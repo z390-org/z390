@@ -23,579 +23,229 @@ import java.util.regex.Pattern;
 
 import javax.swing.JTextArea;
 
-public  class  az390 implements Runnable {
-   /*****************************************************
-	
-    z390 portable mainframe assembler and emulator.
-	
-    Copyright 2011 Automated Software Tools Corporation
-	 
-    z390 is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+/**
+ * Copyright 2011 Automated Software Tools Corporation
+ * Copyright 2013 Cat Herder Software, LLC
+ * Copyright 2018 Joachim Bartz, Germany
+ * 
+ * z390 is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * z390 is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * z390; if not, write to the
+ *    Free Software Foundation, Inc.
+ *    59 Temple Place, Suite 330,
+ *    Boston, MA  02111-1307  USA
+ */
 
-    z390 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with z390; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    az390 is the assembler component of z390 which can be called from
-    z390 gui interface or from command line to read bal source and
-    generate obj relocatable object code file.
-
-    ****************************************************
-    * Maintenance
-    * ***************************************************
-    * 03/30/05 copied from mz390.java and modified
-    * 04/03/05 completed basic assembly of demo with
-    *          obj and prn file output but missing 
-    *          operand parsing.
-    * 04/15/05 completed demo support with literal
-    *          and RLD support for DC A type fields
-    * 05/17/05 add support for '' reduction in dcc
-    * 05/29/05 add DCP support 
-    * 05/31/05 add packed dec L1 and L2 support
-    * 06/25/05 fix r3,r2 code sequence in RRF format
-    * 07/05/05 fix shift ins format to skip r3
-    * 07/11/05 add DB,DH,EB,EH,LB, and LH fp data
-    * 07/19/05 add r1 only exception for SPM and IPM
-    * 07/23/05 fix RSL setup for TP d1(l1,b1) packed field type
-    * 07/24/05 fix fp constant calc to handle LB/LH
-    *          exponent range beyond double by using
-    *          equivalent log(X*10**N)=Log(X)+N*log(10)
-    * 07/27/05 fix RRE to allow 1 opr (IPM,EFPC,SFPC)
-    * 07/30/05 fix sequence of r3,r2 in RRF format for FIEBR
-    * 07/31/05 add format RR4 for RRF DIEBR and DIDBR
-    * 08/04/05 fix trap error when ins has missing operands
-    * 08/17/05 add EXTRN support - unit test TESTEXT1
-    * 08/19/05 fix esd and offset in obj for mult sect6s
-    * 08/19/05 add dcv_data Vcon and ENTRY support
-    * 08/22/05 add SYSBAL, SYSOBJ, SYSPRN dir options
-    * 08/28/05 add DS/DC S type support
-    * 08/28/05 add dependent and labeled USING support
-    * 09/01/05 ADD ORG support and comma delimited continue
-    * 09/08/05 fix address errors for mult sect pgms by
-    *          forcing pass for any sect change
-    * 09/09/05 add CNOP support for use in READ/WRITE
-    * 10/03/05 RPI2  fix DC duplication factor error 51
-    * 10/03/05 RPI3  fix RS/RX with ddd(,B) syntax
-    * 10/03/05 RPI9  fix L' operator parsing
-    * 10/03/05 RPI10 fix ORG with no operand error
-    * 10/03/05 RPI11 fix DC S(1) error 38 no base
-    * 10/03/05 RPI11 fix DC S(X) error 88 xref error
-    * 10/04/05 RPI5 - option ASCII use ASCII vs EBCDIC
-    *                    DC C'...' ascii char data
-    *                    C'..' self def. term value
-    * 10/04/05 RPI6 - option ERR(nn) limit errors
-    * 10/05/05 RPI5 - add DC and SDT C".." ascii char
-    * 10/05/05 RPI12 - reset lit_ref/gen after errors
-    * 10/17/05 RPI25 - change TRACE to TRACEA option
-    * 10/18/05 RPI29 - use AZ390E and AZ390I prefixes
-    * 10/19/05 RPI34 - full ascii / ebcdic translate
-    * 11/07/05 RPI73 support C!..! EBCDIC always
-    * 11/08/05 RPI73 fix PKA X'E9' rflen from s2
-    * 11/11/05 RPI87 fix ORG when preceeded by abs exp. calc
-    * 11/12/05 RPI85 issue error if AFHVY value
-    *          exceeds size of field.
-    * 11/13/05 RPI90 fix regression in RPI73 causing
-    *          B, C, and X symbols to trap
-    * 11/28/05 RPI113 file path with drive: and no separator
-    * 12/03/05 RPI115 fix continuation support for lit comma
-    * 12/03/05 RPI116 issue error if no END found
-    * 12/07/05 RPI122 ignore following opcodes AMODE, RMODE,
-    *          EJECT, SPACE, 
-    * 12/07/05 RPI124 remove trailing spaces from source
-    * 12/08/05 RPI120 fix SRP explicit d2(b2) format
-    * 12/12/05 RPI131 ignore label on TITLE to avoid dup.
-    * 12/15/05 RPI135 use tz390 shared tables
-    * 12/17/05 RPI57 - symbol cross reference option xref
-    * 12/19/05 RPI142 add DS/DC Y and share type tables
-    * 12/23/05 RPI127 remove user mlc type from file name
-    *          and use shared set_pgm_dir_name_type
-    * 12/23/05 RPI131 limit file output to maxfile(mb)
-    * 12/31/05 change MNOTE opcode case value for opsyn
-    * 01/01/06 RPI150 add OPSYN support 
-    * 01/06/06 RPI157 check for extra instruction parms
-    * 01/06/06 RPI159 trap = as literal error in expression
-    * 01/09/06 RPI161 allow d(,b) in  by eliminating
-    *          duplicate code not fixed by RPI3
-    * 01/09/06 RPI164 convert EXTRN to CSECT or ENTRY
-    * 01/10/06 RPI165 xref USAGE references
-    * 01/10/06 RPI167 issue error for contiunation text < 16
-    * 01/11/06 RPI166 correct RSY b(d) generation
-    * 01/13/05 RPI171 correct unary +- support
-    * 01/19/06 RPI181 terminate on any white space char
-    * 01/24/06 RPI182 PRINT, PUSH, POP, WXTRN
-    * 01/25/06 RPI128 add bin obj with hex obj option
-    * 01/26/06 RPI 172 move options to tz390
-    * 02/10/06 RPI 199 add BLX branch relative on condition long
-    * 02/12/06 RPI 189 sort lits and symbols in XREF
-    * 02/18/06 RPI 206 correct RRF 3 formats
-    *          a) case 30 - DIEBR, DIDBR     > r1,r3,r2,m4 > 3412 
-    *          b) case 15 - MA?R, MS?R, MY?R = r1,r3,r2    > 1032 
-    *          c) case 34 - CG?R, CF?R, FI?R, IDTE, TB?R > r1,m3,r2 > 3012
-    * 02/21/06 RPI 208 use tz390.z390_abort flag
-    * 03/16/06 RPI 230 add COM, RSECT, START limited support
-    * 03/16/06 RPI 238 MNOTE error if level > 4
-    * 03/17/06 RPI 233 support macro call/exit level of nesting
-    * 03/19/06 RPI 232 support integers with exponents in expressions and DC's
-    * 03/21/06 RPI 253 allow _ to start symbols
-    * 03/21/06 RPI 258 allow , delimiter on ORG
-    * 03/22/06 RPI 254 allow blank section reference to private
-    * 03/22/06 RPI 260 improve error messages for parsing errors
-    * 03/22/06 RPI 237 fix DROP to handle comments and use parm_pat
-    * 04/01/06 RPI 265 support alignment within DS/DC
-    * 04/02/06 RPI 264 repeat passes at least twice to
-    *          try and resolve errors even if at max.
-    * 04/04/06 RPI 270 support DS/DC/SDT CA, CB, AD, FD, VD
-    * 04/06/06 RPI 274 support dependent USING ref to DSECT base
-    * 04/10/06 RPI 276 don't issue error on missing END if PROFILE
-    * 04/12/06 RPI 277 support 13 opcodes with no operands (E,S, and RRE)
-    * 04/12/06 RPI 278 support NOPRINT on PUSH/POP
-    * 04/12/06 RPI 279 use correct version of max_time_seconds
-    * 04/12/06 RPI 280 increase tz390.opt_maxsym to 50,000
-    * 04/17/06 RPI 284 and opt_max???? for init_arryas()
-    * 04/21/06 RPI 288 fix ENTRY for CSECT and supress SPACE, EJECT
-    * 04/23/06 RPI 285 force printing MNOTE errors and az390 errors
-    * 04/28/06 RPI 301 use esd_base to handle loctr bases
-    * 04/28/06 RPI 304 add NOPRINT support for PRINT
-    * 04/30/06 RPI 306 update OPSYN support, supress copy stmt
-    * 05/09/06 RPI 312 add name to return code message
-    * 05/11/06 RPI 313 change MNOTE to set max return code 
-    *          but do not issue error and fix exp parser
-    *          to handle -(...) unary +- before (.
-    * 06/04/06 RPI 327 issue error if dup < 0
-    * 06/08/06 RPI 338 ignore unsupported options on PRINT
-    * 06/09/06 RPI 330 add MNOTE's with level > 0 to error log
-    * 07/05/06 RPI 356 prevent trap in calc_exp with null parsm
-    * 07/13/06 RPI 365 allow literals as targets of pfx operator in exp.
-    * 07/13/06 RPI 367 support floating point (MIN) and (MAX) constants
-    * 07/13/06 RPI 368 add support for Snn scale factor
-    * 07/14/06 RPI 369 add suppor to allow EQU 4th and 5th parms
-    * 07/14/06 RPI 371 allow spaces in DC X'...' constants
-    * 07/15/06 RPI 368 ignore ACONTROL and ALIAS
-    * 07/16/06 RPI 373 correct alignment to *8 for L etc.
-    * 07/20/06 RPI 378 correct to use first SYSOBJ file dir
-    * 07/26/06 RPI 384 fix HFP exact 0 to all zeros
-    * 08/03/06 RPI 388 fix to generated duplicate DEF constants
-    * 08/14/06 RPI 414 recognize ERR(nnn) limit override 
-    * 08/15/06 RPI 415 merge mz390 and az390 for MFC using process_bal()
-    * 08/27/06 RPI 411 replace loops with get_dup_string and array fills
-    * 09/01/06 RPI 423 add runable thread exception handler
-    *          to correctly shut down az390 thread on interal error
-    * 09/01/06 RPI 424 catch invalid constant errors
-    * 09/01/06 RPI 425 list file xref on PRN
-    * 09/06/06 RPI 437 eliminate TEXT option
-    * 09/07/06 RPI 431 fix USING and DROP to replace dup reg
-    *          and not do drop reg.  Only drop labeled using explicitly.
-    * 09/08/06 RPI 440 route all MNOTE's to ERR file
-    * 09/08/06 RPI 442 fix loc_ctr reset in DSECT's for EQU * calc
-    * 09/13/06 RPI 444 remove MNOTE '..' and *,'..' from ERR file
-    * 09/15/06 RPI 448 allow use of EQU/DS/DC processes during lookahead
-    * 09/16/06 RPI 450 prevent symbol cross reference truncation
-    * 09/17/06 RPI 451 prevent rel symbol update to loc_ctr at end of stmt
-    *          for EQU and USING
-    * 09/18/06 RPI 457 allow literal references across CSECT's
-    * 09/18/06 RPI 459 generate CSECT ESD's first in OBJ.
-    * 09/19/06 RPI 454 support TR?? RRE operands R1,R2,M
-    * 09/20/06 RPI 453 only route stats to BAL, copyright+rc to con
-    * 09/20/06 RPI 458 support explicit off(base) in DC S fields
-    * 09/25/06 RPI 463 correct tz390.trim_continue to support
-    *          string quotes over 1 or more lines followed by
-    *          parms and remove leading blanks from continuations
-    * 09/25/06 RPI 465 allow R0 as base for PSA DSECT etc.
-    * 10/14/06 RPI 481 add I', S' symbol table support
-    * 10/26/06 RPI 485 force completion of last BAL passed
-    * 11/04/06 RPI 484 add TRA trace file support for TRACEA, TRACEALL
-    * 11/09/06 RPI 488 issue error for label ref. to 'M' lookahead symbol
-    * 11/09/06 RPI 489 fix ENTRY ref. to forward ref. symbol
-    * 11/11/06 RPI 481 add S' support for mz390 via sym_scale
-    * 11/12/06 RPI 493 fix opsyn's S type with no operands
-    * 11/12/06 RPI 494 allow any bit length if DS and last field
-    * 11/15/06 RPI 417 add full DS/DC bit length support
-    * 11/28/06 RPI 500 use system newline vs \r\n for Win/Linux
-    * 11/28/06 RPI 501 support literal minus abs expression in operands
-    * 11/28/06 RPI 503 suppress duplicate MNOTE's on SYSTERM
-    * 12/02/06 RPI 511 add option mcall to put mcall/mexit on PRN
-    * 12/04/06 RPI 407 add ED, DD, LD types
-    * 01/19/07 RPI 538 fix SS instruction PKA d1(b1) to correctly gen b1
-    *          also fix duplication factor for DC P type fields
-    * 02/20/07 RPI 553 flag CSECT and DSECT duplicate symbols
-    *          and flag duplicate EQU symbols.  
-    * 03/01/07 RPI 555 allow DS/DC LQ type as default L type for compat. 
-    * 03/05/07 RPI 563 correct computed AGO branch to last label 
-    * 03/09/07 RPI 564 correct RLD generation when esd base does not match currect esd  
-    * 03/12/07 RPI 574 list all BAL lines in error regardless of PRINT setting 
-    * 03/17/07 RPI 577 TR?? 3rd M field optional
-    * 03/17/08 RPI 578 Correct mult. DC S(abs d(b) terms)  
-    * 04/01/07 RPI 567 add CCW, CCW0, CCW1 support   
-    * 04/04/07 RPI 581 print COPY  and inline source in PRN unless PRINT OFF 
-    * 04/07/07 RPI 585 gen ADDR2 target address for relative BR? and J?? instr.
-    * 04/11/07 RPI 588 fix PRINT to avoid trap on bad parm
-    *          RPI 588 issue error for d(,b) if no length or index
-    * 04/17/07 RPI 597 error 184 if missing EQU label  
-    * 04/26/07 RPI 602 error 195 if negative DS/DC length 
-    * 04/27/07 RPI 605 add loc_ctr to TRA, add additional
-    *          checks for label, equ, and end address value changes 
-    *          change section length error messages to show hex
-    * 05/07/07 RPI 606 Fix SSF case 32 to not use llbddd for MVCOS 
-    * 05/07/07 RPI 609 compatibility fixes
-    *           1.  Error 189 if DC with no date and dup > 0  
-    *           2.  Prevent non-labeled using ref to labeld using
-    *           3.  Error 190 if comment * after col 1 
-    *           4.  Error 191 missing comma before comments for type E
-    * 05/07/07 RPI 612 RX off(reg) use X vs B  
-    * 05/07/07 RPI 613 fix SS off(len) for low storage move 
-    * 05/07/07 RPI 615 correct ATTRA string length for FPR
-    * 05/09/07 RPI 617 prevent loop on bad PD digit 
-    * 05/15/07 RPI 624 correct EQU ATTRA operand when followed by comment 
-    * 05/16/07 RPI 620 gen 47000700 for CNOP  compatiblity 
-    * 05/30/07 RPI 629 correct USING to drop prev unlabeled USING for reg.
-    * 05/31/07 RPI 626 literal substitution for CICS DFHRESP(type) codes   
-    * 06/02/07 RPI 635 fix bug in DFHRESP continued text offset 
-    * 06/05/07 RPI 632 show old and new ORG addresses
-    *          align each new CSECt to double word 
-    *          if loctr force 3 passes to check sect changes 
-    *          show DC A/Y/V data address as rel module to
-    *          match PRN location counter but leave obj data
-    *          as relative CSECT for use by linker 
-    * 06/10/07 RPI 637 issue error if missing ) on off(reg,reg) opnd 
-    * 06/21/07 RPI 643 correct multiple value DCF's 
-    * 07/06/07 RPI 646 synchronize abort_error to prevent other task abort errors
-    * 07/07/07 RPI 651 prevent trap on USING with no parms 
-    * 07/20/07 RPI 662 add DFHRESP lits ITEMERR,QIDERR
-    * 07/20/07 RPI 659 error 196 for invalid opcode char.
-    * 07/30/07 RPI 667 issue error 197 for invalid binary value string
-    * 08/22/07 RPI 673 support symbolic register on DROP
-    * 08/25/07 RPI 687 add CICS VSAM DFHRESP literals
-    * 09/03/07 RPI 690 correct NOTEND to NOTFND for =F'13'
-    * 09/11/07 RPI 694 add option ERRSUM to summarize critical errors 
-    *           1. List missing COPY and MACRO files.
-    *           2. List undefined symbols if #1 = 0
-    *           3. Total errror counts all reported on ERR, PRN, CON
-    *           4. ERRSUM turned on automatically if #1 != 0
-    * 10/15/07 RPI 719 support LOG(file) override of log, trace, err files 
-    * 10/24/07 RPI 726 only issue error 187 if trace
-    * 10/24/07 RPI 728 ignore ISEQ and ICTL instructions
-    *          handled by mz390 and reformated to std 1,71,16
-    * 10/30/07 RPI 729 add DFHRESP code ILLOGIC=F'21' 
-    * 11/12/07 RPI 737 correct handling of F/H constant Enn exponent 
-    *          prevent trap on ASCII char > 127 causing trap on cvt to EBCDIC   
-    * 11/12/07 RPI 737 add STATS(file) option    
-    * 11/27/07 RPI 743 set CNOP label attribute type to 'I'
-    *          allow comments without , on PR as on other 12 ops without operands
-        * 12/06/07 RPI 751 add DFHRESP(EXPIRED)=F'31'
-        * 12/07/07 RPI 749 error for X EQU X and lit mod forward refs.
-        * 12/23/07 RPI 769 change abort to log error for invalid ASCII
-        * 12/25/07 RPI 755 cleanup msgs to log, sta, tr* 
-        * 01/08/08 RPI 776 fix parsing error on USING comments
-        * 01/10/08 RPI 777 add decimal point and scale factor for P/Z type
-        *          and correct sign in low digit zone for Z.
-        * 01/10/08 RPI 778 save loc_ctr in esd_loc[cur_esd] for use
-        *          in continued sections following neq ORG's.
-        * 01/13/08 RPI 786 set fp_form for preferred exp DFP constants
-        * 01/17/08 RPI 790 set DFP exp to explicit decimal point or zero for const.
-        *          set scale factor if no explicit modifier
-        *          support I' and S' operators in expression 
-        * 02/28/08 RPI 812 assemble ASSIST opcodes if ASSIST option on 
-        * 03/03/08 RPI 817 assemble all 226 new z10 opcodes 
-        * 04/17/08 RPI 834 correct neg 0 fp value    
-        * 04/24/08 RPI 840 ignore spaces in P and Z data fields  
-        * 04/28/08 RPI 841 add DFHRESP MAPFAIL, INVMPSZ, OVERFLOW  
-        * 05/05/08 rpi 846 sync stats with mz390 
-        * 05/10/08 RPI 821 switch DH from double to BigDecimal cache 
-        * 05/20/08 RPI 851 prevent recursive abort after failing ORG 
-        * 06/06/08 RPI 843 round half-even for FP constants  
-        * 06/23/08 RPI 866 use get_file_name to parse PRN and BAL file names   
-        * 08/05/08 RPI 891 correct MCALL/MEXIT to correctly handle GEN/NOGEN   
-        * 08/08/08 RPI 893 add SY, AL2(*), and F/H'Unnn' for unsigned 
-        * 08/12/08 RPI 894 change AL2(*) to support 2 byt RLD fields
-        * 08/11/08 RPI 895 always print PRN if ERR(0) regardless of ERRSUM    
-        * 09/16/08 RPI 908 prevent trap on SYSPRN file overide etc. 
-        * 09/19/08 RPI 905 add DFHRESP(DSIDERR)=F'12' for ompatiblity
-        * 09/20/08 RPI 917 issue error if START not first CSECT
-        * 10/08/08 RPI 930 prevent trap on invalid Z char, leading Z x'F0'
-        * 10/24/08 RPI 935 prevent recursive abort
-        * 10/27/08 RPI 926 leave macro labels on inline and open code macro statements
-        * 10/27/08 RPI 928 add DFHRESP codes: 1) TERMIDERR=F'11' 2) IOERR=F'17' 
-        *             3) TRANSIDERR=F'28' 4) ENDDATA=F'29' 5) ENVDEFERR=F'56'
-        * 10/29/08 RPI 939 pad DC Z field on left with X'F0'
-        * 11/03/08 RPI 945 include mz and az errors on ERRSUM rpt
-        * 11/08/08 RPI 941 align start of CNOP to *2
-        * 11/09/08 RPI 949 display relative addr for RIL type LARL etc.
-        * 11/10/08 RPI 946 correct DIAGNOSE missing last byte caught by INIT F6's
-        * 11/14/08 RPI 954 correct erroneous extra parm error on LARL
-        * 11/16/08 RPI 960 only count LOCTR in pass 1 for max passes
-        * 11/18/08 RPI 951 add DFHRESP(ENQBUSY)=F'55'
-        * 12/05/08 RPI 955 correct error message for over 256 on MVC
-        * 12/05/08 RPI 959 suppress ERRSUM report if no erros
-        * 12/17/08 RPI 978 prevent trap on DS/DC with no operands
-        * 01/14/09 RPI 982 use higher base reg for coinciding ranges
-        * 02/01/09 RPI 987 fix labelled USING and DROP to handle mixed case
-        * 02/03/09 RPI 988 allow relative addressing across CSECT's in same assembly
-        * 02/04/09 RPI 991 correct unary sign followed by pfx operator AHI 1,-L'var etc.
-        * 02/10/09 RPI 994 support neg base displacements for LA using dependenting USING offsets
-        * 02/10/09 RPI 995 set az390_private_sect for mz390 use 
-        * 06/06/09 RPI 1033 error if SS length too long
-        * 05/19/09 RPI 1034 improve error msg 61, 71, 193
-        * 05/20/09 RPI 1031 show literals with errors and fix length
-        * 05/27/09 RPI 1044 do not resolve V(con) to relative symbol
-        * 06/08/09 RPI 1051 prefix all ERRSUM msgs with ERRSUM
-        * 06/14/09 RPI 1057 add DFHRESP(END)=F'83' and add DFHVALUE support
-        * 06/15/09 RPI 1047 fix AZ390 ENDED if run standalone
-        * 06/15/09 RPI 1050 remove dup START/ENDED for TRACEA CON
-        * 06/15/09 RPI 1052 issue error for DROP of explict reg with no USING
-        * 06/16/09 RPI 1056 issue warning for dup ordinary USING range
-        *          and remove dup dep unlabeled USING range
-        * 06/29/09 RPI 1044 do not resolve Vcon to relative symbol 
-        * 07/10/09 RPI 1062 use z390_abort exit for recursive abort
-        * 07/11/09 RPI 1062 set RC=12 for errors and RC=16 for abort  
-        * 08/24/09 RPI 1069 add CODEPAGE(ascii+ebcdic+LIST) option  
-        * 09/01/09 RPI 1073 support option NOALIGN  
-        * 09/02/09 RPI 1079 add DFHRESP(NOTALLOC)=F'61'
-        * 09/26/09 RPI 1080 replace init tables with init_tz390
-        * 01/08/10 RPI 1099 correct error on 32 digit B type SDT and display 4 byte hex value
-        * 01/09/10 RPI 1101 trunc vs error for out of range or x/0 on DC AFHY
-        * 02/16/10 RPI 1108 align LQ to 16 bytes (see RPI 594 pending)
-        * 07/28/10 RPI 1127 add option PRINTALL to suppress PRINT OFF/NOGEN
-        * 10/08/10 RPI 1125 add LEDBR?, LDXBR?, LEXBR?
-        * 10/10/10 RPI 1125 ADD SRNMB
-        * 10/20/10 RPI 1125 add FIEBR?, FIDBR?, FIXBR?
-        * 11/23/10 RPI 1125 add B394-B39A
-        * 12/01/10 RPI 1125 ADD B3D0-B3DB MDTRA-SXTRA
-        * 12/03/10 RPI 1125 ADD B928-B92D PCKMO KMOTR 
-        * 12/04/10 RPI 1125 ADD B941-B95B CFDTR - CXLFTR, FIX MDTRA DFP/BFP RND 
-        * 12/09/10 RPI 1125 ADD B9E2-B9FB LOCGR-SLRK 
-        * 12/09/10 RPI 1125 ADD C84-C85 LPD-LPDG 
-        * 12/19/10 RPI 1125 ADD EBDC-EBFA SRAK - LAAL
-        * 12/21/10 RPI 1125 ADD EC51-ECDB RISBLG - ALGSIK
-        * 01/30/11 RPI 1152 CORRECT ECTG AND CSST C81/C82 OPCODE
-        * 04/18/11 RPI 1159 force align for each LTORG in csect
-        * 05/03/11 RPI 1146 limit check signed I2 byte for RIE4/RIE5
-        * 05/17/11 RPI 1164 1) correct RISBHGZ/RISBLGZ support
-        *                   2) correct optional length field
-        * 07/26/11 RPI 1168 add DFH RESP codes for CICS  
-        * 07/25/11 RPI 1169 change az390 error to mz390 warning for missing END 
-        * 07/30/11 use tz390.check_java_version 
-        * 02/16/12 RPI 1186 NOTHREAD starts CSECT's at 0  
-        * 03/04/12 RPI 1196 support 20 bit sdt for LAY etc. 
-        * 03/07/12 RPI 1197 support OBJ optional entry on .END TXT
-        *          1) last .END entry overrides default 0
-        *          2) ENTRY command overrides any .END entry  
-        * 03/24/12 RPI 1198 correct misspelled sym_esd1 (was sym_sid1)
-        *          and remove remove sym_sid1 and sym_sid2  
-        * 04/05/12 RPI 1201 use lit_dup*lit_len to align lits  
-        * 04/13/12 RPI 1205 issue error for SDT C'12345' too long 
-        * 04/13/12 RPI 1206 drop unlabeled dependant using for drop reg
-        * 04/17/12 RPI 1208 don't generate RLD's in DSECT  
-        * 04/20/12 RPI 1210 correct handling of periods in paths       
-    *****************************************************
-    * Global variables                        last rpi
-    *****************************************************/
+/**
+ * az390 is the assembler component of z390 which can be called from z390 GUI interface
+ * or from command line to read BAL source and generate obj relocatable object code file.
+ */
+public class az390 implements Runnable
+{
+	// Global variables
 	tz390 tz390 = null;
-	String msg_id = "AZ390I ";
-    int az390_rc = 0;
-    int az390_errors = 0;
-    int mz390_errors = 0; // RPI 415 passed from mz390 if option asm
-    String mz390_started_msg = ""; // RPI 755
-    boolean mz390_abort = false;
-    boolean az390_recursive_abort = false; // RPI 935
-    int mz390_rc     = 0; // RPI 415 passed from mz390 if option asm
-    int cur_pass = 1;
-    Date cur_date = new Date();
-    long tod_start = cur_date.getTime();
-    long tod_end   = 0;
-    long tot_sec = 0;
-    boolean stats_to_obj = false;
-    int tot_obj_bytes = 0;
-    File bal_file = null;
-    BufferedReader bal_file_buff = null;
-    RandomAccessFile obj_file = null;
-    File prn_file = null;
-    BufferedWriter prn_file_buff = null;
-    String bal_line = null;
-    String mnote_warning_msg = ""; // RPI 1056
-    int mcall_bal_index = 22;
-    int mcall_lv_index  = 16;
-    String bal_xref_file_name = null;
-    char   bal_xref_file_type = ' ';
-    char   cur_line_type  = ' '; // RPI 581
-    int    cur_line_file_num = 0;
-    String bal_xref_file_path = null;
-    int    bal_xref_file_num  = 0;
-    int    bal_xref_file_line = 0;
-    int    tot_xref_files = 0;
-    String[] xref_file_name = null;
-    String[] xref_file_path = null; // RPI 425
-    int[]    xref_file_errors = null;
-    char[]   xref_file_type   = null; // RPI 540 '+' macro '=' copy
-    int    mz390_xref_file = 0;
-    int    mz390_xref_line = 0;
-    String bal_label   = null;
-    String opsyn_label = null;
-    String bal_op = null;
-    boolean bal_op_ok = false;
-    boolean bal_label_ok = false; // RPI 451
-    String bal_parms = null;
-    boolean list_use      = false;
-    int      mac_inline_level = 0;      // rpi 581
-    int      mac_inline_op_macro = 220; // rpi 581
-    int      mac_inline_op_mend  = 221; // rpi 581
-    int      mac_inline_op_other = 226; // rpi 581
+	final String msg_id = "AZ390I ";
+	int az390_rc = 0;
+	int az390_errors = 0;
+	int mz390_errors = 0; // RPI 415 passed from mz390 if option asm
+	String mz390_started_msg = ""; // RPI 755
+	boolean mz390_abort = false;
+	boolean az390_recursive_abort = false; // RPI 935
+	int mz390_rc     = 0; // RPI 415 passed from mz390 if option asm
+	int cur_pass = 1;
+	Date cur_date = new Date();
+	long tod_start = cur_date.getTime();
+	long tod_end   = 0;
+	long tot_sec = 0;
+	boolean stats_to_obj = false;
+	int tot_obj_bytes = 0;
+	File bal_file = null;
+	BufferedReader bal_file_buff = null;
+	RandomAccessFile obj_file = null;
+	File prn_file = null;
+	BufferedWriter prn_file_buff = null;
+	String bal_line = null;
+	String mnote_warning_msg = ""; // RPI 1056
+	int mcall_bal_index = 22;
+	int mcall_lv_index  = 16;
+	String bal_xref_file_name = null;
+	char   bal_xref_file_type = ' ';
+	char   cur_line_type  = ' '; // RPI 581
+	int    cur_line_file_num = 0;
+	String bal_xref_file_path = null;
+	int    bal_xref_file_num  = 0;
+	int    bal_xref_file_line = 0;
+	int    tot_xref_files = 0;
+	String[] xref_file_name = null;
+	String[] xref_file_path = null; // RPI 425
+	int[]    xref_file_errors = null;
+	char[]   xref_file_type   = null; // RPI 540 '+' macro '=' copy
+	int    mz390_xref_file = 0;
+	int    mz390_xref_line = 0;
+	String bal_label   = null;
+	String opsyn_label = null;
+	String bal_op = null;
+	boolean bal_op_ok = false;
+	boolean bal_label_ok = false; // RPI 451
+	String bal_parms = null;
+	boolean list_use      = false;
+	int      mac_inline_level = 0;      // rpi 581
+	int      mac_inline_op_macro = 220; // rpi 581
+	int      mac_inline_op_mend  = 221; // rpi 581
+	int      mac_inline_op_other = 226; // rpi 581
 
 	boolean bal_abort = false;
-    int bal_op_index = 0;
-    int end_loc = 0; // RPI 605
-    boolean report_label_changes = true; // RPI 605
-    boolean report_equ_changes = true;   // RPI 605
-    boolean bal_eof = false;
-    boolean end_found = false;
-    String end_entry = "";                // RPI 1197
-    int    end_entry_sid = 0;            // RPI 1197
-    boolean end_entry_found = false; // RPI 1197
+	int bal_op_index = 0;
+	int end_loc = 0; // RPI 605
+	boolean report_label_changes = true;
+	boolean report_equ_changes = true;
+	boolean bal_eof = false;
+	boolean end_found = false;
+	String end_entry = "";
+	int    end_entry_sid = 0;
+	boolean end_entry_found = false;
 	SimpleDateFormat mmddyy = new SimpleDateFormat("MM/dd/yy");
 	SimpleDateFormat hhmmss = new SimpleDateFormat("HH:mm:ss");
-    boolean log_tod = true; 
-    JTextArea z390_log_text = null;
-    /*
-     * semaphores used to synchronize mz390 and az390
-     */
+	boolean log_tod = true; 
+	JTextArea z390_log_text = null;
+
+	// Semaphores used to synchronize mz390 and az390
 	Thread  az390_thread = null;    // RPI 415
 	boolean az390_running = false;  // RPI 415
-    boolean mz390_call = false;     // RPI 415
-    boolean lookahead_mode  = false;     // RPI 415
-    boolean sym_lock = false;
-    String  sym_lock_desc = null;
-    final Lock      lock            = new ReentrantLock();
-    final Condition lock_condition  = lock.newCondition();
-    boolean bal_line_full = false; 
-    String pass_bal_line = null;
-    String pass_xref_file_name = null;
-    char   pass_xref_file_type = ' ';
-    int    pass_xref_file_num = 0;
-    int    pass_xref_file_line = 0;
-    String xref_file_line = null;
-    int    xref_bal_index = 0;
-    boolean pass_bal_eof = false;
-    boolean az390_waiting = false;
-    boolean az390_private_sect = false; // RPI 995
-    /*
-     * static limits
-     */
-    int sort_index_bias = 100000; // must be > tz390.opt_maxsym and tz390.opt_maxsym
-    int sort_index_len  = 6;      // digits in key_index_bias
-    int max_exp_stk = 500;
-    int max_exp_rld = 500;
-    int max_hh = 0x7ffff; // RPI 387
-    int min_hh = 0xfff80000; // RPI 387
-    int max_text_buff_len = 16;
-    long[] max_fh = {((long)(-1) >>> 57),
-    		         ((long)(-1) >>> 49),
-    		         ((long)(-1) >>> 41),
-    		         ((long)(-1) >>> 33),
-    		         ((long)(-1) >>> 25),
-    		         ((long)(-1) >>> 17),
-    		         ((long)(-1) >>> 9),
-    		         ((long)(-1) >>> 1),
-    		         };
-    long[] min_fh = {((long)(-1) << 7),
-    		         ((long)(-1) << 15),
-    		         ((long)(-1) << 23),
-    		         ((long)(-1) << 31),
-    		         ((long)(-1) << 39),
-    		         ((long)(-1) << 47),
-    		         ((long)(-1) << 55),
-    		         ((long)(-1) << 63),
-    		         };
-     /*
-     * bal file global variables
-     */
-    long    tod_time_limit = 0;
-    int tot_bal_line = 1;
+	boolean mz390_call = false;     // RPI 415
+	boolean lookahead_mode  = false;     // RPI 415
+	boolean sym_lock = false;
+	String  sym_lock_desc = null;
+	final Lock      lock            = new ReentrantLock();
+	final Condition lock_condition  = lock.newCondition();
+	boolean bal_line_full = false; 
+	String pass_bal_line = null;
+	String pass_xref_file_name = null;
+	char   pass_xref_file_type = ' ';
+	int    pass_xref_file_num = 0;
+	int    pass_xref_file_line = 0;
+	String xref_file_line = null;
+	int    xref_bal_index = 0;
+	boolean pass_bal_eof = false;
+	boolean az390_waiting = false;
+	boolean az390_private_sect = false; // RPI 995
+
+	// Static limits
+	int sort_index_bias = 100000; // must be > tz390.opt_maxsym and tz390.opt_maxsym
+	int sort_index_len  = 6;      // digits in key_index_bias
+	int max_exp_stk = 500;
+	int max_exp_rld = 500;
+	int max_hh = 0x7ffff; // RPI 387
+	int min_hh = 0xfff80000; // RPI 387
+	int max_text_buff_len = 16;
+	long[] max_fh = {((long)(-1) >>> 57),
+					 ((long)(-1) >>> 49),
+					 ((long)(-1) >>> 41),
+					 ((long)(-1) >>> 33),
+					 ((long)(-1) >>> 25),
+					 ((long)(-1) >>> 17),
+					 ((long)(-1) >>>  9),
+					 ((long)(-1) >>>  1),
+					};
+	long[] min_fh = {((long)(-1) << 7),
+					 ((long)(-1) << 15),
+					 ((long)(-1) << 23),
+					 ((long)(-1) << 31),
+					 ((long)(-1) << 39),
+					 ((long)(-1) << 47),
+					 ((long)(-1) << 55),
+					 ((long)(-1) << 63),
+					};
+
+	// BAL file global variables
+	long    tod_time_limit = 0;
+	int tot_bal_line = 1;
 	int tot_mac_copy = 0;
-    int tot_mnote_warning = 0;
-    int tot_mnote_errors  = 0;
-    int max_mnote_level   = 0;
-    String[]  bal_line_text = null; //logical bal line from 1 or more physical lines
-    int[]     bal_line_num  = null; //starting generated BAL physical line #
-    int[]     bal_line_xref_file_num  = null;
-    int[]     bal_line_xref_file_line = null;
-    boolean bal_line_gen = true;
-    String trace_pfx = null;
-    String parm_name = null;
-    String parm_value = null;
-    int bal_line_index = 1; //current mac line index
-    Pattern exp_pattern = null;
-    Matcher exp_match   = null;
-    Pattern label_pattern = null;
-    Matcher label_match   = null;
-    Pattern extrn_pattern = null;
-    Matcher extrn_match   = null;
-    Pattern dcc_sq_pattern = null;  // EBCDIC or ASCII
-    Pattern dcc_dq_pattern = null;  //RPI5  C".." ASCII
-    Pattern dcc_eq_pattern = null;  //RPI73 C!..! EBCDIC
-    Matcher dcc_match   = null;
-    /*
-     * location counter and ESD tables
-     */
-    int loc_ctr = 0;
-    int loc_start = 0;
-    int loc_len = 0;
+	int tot_mnote_warning = 0;
+	int tot_mnote_errors  = 0;
+	int max_mnote_level   = 0;
+	String[]  bal_line_text = null; //logical bal line from 1 or more physical lines
+	int[]     bal_line_num  = null; //starting generated BAL physical line #
+	int[]     bal_line_xref_file_num  = null;
+	int[]     bal_line_xref_file_line = null;
+	boolean bal_line_gen = true;
+	String trace_pfx = null;
+	String parm_name = null;
+	String parm_value = null;
+	int bal_line_index = 1; //current mac line index
+	Pattern exp_pattern = null;
+	Matcher exp_match   = null;
+	Pattern label_pattern = null;
+	Matcher label_match   = null;
+	Pattern extrn_pattern = null;
+	Matcher extrn_match   = null;
+	Pattern dcc_sq_pattern = null;  // EBCDIC or ASCII
+	Pattern dcc_dq_pattern = null;  //RPI5  C".." ASCII
+	Pattern dcc_eq_pattern = null;  //RPI73 C!..! EBCDIC
+	Matcher dcc_match   = null;
+
+	// Location counter and ESD tables
+	int loc_ctr = 0;
+	int loc_start = 0;
+	int loc_len = 0;
 	int cur_esd_sid = 0;
-    int tot_esd = 0;
-    int cur_esd = 0;
-    int cur_esd_base = 0;   // RPI 301 first section 
-    int first_cst_esd = 0;
-    int esd_sdt = 0;
-    int esd_cpx_rld = -1;
-    int[]     esd_sid  = null;
-    int[]     esd_base = null; // RPI 301
-    int[]     esd_loc  = null; // RPI 778 current loc within section
-    int tot_loc_stmt   = 0;    // RPI 920
-    /*
-     * using global data
-     */
-    int cur_use_start = 0;
-    int cur_use_end   = 0;
-    boolean explicit_drop_reg = false; // RPI 1052
-    int[] push_cur_use_start = null;
-    int[] push_cur_use_end   = null;
-    int cur_use = 0;
-    boolean cur_use_depend = false;
-    boolean use_eof = false;
-    int cur_use_base_esd = 0;
-    int cur_use_base_loc = 0;
-    int cur_use_base_len = 0;
-    int cur_use_reg = -1;
-    int cur_use_neg_reg = -1;
-    int cur_use_off = 0x80000; // RPI 387 max 20 bit+1
-    int cur_use_neg_off = 0xfff00000; // RPI 387 min 20 bit-1
-    String cur_use_lab = "";
-    String[] use_lab      = null;
-    int[]    use_base_esd = null;
-    int[]    use_base_loc = null;
-    int[]    use_base_len = null;
-    int[]    use_reg      = null;
-    int[]    use_reg_loc  = null;
-    int      use_domain_tot = 0; // rpi 776
-    /*
-     * push, pop, and, print data
-     */
-    int using_level = 0;
-    int print_level = 0;
-    int[]     using_start = null;
-    int[]     using_end   = null;
-    boolean[] print_on    = null;
-    boolean[] print_gen   = null;
-    boolean[] print_data  = null;
-    boolean  force_list_bal = false; // RPI 285 RPI 891 force msg on PRN
-    boolean  list_bal_line  = true; // RPI 891 assume all BAL on PRN
-    /*
+	int tot_esd = 0;
+	int cur_esd = 0;
+	int cur_esd_base = 0;   // first section 
+	int first_cst_esd = 0;
+	int esd_sdt = 0;
+	int esd_cpx_rld = -1;
+	int[]     esd_sid  = null;
+	int[]     esd_base = null;
+	int[]     esd_loc  = null; // current loc within section
+	int tot_loc_stmt   = 0;
+
+	// Using global data
+	int cur_use_start = 0;
+	int cur_use_end   = 0;
+	boolean explicit_drop_reg = false;
+	int[] push_cur_use_start = null;
+	int[] push_cur_use_end   = null;
+	int cur_use = 0;
+	boolean cur_use_depend = false;
+	boolean use_eof = false;
+	int cur_use_base_esd = 0;
+	int cur_use_base_loc = 0;
+	int cur_use_base_len = 0;
+	int cur_use_reg = -1;
+	int cur_use_neg_reg = -1;
+	int cur_use_off = 0x80000; // RPI 387 max 20 bit+1
+	int cur_use_neg_off = 0xfff00000; // RPI 387 min 20 bit-1
+	String cur_use_lab = "";
+	String[] use_lab      = null;
+	int[]    use_base_esd = null;
+	int[]    use_base_loc = null;
+	int[]    use_base_len = null;
+	int[]    use_reg      = null;
+	int[]    use_reg_loc  = null;
+	int      use_domain_tot = 0;
+
+	// push, pop, and, print data
+	int using_level = 0;
+	int print_level = 0;
+	int[]     using_start = null;
+	int[]     using_end   = null;
+	boolean[] print_on    = null;
+	boolean[] print_gen   = null;
+	boolean[] print_data  = null;
+	boolean  force_list_bal = false; // RPI 285 RPI 891 force msg on PRN
+	boolean  list_bal_line  = true; // RPI 891 assume all BAL on PRN
+
+	/*
      * set mac_call_gen on after printing
      * *MCALL LV= 1 and set off after
      * print *MEXIT LV= 1
@@ -1093,235 +743,247 @@ public  class  az390 implements Runnable {
               "=F'44'",           //24 "NOTDELETABLE)"
               "=F'732'",          //25 "VRRDS)"
               };
-  /* 
-   * end of global az390 class data and start of procs
-   */
-public static void main(String[] args) {
-  /*
-   * main is entry when executed from command line
-   * Create instance of az390 class and pass
-   * parms to az390 like z390 does.
-   */
-      az390 pgm = new az390();
-	  pgm.init_az390(args,null);
-      pgm.process_az390();
-}
-public void start_az390_thread(String[] args,JTextArea z390_log, RandomAccessFile mz390_systerm_file,RandomAccessFile mz390_stats_file){
-	/*
-	 * initialize z390 when called from mz390
-	 * to receive bal directly and share the
-	 * symbol table with mz390.
+
+	/**
+	 * main is entry when executed from command line.<br>
+	 * Create instance of az390 class and pass parameters to az390 like z390 does.
+	 * @param args
 	 */
-	mz390_call = true;
-	init_az390(args,null);
-	tz390.systerm_file = mz390_systerm_file; // share the ERR file
-    tz390.systerm_prefix = tz390.left_justify(tz390.pgm_name,9) + " AZ390 ";
-	tz390.stats_file = mz390_stats_file; // RPI 737
-    tz390.init_codepage(tz390.codepage);  // RPI 1069
-	az390_thread = new Thread(this);
-    az390_running = true;
-    az390_thread.start();
-    set_sym_lock("az390 startup");    // proceed to waiting for bal and lock sym table
-    lookahead_mode  = true; // lookahead done during mz390 load_mac
-    reset_sym_lock();  // allow use of DS/DC/EQU during lookahead RPI 448
-	cur_esd = tz390.opt_maxesd - 1; // lookahead dummy section # for all ds/dc/equ
-    cur_esd_sid = tz390.opt_maxsym-1;
-    sym_type[tz390.opt_maxsym-1] = sym_cst;
-}
-public void finish_az390(String[] mac_file_path,int[] mac_file_errors){
-	/*
-	 * save xref file names and error counts for
-	 * cross reference at end of PRN
+	public static void main(final String[] args)
+	{
+		final az390 pgm = new az390();
+		pgm.init_az390(args,null);
+		pgm.process_az390();
+	}
+
+	/**
+	 * Initialize z390 when called from mz390 to receive BAL directly and share the symbol table with mz390.
+	 * @param args
+	 * @param z390_log
+	 * @param mz390_systerm_file
+	 * @param mz390_stats_file
 	 */
-	xref_file_path = mac_file_path;
-	xref_file_errors = mac_file_errors;
-}
-public void run() {
-	if (az390_thread == Thread.currentThread()){
-		if (tz390.opt_trap){ // RPI 423
-			try {
+	public void start_az390_thread(String[] args,JTextArea z390_log, RandomAccessFile mz390_systerm_file,RandomAccessFile mz390_stats_file)
+	{
+		mz390_call = true;
+		init_az390(args,null);
+		tz390.systerm_file = mz390_systerm_file; // share the ERR file
+		tz390.systerm_prefix = tz390.left_justify(tz390.pgm_name,9) + " AZ390 ";
+		tz390.stats_file = mz390_stats_file;
+		tz390.init_codepage(tz390.codepage);
+		az390_thread = new Thread(this);
+		az390_running = true;
+		az390_thread.start();
+		set_sym_lock("az390 startup");    // proceed to waiting for bal and lock sym table
+		lookahead_mode  = true; // lookahead done during mz390 load_mac
+		reset_sym_lock();  // allow use of DS/DC/EQU during lookahead RPI 448
+		cur_esd = tz390.opt_maxesd - 1; // lookahead dummy section # for all ds/dc/equ
+		cur_esd_sid = tz390.opt_maxsym-1;
+		sym_type[tz390.opt_maxsym-1] = sym_cst;
+	}
+
+	/**
+	 * Save xref file names and error counts for cross reference at end of PRN.
+	 * @param mac_file_path
+	 * @param mac_file_errors
+	 */
+	public void finish_az390(String[] mac_file_path,int[] mac_file_errors)
+	{
+		xref_file_path   = mac_file_path;
+		xref_file_errors = mac_file_errors;
+	}
+
+	/**
+	 * 
+	 */
+	public void run()
+	{
+		if (az390_thread == Thread.currentThread()){
+			if (tz390.opt_trap){ // RPI 423
+				try {
+					process_az390();
+				} catch (Exception e){
+					abort_error(158,"internal system exception - " + e.toString());
+				}
+			} else {
 				process_az390();
+			}
+			lock.lock(); // RPI 415
+			try {
+				az390_running = false;
+				lock_condition.signalAll();
+			} catch (Exception e) {
+				abort_error(159,"thread ending interruption");
+			} finally {
+				lock.unlock();
+			}
+		}
+	}
+
+	/**
+	 * Assemble BAL source file into relocateable OBJ file and generate optional PRN file.
+	 */
+	private void process_az390()
+	{
+		/*
+		 * Notes;
+		 *   1.  az390 may be called from:
+		 *       a. z390 GUI Windows command via main();
+		 *       b. Windows command prompt via main();
+		 *       c. mz390 call via process_az390_call();
+		 *   2.  If called from z390 GUI Windows command, the console output will be redirected to to the z390 GUI log.
+		 *   3.  If called from mz390 via process_az390_call, az390 process will run on separate thread and the
+		 *       get_bal_line and receive_bal_line methods will synchronize passing BAL record from mz390 to az390 process.
+		 */
+		if (tz390.opt_trap){
+			try {
+				load_bal();
+				process_bal();
 			} catch (Exception e){
-				abort_error(158,"internal system exception - " + e.toString());
+				abort_error(79,"internal system exception - " + e.toString());
 			}
 		} else {
-			process_az390();
+			load_bal();
+			process_bal();
 		}
-		lock.lock(); // RPI 415
-	   	try {
-			az390_running = false;
-	   	    lock_condition.signalAll();
-	   	} catch (Exception e) {
-	   		abort_error(159,"thread ending interruption");
-	   	} finally {
-	   		lock.unlock();
-	   	}
+		exit_az390();
 	}
-}
-private void process_az390(){
-   /*
-    *  assemble bal source file into
-    *  relocatable OBJ file and
-    *  generate optional PRN file.
-    *
-    * Notes;
-    *   1.  az390 may be called from:
-    *       a. z390 GUI Windows command via main();
-    *       b. Windows command prompt via main();
-    *       c. mz390 call via process_az390_call();
-    *   2.  If called from z390 GUI Windows command, the
-    *       console output will be redirected to
-    *       to the z390 GUI log.
-    *   3.  If called from mz390 via process_az390_call,
-    *       az390 process will run on separate
-    *       thread and the get_bal_line and
-    *       receive_bal_line methods will
-    *       synchronize passing bal record
-    *       from mz390 to az390 process.
-    */
-    	if (tz390.opt_trap){
-     	   try {
-        	    load_bal();
-                process_bal();
-     	   } catch (Exception e){
-     		   abort_error(79,"internal system exception - " + e.toString());
-     	   }
-     	} else {
-        	load_bal();
-     		process_bal();
-     	}
-	    exit_az390();
-}
-private void init_az390(String[] args, JTextArea log_text){
-	/*
-	 * 1.  initialize log routing
-	 * 2.  set options
-	 * 3.  compile regular expression parsers
-	 * 4.  open bal and obj buffered I/O files
-	 * 5.  Init ascii/ebcdic translation table
+
+	/**
+	 * 
+	 * @param args
+	 * @param log_text
 	 */
-	    if  (log_text != null){
-	    	z390_log_text = log_text;
-	    }
-    	tz390 = new tz390();
-    	tz390.init_tz390();  // RPI 1080
-    	if (!tz390.check_java_version()){ // RPI 1175
-    		abort_error(88,"unknown java version "
-    	    + tz390.java_vendor + " " + tz390.java_version);  
-    	}
-    	tz390.init_options(args,tz390.bal_type);
-    	if (!mz390_call){
-   			tz390.open_systerm("AZ390");
-   			tz390.init_codepage(tz390.codepage);  // RPI 1069
-   		} else {
-   			tz390.systerm_start = System.currentTimeMillis();
-   			tz390.started_msg = mz390_started_msg;
-   		}
-	    if (!tz390.init_opcode_name_keys()){
-	    	abort_error(87,"opcode key search table exceeded");
-	    }
-        init_arrays();
-	    init_push_pop();
+	private void init_az390(String[] args, JTextArea log_text)
+	{
+		/*
+		 * 1.  initialize log routing
+		 * 2.  set options
+		 * 3.  compile regular expression parsers
+		 * 4.  open bal and obj buffered I/O files
+		 * 5.  Init ascii/ebcdic translation table
+		 */
+		if (log_text != null) {
+			z390_log_text = log_text;
+		}
+
+		final InfoOS infoOS = InfoOS.getInstance();
+		if (!infoOS.isCorrectJava()) {
+			abort_error(88, infoOS.getMessageIncorrectJavaVersion());
+		}
+
+		tz390 = new tz390();
+		tz390.init_tz390();
+		tz390.init_options(args,tz390.bal_type);
+		if (!mz390_call){
+			tz390.open_systerm("AZ390");
+			tz390.init_codepage(tz390.codepage);
+		} else {
+			tz390.systerm_start = System.currentTimeMillis();
+			tz390.started_msg = mz390_started_msg;
+		}
+		if (!tz390.init_opcode_name_keys()) {
+			abort_error(87, "Opcode key search table exceeded");
+		}
+		init_arrays();
+		init_push_pop();
 		open_files();
-		tz390.force_nocon = true;   // RPI 755
-		put_log(tz390.started_msg); // RPI 755
-		tz390.force_nocon = false;  // RPI 755
+		tz390.force_nocon = true;
+		put_log(tz390.started_msg);
+		tz390.force_nocon = false;
 		put_copyright();
-        compile_patterns();
-        tod_time_limit = tz390.max_time_seconds * 1000 + tod_start;
-}
-private void init_push_pop(){
-	/*
-	 * init push/pop using and print
+		compile_patterns();
+		tod_time_limit = tz390.max_time_seconds * 1000 + tod_start;
+	}
+
+	/**
+	 * Init push/pop using and print
 	 */
-    using_start[0] = 0;
-    using_end[0]   = 0;
-    print_on[0] = true;
-    print_gen[0] = true;
-    print_data[0] = false;
-}
-@SuppressWarnings("unchecked")
-private void init_arrays(){
-	/*
-	 * initialize arrays using tz390.opt_max???
+	private void init_push_pop(){
+		using_start[0] = 0;
+		using_end[0]   = 0;
+		print_on[0] = true;
+		print_gen[0] = true;
+		print_data[0] = false;
+	}
+
+	/**
+	 * Initialize arrays using tz390.opt_max???
 	 */
-	/*
-	 * opt_maxcall - maximum call/push/using
-	 */
-    push_cur_use_start = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
-    push_cur_use_end   = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
-    use_lab      = new String[tz390.opt_maxcall];
-    use_base_esd = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
-    use_base_loc = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
-    use_base_len = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
-    use_reg      = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
-    use_reg_loc  = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
-    using_start = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
-    using_end   = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
-    print_on   = (boolean[])Array.newInstance(boolean.class,tz390.opt_maxcall);
-    print_gen  = (boolean[])Array.newInstance(boolean.class,tz390.opt_maxcall);
-    print_data = (boolean[])Array.newInstance(boolean.class,tz390.opt_maxcall);
-    xref_file_name   = new String[tz390.opt_maxfile]; 
-    xref_file_type   = new char[tz390.opt_maxfile]; // RPI 549 + or =
-    xref_file_path   = new String[tz390.opt_maxfile];  // RPI 425
-    xref_file_errors = (int[])Array.newInstance(int.class,tz390.opt_maxfile);
-    /*
-	 * opt_maxesd - maximum sections
-	 */
-    esd_sid   = (int[])Array.newInstance(int.class,tz390.opt_maxesd);
-    esd_base  = (int[])Array.newInstance(int.class,tz390.opt_maxesd); // RPI 301
-    esd_loc   = (int[])Array.newInstance(int.class,tz390.opt_maxesd); // RPI 778 cur loc within section for continue
-    /*
-	 * opt_maxline - maximum BAL loaded in memory
-	 */
-    bal_line_text = new String[tz390.opt_maxline]; //logical bal line from 1 or more physical lines
-    bal_line_num = (int[])Array.newInstance(int.class,tz390.opt_maxline); //starting physical line #
-    bal_line_xref_file_num  = (int[])Array.newInstance(int.class,tz390.opt_maxline); //starting physical line #
-    bal_line_xref_file_line = (int[])Array.newInstance(int.class,tz390.opt_maxline); //starting physical line #
-    /*
-	 * opt_maxrld - relocation definitions
-	 */
-    rld_fld_esd = (int[])Array.newInstance(int.class,tz390.opt_maxrld);
-    rld_fld_loc = (int[])Array.newInstance(int.class,tz390.opt_maxrld);
-    rld_fld_len = (byte[])Array.newInstance(byte.class,tz390.opt_maxrld);
-    rld_fld_sgn = (char[])Array.newInstance(char.class,tz390.opt_maxrld);
-    rld_xrf_esd = (int[])Array.newInstance(int.class,tz390.opt_maxrld);
-    /*
-	 * opt_maxsym - symbols and literals
-	 */
-    sym_name         = new String[tz390.opt_maxsym];
-    sym_def          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    sym_type         = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym);
-    sym_dc_type      = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym); // RPI 790
-    sym_dc_type_sfx  = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym); // RPI 790
-    sym_attr         = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym);
-    sym_attr_elt     = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym);
-    sym_attrp        = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    sym_scale        = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-	sym_attra        = new String[tz390.opt_maxsym];
-    sym_esd          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    sym_loc          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    sym_max_loc      = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    sym_len          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    sym_sect_type    = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    sym_sect_prev    = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    sym_sect_next    = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    sym_xref = (TreeSet<Integer>[])Array.newInstance(TreeSet.class,tz390.opt_maxsym);
-    lit_name         = new String[tz390.opt_maxsym];
-    lit_pool         = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    lit_line         = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    lit_line_loc     = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    lit_esd          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    lit_loc          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    lit_len          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    lit_dup          = (int[])Array.newInstance(int.class,tz390.opt_maxsym); // RPI 1200    
-    lit_scale        = (int[])Array.newInstance(int.class,tz390.opt_maxsym); // RPI 790
-    lit_dc_type      = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym); // RPI 790
-    lit_dc_type_sfx  = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym); // RPI 790
-    lit_gen          = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym);
-    lit_def          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
-    lit_xref = (TreeSet<Integer>[])Array.newInstance(TreeSet.class,tz390.opt_maxsym);
-}
+	@SuppressWarnings("unchecked")
+	private void init_arrays()
+	{
+		// opt_maxcall - maximum call/push/using
+		push_cur_use_start = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
+		push_cur_use_end   = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
+		use_lab      = new String[tz390.opt_maxcall];
+		use_base_esd = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
+		use_base_loc = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
+		use_base_len = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
+		use_reg      = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
+		use_reg_loc  = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
+		using_start = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
+		using_end   = (int[])Array.newInstance(int.class,tz390.opt_maxcall);
+		print_on   = (boolean[])Array.newInstance(boolean.class,tz390.opt_maxcall);
+		print_gen  = (boolean[])Array.newInstance(boolean.class,tz390.opt_maxcall);
+		print_data = (boolean[])Array.newInstance(boolean.class,tz390.opt_maxcall);
+		xref_file_name   = new String[tz390.opt_maxfile]; 
+		xref_file_type   = new char[tz390.opt_maxfile]; // RPI 549 + or =
+		xref_file_path   = new String[tz390.opt_maxfile];  // RPI 425
+		xref_file_errors = (int[])Array.newInstance(int.class,tz390.opt_maxfile);
+
+		// opt_maxesd - maximum sections
+		esd_sid   = (int[])Array.newInstance(int.class,tz390.opt_maxesd);
+		esd_base  = (int[])Array.newInstance(int.class,tz390.opt_maxesd); // RPI 301
+		esd_loc   = (int[])Array.newInstance(int.class,tz390.opt_maxesd); // RPI 778 cur loc within section for continue
+
+		// opt_maxline - maximum BAL loaded in memory
+		bal_line_text = new String[tz390.opt_maxline]; //logical bal line from 1 or more physical lines
+		bal_line_num = (int[])Array.newInstance(int.class,tz390.opt_maxline); //starting physical line #
+		bal_line_xref_file_num  = (int[])Array.newInstance(int.class,tz390.opt_maxline); //starting physical line #
+		bal_line_xref_file_line = (int[])Array.newInstance(int.class,tz390.opt_maxline); //starting physical line #
+
+		// opt_maxrld - relocation definitions
+		rld_fld_esd = (int[])Array.newInstance(int.class,tz390.opt_maxrld);
+		rld_fld_loc = (int[])Array.newInstance(int.class,tz390.opt_maxrld);
+		rld_fld_len = (byte[])Array.newInstance(byte.class,tz390.opt_maxrld);
+		rld_fld_sgn = (char[])Array.newInstance(char.class,tz390.opt_maxrld);
+		rld_xrf_esd = (int[])Array.newInstance(int.class,tz390.opt_maxrld);
+
+		// opt_maxsym - symbols and literals
+		sym_name         = new String[tz390.opt_maxsym];
+		sym_def          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_type         = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym);
+		sym_dc_type      = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym); // RPI 790
+		sym_dc_type_sfx  = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym); // RPI 790
+		sym_attr         = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym);
+		sym_attr_elt     = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym);
+		sym_attrp        = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_scale        = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_attra        = new String[tz390.opt_maxsym];
+		sym_esd          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_loc          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_max_loc      = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_len          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_sect_type    = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_sect_prev    = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_sect_next    = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		sym_xref = (TreeSet<Integer>[])Array.newInstance(TreeSet.class,tz390.opt_maxsym);
+		lit_name         = new String[tz390.opt_maxsym];
+		lit_pool         = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		lit_line         = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		lit_line_loc     = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		lit_esd          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		lit_loc          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		lit_len          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		lit_dup          = (int[])Array.newInstance(int.class,tz390.opt_maxsym); // RPI 1200    
+		lit_scale        = (int[])Array.newInstance(int.class,tz390.opt_maxsym); // RPI 790
+		lit_dc_type      = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym); // RPI 790
+		lit_dc_type_sfx  = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym); // RPI 790
+		lit_gen          = (byte[])Array.newInstance(byte.class,tz390.opt_maxsym);
+		lit_def          = (int[])Array.newInstance(int.class,tz390.opt_maxsym);
+		lit_xref = (TreeSet<Integer>[])Array.newInstance(TreeSet.class,tz390.opt_maxsym);
+	}
 private void compile_patterns(){
 	/* 
 	 * compile regular expression parsers
@@ -1433,148 +1095,151 @@ private void compile_patterns(){
         	}
 
 }
-private void open_files(){
-	/*
-	 * 1.  Set trace file name
-	 * 2.  Open obj and prn files
+	/**
+	 * 1.  Set trace file name.<br>
+	 * 2.  Open OBJ and PRN files.
 	 */
-	    if (tz390.trace_file_name == null){  // RPI 719
-	    	tz390.trace_file_name = tz390.dir_trc + tz390.pgm_name + tz390.tra_type;
-	    } else {
-	    	tz390.trace_file_name = tz390.trace_file_name + tz390.tra_type;
-	    }
-       	if (tz390.opt_obj){  // RPI 694
-       		try {
-       			obj_file = new RandomAccessFile(tz390.get_first_dir(tz390.dir_obj) + tz390.pgm_name + tz390.obj_type,"rw"); 
-       		} catch (Exception e){
-       			abort_error(4,"I/O error on obj open - " + e.toString());
-       		}
-       	}
-       	if (tz390.opt_list){
-       		String prn_file_name = tz390.get_file_name(tz390.dir_prn,tz390.pgm_name,tz390.prn_type); // RPI 866
-            try {
-            	prn_file = new File(prn_file_name); // RPI 908 catch null error
-       	        prn_file_buff = new BufferedWriter(new FileWriter(prn_file));
-       	    } catch (Exception e){
-       		    abort_error(4,"I/O error on prn open - " + e.toString());
-       	    }
-       	}
-}
-private void process_bal(){
-	/* 
-	 * assemble bal source into obj relocatable
-	 * object code file                           
-	 *   
-	 */
-	     resolve_symbols();
-	     list_bal_line = true; // RPI 891 
-	     gen_obj_esds();
-	     gen_obj_text();
-	     gen_obj_rlds();
-	     gen_obj_end();   // RPI 1197
-	     if (tz390.opt_list){
-	    	list_bal_line = true; // RPI 891  
-	     	gen_sym_list();
-	     	gen_lit_xref_list(); //RPI198
-	     }	     
-}
-private void resolve_symbols(){
-	/*
-	 * if errors occurred during loading of bal
-	 * repeat symbol update passes until there 
-	 * are no errors or minimum error or max
-	 * passes are reached.
-	 */
-	reset_lits();
-	tz390.reset_opsyn();
-    if  (az390_errors > 0 || sect_change){ // RPI 605 
-    	 int prev_az390_errors = az390_errors + 1;
-    	 while (cur_pass <= tz390.opt_maxpass + tot_loc_stmt // RPI 920
-    	 		&& (sect_change 
-    	 			|| (az390_errors > 0 && az390_errors < prev_az390_errors) // RPI 632 repeat until 0 or no change
-    	 			|| cur_pass <= 1  // RPI 264, RPI 632 was <=2
-    	 			)
-    	 		){
-    		 report_label_changes = true; // RPI 632
-    		 report_equ_changes   = true; // RPI 632
-    	 	 prev_az390_errors = az390_errors;
-    	 	 az390_errors = 0;
-    	 	 az390_rc = 0; // RPI 1062
-    	 	 cur_pass++;
-    	     update_symbols();
-    	     if (tz390.opt_tracea){
-    	    	 String pass_msg = "PASS " + cur_pass + "  TOTAL ERRORS " + az390_errors;
-    	    	 tz390.put_trace(pass_msg);
-    	    	 tz390.put_systerm(pass_msg); // RPI 605
-    	     }
-    		 reset_lits();
-    		 tz390.reset_opsyn();
-         }
-    }
-    az390_errors = 0;  // RPI 920 restore from prev.
-    az390_rc = 0; // RPI 1062
-    bal_abort = false; // RPI 920 prevent obj ESD error
-	cur_pass++;  // incr to last pass
-}
-private void update_symbols(){
-    /*
-     * scan bal source and update symbols
-     */
-         loc_ctr = 0;
-         cur_lit_pool = 1;
-         cur_esd = 0;
-         bal_eof = false;
-         end_found = false;
-         bal_line_index = 1;
-	     while (!bal_eof){
-	    	  check_timeout();
-		      if  (bal_line_index == tot_bal_line){
-	           	  bal_eof = true;
-		      } else {
-	               bal_line = bal_line_text[bal_line_index];
-	               xref_bal_index = bal_line_index;
-	               parse_bal_line();
-	               bal_op_index = find_bal_op();
-	               if (bal_op_index > -1){  // RPI 274
-	           	      process_bal_op();    
-	               }
-			       bal_line_index++;
-	          }
-	     }
-	     if (!end_found){
-	    	 process_end();
-	     }
-}
-private void check_timeout(){
-	/*
-	 * check if timeout expired
-	 */
-	if (tz390.opt_time){
-		cur_date = new Date();
-		tod_end = cur_date.getTime();
-		if (tod_end > tod_time_limit){
-			abort_error(80,"time limit exceeded");
+	private void open_files()
+	{
+		if (tz390.trace_file_name == null) {  // RPI 719
+			tz390.trace_file_name = tz390.dir_trc + tz390.pgm_name + tz390.tra_type;
+		} else {
+			tz390.trace_file_name = tz390.trace_file_name + tz390.tra_type;
+		}
+		if (tz390.opt_obj) {  // RPI 694
+			try {
+				obj_file = new RandomAccessFile(tz390.get_first_dir(tz390.dir_obj) + tz390.pgm_name + tz390.obj_type,"rw"); 
+			} catch (final Exception e) {
+				abort_error(4, "I/O error on obj open - " + e.toString());
+			}
+		}
+		if (tz390.opt_list) {
+			final String prn_file_name = tz390.get_file_name(tz390.dir_prn,tz390.pgm_name,tz390.prn_type); // RPI 866
+			try {
+				prn_file = new File(prn_file_name); // RPI 908 catch null error
+				prn_file_buff = new BufferedWriter(new FileWriter(prn_file));
+			} catch (final Exception e) {
+				abort_error(4, "I/O error on prn open - " + e.toString());
+			}
 		}
 	}
+
+	/**
+	 * Assemble BAL source into OBJ relocatable object code file.                           
+	 */
+	private void process_bal()
+	{
+		resolve_symbols();
+		list_bal_line = true; // RPI 891 
+		gen_obj_esds();
+		gen_obj_text();
+		gen_obj_rlds();
+		gen_obj_end();   // RPI 1197
+		if (tz390.opt_list) {
+			list_bal_line = true; // RPI 891  
+			gen_sym_list();
+			gen_lit_xref_list(); //RPI198
+		}
+	}
+
+	/**
+	 * If errors occurred during loading of BAL repeat symbol update passes until there 
+	 * are no errors or minimum error or max passes are reached.
+	 */
+	private void resolve_symbols()
+	{
+		reset_lits();
+		tz390.reset_opsyn();
+		if (az390_errors > 0 || sect_change) { // RPI 605 
+			int prev_az390_errors = az390_errors + 1;
+			while (cur_pass <= tz390.opt_maxpass + tot_loc_stmt // RPI 920
+					&& (sect_change 
+						|| (az390_errors > 0 && az390_errors < prev_az390_errors) // RPI 632 repeat until 0 or no change
+						|| cur_pass <= 1  // RPI 264, RPI 632 was <=2
+						)
+					) {
+				report_label_changes = true; // RPI 632
+				report_equ_changes   = true; // RPI 632
+				prev_az390_errors = az390_errors;
+				az390_errors = 0;
+				az390_rc = 0; // RPI 1062
+				cur_pass++;
+				update_symbols();
+				if (tz390.opt_tracea){
+					String pass_msg = "PASS " + cur_pass + "  TOTAL ERRORS " + az390_errors;
+					tz390.put_trace(pass_msg);
+					tz390.put_systerm(pass_msg); // RPI 605
+				}
+				reset_lits();
+				tz390.reset_opsyn();
+			}
+		}
+		az390_errors = 0;  // RPI 920 restore from prev.
+		az390_rc = 0; // RPI 1062
+		bal_abort = false; // RPI 920 prevent obj ESD error
+		cur_pass++; // incr to last pass
+	}
+
+	/**
+	 * Scan BAL source and update symbols.
+	 */
+	private void update_symbols()
+	{
+		loc_ctr = 0;
+		cur_lit_pool = 1;
+		cur_esd = 0;
+		bal_eof = false;
+		end_found = false;
+		bal_line_index = 1;
+		while (!bal_eof){
+			check_timeout();
+			if  (bal_line_index == tot_bal_line){
+				bal_eof = true;
+			} else {
+				bal_line = bal_line_text[bal_line_index];
+				xref_bal_index = bal_line_index;
+				parse_bal_line();
+				bal_op_index = find_bal_op();
+				if (bal_op_index > -1){  // RPI 274
+					process_bal_op();    
+				}
+				bal_line_index++;
+			}
+		}
+		if (!end_found){
+			process_end();
+		}
+	}
+
+	/**
+	 * Check if timeout expired.
+	 */
+	private void check_timeout()
+	{
+		if (tz390.opt_time) {
+			cur_date = new Date();
+			tod_end = cur_date.getTime();
+			if (tod_end > tod_time_limit) {
+				abort_error(80, "Time limit exceeded");
+			}
+		}
 }
-private void update_sects(){
-	/*
-	 * update each section starting address
-	 * and max length, and reset current length
-	 * and current esd_loc
+
+	/**
+	 * Update each section starting address and max length, and
+	 * reset current length and current esd_loc.
 	 * 
 	 * Notes:
-	 *   1.  If any section start address or 
-	 *       max length changes issue error
+	 *   1.  If any section start address or max length changes issue error
 	 *       to force additional passes.
-	 *   2.  sym_cst CSECT's start at 0 and are
-	 *       contiguous within LOCTR's
+	 *   2.  sym_cst CSECT's start at 0 and are contiguous within LOCTR's
 	 *   3.  Each new CSECT is aligned to *8
 	 *   4.  sym_dst DSECT's always start at 0
-	 *   5.  Set esd_base to root section
-	 *       for cst, dst, and loctors
-	 **/
-	if (tot_loc_stmt > 0 && cur_pass == 1){ // RPI 632 
+	 *   5.  Set esd_base to root section for cst, dst, and loctors
+	 */
+private void update_sects()
+{
+	if (tot_loc_stmt > 0 && cur_pass == 1) { // RPI 632 
 		sect_change_error();  // RPI 632 force first 2 passes if LOCTR found
 	} else {
 		sect_change = false;
@@ -1618,8 +1283,8 @@ private void update_sects(){
 			sym_len[cur_sid] = loc_ctr - sym_loc[cur_sid];
 			update_loctrs();
 			sym_len[cur_sid] = 0;
-            cst_ctr = loc_ctr; // save end of CSECT
-		} else if (sym_type[cur_sid] == sym_dst              
+			cst_ctr = loc_ctr; // save end of CSECT
+		} else if (sym_type[cur_sid] == sym_dst
 			       && sym_sect_prev[cur_sid] == 0){
 			loc_ctr = 0;
 			sym_loc[esd_sid[index]] = loc_ctr;
@@ -1642,7 +1307,9 @@ private void update_sects(){
 	}
 	loc_ctr = 0;
 }
-private void sect_change_error(){
+
+private void sect_change_error()
+{
 	/*
 	 * set sect_change 
 	 */
@@ -1650,10 +1317,8 @@ private void sect_change_error(){
 }
 private void update_loctrs(){
 	/*
-	 * update loctr sections with contiguous
-	 * starting addresses from CSECT/DSECT
-	 * and issue errors if any start address
-	 * or length changes and reset length for
+	 * update loctr sections with contiguous starting addresses from CSECT/DSECT
+	 * and issue errors if any start address or length changes and reset length for
 	 * next pass.
 	 */
 	int index = cur_sid;
@@ -1686,8 +1351,7 @@ private void update_loctrs(){
 }
 private void reset_lits(){
 	/*
-	 * reset lit_gen flags to force reallocation
-	 * on each pass
+	 * reset lit_gen flags to force reallocation on each pass
 	 */
 	if (tot_lit > 0){
 		Arrays.fill(lit_gen,0,tot_lit,(byte)0); // RPI 411
@@ -1695,8 +1359,7 @@ private void reset_lits(){
 }
 private void gen_obj_esds(){
 	/*
-	 * write ESD's for CSECTS, EXTRNS, and ENTRIES
-	 * to the OBJ file in ascii hex 
+	 * write ESD's for CSECTS, EXTRNS, and ENTRIES to the OBJ file in ascii hex 
 	 * and list on PRN if option LIST
 	 */
 	xref_bal_index = -1;
@@ -5430,8 +5093,7 @@ private synchronized void abort_error(int error,String msg){ // RPI 646
 }
 private void put_copyright(){
 	   /*
-	    * display az390 version, timestamp,
-	    * and copyright if running standalone
+	    * display az390 version, time stamp, and copyright if running stand-alone
 	    */
 	    tz390.force_nocon = true; // RPI 755
 	   	if  (z390_log_text == null){
@@ -8701,316 +8363,308 @@ private void gen_ccw1(){  // RPI 567
 		list_obj_code = list_obj_code.substring(8)+list_obj_code.substring(0,8);
 	}
 }
-private void fp_get_hex(){
-	/*
-	 * set dc_hex for floating point
-	 * string fp_text
+
+	/**
+	 * Set dc_hex for floating point string fp_text
 	 * in scientific notation 0.314159E1 etc.
-	 * format is based on fp type 0-8 (db,dd,dh,eb,ed,eh,lb,ld,lh)
-	 *
-	 * Notes:
-	 *   1.  This is very tricky code!
-	 *   2.  Use BigDecimal for all types to 
-	 *       insure DH and EH exponents beyond 
-	 *       range of DB and EB will be correctly
-	 *       handled without error.
-	 *   3.  The fp_context is set to significant
-	 *       decimal digits plus fp_guard_digts to insure 
-	 *       sufficient significant bits for proper
-	 *       rounding occurs.
-	 *   4.  The preferred DFP exponent  
-	 *       (BigDecimal scale factor) is
-	 *       set based on explicit decimal poiint
-	 *       with significant trailing decimal places
-	 *       including zeros else use 0. RPI 790
-	 * 
-	 * First convert string constant to positive
-	 * big_dec1 value with sufficent sig. bits.
-	 * Exit with artbitrary format if zero.
+	 * Format is based on fp type 0-8 (db,dd,dh,eb,ed,eh,lb,ld,lh)
 	 */
-	char fp_sign = '+';
-	if (fp_text.charAt(0) =='-'){ // RPI 834
-		fp_sign = '-';
-		fp_text = fp_text.substring(1);
-	}
-	if (fp_text.charAt(0) == '('){ // RPI 367 support (MIN) and (MAX)
-		if (fp_text.toUpperCase().equals("(MAX)")){
-			switch (tz390.fp_type){  // gen (max) hex for tz390.fp_type
-			case 0: // tz390.fp_db_type s1,e11,m52 with assumed 1
-				dc_hex = "7FEFFFFFFFFFFFFF";
-			    break;
-			case 1: // tz390.fp_dd_type s1,cf5,bxcf6,ccf20
-			    dc_hex = "77FCFF3FCFF3FCFF"; // RPI 407
-			    break;
-			case 2: // tz390.fp_dh_type s1,e7,m56 with hex exp
-				dc_hex = "7FFFFFFFFFFFFFFF";
-				break;
-			case 3: // tz390.fp_eb_type s1,e8,m23 with assumed 1
-	            dc_hex = "7F7FFFFF";
-	            break;
-			case 4: // tz390.fp_ed_type s1,cf5,bxcf8,ccf50
-			    dc_hex = "77F3FCFF"; // RPI 407
-			    break;
-			case 5: // tz390.fp_eh_type s1,e7,m24 with hex exp
-				dc_hex = "7FFFFFFF";
-				break;
-			case 6: // tz390.fp_lb_type s1,e15,m112 with assumed 1
-				dc_hex = "7FFEFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
-				break;
-			case 7: // tz390.fp_ld_type s1,cf5,bxcf12,ccf110
-			    dc_hex = "77FFCFF3FCFF3FCFF3FCFF3FCFF3FCFF"; // RPI 407
-			    break;
-			case 8: // tz390.fp_lh_type s1,e7,m112 with split hex	
-				dc_hex = "7FFFFFFFFFFFFFFF71FFFFFFFFFFFFFF";
-				break;
-			case 9: // tz390.fp_lq_type quad word RPI 1108
-				dc_hex = "00000000000000000000000000000000";
-				break;
+	private void fp_get_hex(){
+		/*
+		 * Notes:
+		 *   1.  This is very tricky code!
+		 *   2.  Use BigDecimal for all types to insure DH and EH exponents beyond 
+		 *       range of DB and EB will be correctly handled without error.
+		 *   3.  The fp_context is set to significant decimal digits plus fp_guard_digts
+		 *       to insure sufficient significant bits for proper rounding occurs.
+		 *   4.  The preferred DFP exponent  (BigDecimal scale factor) is
+		 *       set based on explicit decimal poiint with significant trailing decimal places
+		 *       including zeros else use 0. RPI 790
+		 * 
+		 * First convert string constant to positive big_dec1 value with sufficent sig. bits.
+		 * Exit with artbitrary format if zero.
+		 */
+		char fp_sign = '+';
+		if (fp_text.charAt(0) =='-') { // RPI 834
+			fp_sign = '-';
+			fp_text = fp_text.substring(1);
+		}
+		if (fp_text.charAt(0) == '(') { // RPI 367 support (MIN) and (MAX)
+			if (fp_text.toUpperCase().equals("(MAX)")) {
+				switch (tz390.fp_type) {  // gen (max) hex for tz390.fp_type
+				case 0: // tz390.fp_db_type s1,e11,m52 with assumed 1
+					dc_hex = "7FEFFFFFFFFFFFFF";
+					break;
+				case 1: // tz390.fp_dd_type s1,cf5,bxcf6,ccf20
+					dc_hex = "77FCFF3FCFF3FCFF"; // RPI 407
+					break;
+				case 2: // tz390.fp_dh_type s1,e7,m56 with hex exp
+					dc_hex = "7FFFFFFFFFFFFFFF";
+					break;
+				case 3: // tz390.fp_eb_type s1,e8,m23 with assumed 1
+					dc_hex = "7F7FFFFF";
+					break;
+				case 4: // tz390.fp_ed_type s1,cf5,bxcf8,ccf50
+					dc_hex = "77F3FCFF"; // RPI 407
+					break;
+				case 5: // tz390.fp_eh_type s1,e7,m24 with hex exp
+					dc_hex = "7FFFFFFF";
+					break;
+				case 6: // tz390.fp_lb_type s1,e15,m112 with assumed 1
+					dc_hex = "7FFEFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
+					break;
+				case 7: // tz390.fp_ld_type s1,cf5,bxcf12,ccf110
+					dc_hex = "77FFCFF3FCFF3FCFF3FCFF3FCFF3FCFF"; // RPI 407
+					break;
+				case 8: // tz390.fp_lh_type s1,e7,m112 with split hex	
+					dc_hex = "7FFFFFFFFFFFFFFF71FFFFFFFFFFFFFF";
+					break;
+				case 9: // tz390.fp_lq_type quad word RPI 1108
+					dc_hex = "00000000000000000000000000000000";
+					break;
+				}
+				if (fp_sign == '-') {
+					dc_hex = "F" + dc_hex.substring(1);
+				}
+				return;
+			} else if (fp_text.toUpperCase().equals("(MIN)")) {
+				switch (tz390.fp_type){  // gen (min) hex for tz390.fp_type
+				case 0: // tz390.fp_db_type s1,e11,m52 with assumed 1
+					dc_hex = "0010000000000000";
+				    break;
+				case 1: // tz390.fp_dd_type s1,cf5,bxcf8,ccf50
+					dc_hex = "0000000000000001"; // RPI 407
+					break;
+				case 2: // tz390.fp_dh_type s1,e7,m56 with hex exp
+					dc_hex = "0110000000000000";
+					break;
+				case 3: // tz390.fp_eb_type s1,e7,m24 with assumed 1
+					dc_hex = "00800000";
+					break;
+				case 4: // tz390.fp_dd_type s1,cf5,bxcf6,ccf20
+					dc_hex = "00000001"; // RPI 407
+					break;
+				case 5: // tz390.fp_eh_type s1,e7,m24 with hex exp
+					dc_hex = "01100000";
+					break;
+				case 6: // tz390.fp_lb_type s1,e15,m112 with assumed 1
+					dc_hex = "00010000000000000000000000000000";
+					break;
+				case 7: // tz390.fp_ld_type s1,cf5,bxcf12,ccf110
+					dc_hex = "00000000000000000000000000000001"; // RPI 407
+					break;
+				case 8: // tz390.fp_lh_type s1,e7,m112 with split hex	
+					dc_hex = "01100000000000007200000000000000";
+					break;
+				case 9: // tz390.fp_lq_type quad word RPI 1108
+					dc_hex = "00000000000000000000000000000000";
+					break;	
+				}
+				if (fp_sign == '-'){
+					dc_hex = "8" + dc_hex.substring(1);
+				}
+				return;
+			} else {
+				log_error(112,"unrecognized floating point constant " + fp_text);
 			}
-			if (fp_sign == '-'){
-				dc_hex = "F" + dc_hex.substring(1);
+		}
+		fp_context = new MathContext(tz390.fp_precision[tz390.fp_type],RoundingMode.HALF_EVEN); // RPI 843
+		try { // RPI 424
+			fp_big_dec1 = new BigDecimal(fp_text,fp_context);
+		} catch (Exception e){
+			log_error(162,"invalid decimal floating point constant");
+			fp_big_dec1 = BigDecimal.ZERO;
+		}
+		if (dc_exp > 0){ // RPI 368 adj by DC E modifer
+			fp_big_dec1 = fp_big_dec1.movePointLeft(dc_exp);
+		} else if (dc_exp < 0){
+			fp_big_dec1 = fp_big_dec1.movePointRight(-dc_exp);		
+		}
+		if (fp_big_dec1.signum() > 0){
+			if (fp_sign == '+'){  // RPI 834
+				tz390.fp_sign = 0;
+			} else {
+				tz390.fp_sign = tz390.fp_sign_bit[tz390.fp_type];
 			}
-			return;
-		} else if (fp_text.toUpperCase().equals("(MIN)")){
-			switch (tz390.fp_type){  // gen (min) hex for tz390.fp_type
+		} else if (fp_sign == '+'){ // RPI 834
+			switch (tz390.fp_type){  // gen zero hex for tz390.fp_type
 			case 0: // tz390.fp_db_type s1,e11,m52 with assumed 1
-				dc_hex = "0010000000000000";
-			    break;
-			case 1: // tz390.fp_dd_type s1,cf5,bxcf8,ccf50
-				dc_hex = "0000000000000001"; // RPI 407
-				break;
+				dc_hex = "0000000000000000"; // RPI 384
+				return;
+			case 1: // tz390.fp_dd_type s1,cf5,bxcf8,ccf50 // RPI 407
+				dc_hex = "2238000000000000"; // RPI 384 RPI 790
+				return;
 			case 2: // tz390.fp_dh_type s1,e7,m56 with hex exp
-				dc_hex = "0110000000000000";
-				break;
+				dc_hex = "0000000000000000"; // RPI 384
+				return;
 			case 3: // tz390.fp_eb_type s1,e7,m24 with assumed 1
-	            dc_hex = "00800000";
-	            break;
-			case 4: // tz390.fp_dd_type s1,cf5,bxcf6,ccf20
-				dc_hex = "00000001"; // RPI 407
-				break;
+				dc_hex = "00000000"; // RPI 384
+				return;
+			case 4: // tz390.fp_ed_type s1,cf5,bxdf6,ccf20 // RPI 407
+				dc_hex = "22500000"; // RPI 384 RPI 790
+				return;
 			case 5: // tz390.fp_eh_type s1,e7,m24 with hex exp
-				dc_hex = "01100000";
-				break;
+				dc_hex = "00000000"; // RPI 384
+				return;
 			case 6: // tz390.fp_lb_type s1,e15,m112 with assumed 1
-				dc_hex = "00010000000000000000000000000000";
-				break;
-			case 7: // tz390.fp_ld_type s1,cf5,bxcf12,ccf110
-				dc_hex = "00000000000000000000000000000001"; // RPI 407
-				break;
+				dc_hex = "00000000000000000000000000000000";  // RPI 384
+				return;
+			case 7: // tz390.fp_ld_type s1,cf5,bxdf12,ccf110 // RPI 407	
+				dc_hex = "22080000000000000000000000000000";  // RPI 384 RPI 790
+				return;
 			case 8: // tz390.fp_lh_type s1,e7,m112 with split hex	
-				dc_hex = "01100000000000007200000000000000";
-				break;
+				dc_hex = "00000000000000000000000000000000";  // RPI 384
+				return;
 			case 9: // tz390.fp_lq_type quad word RPI 1108
 				dc_hex = "00000000000000000000000000000000";
 				break;	
 			}
-			if (fp_sign == '-'){
-				dc_hex = "8" + dc_hex.substring(1);
+		} else { // RPI 834 negative zero values
+			switch (tz390.fp_type){  // gen zero hex for tz390.fp_type
+			case 0: // tz390.fp_db_type s1,e11,m52 with assumed 1
+				dc_hex = "8000000000000000"; // RPI 384
+				return;
+			case 1: // tz390.fp_dd_type s1,cf5,bxcf8,ccf50 // RPI 407
+				dc_hex = "A238000000000000"; // RPI 384 RPI 790
+				return;
+			case 2: // tz390.fp_dh_type s1,e7,m56 with hex exp
+				dc_hex = "8000000000000000"; // RPI 384
+				return;
+			case 3: // tz390.fp_eb_type s1,e7,m24 with assumed 1
+				dc_hex = "80000000"; // RPI 384
+				return;
+			case 4: // tz390.fp_ed_type s1,cf5,bxdf6,ccf20 // RPI 407
+				dc_hex = "A2500000"; // RPI 384 RPI 790
+				return;
+			case 5: // tz390.fp_eh_type s1,e7,m24 with hex exp
+				dc_hex = "80000000"; // RPI 384
+				return;
+			case 6: // tz390.fp_lb_type s1,e15,m112 with assumed 1
+				dc_hex = "80000000000000000000000000000000";  // RPI 384
+				return;
+			case 7: // tz390.fp_ld_type s1,cf5,bxdf12,ccf110 // RPI 407	
+				dc_hex = "A2080000000000000000000000000000";  // RPI 384 RPI 790
+				return;
+			case 8: // tz390.fp_lh_type s1,e7,m112 with split hex	
+				dc_hex = "80000000000000000000000000000000";  // RPI 384
+				return;
+			case 9: // tz390.fp_lq_type quad word RPI 1108
+				dc_hex = "00000000000000000000000000000000";
+				break;	
 			}
-			return;
-		} else {
-			log_error(112,"unrecognized floating point constant " + fp_text);
 		}
-	}
-	fp_context = new MathContext(tz390.fp_precision[tz390.fp_type],RoundingMode.HALF_EVEN); // RPI 843
-	try { // RPI 424
-		fp_big_dec1 = new BigDecimal(fp_text,fp_context);
-	} catch (Exception e){
-		log_error(162,"invalid decimal floating point constant");
-		fp_big_dec1 = BigDecimal.ZERO;
-	}
-	if (dc_exp > 0){ // RPI 368 adj by DC E modifer
-		fp_big_dec1 = fp_big_dec1.movePointLeft(dc_exp);
-	} else if (dc_exp < 0){
-		fp_big_dec1 = fp_big_dec1.movePointRight(-dc_exp);		
-	}
-	if (fp_big_dec1.signum() > 0){
-		if (fp_sign == '+'){  // RPI 834
-			tz390.fp_sign = 0;
-		} else {
-			tz390.fp_sign = tz390.fp_sign_bit[tz390.fp_type];
-		}
-	} else if (fp_sign == '+'){ // RPI 834
-		switch (tz390.fp_type){  // gen zero hex for tz390.fp_type
+		/*
+		 * 1.  Convert BFP and HFP to base 2 exp and mantissa from base 10.
+		 * 2.  For DFP adjust base 10 exponent based on explicit decimal point
+		 *     and significant trailing digits including zeros.
+		 */
+		switch (tz390.fp_type) {
 		case 0: // tz390.fp_db_type s1,e11,m52 with assumed 1
-			dc_hex = "0000000000000000"; // RPI 384
-			return;
+			cvt_fp_exp_to_base_2();
+			fp_cvt_bd_to_hex();
+			break;
 		case 1: // tz390.fp_dd_type s1,cf5,bxcf8,ccf50 // RPI 407
-			dc_hex = "2238000000000000"; // RPI 384 RPI 790
-			return;
+			fp_cvt_bd_to_hex();
+			break;
 		case 2: // tz390.fp_dh_type s1,e7,m56 with hex exp
-			dc_hex = "0000000000000000"; // RPI 384
-			return;
+			cvt_fp_exp_to_base_2();
+			fp_cvt_bd_to_hex();
+			break;
 		case 3: // tz390.fp_eb_type s1,e7,m24 with assumed 1
-			dc_hex = "00000000"; // RPI 384
-			return;
+			cvt_fp_exp_to_base_2();
+			fp_cvt_bd_to_hex();
+			break;
 		case 4: // tz390.fp_ed_type s1,cf5,bxdf6,ccf20 // RPI 407
-			dc_hex = "22500000"; // RPI 384 RPI 790
-			return;
+			fp_cvt_bd_to_hex();
+			break;
 		case 5: // tz390.fp_eh_type s1,e7,m24 with hex exp
-			dc_hex = "00000000"; // RPI 384
-			return;
+			cvt_fp_exp_to_base_2();
+			fp_cvt_bd_to_hex();
+			break;
 		case 6: // tz390.fp_lb_type s1,e15,m112 with assumed 1
-			dc_hex = "00000000000000000000000000000000";  // RPI 384
-			return;
+			cvt_fp_exp_to_base_2();
+			fp_cvt_bd_to_hex();
+			break;
 		case 7: // tz390.fp_ld_type s1,cf5,bxdf12,ccf110 // RPI 407	
-			dc_hex = "22080000000000000000000000000000";  // RPI 384 RPI 790
-			return;
+			fp_cvt_bd_to_hex();
+			break;
 		case 8: // tz390.fp_lh_type s1,e7,m112 with split hex	
-			dc_hex = "00000000000000000000000000000000";  // RPI 384
-			return;
+			cvt_fp_exp_to_base_2();
+			fp_cvt_bd_to_hex();
+			break;
 		case 9: // tz390.fp_lq_type quad word RPI 1108
-			dc_hex = "00000000000000000000000000000000";
-			break;	
-		}
-	} else { // RPI 834 negative zero values
-		switch (tz390.fp_type){  // gen zero hex for tz390.fp_type
-		case 0: // tz390.fp_db_type s1,e11,m52 with assumed 1
-			dc_hex = "8000000000000000"; // RPI 384
-			return;
-		case 1: // tz390.fp_dd_type s1,cf5,bxcf8,ccf50 // RPI 407
-			dc_hex = "A238000000000000"; // RPI 384 RPI 790
-			return;
-		case 2: // tz390.fp_dh_type s1,e7,m56 with hex exp
-			dc_hex = "8000000000000000"; // RPI 384
-			return;
-		case 3: // tz390.fp_eb_type s1,e7,m24 with assumed 1
-			dc_hex = "80000000"; // RPI 384
-			return;
-		case 4: // tz390.fp_ed_type s1,cf5,bxdf6,ccf20 // RPI 407
-			dc_hex = "A2500000"; // RPI 384 RPI 790
-			return;
-		case 5: // tz390.fp_eh_type s1,e7,m24 with hex exp
-			dc_hex = "80000000"; // RPI 384
-			return;
-		case 6: // tz390.fp_lb_type s1,e15,m112 with assumed 1
-			dc_hex = "80000000000000000000000000000000";  // RPI 384
-			return;
-		case 7: // tz390.fp_ld_type s1,cf5,bxdf12,ccf110 // RPI 407	
-			dc_hex = "A2080000000000000000000000000000";  // RPI 384 RPI 790
-			return;
-		case 8: // tz390.fp_lh_type s1,e7,m112 with split hex	
-			dc_hex = "80000000000000000000000000000000";  // RPI 384
-			return;
-		case 9: // tz390.fp_lq_type quad word RPI 1108
-			dc_hex = "00000000000000000000000000000000";
-			break;	
+			break;
 		}
 	}
-	/*
-	 * 1.  Convert BFP and HFP to base 2 exp
-	 *     and mantissa from base 10.
-	 * 2.  For DFP adjust base 10 exponent
-	 *     based on explicit decimal point
-	 *     and significant trailing digits
-	 *     includeing zeros.
-	 */
-	switch (tz390.fp_type){
-	case 0: // tz390.fp_db_type s1,e11,m52 with assumed 1
-	    cvt_fp_exp_to_base_2();
-	    fp_cvt_bd_to_hex();
-	    break;
-	case 1: // tz390.fp_dd_type s1,cf5,bxcf8,ccf50 // RPI 407
-		fp_cvt_bd_to_hex();
-		break;
-	case 2: // tz390.fp_dh_type s1,e7,m56 with hex exp
-	    cvt_fp_exp_to_base_2();
-	    fp_cvt_bd_to_hex();
-	    break;
-	case 3: // tz390.fp_eb_type s1,e7,m24 with assumed 1
-	    cvt_fp_exp_to_base_2();
-	    fp_cvt_bd_to_hex();
-	    break;
-	case 4: // tz390.fp_ed_type s1,cf5,bxdf6,ccf20 // RPI 407
-		fp_cvt_bd_to_hex();
-		break;
-	case 5: // tz390.fp_eh_type s1,e7,m24 with hex exp
-	    cvt_fp_exp_to_base_2();
-	    fp_cvt_bd_to_hex();
-	    break;
-	case 6: // tz390.fp_lb_type s1,e15,m112 with assumed 1
-	    cvt_fp_exp_to_base_2();
-	    fp_cvt_bd_to_hex();
-	    break;
-	case 7: // tz390.fp_ld_type s1,cf5,bxdf12,ccf110 // RPI 407	
-		fp_cvt_bd_to_hex();
-		break;
-	case 8: // tz390.fp_lh_type s1,e7,m112 with split hex	
-	    cvt_fp_exp_to_base_2();
-	    fp_cvt_bd_to_hex();
-	    break;
-	case 9: // tz390.fp_lq_type quad word RPI 1108
-		break;
-	}
-}
-	private void cvt_fp_exp_to_base_2(){
-	/*******************************************
-	 * calc tz390.fp_exp and big_dec2 such that:      
+
+	/**
+	 * Calc tz390.fp_exp and big_dec2 such that:      
 	 * big_dec1 = big_dec2 * 2  ** tz390.fp_exp      
-	 *************************************** 
-	 * 
-	 * tz390.fp_exp = log(big_dec1) / log(2)
-	 * 	 *                                           
-	 * Since the exponent range of LB exceeds  
-	 * native double, the log of big_dec1 is
-	 * calculated using equivalent:
-	 *   log(X*10**N) = log(X) + N*log(10)
-	 * The exponent must then be offset by the number
-	 * of bits in the required binary mantissa in 
-	 * order to retain significant bits when big_dec2
-	 * is converted to big_int format.  The exponent
-	 * is also reduced by 1 for assumed bit in binary 
-	 * formats plus 1 additional to insure rounding for
-	 * irrational values is done by shifting right.
-	 * 
-	 */ 
-	fp_big_dec1 = fp_big_dec1.stripTrailingZeros(); // RPI 821	
-	int    work_scale  =  - fp_big_dec1.scale();
-	double work_man    =    fp_big_dec1.multiply(
-		BigDecimal.TEN.pow(-work_scale,fp_context),fp_context).doubleValue();
-	tz390.fp_exp   =  (int)((Math.log(work_man) 
-			           + ((double)work_scale 
-			                * fp_log10))
-			          / fp_log2) 
-	         - tz390.fp_man_bits[tz390.fp_type] 
-			 - tz390.fp_one_bit_adj[tz390.fp_type]; 
-	/*
-	 * Now calc big_dec2 mantissa truncated integer
-	 * tz390.fp_exp calculated above.  This calculation
-	 * may produce an irrational number with the 
-	 * precison specified due to base 10 to base 2
-	 * exponent conversion.
-     *
-	 * big_dec2 = big_dec1 / 2 ** tz390.fp_exp/
-	 * 
 	 */
-	try {
-	    fp_big_dec2 = fp_big_dec1.multiply(BigDecimal.valueOf(2).pow(-tz390.fp_exp,fp_context),fp_context);
-	} catch (Exception e){
-		log_error(89,"floating point value out of range");
-		dc_hex = "FFFF000000000000";
-		return;
+	private void cvt_fp_exp_to_base_2()
+	{
+		/*******************************************
+		 * calc tz390.fp_exp and big_dec2 such that:      
+		 * big_dec1 = big_dec2 * 2  ** tz390.fp_exp      
+		 *************************************** 
+		 * 
+		 * tz390.fp_exp = log(big_dec1) / log(2)
+		 * 	 *                                           
+		 * Since the exponent range of LB exceeds  
+		 * native double, the log of big_dec1 is
+		 * calculated using equivalent:
+		 *   log(X*10**N) = log(X) + N*log(10)
+		 * The exponent must then be offset by the number
+		 * of bits in the required binary mantissa in 
+		 * order to retain significant bits when big_dec2
+		 * is converted to big_int format.  The exponent
+		 * is also reduced by 1 for assumed bit in binary 
+		 * formats plus 1 additional to insure rounding for
+		 * irrational values is done by shifting right.
+		 * 
+		 */ 
+		fp_big_dec1 = fp_big_dec1.stripTrailingZeros(); // RPI 821	
+		int    work_scale  =  - fp_big_dec1.scale();
+		double work_man    =    fp_big_dec1.multiply(
+			BigDecimal.TEN.pow(-work_scale,fp_context),fp_context).doubleValue();
+		tz390.fp_exp = (int)((Math.log(work_man) 
+					 + ((double)work_scale * fp_log10)) / fp_log2) 
+					 - tz390.fp_man_bits[tz390.fp_type] 
+					 - tz390.fp_one_bit_adj[tz390.fp_type]; 
+		/*
+		 * Now calc big_dec2 mantissa truncated integer tz390.fp_exp calculated above.  This calculation
+		 * may produce an irrational number with the precision specified due to base 10 to base 2
+		 * exponent conversion.
+	     *
+		 * big_dec2 = big_dec1 / 2 ** tz390.fp_exp/
+		 */
+		try {
+			fp_big_dec2 = fp_big_dec1.multiply(BigDecimal.valueOf(2).pow(-tz390.fp_exp,fp_context),fp_context);
+		} catch (Exception e){
+			log_error(89,"floating point value out of range");
+			dc_hex = "FFFF000000000000";
+			return;
+		}
+		/*
+		 * retrieve fp_big_dec2 mantissa bits as big_int and
+		 * adjust tz390.fp_exp by mantissa bits
+		 */
+		fp_big_int1 = fp_big_dec2.toBigInteger();
+		tz390.fp_exp = tz390.fp_exp + tz390.fp_man_bits[tz390.fp_type];
 	}
-	/*
-	 * retrieve fp_big_dec2 mantissa bits as big_int and
-	 * adjust tz390.fp_exp by mantissa bits
-	 */
-	fp_big_int1 = fp_big_dec2.toBigInteger();
-    tz390.fp_exp = tz390.fp_exp + tz390.fp_man_bits[tz390.fp_type];
-	}
-	private void fp_cvt_bd_to_hex(){
-	/*
-	 * 1.  BFP - Adjust mantiss and base 2 exponent
-	 *     to align for assumed 1 bit.
-	 * 2.  HFP - Adjust mantissa and base 2
-	 *     exponent to base 16 exponent.
-	 * 3.  DFP - Set base 10 exponent based on
-	 *     explicit decimal point and trailing
-	 *     significant digits including zeros
-	 *     else use preferred exponent of 0.  RPI 790
+
+	/**
 	 * 
 	 */
-	switch (tz390.fp_type){  // gen hex for fp type
+	private void fp_cvt_bd_to_hex()
+	{
+	/*
+	 * 1.  BFP - Adjust mantiss and base 2 exponent to align for assumed 1 bit.
+	 * 2.  HFP - Adjust mantissa and base 2 exponent to base 16 exponent.
+	 * 3.  DFP - Set base 10 exponent based on explicit decimal point and trailing
+	 *     significant digits including zeros else use preferred exponent of 0.  RPI 790
+	 */
+	switch (tz390.fp_type) {  // gen hex for fp type
 	case 0: // tz390.fp_db_type s1,e11,m52 with assumed 1
 		fp_long1 = fp_big_int1.longValue();
 		fp_round_bit = 0;
@@ -9025,22 +8679,22 @@ private void fp_get_hex(){
 		tz390.fp_exp = tz390.fp_exp + tz390.fp_exp_bias[tz390.fp_type];
 		if (tz390.fp_exp >= 0 && tz390.fp_exp <= tz390.fp_exp_max[tz390.fp_type]){
 			dc_hex = get_long_hex( 
-			         ((long)(tz390.fp_sign | tz390.fp_exp) 
-			         		<< tz390.fp_man_bits[tz390.fp_type])
-		              | (fp_long1 & fp_long_db_man_bits));
+					 ((long)(tz390.fp_sign | tz390.fp_exp) 
+							 << tz390.fp_man_bits[tz390.fp_type])
+					   | (fp_long1 & fp_long_db_man_bits));
 		} else {
-			log_error(89,"floating point value out of range");
+			log_error(89, "Floating point value out of range");
 			dc_hex = "FFFF000000000000";
 		}
-        break;
+		break;
 	case 1: // tz390.fp_dd_type s1,cf5,bxcf8,ccf50 // RPI 50
 		set_dfp_preferred_exp();
 		if (!tz390.fp_get_dfp_bin(tz390.fp_dd_type, fp_big_dec1)){  
-        	log_error(179,"DD dfp constant out of range");
-	    	dc_hex = "0000000000000000";
-        } else {
-        	dc_hex = tz390.get_long_hex(tz390.fp_work_reg.getLong(0),16);
-        }
+			log_error(179,"DD dfp constant out of range");
+			dc_hex = "0000000000000000";
+		} else {
+			dc_hex = tz390.get_long_hex(tz390.fp_work_reg.getLong(0),16);
+		}
 		break;
 	case 2: // tz390.fp_dh_type s1,e7,m56 with hex exp
 		fp_long1 = fp_big_int1.longValue();
@@ -9058,29 +8712,29 @@ private void fp_get_hex(){
 			}
 		}
 		tz390.fp_exp = (tz390.fp_exp >> 2) + tz390.fp_exp_bias[tz390.fp_type] + dc_scale; // RPI 368
-		if (tz390.fp_exp >= 0 && tz390.fp_exp <= tz390.fp_exp_max[tz390.fp_type]){
+		if (tz390.fp_exp >= 0 && tz390.fp_exp <= tz390.fp_exp_max[tz390.fp_type]) {
 			dc_hex = get_long_hex( 
-			         ((long)(tz390.fp_sign | tz390.fp_exp) 
-			         		<< tz390.fp_man_bits[tz390.fp_type])
-		              | fp_long1);
+					 ((long)(tz390.fp_sign | tz390.fp_exp) 
+							 << tz390.fp_man_bits[tz390.fp_type])
+					  | fp_long1);
 		} else {
-			log_error(89,"floating point value out of range");
+			log_error(89, "Floating point value out of range");
 			dc_hex = "FFFF000000000000";
 		}
 		break;
 	case 3: // tz390.fp_eb_type s1,e7,m24 with assumed 1
 		fp_int1 = fp_big_int1.intValue();
 		fp_round_bit = 0;
-		while (fp_int1 >= fp_int_eb_one_bits){
+		while (fp_int1 >= fp_int_eb_one_bits) {
 			fp_round_bit = fp_int1 & 1;
 			fp_int1 = fp_int1 >>> 1;
 			tz390.fp_exp++;
-			if (fp_int1 <= fp_int_eb_one_bits){
+			if (fp_int1 <= fp_int_eb_one_bits) {
 				fp_int1 = fp_int1 + fp_round_bit;	
 			}
 		}
 		tz390.fp_exp = tz390.fp_exp + tz390.fp_exp_bias[tz390.fp_type];
-		if (tz390.fp_exp >= 0 && tz390.fp_exp <= tz390.fp_exp_max[tz390.fp_type]){
+		if (tz390.fp_exp >= 0 && tz390.fp_exp <= tz390.fp_exp_max[tz390.fp_type]) {
 			dc_hex = tz390.get_hex( 
 			          ((tz390.fp_sign | tz390.fp_exp) 
 			          		<< tz390.fp_man_bits[tz390.fp_type])
@@ -9222,156 +8876,172 @@ private void fp_get_hex(){
 		break;
 	}	
 }
-	private void set_dfp_preferred_exp(){
-		/*
-		 * set DFP preferred base 10 exponent
-		 * for fp_big_dec1 value if explicit
-		 * decimal found in fp_text.
-		 */
+
+	/**
+	 * Set DFP preferred base 10 exponent for fp_big_dec1 value
+	 * if explicit decimal found in fp_text.
+	 */
+	private void set_dfp_preferred_exp()
+	{
 		int tot   = 0;
 		int index = fp_text.indexOf('.');
-		if (index != -1){
+		if (index != -1) {
 			index++;
 			while (index < fp_text.length() && fp_text.charAt(index) >= '0'
 				   && fp_text.charAt(index) <= '9'){
 				tot++;
 				index++;
 			}
-			if (tot > tz390.fp_digits_max[tz390.fp_type]){
+			if (tot > tz390.fp_digits_max[tz390.fp_type]) {
 				tot = tz390.fp_digits_max[tz390.fp_type];
 			}
-			fp_big_dec1.setScale(tot);			
+			fp_big_dec1.setScale(tot);
 		}
-		if (!dc_scale_explicit && dc_first_field){
+		if (!dc_scale_explicit && dc_first_field) {
 			dc_first_scale = tot; // RPI 790
 		}
 		dc_scale = fp_big_dec1.scale();
 	}
-    public boolean add_missing_copy(String name){
-	/*
-	 * add missing copy file for ERRSUM
+
+	/**
+	 * Add missing copy file for ERRSUM.
+	 * @param name
+	 * @return
 	 */
-	int index = 0;
-	while (index < tot_missing_copy){
-		if (name.equals(missing_copy[index])){
-			return true;
-		}
-		index++;
-	}
-	if (index < max_missing){
-		tot_missing_copy++;
-		missing_copy[index] = name;
-		return true;
-	} else {
-		return false;
-	}	
-}
-private boolean add_missing_macro(String name){
-	/*
-	 * add nussubg ciot file for ERRSUM
-	 */
-	int index = 0;
-	while (index < tot_missing_macro){
-		if (name.equals(missing_macro[index])){
-			return true;
-		}
-		index++;
-	}
-	if (index < max_missing){
-		tot_missing_macro++;
-		missing_macro[index] = name;
-		return true;
-	} else {
-		return false;
-	}
-}
-public void report_critical_errors(){
-	/*
-	 * report critical errors on ERR file
-	 * and console for ERRSUM option
-	 */
-	if (tot_missing_macro+tot_missing_copy+tot_missing_sym == 0){
-		return; // RPI 959
-	}
-	tz390.opt_errsum = false; // allow printing on PRN again
-	tz390.opt_list   = true;
-	put_errsum("ERRSUM Critical Error Summary Option");
-    put_errsum("ERRSUM Fix and repeat until all nested errors resolved");
-	int index = 0;
-	while (index < tot_missing_copy){
-		put_errsum("ERRSUM missing copy  =" + missing_copy[index]); // RPI 1051
-		index++;
-	}
-	index = 0;
-	while (index < tot_missing_macro){
-		put_errsum("ERRSUM missing macro =" + missing_macro[index]);
-		index++;
-	}
-	if (tot_missing_macro + tot_missing_copy == 0){
-		index = 1;
-		while (index <= tot_sym){
-			if (sym_type[index] == sym_und){
-				put_errsum("ERRSUM undefined symbol = " + sym_name[index]);
+	public boolean add_missing_copy(final String name)
+	{
+		int index = 0;
+		while (index < tot_missing_copy) {
+			if (name.equals(missing_copy[index])) {
+				return true;
 			}
 			index++;
 		}
-	}
-	put_errsum("ERRSUM total missing   copy   files =" + tot_missing_copy);
-	put_errsum("ERRSUM total missing   macro  files =" + tot_missing_macro);
-	put_errsum("ERRSUM total undefined symbols      =" + tot_missing_sym);
-	if (mz390_call){
-		put_errsum("ERRSUM total mz390 errors    = " + mz390_errors); // RPI 659 RPI 945
-	}
-	put_errsum("ERRSUM total az390 errors    = " + az390_errors); // RPI 659 RPI 945
+		if (index < max_missing) {
+			tot_missing_copy++;
+			missing_copy[index] = name;
+			return true;
+		}
+
+		return false;
 }
-private void put_errsum(String msg){
-	/*
-	 * put ERRSUM msgs on ERR file and console
+
+	/**
+	 * Add nussubg ciot file for ERRSUM.
+	 * @param name
+	 * @return
 	 */
-	msg = "AZ390E " + msg;
-	System.out.println(msg);
-	if (prn_file != null){ 
-		 // if ERRSUM turned on after open put msgs to PRN
-		 put_prn_line(msg);
+	private boolean add_missing_macro(final String name)
+	{
+		int index = 0;
+		while (index < tot_missing_macro) {
+			if (name.equals(missing_macro[index])) {
+				return true;
+			}
+			index++;
+		}
+		if (index < max_missing) {
+			tot_missing_macro++;
+			missing_macro[index] = name;
+			return true;
+		}
+
+		return false;
 	}
-	tz390.put_systerm(msg);
-}
-public int get_int_pfx(byte type,byte type_sfx,int len,int scale){
-	/*
-	 * return I' integer pfx value for symbol
-	 * based on length and scale per ref.
+
+	/**
+	 * Report critical errors on ERR file and console for ERRSUM option.
 	 */
-	switch (type){  // RPI 790
-	case 'F':
-	case 'H':
-		return 8 * len - scale - 1;
-	case 'D':
-	case 'E':
-	case 'L':
-		if (type_sfx == 'D'){ // DFP
-			if (len == 4){
-				return 7 - scale;
-			} else if (len == 8){
-				return 16 - scale;
-			} else {
-				return 34 - scale;
-			}			
-		} else { // HFP and BFP
-			if (len <= 8){
-				return 2 * (len - 1) - scale;
-			} else {
-				return 2 * (len - 1) - scale - 2;
+	public void report_critical_errors()
+	{
+		if (tot_missing_macro + tot_missing_copy + tot_missing_sym == 0) {
+			return; // RPI 959
+		}
+		tz390.opt_errsum = false; // allow printing on PRN again
+		tz390.opt_list   = true;
+		put_errsum("ERRSUM Critical Error Summary Option");
+		put_errsum("ERRSUM Fix and repeat until all nested errors resolved");
+		int index = 0;
+		while (index < tot_missing_copy) {
+			put_errsum("ERRSUM missing copy  =" + missing_copy[index]); // RPI 1051
+			index++;
+		}
+		index = 0;
+		while (index < tot_missing_macro) {
+			put_errsum("ERRSUM missing macro =" + missing_macro[index]);
+			index++;
+		}
+		if (tot_missing_macro + tot_missing_copy == 0) {
+			index = 1;
+			while (index <= tot_sym) {
+				if (sym_type[index] == sym_und) {
+					put_errsum("ERRSUM undefined symbol = " + sym_name[index]);
+				}
+				index++;
 			}
 		}
-	case 'P':
-		return 2 * len - scale - 1;
-	case 'Z':
-		return len - scale;
-	default:
-		return 0;
+		put_errsum("ERRSUM total missing   copy   files =" + tot_missing_copy );
+		put_errsum("ERRSUM total missing   macro  files =" + tot_missing_macro);
+		put_errsum("ERRSUM total undefined symbols      =" + tot_missing_sym  );
+		if (mz390_call) {
+			put_errsum("ERRSUM total mz390 errors    = " + mz390_errors); // RPI 659 RPI 945
+		}
+		put_errsum("ERRSUM total az390 errors    = " + az390_errors); // RPI 659 RPI 945
 	}
-}
-/*
- *  end of az390 code 
- */
+
+	/**
+	 * Put ERRSUM msgs on ERR file and console.
+	 * @param msg
+	 */
+	private void put_errsum(String msg)
+	{
+		msg = "AZ390E " + msg;
+		System.out.println(msg);
+		if (prn_file != null) {
+			// If ERRSUM turned on after open put messages to PRN.
+			put_prn_line(msg);
+		}
+		tz390.put_systerm(msg);
+	}
+
+	/**
+	 * Return I' integer pfx value for symbol based on length and scale per ref.
+	 * @param type
+	 * @param type_sfx
+	 * @param len
+	 * @param scale
+	 * @return
+	 */
+	public int get_int_pfx(byte type,byte type_sfx,int len,int scale)
+	{
+		switch (type) {
+		case 'F':
+		case 'H':
+			return 8 * len - scale - 1;
+		case 'D':
+		case 'E':
+		case 'L':
+			if (type_sfx == 'D') { // DFP
+				if (len == 4) {
+					return 7 - scale;
+				} else if (len == 8) {
+					return 16 - scale;
+				} else {
+					return 34 - scale;
+				}
+			} else { // HFP and BFP
+				if (len <= 8) {
+					return 2 * (len - 1) - scale;
+				} else {
+					return 2 * (len - 1) - scale - 2;
+				}
+			}
+		case 'P':
+			return 2 * len - scale - 1;
+		case 'Z':
+			return len - scale;
+		default:
+			return 0;
+		}
+	}
 }

@@ -7,330 +7,35 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Date;
 
+/**
+ * Copyright 2011 Automated Software Tools Corporation
+ * Copyright 2013 Cat Herder Software, LLC
+ * Copyright 2018 Joachim Bartz, Germany
+ * 
+ * z390 is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * z390 is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * z390; if not, write to the
+ *    Free Software Foundation, Inc.
+ *    59 Temple Place, Suite 330,
+ *    Boston, MA  02111-1307  USA
+ */
+
+/**
+ * pz390 is the processor emulator component of z390 which is called from
+ * ez390 to execute 390 code loaded in memory. Both ez390 and pz390 call
+ * sz390 svc component to perform os functions such as memory allocation and
+ * loading.
+ */
 public class pz390 {
-	/***************************************************************************
-	 * 
-	 * z390 portable mainframe assembler and emulator.
-	 * 
-	 * Copyright 2011 Automated Software Tools Corporation
-	 * 
-	 * z390 is free software; you can redistribute it and/or modify it under the
-	 * terms of the GNU General Public License as published by the Free Software
-	 * Foundation; either version 2 of the License, or (at your option) any
-	 * later version.
-	 * 
-	 * z390 is distributed in the hope that it will be useful, but WITHOUT ANY
-	 * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-	 * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-	 * details.
-	 * 
-	 * You should have received a copy of the GNU General Public License along
-	 * with z390; if not, write to the Free Software Foundation, Inc., 59 Temple
-	 * Place, Suite 330, Boston, MA 02111-1307 USA
-	 * 
-	 * pz390 is the processor emulator component of z390 which is called from
-	 * ez390 to execute 390 code loaded in memory. Both ez390 and pz390 call
-	 * sz390 svc component to perform os functions such as memory allocation and
-	 * loading.
-	 * 
-	 * *************************************************** Maintenance
-	 * *************************************************** 04/18/05 copied from
-	 * lz390.java and modified 06/20/05 start adding and testing common instr.
-	 * 06/25/05 add opcodes to trace 
-	 * 07/11/05 add floating point instructions
-	 * 08/20/05 add svc 6 link, fix svc 8 to use r0 pgm name 
-	 * 08/22/05 add SYS390
-	 *   and SYSLOG dir options 
-	 * 09/04/05 add sequential and random DCB file I/O
-	 * support 
-	 * 09/16/05 fix DSG, DSGR, DSGF, DSGFR to use R1+1 dividend 
-	 * 09/18/05 add CDE with usage and freemain info for DELETE 
-	 * 09/18/05 add link svc amode support 
-	 * 09/19/05 add TEST option interactive debug 
-	 * 09/27/05 add MEM(MB) option and reduce default to MEM(1) 
-	 * 09/27/05 fix 0C5 at end of mem using work_mem 
-	 * 10/04/05 RPI5 - option ASCII use ASCII vs EBCDIC
-	 *          zcvt_ipl_pgm = ascii name DCB DDNAME field ascii DCB FT RCDS = ascii SVC
-	 * LOAD, LINK, DELETE EP/EPLOC ASCII dump text = ascii TEST C'...' SDT =
-	 * ASCII ED/EDMK remove high bit on chars SSP type instr. allow 0x3 sign
-	 * UNPK gen 0x3 zone 
-	 * 10/04/05 RPI6 - option ERR(nn) limit errors 
-	 * 10/05/05 RPI5 - add test C"..." sdt support 
-	 * 10/12/05 suppress stats if NOSTATS option on 
-	 * 10/12/05 RPI20 fix error 62 on open of output file 10/14/05
-	 * RPI21 0C5 on PSW addr > mem 
-	 * 10/14/05 RPI22 turn off time limit if test
-	 * 10/14/05 RPI15 req z390 to issue exit at end of test 10/16/05 force
-	 * console output of msgs after abort 10/16/05 RPI23 add CLST, CUSE, and
-	 * SRST instructions 
-	 * 10/18/05 RPI28 change DSNAM field to EBCDIC unless
-	 * ASCII mode 
-	 * 10/18/05 RPI29 use EZ390E and EZ390I prefixes 10/18/05 RPI31
-	 * set r15 to 0 on successful svc 10/19/05 RPI33 only enable PD and exponent
-	 * overflow 
-	 * 10/19/05 RPI32 add SYS390 dir list support 10/19/05 RPI34 full
-	 * ebcdic / ascii translation 
-	 * 10/20/05 RPI35 prevent exit loop in test
-	 * filling log 
-	 * 10/20/05 RPI37 use "I:" and "H:" to separate op/hex keys
-	 * 10/20/05 RPI39 set rc=r15 on normal exit 10/22/05 RPI44 fix TM to set CC3
-	 * when OR'd byte = mask rather than = to test memory byte 10/23/05 RPI43
-	 * correct ED/EDMK sif. 1 byte early 
-	 * 10/23/05 RPI42 use full EBCDIC to ASCII
-	 * translate for PGMNAME, DDNAM, DSNAM, GET/PUT 10/24/05 RPI46 add svc 34 to
-	 * issue OS command 
-	 * 10/25/05 RPI47 add svc 93 to support application window
-	 * 10/26/05 RPI49 10/27/05 RPI53 set r15 to error # in synad 10/27/05 RPI56
-	 * add dump of first pgm memory if dump req 11/01/05 RPI65 fix BALR, BASR,
-	 * BASSM when R1=R2 
-	 * 11/02/05 RPI66 correct padding spaces in ASCII mode
-	 * 11/02/05 RPI69 change ED/EDMK to map X'40'for ASCII 11/03/05 RPI71 add
-	 * missing AL3 relocation code 
-	 * 11/03/05 RPI63 handle x'1a' eof marker in gm
-	 * RT/VT 
-	 * 11/03/05 RPI64 issue abend S013 if no synad after io err 11/07/05
-	 * RPI73 remove PACK/UNPK mode changes and add PKA/UNPKA 11/08/05 RPI73
-	 * change ED/EDMK to require EBCDIC mask and then translate output if ascii
-	 * 11/08/05 RPI76 end cmd processes at exit 11/08/05 RPI77 add cmd read and
-	 * wait controls 
-	 * 11/08/05 RPI79 add mult. cmd task support 11/11/05 RPI73
-	 * restore PACK, UNPK ASCII mode support (allow 3/b sign and unpk to f/s or
-	 * 3/s zone) 
-	 * 11/11/05 RPI75 add SNAP dump support svc 51 11/13/05 RPI88 add
-	 * DCB validation 
-	 * 11/15/05 RPI92 correct trace format in test 11/15/05 RPI93
-	 * correct SNAP svc to use memory range instead of address and length
-	 * 11/15/05 RPI94 add svc_timer nano-sec counter 11/18/05 RPI98 ignore cr,lf
-	 * TEST commands 
-	 * 11/19/05 RPI100 reformat abend dump and include before
-	 * continuing in test 
-	 * 11/19/05 RPI101 correct open error causing erroneous
-	 * eof error after reuse of tiot entry 11/19/05 RPI102 add LOAD extension to
-	 * support loading and deleting file in addition to 390's. 11/20/05 RPI106
-	 * correct SPM, IPM field position also NR, OR, and XR not setting CC also
-	 * PR only restore 2-14 
-	 * 11/20/05 RPI82 replace MVC loop with copy & fill
-	 * 11/21/05 add LinkedList string type checking 11/21/05 RPI108 speed up BC
-	 * by 140 NS when branch not taken by skipping RX address fetch 11/23/05
-	 * RPI110 turn off DCBOFLGS open bit at close 11/23/05 RPI108 speed up PD by
-	 * removing mem_work and using int vs BigInteger when possible 11/25/05
-	 * RPI111 trim spaces from DDNAME and DSNAME file 11/26/05 RPI47 add inital
-	 * gz390 GUAM GUI window option for WTO and WTOR support 11/27/05 RPI112 correct
-	 * error 90 I/O error 
-	 * 11/27/05 RPI108 replace byte buffer mem.get, mem.put
-	 * reg.get and reg.put with direct byte array. 11/28/05 RPI113 file path
-	 * with drive: and no separator 
-	 * 11/29/05 RPI47 add svc 1 wait and svc 160
-	 * wtor request 
-	 * 12/04/05 RPI108 speed up MVCLE, CLC, MVZ, MVN OC, NC, XC.
-	 * 12/07/05 RPI123 fix multiple path support 12/08/05 RPI121 abort ez390 on
-	 * test q command 
-	 * 12/15/05 RPI135 use tz390 shared tables 12/18/05 RPI142
-	 * use init_opcode_name_keys in tz390 and document all key codes in tz390.
-	 * 12/20/05 RPI103 add multiple +- test addr operands 12/23/05 RPI127 strip
-	 * mlc type from file name and use shared set_pgm_name_type 12/23/05 RPI131
-	 * limit file output to maxfile(mb) 01/04/06 RPI107 split ez390 into ez390,
-	 * pz390 01/06/06 RPI158 clear remainder of register for LL???? 01/08/06
-	 * RPI160 correct LLGT loading from loc + 4 01/12/06 RPI 151 add LPSW
-	 * support as branch. 
-	 * 01/15/06 RPI 173 add LRV, STPQ, LPQ support. 01/26/06
-	 * RPI 172 move options to tz390, svc > sz390 02/02/06 RPI 175 rewrite AL???
-	 * SL??? using long vs bigint 
-	 * 02/02/06 RPI 185 add z9 opcodes AFI, AGFI,
-	 * etc. 
-	 * 02/04/06 RPI 197 remove test_or_trace interrupts 02/08/06 RPI 185
-	 * add STCKF and fix STCK to be unique 02/09/06 RPI 185 add remainder of z9
-	 * opcodes 
-	 * 02/16/06 RPI 202 correct 2nd opcode mask for z9 instr. 02/18/06
-	 * RPI 206 support 3 flavors of RRF format 03/14/06 RPI 228 add CVTDCB OS
-	 * flags 
-	 * 03/15/06 RPI 229 verify correct even/odd fp pairs 04/05/06 RPI 272
-	 * correct MR to only use low 32 bits of r1+1 04/07/06 RPI 275 correct MLR
-	 * and ML to only use low 32 bits of r1+1 04/10/06 RPI 276 add zcvt_user_pgm
-	 * 04/12/06 RPI 244 support ESPIE/ESTAE PARAM, CT,OV 04/21/06 RPI 279 stimer
-	 * real exit support 
-	 * 04/23/06 RPI 295 correct ICM, ICMH, ICMY, OIHL, and
-	 * OILH CC values. 
-	 * 04/26/06 RPI 299 check for 0C5 in setups 04/27/06 RPI 298
-	 * add MAYLR MYLR MAYHR MYHR, MAYL MYL MAYH MYH 04/28/06 RPI 301 force 0C7
-	 * on PD zero sign was checking was checking first non-zero byte beyond in
-	 * error. 
-	 * 05/02/06 RPI 305 update ESPIE and ESTAE support and fix get_pd for
-	 * pd instr. to avoid recursive program checks 05/02/06 RPI 307 correct MAYL
-	 * and MAYLR to remove duplicate setup call corrupting next instruction, and
-	 * correct IPM trace format. 06/03/06 RPI 323 allow opcode break on first
-	 * stimer exit instr. 
-	 * 06/03/06 RPI 325 allow KEB and KDD exact 0 07/03/06
-	 * RPI 326 add TCEB, TCDB, and TCXB test data class 07/03/06 RPI 333 add
-	 * SRNM and support rounding modes 07/05/06 RPI 335 correct TBEDR and other
-	 * users of RRF2 setup to caculate rf3 and mf3 correctly 07/05/06 RPI 348
-	 * only show 2 bytes for halfword instr. 07/06/06 RPI 357 impove speed using
-	 * short, int, and long buffers 07/17/06 RPI 370 make zcvt conversion rtns
-	 * public for svc_cfd 
-	 * 07/20/06 RPI 376 CORRECT AL?? CC1 for high bit set
-	 * with no carry 
-	 * 07/24/06 RPI 383 CORRECT MLG AND MLGR R1+1 * S2/R2 07/26/06
-	 * RPI 384 fix HFP true zero 07/30/06 RPI 386 fix MVCL trap when data length =
-	 * 0. 
-	 * 07/30/06 RPI 387 Fix RXY, RSY, and SIY to support 20 bit signed disp.
-	 * 08/06/06 RPI 397 S0C5 on memory violations 08/06/06 RPI 398 fix D and DR
-	 * truncated dividend error. 08/27/06 RPI 411 replace while loops with
-	 * Arrays.fill and arraycopy 09/06/06 RPI 395 fix IC,STC,SS trace data
-	 * lengths 
-	 * 09/08/06 RPI 441 add MVST move string and speed up TRT 09/18/06
-	 * RPI 453 speedup MVST with byte memory access 09/19/06 RPI 454 add TRE,
-	 * TROT, TRTO, TRTT 
-	 * 11/04/06 RPI 484 support TRE trace file for TRACE,
-	 * TRACEALL 11/10/06 RPI 474 trace invalid opcode if trace on 11/10/06 RPI
-	 * 487 speed up MVST using scan and arraycopy 12/06/06 RPI 407 add DFP CSDTR
-	 * 12/10/06 RPI 414 add CFD and CTD DFP type conversions
-	 * 12/13/06 RPI 407 add DFP initial instruction support
-	 * 12/16/06 RPI 517 correct inexact result trap on DDTR etc.
-	 * 12/17/06 RPI 518 correct HFP, BFP, and DFP 0C6 on invalid fetch pair
-	 * 23/28/06 RPI 526 add missing DFP instr. 
-	 *          and fix CGDTR, CGXTR, IEDTR, IEXTR rounding/sign 
-	 * 01/06/07 RPI 524 add TCPIO svc x'7C' support
-	 * 01/10/07 RPI 533 correct CGDTR/CGXTR rounding
-	 * 01/16/07 RPI 536 issue 0C7 if DFP infinity or NaN used in calc
-	 * 01/19/07 RPI 538 fix TEST single step through EX target.
-	 * 01/19/07 RPI 540 fix DLG to prevent erroneous divide by 0 trap
-	 *          and optimizie DLG, DLGR by removing work reg copy
-	 * 01/23/07 RPI 544 corect trace format 183 for DLG, MLG to show r1+1   
-	 * 03/12/07 RPI 558 init ZCVT VSE COMRG JOBDATE and COMNAME 
-	 * 03/17/07 RPI 579 correct SRST to stop on = vs >=  
-	 * 03/18/07 RPI 580 correct TR?? test code compares   
-	 * 04/03/07 RPI 584 fix trap at startup with option ASCII and pgmname < 8 
-	 * 04/07/07 RPI 582 set R1 to addr of addr of PARM
-	 * 04/16/07 RPI 588 correct trace for CVB, CVBG, CVBY, CVD, CVDG, CVDY
-	 * 05/07/07 RPI 606 add MVCOS  support per SHARE HLASM info.
-	 * 05/11/07 RPI 619 restore MVC and MVCOS to use inline code, fix  trace
-	 * 05/29/07 RPI 627 repackage all 2 byte opcodes into separate function
-	 *          for nested switch to speed up primary switch byte code
-	 * 06/10/07 RPI 636 add estae_link to reset link stack for puercolate
-	 *          and share setup_estae_exit routine.
-	 * 06/21/07 RPI 643 fix CEFBR, CDFBR, CXFBR, CEGBR, CDGBR, CXGBR trace
-	 * 08/09/07 RPI 672 prevent trace_psw switch being left on during
-	 *          trace of undefined opcode causing EX target instruction
-	 *          to be left modified.   
-	 * 08/30/07 RPI 689 route all TRACE output to TRE vs LOG 
-	 * 12/17/07 RPI 758 add specification exception for M, D, etc.  
-	 *          and fix MVST to store ending address in first oper reg vs R1 
-	 * 12/22/07 RPI 768 fix setting fp_ctl_bd2 for LXR 
-	 *          and fix setscale rounding for SQRT   
-	 * 12/23/07 rpi 767 enable unnormalized instr with normalization if option NORM
-	 * 01/02/08 RPI 767 add IEXTR, IEDTR, LXDTR, LEDTR, 
-	 *          LDXTR, LEDTR, SLXT, SLDT, SRXT, SRDT   
-	 * 01/07/08 RPI 781 switch PD long to BigInt to prevent overflow
-	 *          and detect overflow for DLG, DLGR   
-	 * 01/14/08 RPI 786 support DFP preferred exp.
-	 * 01/14/08 RPI 787 support DFP unnormalized instructions.
-	 * 01/14/08 RPI 788 correct overflow on DFP packed conversion 
-     * 01/17/08 RPI 790 remove DFP normalization, add fp_normalization for HFP 
-     * 01/22/08 RPI 791 set cc3 for CGDTR and CGXTR if too big 
-     * 01/25/08 RPI 798 correct RRDTR/RRXTR to remove exact check
-     *          fix trace format, and fix ESDTR/ESXTR to include trailing zeros 
-     * 02/20/08 RPI 808 prevent trap on LA for addr > max memory
-     *          prevent underflow if value exactly zero  
-     * 02/27/08 rpi 811 fix CSDTR high digit 0 if negative 
-     *                  fix SLDT/SRDT/SLXT/SRXT to handle pos exp. 
-     * 02/27/08 RPI 815 correct support for negative index register
-     * 02/27/08 RPI 816 correct LDR and LXR to simply copy ctl registers 
-     * 03/03/08 RPI 817 add 226 z10 instructions 
-     * 03/12/08 RPI 820 misc. fixes:
-     *   1.  Prevent S0C5 for neg SRP b2 reg, and optimize
-     *       performance of RLL/RLLG using int/long rotate function.
-     *   2.  Honor DD/LD IEEE de, ue, oe exception on DDTR,MDTR
-     *   3.  Support un-normalized HFP input values 
-     *   4.  Allow replacement of 2nd reg for cached LB/LD/LH   
-     * 03/15/08 RPI 823 correct MVCIN to use right most source addr  
-     * 03/19/08 RPI 819 add trace table for last 10 instr. at abend 
-     *          init memory to x'F5' and registers to x'F4'
-     * 03/20/08 RPI 809 restore psw cc and amode for SPIE and ESTAE exits
-     * 03/20/08 RPI 824 flush LB/LD/LH value before rplacing 2nd reg 
-     *          and correct DDTR, DXTR, DXR, and DXBR
-     *          to prevent null value stored in register cache  
-     * 03/21/08 RPI 822 fix trace for LGFR type instr. using case 148 
-     * 03/27/08 RPI 827 add opt_init support  
-     * 03/27/08 RPI 828 fix TRT and EDMK to set high bit r1 = 0 in AMODE31  
-     * 03/27/08 RPI 831 fix SLR,SL, SLY, SLGR, SLG, SLGFR, SLGF
-     *          to set CC1 when 2 neg values & result neg. 
-     * 04/06/08 RPI 834 fix MSE?? and MSD?? to subtract rf1 from product rf2*rf3
-     *          and fix TCEB, TCDB, TCXB to detect -0
-     *          and fix LE RX type traces to show 4 byte target and source
-     * 05/10/08 RPI 821 switch DH from double to BigDecimal cache 
-     * 05/10/08 RPI 849 use shared abort_case to catch logic errors
-     * 05/29/08 RPI 767 add HFP unnormalized support 
-     *  AW, AWR, SW, SWR, AU, AUR, SU, SUR
-     *  MY, MYR, MAY, MAYR  
-     *  MYH, MYHR, MYL, MYLR
-     *  MAYH, MAYHR, MAYL, MAYLR  
-     * 06/04/08 RPI 842 check LD regs for IEXTR and RRXTR and ifx RRXTR.  
-     * 06/06/08 RPI 843 round half-even for FP default  
-     * 06/07/08 RPI 844 compatibility fixes for z9/z10 testins2
-     *          1) Raise spec error for TR?? table not on dword 
-     *          2) Correct TMXX for high bit mixed tests 
-     * 06/09/08 RPI 859 correct ALSI and ALGSI immediate sign extension 
-     * 06/17/08 RPI 845 change EPIE offsets to match z/OS
-     * 06/21/08 RPI 845 replace ESTAD.MAC with IHASDWA passed in R1 
-     * 06/23/08 RPI 866 init mem to F5 starting at mem24_start  
-     * 07/05/08 RPI 875 correct CLIY error introduced by RPI 859 
-     *          and masked by incorrect CLIY test in TESTINS2
-     * 07/23/08 RPI 878 fix XDECI to support ASCII mode 
-     * 07/23/08 RPI 879 fix SLR, SLGR, SLGFR, SL, SLY, SLG, SLGF
-     *          to set CC3 when both neg and no borrow  
-     * 08/13/08 RPI 894 change low DSA addr from 64k to 32k for testing AL2 RLD 
-     * 09/12/08 RPI 764	change trace info for GL/PL svcs 
-     * 11/06/08 rpi 947 add ascii printable text display of MVC data moved  
-     * 12/13/08 RPI 975 prevent SFFF on dirty high addr bit for printable hex 
-     * 01/12/09 RPI 981 prevent PD target update after data exception   
-     * 01/18/09 RPI 985 optimize XC instruction for S1=S2  
-     * 03/09/09 RPI 1013 add PFPO, CSTG, and CSST opcodes per POP V7      
-	 * 03/17/09 RPI 1015 prevent S0C5 on SRAG,SLAG,SRLG,SLLG,SRXT,SLXT
-	 * 04/20/09 RPI 1026 add ESTA extract PC/BAKR PSW/CC
-	 * 04/26/09 RPI 1030 verify zeros in R0 for SRST
-	 * 05/03/09 RPI 1003 fix PFPO for LD to ED and ED to LB, EH to LD, fix MDE ovf chk
-	 * 05/06/09 RPI 1035 trace EX 2,4,6 byte instr.
-	 * 06/13/09 RPI 1054 correct ABEND PSW addr when S0C5 occurs during trace
-	 * 06/14/09 RPI 1055 add CPYA, EAR, and SAR instruction support
-	 * 09/19/09 RPI 1063 add CDE support with pointer from CVTCDE
-	 * 09/20/09 RPI 1063 update pgm old psw for pgm checks (duplicate of ESPIE psw0
-	 * 01/04/10 RPI 1094 move timeout to tz390 for use by gz390
-	 * 01/10/10 RPI 1103 correct trace for EX to show R vs F.
-	 * 02/04/10 RPI 1092 make PD compare routines public for zsort keys
-	 * 02/25/10 RPI 1111 correct PR to only restore 2-14 vs 1-14
-	 * 08/06/10 RPI 1125 add POPCNT per SHARE Pres. 08/04/10
-	 * 10/11/10 RPI 1125 add SRNMB
-	 * 10/21/10 RPI 1125 add B390-B392
-	 * 10/22/10 RPI 1125 add alt_rnd_mode for "?" instr, LEDBR etc.
-	 * 11/10/10 RPI 1125 add FIXBRA,FIEBRA,FIDBRA,CELFBR,CDLFBR,CXLFBR
-	 * 11/23/10 RPI 1125 add CEFBRA,CDFBRA,CSFBRA, CFEBRA,CFDBRA,CFXBRA
-	 * 11/24/10 RPI 1125 ADD B39C-B3A2 CLFEBR-CXLGBR
-	 * 11/29/10 RPI 1125 ADD B3A4-B3AE CEGBRA, CGEBRA, CLGEBR
-	 * 12/01/10 RPI 1125 ADD B3D0-B3DB MDTRA-SXTRA
-	 * 12/02/10 RPI 1125 ADD B3E1-BEF9 CGDTRA-CXGTRA 
-	 * 12/03/10 RPI 1125 ADD B928-B92D PCKMO KMOTR
-	 * 12/04/10 RPI 1125 ADD B941-B95B CFDTR - CXLFTR, FIX MDTRA DFP/BFP RND 
-	 * 12/06/10 RPI 1125 ADD B9AE-B9CB RRBM-SLHHHR  
-	 * 12/08/10 RPI 1125 ADD B9CD-B9DF CHHR-CLHHLR 
-	 * 12/09/10 RPI 1125 ADD B9E2-B9FB LOCGR-SLRK 
-	 * 12/09/10 RPI 1125 ADD C84-C85 LPD-LPDG 
-	 * 12/11/10 RPI 1125 ADD CC6-CCF BRCTH - CLIH 
-	 * 12/18/10 RPI 1125 ADD E3C0-E3CF LBH - CLHF
-	 * 12/19/10 RPI 1125 ADD EBDC-EBFA SRAK - LAAL
-	 * 12/21/10 RPI 1125 ADD EC51-ECDB RISBLG - ALGSIK
-	 * 04/06/11 RPI 1158 FIX ALT DFP RND FOR CXGTR,CDGTR,CGXTR,CGDTR
-	 * 05/06/11 RPI 1149 FIX TRACE FOR LAY, BCTR R,0
-	 * 05/17/11 RPI 1164 add RISBHGZ and RISBLGZ trace support
-	 * 09/23/11 RPI 1179 support +-num for XDECI
-	 * 09/27/11 RPI 1180 fix trace format for SRXT/SLXT etc.
-	 * 03/04/12 RPI 1195 issue spec error if CUSE r2 odd
-	 * 04/02/12 RPI 1200 correct LRVGR and LRVR when same reg.
-	 * 04/14/12 RPI 1207 correct E2xx() to E3xx() 
-	 * 04/30/12 RPI 1211 round L? and D? when trunc BD
-	 * 05/10/12 RPI 1214 fix DXTR fp_rbdv2 to prevent S0C5
-	 ********************************************************* 
-	 * Global variables              (last RPI)
-	 ********************************************************/
 	/*
 	 * limits
 	 */
@@ -389,14 +94,14 @@ public class pz390 {
 	long max_pos_long = ((long) -1) >>> 1;
 
 	long min_neg_long = ((long) 1) << 63;
-    long max_srp_long = max_pos_long / 10; // RPI 781
-    long min_srp_long = min_neg_long / 10; // RPI 781
+	long max_srp_long = max_pos_long / 10; // RPI 781
+	long min_srp_long = min_neg_long / 10; // RPI 781
 	BigInteger bi_max_pos_long = BigInteger.valueOf(max_pos_long);
-    BigDecimal bd_max_pos_long = BigDecimal.valueOf(max_pos_long); // RPI 791
-    BigDecimal bd_min_neg_long = BigDecimal.valueOf(min_neg_long); // RPI 791
+	BigDecimal bd_max_pos_long = BigDecimal.valueOf(max_pos_long); // RPI 791
+	BigDecimal bd_min_neg_long = BigDecimal.valueOf(min_neg_long); // RPI 791
 	BigDecimal bd_max_log_long = bd_max_pos_long.add(BigDecimal.ONE).multiply(BigDecimal.valueOf(2)); // rpi 1125
-    
-    BigInteger bi_min_neg_long = BigInteger.valueOf(min_neg_long);
+
+	BigInteger bi_min_neg_long = BigInteger.valueOf(min_neg_long);
 	BigInteger bi_max_pos_int = BigInteger.valueOf(max_pos_int); // rpi 781
 
 	BigInteger bi_min_neg_int = BigInteger.valueOf(min_neg_int); // rpi 781
@@ -492,12 +197,12 @@ public class pz390 {
 
 	int fp_fpc_mask_sig = 0x08000000;
 	// fp_dd_mod_bi to truncate digits         1234567890123456    
-    BigInteger fp_dd_mod_bi = new BigInteger("10000000000000000");
+	BigInteger fp_dd_mod_bi = new BigInteger("10000000000000000");
 	// fp_ld_mod_bi to truncate digits         1234567890123456789012345678901234    
-    BigInteger fp_ld_mod_bi = new BigInteger("10000000000000000000000000000000000");
-    int alt_rnd_mode = 0; // RPI 1125 set alternate round mode if ?=A
-    int alt_fpe_mode = 0; // RPI 1125 set alt FP extension if bits 20-23 set
-    int fp_bfp_rnd_mask = 0x00000007; // bfp rounding mode  RPI 1125 was 3
+	BigInteger fp_ld_mod_bi = new BigInteger("10000000000000000000000000000000000");
+	int alt_rnd_mode = 0; // RPI 1125 set alternate round mode if ?=A
+	int alt_fpe_mode = 0; // RPI 1125 set alt FP extension if bits 20-23 set
+	int fp_bfp_rnd_mask = 0x00000007; // bfp rounding mode  RPI 1125 was 3
 	int fp_bfp_rnd_not = 0xfffffff8; // not round mode bits RPI 1125 was c
 	int fp_bfp_rnd_even = 0x0; // round to nearest (default)
 	int fp_bfp_rnd_zero = 0x1; // round toward zero (discard bits to right)
@@ -544,25 +249,26 @@ public class pz390 {
 	int fp_dxc_oper = 0x80; // IEEE invalid operation
 	int fp_dxc_trap = 0xff; // compare and trap exception RPI 817
 	int fp_dxc = 0; // byte 2 of fp_fpc_reg with IEEE exceptions
-    String fp_dfp_digits = null;
+	String fp_dfp_digits = null;
 	
-    /*
+	/*
      * ASSIST global execution data areas RPI 812
      */
-    int ast_xdump_addr = 0; // default xdump area
-    int ast_xdump_len  = 0; // default xdump area length
-    int ast_xread_tiot = -1;
-    int ast_xprnt_tiot = -1;
-    int ast_xpnch_tiot = -1;
-    int ast_xget_tiot  = -1;
-    int ast_xput_tiot  = -1; 
-    int ast_xread_dcb = 0xe00;
-    int ast_xprnt_dcb = 0xe02;
-    int ast_xpnch_dcb = 0xe04;
-    int ast_xget_dcb  = 0xe0a;
-    int ast_xput_dcb  = 0xe0c;
-    String ast_file_line;
-    /*
+	int ast_xdump_addr = 0; // default xdump area
+	int ast_xdump_len  = 0; // default xdump area length
+	int ast_xread_tiot = -1;
+	int ast_xprnt_tiot = -1;
+	int ast_xpnch_tiot = -1;
+	int ast_xget_tiot  = -1;
+	int ast_xput_tiot  = -1; 
+	int ast_xread_dcb = 0xe00;
+	int ast_xprnt_dcb = 0xe02;
+	int ast_xpnch_dcb = 0xe04;
+	int ast_xget_dcb  = 0xe0a;
+	int ast_xput_dcb  = 0xe0c;
+	String ast_file_line;
+
+	/*
 	 * program check and program interruption fields
 	 */
 	boolean psw_check = false;
@@ -715,12 +421,12 @@ public class pz390 {
 
 	int[] estae_exit = (int[]) Array.newInstance(int.class, max_estae);
 	int[] estae_parm = (int[]) Array.newInstance(int.class, max_estae);
-    int[] estae_link = (int[]) Array.newInstance(int.class, max_estae);
+	int[] estae_link = (int[]) Array.newInstance(int.class, max_estae);
 	int if1 = 0;
 
 	int if2 = 0;
 	int if3 = 0; // RIE8 RNSBG RPI 817
-    int if4 = 0; // RIE4 RNSBG and CGIJ  RPI 817
+	int if4 = 0; // RIE4 RNSBG and CGIJ  RPI 817
 	int if5 = 0; // RIE8 RNSBG RPI 817
 	int sv1 = 0; 
 
@@ -765,7 +471,7 @@ public class pz390 {
 	int bf1 = 0;
 
 	int df1 = 0;
-    int xf1 = 0; // RPI 812 for ASSIST
+	int xf1 = 0; // RPI 812 for ASSIST
 	int xf2 = 0;
 
 	int bf2 = 0;
@@ -777,7 +483,7 @@ public class pz390 {
 	int bd2_loc = 0;
 	int bf4     = 0;
 	int df4     = 0;
-    int bd4_loc = 0;  // RRS1/RRS3 RPI 817
+	int bd4_loc = 0;  // RRS1/RRS3 RPI 817
 	int bd1_start = 0;
 
 	int bd2_start = 0;
@@ -815,7 +521,7 @@ public class pz390 {
 
 	int ex_opcode1 = 0x44;   // EX   "44"   RPI 817
 	int exrl_opcode1 = 0xc6; // EXRL "C6x0" RPI 817
-    int exrl_opcode2 = 0x00; // EXR: "C6x0" RPI 817
+	int exrl_opcode2 = 0x00; // EXR: "C6x0" RPI 817
 	byte ex_mod_byte = 0; // save targe+1 byte
 
 	int ex_psw_return = 0; // return from ex
@@ -831,7 +537,7 @@ public class pz390 {
 	int pdf_zeros = 0;
 
 	char pdf_sign = '+';
-    boolean pdf_trunc = false; // RPI 788
+	boolean pdf_trunc = false; // RPI 788
 	int pdf_zone = 0xf0;
 
 	byte pdf_next_out = 0;
@@ -864,7 +570,7 @@ public class pz390 {
 	BigInteger[] big_int_array = null;
 
 	int pd_cc = 0;
-    /*
+	/*
      * R?SBG rotate selected bits data RPI 817  
      */
 	boolean rsbg_test = false;
@@ -891,37 +597,22 @@ public class pz390 {
 
 	ByteBuffer log_reg = ByteBuffer.wrap(log_reg_byte, 0, 9);
 
-	int r0 = 4;
-
-	int r1 = 12;
-
-	int r2 = 20;
-
-	int r3 = 28;
-
-	int r4 = 36;
-
-	int r5 = 44;
-
-	int r6 = 52;
-
-	int r7 = 60;
-
-	int r8 = 68;
-
-	int r9 = 76;
-
-	int r10 = 84;
-
-	int r11 = 92;
-
-	int r12 = 100;
-
-	int r13 = 108;
-
-	int r14 = 116;
-
-	int r15 = 124;
+	final static int r0 = 4;
+	final static int r1 = 12;
+	final static int r2 = 20;
+	final static int r3 = 28;
+	final static int r4 = 36;
+	final static int r5 = 44;
+	final static int r6 = 52;
+	final static int r7 = 60;
+	final static int r8 = 68;
+	final static int r9 = 76;
+	final static int r10 = 84;
+	final static int r11 = 92;
+	final static int r12 = 100;
+	final static int r13 = 108;
+	final static int r14 = 116;
+	final static int r15 = 124;
 
 	/*
 	 * 16 fp registers with eb, db, and bd co-regs to avoid conversions when
@@ -932,11 +623,11 @@ public class pz390 {
 	 * store from fp_reg or co_reg 3. fp_reg is indexed by reg * 8 byte index 4.
 	 * fp_ctl and co-regs are indexed by reg #
 	 */
-	byte[] fp_reg_byte = (byte[]) Array.newInstance(byte.class, 16 * 8);
+	final static byte[] fp_reg_byte = (byte[]) Array.newInstance(byte.class, 16 * 8);
 
 	ByteBuffer fp_reg = ByteBuffer.wrap(fp_reg_byte, 0, 16 * 8);
 
-	byte[] trace_reg_byte = (byte[]) Array.newInstance(byte.class, 16 * 8);
+	final static byte[] trace_reg_byte = (byte[]) Array.newInstance(byte.class, 16 * 8);
 
 	ByteBuffer trace_reg = ByteBuffer.wrap(trace_reg_byte, 0, 16 * 8);
 
@@ -964,10 +655,10 @@ public class pz390 {
 	byte[] work_fp_reg_byte = (byte[]) Array.newInstance(byte.class, 16);
 
 	ByteBuffer work_fp_reg = ByteBuffer.wrap(work_fp_reg_byte, 0, 16);
-    boolean[] fp_pair_type  = {
-    		false, false, false, // DB, DD, DH
-    		false, false, false, // EB, ED, EH
-    		true,  true,  true};  // LB, LD, LH
+	boolean[] fp_pair_type  = {
+			false, false, false, // DB, DD, DH
+			false, false, false, // EB, ED, EH
+			true,  true,  true};  // LB, LD, LH
 	boolean[] fp_pair_valid = { // RPI 229
 	/* 0 1 2 3 */
 	        true, true, false, false, // 0 - 3 (0,2) (1,3)
@@ -1051,7 +742,7 @@ public class pz390 {
 	int int_man = 0;
 
 	int int_eh_man_bits = 0xffffff;
-    MathContext fp_dhg_context = null; // RPI 821 for DH
+	MathContext fp_dhg_context = null; // RPI 821 for DH
 	MathContext fp_lxg_context = null; // RPI 821 for LB/LH
 	MathContext fp_dbg_context = null; //         for EH, DB
 	MathContext fp_ebg_context = null; //         for EB
@@ -1059,7 +750,7 @@ public class pz390 {
 	MathContext fp_lh_context = null; // RPI 821
 	MathContext fp_ld_context = null; // RPI 1211
 	// RPI 1125 use array for BFP context
-	RoundingMode[] fp_bfp_rnd_mode = {
+/*	private final static RoundingMode[] fp_bfp_rnd_mode = {
 			RoundingMode.HALF_EVEN, // 0
 			RoundingMode.DOWN,      // 1
 			RoundingMode.CEILING,   // 2
@@ -1069,7 +760,7 @@ public class pz390 {
 			RoundingMode.HALF_EVEN, // 6 not valid
 			RoundingMode.HALF_UP,   // 7 (prepare for shorter)
 	};
-	MathContext[] fp_db_rnd_context = {
+*/	private final static MathContext[] fp_db_rnd_context = {
 			new MathContext(16,RoundingMode.HALF_EVEN), // 0
 			new MathContext(16,RoundingMode.DOWN),      // 1
 			new MathContext(16,RoundingMode.CEILING),   // 2
@@ -1079,7 +770,7 @@ public class pz390 {
 			new MathContext(16,RoundingMode.HALF_EVEN), // 6 not used
 			new MathContext(16,RoundingMode.HALF_UP),   // 7 (prevare for shorter)
 	};
-	MathContext[] fp_eb_rnd_context = {
+	private final static MathContext[] fp_eb_rnd_context = {
 			new MathContext(7,RoundingMode.HALF_EVEN), // 0
 			new MathContext(7,RoundingMode.DOWN),      // 1
 			new MathContext(7,RoundingMode.CEILING),   // 2
@@ -1089,7 +780,7 @@ public class pz390 {
 			new MathContext(7,RoundingMode.HALF_EVEN),   // 6 not used
 			new MathContext(7,RoundingMode.HALF_UP),   // 7
 	};
-	MathContext[] fp_lb_rnd_context = {
+	final static MathContext[] fp_lb_rnd_context = {
 			new MathContext(34,RoundingMode.HALF_EVEN), // 0
 			new MathContext(34,RoundingMode.DOWN),      // 1
 			new MathContext(34,RoundingMode.CEILING),   // 2
@@ -1102,7 +793,7 @@ public class pz390 {
 	byte fp_hfp_class = 0;
 	byte fp_bfp_class = 1;
 	byte fp_dfp_class = 3;
-	RoundingMode[] fp_dfp_rnd_mode = {
+	private final static RoundingMode[] fp_dfp_rnd_mode = {
 			RoundingMode.HALF_EVEN, // 0
 			RoundingMode.DOWN,      // 1
 			RoundingMode.CEILING,   // 2
@@ -1112,7 +803,7 @@ public class pz390 {
 			RoundingMode.UP,        // 6
 			RoundingMode.HALF_UP,   // 7 (prepare for shorter)
 	};
-	MathContext[] fp_dd_rnd_context = {
+	final static MathContext[] fp_dd_rnd_context = {
 			new MathContext(16,RoundingMode.HALF_EVEN), // 0
 			new MathContext(16,RoundingMode.DOWN),      // 1
 			new MathContext(16,RoundingMode.CEILING),   // 2
@@ -1122,7 +813,7 @@ public class pz390 {
 			new MathContext(16,RoundingMode.UP),        // 6
 			new MathContext(16,RoundingMode.HALF_UP),   // 7 (prevare for shorter)
 	};
-	MathContext[] fp_ed_rnd_context = {
+	final static MathContext[] fp_ed_rnd_context = {
 			new MathContext(7,RoundingMode.HALF_EVEN), // 0
 			new MathContext(7,RoundingMode.DOWN),      // 1
 			new MathContext(7,RoundingMode.CEILING),   // 2
@@ -1132,7 +823,7 @@ public class pz390 {
 			new MathContext(7,RoundingMode.UP),        // 6
 			new MathContext(7,RoundingMode.HALF_UP),   // 7
 	};
-	MathContext[] fp_ld_rnd_context = {
+	final static MathContext[] fp_ld_rnd_context = {
 			new MathContext(34,RoundingMode.HALF_EVEN), // 0
 			new MathContext(34,RoundingMode.DOWN),      // 1
 			new MathContext(34,RoundingMode.CEILING),   // 2
@@ -1142,7 +833,7 @@ public class pz390 {
 			new MathContext(34,RoundingMode.UP),        // 6
 			new MathContext(34,RoundingMode.HALF_UP),   // 7
 	};
-	MathContext[] fp_dh_rnd_context = { // RPI 1211
+	final static MathContext[] fp_dh_rnd_context = { // RPI 1211
 			new MathContext(15,RoundingMode.HALF_EVEN), // 0
 			new MathContext(15,RoundingMode.DOWN),      // 1
 			new MathContext(15,RoundingMode.CEILING),   // 2
@@ -1153,75 +844,60 @@ public class pz390 {
 			new MathContext(15,RoundingMode.HALF_UP),   // 7
 	};
 
-	double fp_log2 = Math.log(2);
+	final double fp_log2 = Math.log(2);
 
-	double fp_log10 = Math.log(10);
+	final double fp_log10 = Math.log(10);
 
-	BigDecimal fp_bd = new BigDecimal("0");
+	final BigDecimal fp_bd = new BigDecimal("0");
 
 	BigDecimal fp_big_dec2 = new BigDecimal("0");
 
-	BigDecimal fp_big_dec3 = new BigDecimal("0");
+	final BigDecimal fp_big_dec3 = new BigDecimal("0");
 
 	BigInteger fp_big_int1 = new BigInteger("0");
 
 	BigInteger fp_big_int2 = new BigInteger("0");
 
-	BigInteger fp_big_int_one_bits = BigInteger.ONE.shiftLeft(113).subtract(
-			BigInteger.ONE);
-
-	BigInteger fp_big_int_lx_man_bits = BigInteger.ONE.shiftLeft(112).subtract(
-			BigInteger.ONE); // RPI 821
-	BigInteger fp_big_int_dh_man_bits = BigInteger.ONE.shiftLeft(56).subtract(
-			BigInteger.ONE);  // RPI 821
+	final BigInteger fp_big_int_one_bits    = BigInteger.ONE.shiftLeft(113).subtract(BigInteger.ONE);
+	final BigInteger fp_big_int_lx_man_bits = BigInteger.ONE.shiftLeft(112).subtract(BigInteger.ONE);
+	final BigInteger fp_big_int_dh_man_bits = BigInteger.ONE.shiftLeft( 56).subtract(BigInteger.ONE);
 	int fp_int1 = 0;
 	int fp_int2 = 0; // RPI 767
 
-	int fp_int_eb_one_bits = 0xffffff;
-
-	int fp_int_eb_man_bits = 0x7fffff;
-
-	int fp_int_eh_man_bits = 0xffffff;
+//	private final int fp_int_eb_one_bits = 0xffffff; // JBA - Unused at the moment.
+//	private final int fp_int_eb_man_bits = 0x7fffff; // JBA - Unused at the moment.
+//	private final int fp_int_eh_man_bits = 0xffffff; // JBA - Unused at the moment.
 
 	long fp_long1 = 0;
-	long fp_long2 = 0; // RPI 767
-    long fp_long3 = 0; // RPI 767
+	long fp_long2 = 0;
+	long fp_long3 = 0;
 	byte fp_exp1 = 0;
-    byte fp_exp2 = 0;
-    byte fp_exp3 = 0;
-    byte fp_sign1 = 0;
-    byte fp_sign2 = 0;
-    byte fp_sign3 = 0;
-	long fp_long_db_one_bits = ((long) (1) << 53) - 1;
-
-	long fp_long_db_man_bits = ((long) (1) << 52) - 1;
-
-	long fp_long_dh_man_bits = ((long) (1) << 56) - 1;
-    int     fp_eb_pos_inf = 0x7f8 << 23; // RPI 830
-    int     fp_eb_neg_inf = 0xff8 << 23; // RPI 830
-	long    fp_db_pos_inf = (long)(0x7ff) << 52; // RPI 830
-    long    fp_db_neg_inf = (long)(0xfff) << 52; // RPI 830
-    long    fp_dd_pos_inf = (long)(0x7a) << 56;
-    long    fp_dd_neg_inf = (long)(0xfa) << 56;
-	long    fp_lb_pos_inf = (long)(0x7a) << 56; // RPI 830
-    long    fp_lb_neg_inf = (long)(0xfa) << 56; // RPI 830
-    long    fp_ld_pos_inf = (long)(0x7fff) << 48;
-    long    fp_ld_neg_inf = (long)(0xffff) << 48;
-    float fp_eb_min = (float) 1.2e-38; // BFP range ref. pop 19-5
-
-	float fp_eb_max = (float) 3.4e+38;
-
-	double fp_db_min = 2.2e-308;
-
-	double fp_db_max = 1.79e+308; // (1.8 too big?)
-
-	double fp_eh_min = 5.41e-79; // HFP range ref. pop 18-4
-
-	double fp_eh_max = 7.2e+75;
-
-	BigDecimal fp_dh_min = BigDecimal.valueOf(5.41e-79); // RPI 821
-
-	BigDecimal fp_dh_max = BigDecimal.valueOf(7.2e+75);  // RPI 821
+	byte fp_exp2 = 0;
+	byte fp_exp3 = 0;
+	byte fp_sign1 = 0;
+	byte fp_sign2 = 0;
+	byte fp_sign3 = 0;
+//	private final static long  fp_long_db_one_bits = ((long) (1) << 53) - 1; // JBA - Unused at the moment.
+//	private final static long  fp_long_db_man_bits = ((long) (1) << 52) - 1; // JBA - Unused at the moment.
+//	private final static long  fp_long_dh_man_bits = ((long) (1) << 56) - 1; // JBA - Unused at the moment.
+	private final static int   fp_eb_pos_inf = 0x7f8 << 23; // RPI 830
+	private final static int   fp_eb_neg_inf = 0xff8 << 23; // RPI 830
+	private final static long  fp_db_pos_inf = (long)(0x7ff) << 52; // RPI 830
+	private final static long  fp_db_neg_inf = (long)(0xfff) << 52; // RPI 830
+	private final static long  fp_dd_pos_inf = (long)(0x7a) << 56;
+	private final static long  fp_dd_neg_inf = (long)(0xfa) << 56;
+	private final static long  fp_lb_pos_inf = (long)(0x7a) << 56; // RPI 830
+	private final static long  fp_lb_neg_inf = (long)(0xfa) << 56; // RPI 830
+	private final static long  fp_ld_pos_inf = (long)(0x7fff) << 48;
+	private final static long  fp_ld_neg_inf = (long)(0xffff) << 48;
+	private final static float fp_eb_min = (float) 1.2e-38; // BFP range ref. pop 19-5
+	private final static float fp_eb_max = (float) 3.4e+38;
+	private final static double fp_db_min = 2.2e-308;
+	private final static double fp_db_max = 1.79e+308; // (1.8 too big?)
+	private final static double fp_eh_min = 5.41e-79; // HFP range ref. pop 18-4
+	private final static double fp_eh_max = 7.2e+75;
+	private final static BigDecimal fp_dh_min = BigDecimal.valueOf(5.41e-79); // RPI 821
+	private final static BigDecimal fp_dh_max = BigDecimal.valueOf(7.2e+75);  // RPI 821
 
 	BigDecimal fp_lh_min = null;
 
@@ -1242,12 +918,12 @@ public class pz390 {
 	BigDecimal fp_ld_pos_min = null;
 	BigDecimal fp_ld_neg_max = null;
 	BigDecimal fp_ld_neg_min = null;
-    int fp_dd_exp_min = -398;
-    int fp_dd_exp_max =  369;
-    int fp_ed_exp_min = -101;
-    int fp_ed_exp_max =   90;
-    int fp_ld_exp_min = -6178;
-    int fp_ld_exp_max =  6111;
+	final static int fp_dd_exp_min = -398;
+	final static int fp_dd_exp_max =  369;
+	final static int fp_ed_exp_min = -101;
+	final static int fp_ed_exp_max =   90;
+	final static int fp_ld_exp_min = -6178;
+	final static int fp_ld_exp_max =  6111;
 	/*
 	 * PC, PR, PT stack for psw and regs
 	 */
@@ -1255,16 +931,14 @@ public class pz390 {
 
 	int cur_pc_stk_reg = 0;
 
-	byte[] pc_stk_reg_byte = (byte[]) Array.newInstance(byte.class, max_pc_stk
-			* reg_len);
+	byte[] pc_stk_reg_byte = (byte[]) Array.newInstance(byte.class, max_pc_stk * reg_len);
 
-	ByteBuffer pc_stk_reg = ByteBuffer.wrap(pc_stk_reg_byte, 0, max_pc_stk
-			* reg_len);
+	ByteBuffer pc_stk_reg = ByteBuffer.wrap(pc_stk_reg_byte, 0, max_pc_stk * reg_len);
 
 	int[] pc_stk_psw_loc = (int[]) Array.newInstance(int.class, max_pc_stk);
 
 	int[] pc_stk_psw_cc = (int[]) Array.newInstance(int.class, max_pc_stk);
-    boolean[] pc_stk_type_pc = (boolean[]) Array.newInstance(boolean.class,max_pc_stk); // RPI 1026 PC vs BAKR
+	boolean[] pc_stk_type_pc = (boolean[]) Array.newInstance(boolean.class,max_pc_stk); // RPI 1026 PC vs BAKR
 	/*
 	 * virtual memory with 24 bit and 31 bit fqes all initialized by init_mem()
 	 */
@@ -1288,116 +962,119 @@ public class pz390 {
 
 	int tot_mem_alloc = 0;
 
-	/*
+	/**
 	 * psa low memory supported fields
 	 */
-	int psa_cvt = 0x10;    // pointer to os cvt
-	int psa_svc_old_psw = 0x20;
-	int psa_svc_new_psw = 0x60;
-	int psa_pgm_old_psw = 0x28; // RPI 1063 see update_psa
-	int psa_pgm_nwq_paq = 0x68; // RPI `063
-	int psa_cvt2 = 0x4c;   // pointer to os cvt
-    int psa_psw_ins_len = 0x8d; // RPI 1063 see update_psa
-	int psa_len  = 0x2000; // length of PSA (see PSAD macro) RPI 538
+	final static int psa_cvt         =   0x10; // pointer to os cvt
+	final static int psa_svc_old_psw =   0x20;
+	final static int psa_svc_new_psw =   0x60;
+	final static int psa_pgm_old_psw =   0x28; // RPI 1063 see update_psa
+	final static int psa_pgm_nwq_paq =   0x68; // RPI `063
+	final static int psa_cvt2        =   0x4c; // pointer to os cvt
+	final static int psa_psw_ins_len =   0x8d; // RPI 1063 see update_psa
+	final static int psa_len         = 0x2000; // length of PSA (see PSAD macro) RPI 538
 	/*
 	 * z390 communication vector table at x'2000';
 	 */
-	int zcvt_start = 0x2000; // RPI 286 // cvt start
+	final static int zcvt_start       = 0x2000; // RPI 286 // cvt start
 
-	int zcvt_user_pgm = zcvt_start + 0x00; // user pgm name
+	final static int zcvt_user_pgm    = zcvt_start +  0x00; // user pgm name
 
-	int zcvt_ipl_pgm = zcvt_start + 0x08; // ipl pgm name
+	final static int zcvt_ipl_pgm     = zcvt_start +  0x08; // ipl pgm name
 
-	int zcvt_fqe24 = zcvt_start + 0x10; // amode 24 fqe
+	final static int zcvt_fqe24       = zcvt_start +  0x10; // amode 24 fqe
 
-	int zcvt_fqe31 = zcvt_start + 0x14; // amode 31 fqe
+	final static int zcvt_fqe31       = zcvt_start +  0x14; // amode 31 fqe
 
-	int zcvt_exit = zcvt_start + 0x18; // svc 3 exit to last link or term
+	final static int zcvt_exit        = zcvt_start +  0x18; // svc 3 exit to last link or term
 
-	int zcvt_tget_ecb = zcvt_start + 0x1c; // ecb for tget reply in non GUAM GUI
-											// mode
+	final static int zcvt_tget_ecb    = zcvt_start +  0x1c; // ecb for tget reply in non GUAM GUI mode
 
-	int zcvt_save = zcvt_start + 0x100; // user save
+	final static int zcvt_save        = zcvt_start + 0x100; // user save
 
-	int zcvt_stimer_save = zcvt_start + 0x200;
-    int zcvt_exec_parma = zcvt_start + 0x300; // address of exec_parm RPI 582
-	int zcvt_exec_parm  = zcvt_start + 0x304; // half word length followed by
-												// EBCDIC/ASCII value of PARM(.)
+	final static int zcvt_stimer_save = zcvt_start + 0x200;
+	final static int zcvt_exec_parma  = zcvt_start + 0x300; // address of exec_parm RPI 582
+	final static int zcvt_exec_parm   = zcvt_start + 0x304; // half word length followed by
+															// EBCDIC/ASCII value of PARM(.)
 
-	int zcvt_epie = zcvt_start + 0x400; // espie passed in r1
+	final static int zcvt_epie        = zcvt_start + 0x400; // espie passed in r1
 
-	int zcvt_sdwa = zcvt_start + 0x500; // sdwa passed in r1 to ESTAE exit RPI 845
-    int zcvt_comrg = zcvt_start + 0x600; // start of VSE COMRG area RPI 558
+	final static int zcvt_sdwa        = zcvt_start + 0x500; // sdwa passed in r1 to ESTAE exit RPI 845
+	final static int zcvt_comrg       = zcvt_start + 0x600; // start of VSE COMRG area RPI 558
+
 	/*
 	 * OS/MVS compatible CVT with pointer at x'10'
 	 */
-	int cvt_start = 0x2000;  // rpi 894 was 0x8000
-	int cvt_date = cvt_start + 0x38; // IPL date
+	final static int cvt_start = 0x2000;           // RPI 894 was 0x8000
+	final static int cvt_date  = cvt_start + 0x38; // IPL date
 
-	int cvt_dcb = cvt_start + 0x74; // os flags (x'80' 31 bit, x'13' MVS+) RPI
-	int cvt_cde = cvt_start + 208;  // RPI 1063
+	final static int cvt_dcb   = cvt_start + 0x74; // OS flags (x'80' 31 bit, x'13' MVS+) RPI
+	final static int cvt_cde   = cvt_start + 208;  // RPI 1063
+
 	/*
 	 * cde offsets (see mac\CDED.MAC)
 	 */
-	int cde_cdchain   =  0;    // next CDE (first pointed to by cvtcde)
-	int cde_cdname    =  8;    // load module name in EBCDIC
-	int cde_cdentpt   = 16;  // entry point
-	int cde_cduse     = 24;  // use count 0 = deleted cde
-	int cde_cdloadpt  = 32;  // load address
-	int cde_cdmodlen  = 36;  // module length
-	int cde_len       = 40;  // length of CDE entry block
+	final static int cde_cdchain   =  0; // next CDE (first pointed to by cvtcde)
+	final static int cde_cdname    =  8; // load module name in EBCDIC
+	final static int cde_cdentpt   = 16; // entry point
+	final static int cde_cduse     = 24; // use count 0 = deleted cde
+	final static int cde_cdloadpt  = 32; // load address
+	final static int cde_cdmodlen  = 36; // module length
+	final static int cde_len       = 40; // length of CDE entry block
 	
-    /*
-     * VSE COMRG data fields
-     */
-	int zcvt_comrg_jobdate = zcvt_comrg +  0; // COMRG JOBDATE  0  8 MM/DD/YY
-	int zcvt_comrg_comname = zcvt_comrg + 24; // COMRG COMNAME 24  8 JOB NAME 
+	/*
+	 * VSE COMRG data fields
+	 */
+	final static int zcvt_comrg_jobdate = zcvt_comrg +  0; // COMRG JOBDATE  0  8 MM/DD/YY
+	final static int zcvt_comrg_comname = zcvt_comrg + 24; // COMRG COMNAME 24  8 JOB NAME 
 	/*
 	 * epie fields
 	 */
-	int epie_id = zcvt_epie; // C'EPIE'
+	final static int epie_id = zcvt_epie; // C'EPIE'
 
-	int epie_parm  = zcvt_epie + 0x04; // ESPIE PARAM addr
+	final static int epie_parm  = zcvt_epie + 0x04; // ESPIE PARAM addr
 
-	int epie_psw   = zcvt_epie + 0x48; // PSW int,addr RPI 845
-    int epie_ilc   = zcvt_epie + 0x51; // RPI 845 last instruction length byte (2,4,6)
-	int epie_inc   = zcvt_epie + 0x52; // RPI 845 interruption code (2 bytes)
-    int epie_flags = zcvt_epie + 0x99; // RPI 845 set X'40' 64 bit reg flag
-	int epie_gpr   = zcvt_epie + 0xA0; // GPR 64 bit regs R0-R15 RPI 845
+	final static int epie_psw   = zcvt_epie + 0x48; // PSW int,addr RPI 845
+	final static int epie_ilc   = zcvt_epie + 0x51; // RPI 845 last instruction length byte (2,4,6)
+	final static int epie_inc   = zcvt_epie + 0x52; // RPI 845 interruption code (2 bytes)
+	final static int epie_flags = zcvt_epie + 0x99; // RPI 845 set X'40' 64 bit reg flag
+	final static int epie_gpr   = zcvt_epie + 0xA0; // GPR 64 bit regs R0-R15 RPI 845
 
 	/*
 	 * sdwa dsect fields (r1 at exit entry) 
 	 */
-	int sdwa_parm = zcvt_sdwa + 0x00; // SDWA ESPIE PARAM addr
-    int sdwa_cmp  = zcvt_sdwa + 0x04; // SDWA SDWAABSS completion code FFSSSUUU RPI 845
-	int sdwa_psw  = zcvt_sdwa + 0x68; // SDWA SDWAEC1 PSW at error RPI 845
-    int sdwa_xpad = zcvt_sdwa + 0x170; // SDWA addr extensions RPI 845
-    int sdwa_ptrs = zcvt_sdwa + 0x200; // SDWA address for extensions RPI 845
-    int sdwa_xeme = sdwa_ptrs + 0x18;  // SDWA PTRS addr of SDWARC4 regs RPI 845
-    int sdwa_rc4  = zcvt_sdwa + 0x300; // SDWA RC4 registers extension RPI 834
-    int sdwa_g64  = sdwa_rc4  + 0x00;  // SDWA RC4 extension 16 - 64 bit regs at error RPI 845
-	/*
+	final static int sdwa_parm = zcvt_sdwa +  0x00; // SDWA ESPIE PARAM addr
+	final static int sdwa_cmp  = zcvt_sdwa +  0x04; // SDWA SDWAABSS completion code FFSSSUUU RPI 845
+	final static int sdwa_psw  = zcvt_sdwa +  0x68; // SDWA SDWAEC1 PSW at error RPI 845
+	final static int sdwa_xpad = zcvt_sdwa + 0x170; // SDWA addr extensions RPI 845
+	final static int sdwa_ptrs = zcvt_sdwa + 0x200; // SDWA address for extensions RPI 845
+	final static int sdwa_xeme = sdwa_ptrs +  0x18; // SDWA PTRS addr of SDWARC4 regs RPI 845
+	final static int sdwa_rc4  = zcvt_sdwa + 0x300; // SDWA RC4 registers extension RPI 834
+	final static int sdwa_g64  = sdwa_rc4  +  0x00; // SDWA RC4 extension 16 - 64 bit regs at error RPI 845
+
+	/**
 	 * byte bit count lookup table
 	 */
-    byte[] bit_cnt = {  // RPI 1125 for use by POPCNT instr
-            00,01,01,02,01,02,02,03,01,02,02,03,02,03,03,04, //  0
-            01,02,02,03,02,03,03,04,02,03,03,04,03,04,04,05, //  1
-            01,02,02,03,02,03,03,04,02,03,03,04,03,04,04,05, //  2
-            02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  3
-            01,02,02,03,02,03,03,04,02,03,03,04,03,04,04,05, //  4
-            02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  5
-            02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  6
-            03,04,04,05,04,05,05,06,04,05,05,06,05,06,06,07, //  7
-            01,02,02,03,02,03,03,04,02,03,03,04,03,04,04,05, //  8
-            02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  9
-            02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  A
-            03,04,04,05,04,05,05,06,04,05,05,06,05,06,06,07, //  B
-            02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  C
-            03,04,04,05,04,05,05,06,04,05,05,06,05,06,06,07, //  D
-            03,04,04,05,04,05,05,06,04,05,05,06,05,06,06,07, //  E
-            04,05,05,06,05,06,06,07,05,06,06,07,06,07,07,8  //  F
-    };
-    /*
+	private final static byte[] bit_cnt = {  // RPI 1125 for use by POPCNT instr
+			00,01,01,02,01,02,02,03,01,02,02,03,02,03,03,04, //  0
+			01,02,02,03,02,03,03,04,02,03,03,04,03,04,04,05, //  1
+			01,02,02,03,02,03,03,04,02,03,03,04,03,04,04,05, //  2
+			02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  3
+			01,02,02,03,02,03,03,04,02,03,03,04,03,04,04,05, //  4
+			02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  5
+			02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  6
+			03,04,04,05,04,05,05,06,04,05,05,06,05,06,06,07, //  7
+			01,02,02,03,02,03,03,04,02,03,03,04,03,04,04,05, //  8
+			02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  9
+			02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  A
+			03,04,04,05,04,05,05,06,04,05,05,06,05,06,06,07, //  B
+			02,03,03,04,03,04,04,05,03,04,04,05,04,05,05,06, //  C
+			03,04,04,05,04,05,05,06,04,05,05,06,05,06,06,07, //  D
+			03,04,04,05,04,05,05,06,04,05,05,06,05,06,06,07, //  E
+			04,05,05,06,05,06,06,07,05,06,06,07,06,07,07, 8  //  F
+	};
+
+	/**
 	 * opcode lookup tables unique to ez390
 	 */
 	int[] op_type_offset = new int[256];
@@ -1407,1237 +1084,1240 @@ public class pz390 {
 	int[] opcode2_offset = new int[256];
 
 	int[] opcode2_mask = new int[256];
-	int[]    op_trace_type  = {
-			   00,  // comments
-		       10,  // 10 "0101" "PR" "E" 1
-		       10,  // 20 "0102" "UPT" "E" 1		       
-		       10,  //    "0104" "PTFF" "E" 1 Z9-1
-		       10,  // 30 "0107" "SCKPF" "E" 1
-		       10,  // 40 "010A" "PFPO" "E" 1   RPI 1013
-		       10,  // 40 "010B" "TAM" "E" 1
-		       10,  // 50 "010C" "SAM24" "E" 1
-		       10,  // 60 "010D" "SAM31" "E" 1
-		       10,  // 70 "010E" "SAM64" "E" 1
-		       10,  // 80 "01FF" "TRAP2" "E" 1
-		       20,  // 90 "04" "SPM" "RR" 2
-		       20,  // 100 "05" "BALR" "RR" 2
-		       20,  // 110 "06" "BCTR" "RR" 2
-		       30,  // 120 "07" "BCR" "RR" 2
-		       30,  // 130 "07F" "BR" "BRX" 3
-		       30,  // 140 "070" "NOPR" "BRX" 3
-		       30,  // 150 "072" "BHR" "BRX" 3
-		       30,  // 160 "074" "BLR" "BRX" 3
-		       30,  // 170 "078" "BER" "BRX" 3
-		       30,  // 180 "07D" "BNHR" "BRX" 3
-		       30,  // 190 "07B" "BNLR" "BRX" 3
-		       30,  // 200 "077" "BNER" "BRX" 3
-		       30,  // 210 "072" "BPR" "BRX" 3
-		       30,  // 220 "071" "BOR" "BRX" 3
-		       30,  // 230 "074" "BMR" "BRX" 3
-		       30,  // 240 "078" "BZR" "BRX" 3
-		       30,  // 250 "07D" "BNPR" "BRX" 3
-		       30,  // 260 "07B" "BNMR" "BRX" 3
-		       30,  // 270 "077" "BNZR" "BRX" 3
-		       30,  // 280 "07E" "BNOR" "BRX" 3
-		       40,  // 290 "0A" "SVC" "I" 4
-		       20,  // 300 "0B" "BSM" "RR" 2
-		       20,  // 310 "0C" "BASSM" "RR" 2
-		       20,  // 320 "0D" "BASR" "RR" 2
-		       22,  // 330 "0E" "MVCL" "RR" 2
-		       22,  // 340 "0F" "CLCL" "RR" 2
-		       20,  // 350 "10" "LPR" "RR" 2
-		       20,  // 360 "11" "LNR" "RR" 2
-		       20,  // 370 "12" "LTR" "RR" 2
-		       20,  // 380 "13" "LCR" "RR" 2
-		       20,  // 390 "14" "NR" "RR" 2
-		       20,  // 400 "15" "CLR" "RR" 2
-		       20,  // 410 "16" "OR" "RR" 2
-		       20,  // 420 "17" "XR" "RR" 2
-		       20,  // 430 "18" "LR" "RR" 2
-		       20,  // 440 "19" "CR" "RR" 2
-		       20,  // 450 "1A" "AR" "RR" 2
-		       20,  // 460 "1B" "SR" "RR" 2
-		       23,  // 470 "1C" "MR" "RR" 2
-		       23,  // 480 "1D" "DR" "RR" 2
-		       20,  // 490 "1E" "ALR" "RR" 2
-		       20,  // 500 "1F" "SLR" "RR" 2
-		       21,  // 510 "20" "LPDR" "RR" 2
-		       21,  // 520 "21" "LNDR" "RR" 2
-		       21,  // 530 "22" "LTDR" "RR" 2
-		       21,  // 540 "23" "LCDR" "RR" 2
-		       21,  // 550 "24" "HDR" "RR" 2
-		       21,  // 560 "25" "LDXR" "RR" 2
-		       21,  // 570 "25" "LRDR" "RR" 2
-		       21,  // 580 "26" "MXR" "RR" 2
-		       21,  // 590 "27" "MXDR" "RR" 2
-		       21,  // 600 "28" "LDR" "RR" 2
-		       21,  // 610 "29" "CDR" "RR" 2
-		       21,  // 620 "2A" "ADR" "RR" 2
-		       21,  // 630 "2B" "SDR" "RR" 2
-		       21,  // 640 "2C" "MDR" "RR" 2
-		       21,  // 650 "2D" "DDR" "RR" 2
-		       21,  // 660 "2E" "AWR" "RR" 2
-		       21,  // 670 "2F" "SWR" "RR" 2
-		       21,  // 680 "30" "LPER" "RR" 2
-		       21,  // 690 "31" "LNER" "RR" 2
-		       21,  // 700 "32" "LTER" "RR" 2
-		       21,  // 710 "33" "LCER" "RR" 2
-		       21,  // 720 "34" "HER" "RR" 2
-		       21,  // 730 "35" "LEDR" "RR" 2
-		       21,  // 740 "35" "LRER" "RR" 2
-		       21,  // 750 "36" "AXR" "RR" 2
-		       21,  // 760 "37" "SXR" "RR" 2
-		       21,  // 770 "38" "LER" "RR" 2
-		       21,  // 780 "39" "CER" "RR" 2
-		       21,  // 790 "3A" "AER" "RR" 2
-		       21,  // 800 "3B" "SER" "RR" 2
-		       21,  // 810 "3C" "MDER" "RR" 2
-		       21,  // 820 "3C" "MER" "RR" 2
-		       21,  // 830 "3D" "DER" "RR" 2
-		       21,  // 840 "3E" "AUR" "RR" 2
-		       21,  // 850 "3F" "SUR" "RR" 2
-		       53,  // 860 "40" "STH" "RX" 5
-		       52,  // 870 "41" "LA" "RX" 5
-		       56,  // 880 "42" "STC" "RX" 5
-		       56,  // 890 "43" "IC" "RX" 5
-		       59,  // 900 "44" "EX" "RX" 5  // RPI 1035
-		       51,  // 910 "45" "BAL" "RX" 5
-		       50,  // 920 "46" "BCT" "RX" 5
-		       50,  // 930 "47" "BC" "RX" 5
-		       60,  // 940 "47F" "B" "BCX" 6
-		       60,  // 950 "470" "NOP" "BCX" 6
-		       60,  // 960 "472" "BH" "BCX" 6
-		       60,  // 970 "474" "BL" "BCX" 6
-		       60,  // 980 "478" "BE" "BCX" 6
-		       60,  // 990 "47D" "BNH" "BCX" 6
-		       60,  // 1000 "47B" "BNL" "BCX" 6
-		       60,  // 1010 "477" "BNE" "BCX" 6
-		       60,  // 1020 "472" "BP" "BCX" 6
-		       60,  // 1030 "471" "BO" "BCX" 6
-		       60,  // 1040 "474" "BM" "BCX" 6
-		       60,  // 1050 "478" "BZ" "BCX" 6
-		       60,  // 1060 "47D" "BNP" "BCX" 6
-		       60,  // 1070 "47B" "BNM" "BCX" 6
-		       60,  // 1080 "477" "BNZ" "BCX" 6
-		       60,  // 1090 "47E" "BNO" "BCX" 6
-		       53,  // 1100 "48" "LH" "RX" 5
-		       53,  // 1110 "49" "CH" "RX" 5
-		       53,  // 1120 "4A" "AH" "RX" 5
-		       53,  // 1130 "4B" "SH" "RX" 5
-		       53,  // 1140 "4C" "MH" "RX" 5
-		       50,  // 1150 "4D" "BAS" "RX" 5
-		       57,  // 1160 "4E" "CVD" "RX" 5  RPI 588
-		       57,  // 1170 "4F" "CVB" "RX" 5  RPI 588
-		       50,  // 1180 "50" "ST" "RX" 5
-		       52,  // 1190 "51" "LAE" "RX" 5
-		       50,  // 1193 "52" "XDECO" "RX" 37 RPI 812
-		       50,  // 1196 "53" "XDECI" "RX" 37 RPI 812	
-		       50,  // 1200 "54" "N" "RX" 5
-		       50,  // 1210 "55" "CL" "RX" 5
-		       50,  // 1220 "56" "O" "RX" 5
-		       50,  // 1230 "57" "X" "RX" 5
-		       50,  // 1240 "58" "L" "RX" 5
-		       50,  // 1250 "59" "C" "RX" 5
-		       50,  // 1260 "5A" "A" "RX" 5
-		       50,  // 1270 "5B" "S" "RX" 5
-		       55,  // 1280 "5C" "M" "RX" 5
-		       55,  // 1290 "5D" "D" "RX" 5
-		       50,  // 1300 "5E" "AL" "RX" 5
-		       50,  // 1310 "5F" "SL" "RX" 5
-		       54,  // 1320 "60" "STD" "RX" 5
-		       50,  // 1323 "61" "XHEXI" "RX" 37 RPI 812
-		       50,  // 1326 "62" "XHEXO" "RX" 37 RPI 812
-		       54,  // 1330 "67" "MXD" "RX" 5
-		       54,  // 1340 "68" "LD" "RX" 5
-		       54,  // 1350 "69" "CD" "RX" 5
-		       54,  // 1360 "6A" "AD" "RX" 5
-		       54,  // 1370 "6B" "SD" "RX" 5
-		       54,  // 1380 "6C" "MD" "RX" 5
-		       54,  // 1390 "6D" "DD" "RX" 5
-		       54,  // 1400 "6E" "AW" "RX" 5
-		       54,  // 1410 "6F" "SW" "RX" 5
-		       58,  // 1420 "70" "STE" "RX" 5  // RPI 834
-		       50,  // 1430 "71" "MS" "RX" 5  RPI 627
-		       58,  // 1440 "78" "LE" "RX" 5  // RPI 834
-		       58,  // 1450 "79" "CE" "RX" 5  // RPI 834
-		       58,  // 1460 "7A" "AE" "RX" 5  // RPI 834
-		       58,  // 1470 "7B" "SE" "RX" 5  // RPI 834
-		       58,  // 1480 "7C" "MDE" "RX" 5  // RPI 834
-		       58,  // 1490 "7C" "ME" "RX" 5  // RPI 834
-		       58,  // 1500 "7D" "DE" "RX" 5  // RPI 834
-		       58,  // 1510 "7E" "AU" "RX" 5  // RPI 834
-		       58,  // 1520 "7F" "SU" "RX" 5  // RPI 834
-		       70,  // 1530 "8000" "SSM" "S" 7
-		       70,  // 1540 "8202" "LPSW" "S" 7
-		       80,  // 1550 "83" "DIAGNOSE" "DM" 8
-		       91,  // 1560 "84" "BRXH" "RSI" 9
-		       91,  // 1570 "84" "JXH" "RSI" 9
-		       91,  // 1580 "85" "BRXLE" "RSI" 9
-		       91,  // 1590 "85" "JXLE" "RSI" 9
-		       103,  // 1600 "86" "BXH" "RS" 10
-		       103,  // 1610 "87" "BXLE" "RS" 10
-		       102,  // 1620 "88" "SRL" "RS" 10
-		       102,  // 1630 "89" "SLL" "RS" 10
-		       102,  // 1640 "8A" "SRA" "RS" 10
-		       102,  // 1650 "8B" "SLA" "RS" 10
-		       102,  // 1660 "8C" "SRDL" "RS" 10
-		       102,  // 1670 "8D" "SLDL" "RS" 10
-		       102,  // 1680 "8E" "SRDA" "RS" 10
-		       102,  // 1690 "8F" "SLDA" "RS" 10
-		       100,  // 1700 "90" "STM" "RS" 10
-		       110,  // 1710 "91" "TM" "SI" 11
-		       110,  // 1720 "92" "MVI" "SI" 11
-		       70,  // 1730 "93" "TS" "S" 7
-		       110,  // 1740 "94" "NI" "SI" 11
-		       110,  // 1750 "95" "CLI" "SI" 11
-		       110,  // 1760 "96" "OI" "SI" 11
-		       110,  // 1770 "97" "XI" "SI" 11
-		       100,  // 1780 "98" "LM" "RS" 10
-		       100,  // 1790 "99" "TRACE" "RS" 10
-		       100,  // 1800 "9A" "LAM" "RS" 10
-		       100,  // 1810 "9B" "STAM" "RS" 10
-		       120,  // 1820 "A50" "IIHH" "RI" 12
-		       120,  // 1830 "A51" "IIHL" "RI" 12
-		       120,  // 1840 "A52" "IILH" "RI" 12
-		       120,  // 1850 "A53" "IILL" "RI" 12
-		       120,  // 1860 "A54" "NIHH" "RI" 12
-		       120,  // 1870 "A55" "NIHL" "RI" 12
-		       120,  // 1880 "A56" "NILH" "RI" 12
-		       120,  // 1890 "A57" "NILL" "RI" 12
-		       120,  // 1900 "A58" "OIHH" "RI" 12
-		       120,  // 1910 "A59" "OIHL" "RI" 12
-		       120,  // 1920 "A5A" "OILH" "RI" 12
-		       120,  // 1930 "A5B" "OILL" "RI" 12
-		       120,  // 1940 "A5C" "LLIHH" "RI" 12
-		       120,  // 1950 "A5D" "LLIHL" "RI" 12
-		       120,  // 1960 "A5E" "LLILH" "RI" 12
-		       120,  // 1970 "A5F" "LLILL" "RI" 12
-		       123,  // 1980 "A70" "TMLH" "RI" 12
-		       123,  // 1990 "A70" "TMH" "RI" 12
-		       123,  // 2000 "A71" "TMLL" "RI" 12
-		       123,  // 2010 "A71" "TML" "RI" 12
-		       123,  // 2020 "A72" "TMHH" "RI" 12
-		       123,  // 2030 "A73" "TMHL" "RI" 12
-		       130,  // 2040 "A74" "BRC" "RI" 12
-		       130,  // 2050 "A74F" "J" "BRCX" 13
-		       130,  // 2060 "A740" "JNOP" "BRCX" 13
-		       130,  // 2070 "A74F" "BRU" "BRCX" 13
-		       130,  // 2080 "A742" "BRH" "BRCX" 13
-		       130,  // 2090 "A744" "BRL" "BRCX" 13
-		       130,  // 2100 "A748" "BRE" "BRCX" 13
-		       130,  // 2110 "A74D" "BRNH" "BRCX" 13
-		       130,  // 2120 "A74B" "BRNL" "BRCX" 13
-		       130,  // 2130 "A747" "BRNE" "BRCX" 13
-		       130,  // 2140 "A742" "BRP" "BRCX" 13
-		       130,  // 2150 "A744" "BRM" "BRCX" 13
-		       130,  // 2160 "A748" "BRZ" "BRCX" 13
-		       130,  // 2170 "A741" "BRO" "BRCX" 13
-		       130,  // 2180 "A74D" "BRNP" "BRCX" 13
-		       130,  // 2190 "A74B" "BRNM" "BRCX" 13
-		       130,  // 2200 "A747" "BRNZ" "BRCX" 13
-		       130,  // 2210 "A74E" "BRNO" "BRCX" 13
-		       130,  // 2220 "A742" "JH" "BRCX" 13
-		       130,  // 2230 "A744" "JL" "BRCX" 13
-		       130,  // 2240 "A748" "JE" "BRCX" 13
-		       130,  // 2250 "A74D" "JNH" "BRCX" 13
-		       130,  // 2260 "A74B" "JNL" "BRCX" 13
-		       130,  // 2270 "A747" "JNE" "BRCX" 13
-		       130,  // 2280 "A742" "JP" "BRCX" 13 
-		       130,  // 2290 "A744" "JM" "BRCX" 13
-		       130,  // 2300 "A748" "JZ" "BRCX" 13
-		       130,  // 2310 "A741" "JO" "BRCX" 13
-		       130,  // 2320 "A74D" "JNP" "BRCX" 13
-		       130,  // 2330 "A74B" "JNM" "BRCX" 13
-		       130,  // 2340 "A747" "JNZ" "BRCX" 13
-		       130,  // 2350 "A74E" "JNO" "BRCX" 13
-		       121,  // 2360 "A75" "BRAS" "RI" 12
-		       121,  // 2370 "A75" "JAS" "RI" 12
-		       121,  // 2380 "A76" "BRCT" "RI" 12
-		       121,  // 2390 "A76" "JCT" "RI" 12
-		       121,  // 2400 "A77" "BRCTG" "RI" 12
-		       121,  // 2410 "A77" "JCTG" "RI" 12
-		       122,  // 2420 "A78" "LHI" "RI" 12
-		       123,  // 2430 "A79" "LGHI" "RI" 12
-		       122,  // 2440 "A7A" "AHI" "RI" 12
-		       123,  // 2450 "A7B" "AGHI" "RI" 12
-		       122,  // 2460 "A7C" "MHI" "RI" 12
-		       123,  // 2470 "A7D" "MGHI" "RI" 12
-		       122,  // 2480 "A7E" "CHI" "RI" 12
-		       123,  // 2490 "A7F" "CGHI" "RI" 12
-		       104,  // 2500 "A8" "MVCLE" "RS" 10  RPI 1112
-		       104,  // 2510 "A9" "CLCLE" "RS" 10  RPI 1112
-		       110,  // 2520 "AC" "STNSM" "SI" 11
-		       110,  // 2530 "AD" "STOSM" "SI" 11
-		       100,  // 2540 "AE" "SIGP" "RS" 10
-		       110,  // 2550 "AF" "MC" "SI" 11
-		       50,  // 2560 "B1" "LRA" "RX" 5
-		       70,  // 2570 "B202" "STIDP" "S" 7
-		       70,  // 2580 "B204" "SCK" "S" 7
-		       70,  // 2590 "B205" "STCK" "S" 7
-		       70,  // 2600 "B206" "SCKC" "S" 7
-		       70,  // 2610 "B207" "STCKC" "S" 7
-		       70,  // 2620 "B208" "SPT" "S" 7
-		       70,  // 2630 "B209" "STPT" "S" 7
-		       70,  // 2640 "B20A" "SPKA" "S" 7
-		       70,  // 2650 "B20B" "IPK" "S" 7
-		       70,  // 2660 "B20D" "PTLB" "S" 7
-		       70,  // 2670 "B210" "SPX" "S" 7
-		       70,  // 2680 "B211" "STPX" "S" 7
-		       70,  // 2690 "B212" "STAP" "S" 7
-		       70,  // 2700 "B218" "PC" "S" 7
-		       70,  // 2710 "B219" "SAC" "S" 7
-		       70,  // 2720 "B21A" "CFC" "S" 7
-		       140,  // 2730 "B221" "IPTE" "RRE" 14
-		       140,  // 2740 "B222" "IPM" "RRE" 14
-		       140,  // 2750 "B223" "IVSK" "RRE" 14
-		       140,  // 2760 "B224" "IAC" "RRE" 14
-		       140,  // 2770 "B225" "SSAR" "RRE" 14
-		       140,  // 2780 "B226" "EPAR" "RRE" 14
-		       140,  // 2790 "B227" "ESAR" "RRE" 14
-		       140,  // 2800 "B228" "PT" "RRE" 14
-		       140,  // 2810 "B229" "ISKE" "RRE" 14
-		       140,  // 2820 "B22A" "RRBE" "RRE" 14
-		       140,  // 2830 "B22B" "SSKE" "RRE" 14
-		       140,  // 2840 "B22C" "TB" "RRE" 14
-		       142,  // 2850 "B22D" "DXR" "RRE" 14
-		       140,  // 2860 "B22E" "PGIN" "RRE" 14
-		       140,  // 2870 "B22F" "PGOUT" "RRE" 14
-		       70,  // 2880 "B230" "CSCH" "S" 7
-		       70,  // 2890 "B231" "HSCH" "S" 7
-		       70,  // 2900 "B232" "MSCH" "S" 7
-		       70,  // 2910 "B233" "SSCH" "S" 7
-		       70,  // 2920 "B234" "STSCH" "S" 7
-		       70,  // 2930 "B235" "TSCH" "S" 7
-		       70,  // 2940 "B236" "TPI" "S" 7
-		       70,  // 2950 "B237" "SAL" "S" 7
-		       70,  // 2960 "B238" "RSCH" "S" 7
-		       70,  // 2970 "B239" "STCRW" "S" 7
-		       70,  // 2980 "B23A" "STCPS" "S" 7
-		       70,  // 2990 "B23B" "RCHP" "S" 7
-		       70,  // 3000 "B23C" "SCHM" "S" 7
-		       140,  // 3010 "B240" "BAKR" "RRE" 14
-		       140,  // 3020 "B241" "CKSM" "RRE" 14
-		       142,  // 3030 "B244" "SQDR" "RRE" 14
-		       142,  // 3040 "B245" "SQER" "RRE" 14
-		       140,  // 3050 "B246" "STURA" "RRE" 14
-		       140,  // 3060 "B247" "MSTA" "RRE" 14
-		       140,  // 3070 "B248" "PALB" "RRE" 14
-		       140,  // 3080 "B249" "EREG" "RRE" 14
-		       140,  // 3090 "B24A" "ESTA" "RRE" 14
-		       140,  // 3100 "B24B" "LURA" "RRE" 14
-		       140,  // 3110 "B24C" "TAR" "RRE" 14
-		       149,  // 3120 "B24D" "CPYA" "RRE" 14 // RPI 1055
-		       149,  // 3130 "B24E" "SAR" "RRE" 14 // RPI 1055
-		       149,  // 3140 "B24F" "EAR" "RRE" 14 // RPI 1055
-		       140,  // 3150 "B250" "CSP" "RRE" 14
-		       140,  // 3160 "B252" "MSR" "RRE" 14
-		       140,  // 3170 "B254" "MVPG" "RRE" 14
-		       140,  // 3180 "B255" "MVST" "RRE" 14
-		       140,  // 3190 "B257" "CUSE" "RRE" 14
-		       140,  // 3200 "B258" "BSG" "RRE" 14
-		       140,  // 3210 "B25A" "BSA" "RRE" 14
-		       140,  // 3220 "B25D" "CLST" "RRE" 14
-		       140,  // 3230 "B25E" "SRST" "RRE" 14
-		       140,  // 3240 "B263" "CMPSC" "RRE" 14
-		       70,  // 3250 "B276" "XSCH" "S" 7
-		       70,  // 3260 "B277" "RP" "S" 7
-		       70,  // 3270 "B278" "STCKE" "S" 7
-		       70,  // 3280 "B279" "SACF" "S" 7
-		       70,  //      "B27C" "STCKF" "S" 7 Z9-2
-		       70,  // 3290 "B27D" "STSI" "S" 7
-		       71,  // 3300 "B299" "SRNM" "S" 7
-		       72,  // 3310 "B29C" "STFPC" "S" 7
-		       72,  // 3320 "B29D" "LFPC" "S" 7
-		       140,  // 3330 "B2A5" "TRE" "RRE" 14
-		       140,  // 3340 "B2A6" "CUUTF" "RRE" 14
-		       140,  // 3350 "B2A6" "CU21" "RRE" 14
-		       140,  // 3360 "B2A7" "CUTFU" "RRE" 14
-		       140,  // 3370 "B2A7" "CU12" "RRE" 14
-		       70,  //      "B2B0" "STFLE" "S" 7 Z9-3
-		       70,  // 3380 "B2B1" "STFL" "S" 7
-		       70,  // 3390 "B2B2" "LPSWE" "S" 7
-		       70,  // 3392 "B2B8" "SRNMB" "S" 7 RPI 1125
-		       71,  // 3395 "B2B9" "T" "S" 7 DFP 56
-		       72,  // 3395 "B2BD" "LFAS"  "S" 7 DFP 55
-		       70,  // 3400 "B2FF" "TRAP4" "S" 7
-		       142,  // 3410 "B300" "LPEBR" "RRE" 14
-		       142,  // 3420 "B301" "LNEBR" "RRE" 14
-		       142,  // 3430 "B302" "LTEBR" "RRE" 14
-		       142,  // 3440 "B303" "LCEBR" "RRE" 14
-		       142,  // 3450 "B304" "LDEBR" "RRE" 14
-		       142,  // 3460 "B305" "LXDBR" "RRE" 14
-		       142,  // 3470 "B306" "LXEBR" "RRE" 14
-		       142,  // 3480 "B307" "MXDBR" "RRE" 14
-		       142,  // 3490 "B308" "KEBR" "RRE" 14
-		       142,  // 3500 "B309" "CEBR" "RRE" 14
-		       142,  // 3510 "B30A" "AEBR" "RRE" 14
-		       142,  // 3520 "B30B" "SEBR" "RRE" 14
-		       142,  // 3530 "B30C" "MDEBR" "RRE" 14
-		       142,  // 3540 "B30D" "DEBR" "RRE" 14
-		       150,  // 3550 "B30E" "MAEBR" "RRF1" 15
-		       150,  // 3560 "B30F" "MSEBR" "RRF1" 15
-		       142,  // 3570 "B310" "LPDBR" "RRE" 14
-		       142,  // 3580 "B311" "LNDBR" "RRE" 14
-		       142,  // 3590 "B312" "LTDBR" "RRE" 14
-		       142,  // 3600 "B313" "LCDBR" "RRE" 14
-		       142,  // 3610 "B314" "SQEBR" "RRE" 14
-		       142,  // 3620 "B315" "SQDBR" "RRE" 14
-		       142,  // 3630 "B316" "SQXBR" "RRE" 14
-		       142,  // 3640 "B317" "MEEBR" "RRE" 14
-		       142,  // 3650 "B318" "KDBR" "RRE" 14
-		       142,  // 3660 "B319" "CDBR" "RRE" 14
-		       142,  // 3670 "B31A" "ADBR" "RRE" 14
-		       142,  // 3680 "B31B" "SDBR" "RRE" 14
-		       142,  // 3690 "B31C" "MDBR" "RRE" 14
-		       142,  // 3700 "B31D" "DDBR" "RRE" 14
-		       150,  // 3710 "B31E" "MADBR" "RRF1" 15
-		       150,  // 3720 "B31F" "MSDBR" "RRF1" 15
-		       142,  // 3730 "B324" "LDER" "RRE" 14
-		       142,  // 3740 "B325" "LXDR" "RRE" 14
-		       142,  // 3750 "B326" "LXER" "RRE" 14
-		       150,  // 3760 "B32E" "MAER" "RRF1" 15
-		       150,  // 3770 "B32F" "MSER" "RRF1" 15
-		       142,  // 3780 "B336" "SQXR" "RRE" 14
-		       142,  // 3790 "B337" "MEER" "RRE" 14
-		       150,  //      "B338" "MAYLR" "RRF1" 15 Z9-4
-		       150,  //      "B339" "MYLR" "RRF1" 15 Z9-5
-		       150,  //      "B33A" "MAYR" "RRF1" 15 Z9-6
-		       150,  //      "B33B" "MYR" "RRF1" 15 Z9-7
-		       150,  //      "B33C" "MAYHR" "RRF1" 15 Z9-8
-		       150,  //      "B33D" "MYHR" "RRF1" 15 Z9-9
-		       150,  // 3800 "B33E" "MADR" "RRF1" 15
-		       150,  // 3810 "B33F" "MSDR" "RRF1" 15
-		       142,  // 3820 "B340" "LPXBR" "RRE" 14
-		       142,  // 3830 "B341" "LNXBR" "RRE" 14
-		       142,  // 3840 "B342" "LTXBR" "RRE" 14
-		       142,  // 3850 "B343" "LCXBR" "RRE" 14
-		       142,  // 3860 "B344" "LEDBR?" "RRE" 53 RPI 1125
-		       142,  // 3870 "B345" "LDXBR?" "RRE" 53 RPI 1125
-		       142,  // 3880 "B346" "LEXBR?" "RRE" 53 RPI 1125
-		       340,  // 3890 "B347" "FIXBR?" "RRF2" 54 RPI 1125
-		       142,  // 3900 "B348" "KXBR" "RRE" 14
-		       142,  // 3910 "B349" "CXBR" "RRE" 14
-		       142,  // 3920 "B34A" "AXBR" "RRE" 14
-		       142,  // 3930 "B34B" "SXBR" "RRE" 14
-		       142,  // 3940 "B34C" "MXBR" "RRE" 14
-		       142,  // 3950 "B34D" "DXBR" "RRE" 14
-		       340,  // 3960 "B350" "TBEDR" "RRF2" 34
-		       340,  // 3970 "B351" "TBDR" "RRF2" 34
-		       300,  // 3980 "B353" "DIEBR" "RRF3" 30
-		       340,  // 3990 "B357" "FIEBR?" "RRF2" 54 RPI 1125
-		       142,  // 4000 "B358" "THDER" "RRE" 14
-		       142,  // 4010 "B359" "THDR" "RRE" 14
-		       300,  // 4020 "B35B" "DIDBR" "RRF3" 30
-		       340,  // 4030 "B35F" "FIDBR?" "RRF2" 54 RPI 1125
-		       142,  // 4040 "B360" "LPXR" "RRE" 14
-		       142,  // 4050 "B361" "LNXR" "RRE" 14
-		       142,  // 4060 "B362" "LTXR" "RRE" 14
-		       142,  // 4070 "B363" "LCXR" "RRE" 14
-		       142,  // 4080 "B365" "LXR" "RRE" 14
-		       142,  // 4090 "B366" "LEXR" "RRE" 14
-		       142,  // 4100 "B367" "FIXR" "RRE" 14
-		       142,  // 4110 "B369" "CXR" "RRE" 14
-		       142,  // 4115 "B370" "LPDFR" "RRE"  14 DFP
-		       142,  // 4115 "B371" "LNDFR" "RRE"  14 DFP
-		       340,  // 4115 "B372" "CPSDR" "RRF2" 34 DFP
-		       142,  // 4115 "B373" "LCDFR" "RRE"  14 DFP
-		       142,  // 4120 "B374" "LZER" "RRE" 14
-		       142,  // 4130 "B375" "LZDR" "RRE" 14
-		       142,  // 4140 "B376" "LZXR" "RRE" 14
-		       142,  // 4150 "B377" "FIER" "RRE" 14
-		       142,  // 4160 "B37F" "FIDR" "RRE" 14
-		       142,  // 4170 "B384" "SFPC" "RRE" 14
-		       142,  // 4175 "B385" "SFASR" "RRE" 14 DFP 57
-		       142,  // 4180 "B38C" "EFPC" "RRE" 14
-		       301,  //      "B390" "CELFBR" "RRF3" 30 RPI 1125 Z196
-               301,  //      "B391" "CDLFBR" "RRF3" 30 RPI 1125 Z196
-               301,  //      "B392" "CXLFBR" "RRF3" 30 RPI 1125 Z196
-		       146,  // 4190 "B394" "CEFBR?" "RRE" 14  RPI 643 RPI 1125
-		       146,  // 4200 "B395" "CDFBR?" "RRE" 14  RPI 643 RPI 1125
-		       146,  // 4210 "B396" "CXFBR?" "RRE" 14  RPI 643 RPI 1125
-		       341,  // 4220 "B398" "CFEBR?" "RRF2" 34 RPI 1125 Z196
-		       341,  // 4230 "B399" "CFDBR?" "RRF2" 34 RPI 1125 Z196
-		       341,  // 4240 "B39A" "CFXBR?" "RRF2" 34 RPI 1125 Z196
-		       303,    // 'B39C' 'CLFEBR' 'RRF3' 30 RPI 1125 Z196
-               303,    // 'B39D' 'CLFDBR' 'RRF3' 30 RPI 1125 Z196
-               303,    // 'B39E' 'CLFXBR' 'RRF3' 30 RPI 1125 Z196
-               304,    // 'B3A0' 'CELGBR' 'RRF3' 30 RPI 1125 Z196
-               304,    // 'B3A1' 'CDLGBR' 'RRF3' 30 RPI 1125 Z196
-               304,    // 'B3A2' 'CXLGBR' 'RRF3' 30 RPI 1125 Z196		       
-               141,  // 4250 "B3A4" "CEGBR?" "RRE"  53  RPI 1125 Z196
-		       141,  // 4260 "B3A5" "CDGBR?" "RRE"  53  RPI 1125 Z196
-		       141,  // 4270 "B3A6" "CXGBR?" "RRE"  53  RPI 1125 Z196
-		       342,  // 4280 "B3A8" "CGEBR?" "RRF2" 54  RPI 1125 Z196 
-		       342,  // 4290 "B3A9" "CGDBR?" "RRF2" 54  RPI 1125 Z196
-		       342,  // 4300 "B3AA" "CGXBR?" "RRF2" 54  RPI 1125 Z196
-		       342,    //      "B3AC" "CLGEBR" "RRF2" 30  RPI 1125 Z196
-               342,    //      "B3AD" "CLGDBR" "RRF2" 30  RPI 1125 Z196
-               342,    //      "B3AE" "CLGXBR" "RRF2" 30  RPI 1125 Z196		       
-		       146,  // 4310 "B3B4" "CEFR" "RRE" 14
-		       146,  // 4320 "B3B5" "CDFR" "RRE" 14
-		       146,  // 4330 "B3B6" "CXFR" "RRE" 14
-		       341,  // 4340 "B3B8" "CFER" "RRF2" 34
-		       341,  // 4350 "B3B9" "CFDR" "RRF2" 34
-		       341,  // 4360 "B3BA" "CFXR" "RRF2" 34
-		       141,  // 4365 "B3C1" "LDGR" "RRE" 14 DFP
-		       141,  // 4370 "B3C4" "CEGR" "RRE" 14
-		       141,  // 4380 "B3C5" "CDGR" "RRE" 14
-		       141,  // 4390 "B3C6" "CXGR" "RRE" 14
-		       342,  // 4400 "B3C8" "CGER" "RRF2" 34
-		       342,  // 4410 "B3C9" "CGDR" "RRF2" 34
-		       342,  // 4420 "B3CA" "CGXR" "RRF2" 34
-		       145,  // 4425 "B3CD" "LGDR" "RRE" 14 DFP
-		       360, // "MDTR?" "B3D0" "RRR" DFP 1 RPI 1125
-		       360, // "DDTR?" "B3D1" "RRR" DFP 2 RPI 1125
-		       360, // "ADTR?" "B3D2" "RRR" DFP 3 RPI 1125
-		       360, // "SDTR?" "B3D3" "RRR" DFP 4 RPI 1125
-		       350, // "LDETR" "B3D4" "RRF4" DFP 5
-		       301, // "LEDTR" "B3D5" "RRF3" DFP 6
-		       142, // "LTDTR" "B3D6" "RRE" DFP 7
-		       301, // "FIDTR" "B3D7" "RRF3" DFP 8
-		       360, // "MXTR?" "B3D8" "RRR" DFP 9  RPI 1125
-		       360, // "DXTR?" "B3D9" "RRR" DFP 10 RPI 1125
-		       360, // "AXTR?" "B3DA" "RRR" DFP 11 RPI 1125
-		       360, // "SXTR?" "B3DB" "RRR" DFP 12 RPI 1125
-		       350, // "LXDTR" "B3DC" "RRF4" DFP 13
-		       301, // "LDXTR" "B3DD" "RRF3" DFP 14
-		       142, // "LTXTR" "B3DE" "RRE" DFP 15
-		       301, // "FIXTR" "B3DF" "RRF3" DFP 16
-		       142, // "KDTR" "B3E0" "RRE" DFP 17
-		       342, // "CGDTR?" "B3E1" "RRF7" DFP 18 RPI 1125
-		       145, // "CUDTR" "B3E2" "RRE" DFP 19
-		       351, // "CSDTR" "B3E3" "RRF4" DFP 20  // RPI 798
-		       142, // "CDTR" "B3E4" "RRE" DFP 21
-		       145, // "EEDTR" "B3E5" "RRE" DFP 22
-		       145, // "ESDTR" "B3E7" "RRE" DFP 23
-		       142, // "KXTR" "B3E8" "RRE" DFP 24
-		       342, // "CGXTR?" "B3E9" "RRF7" DFP 25 RPI 1125
-		       145, // "CUXTR" "B3EA" "RRE" DFP 26
-		       351, // "CSXTR" "B3EB" "RRF4" DFP 27  // RPI 798
-		       142, // "CXTR" "B3EC" "RRE" DFP 28
-		       145, // "EEXTR" "B3ED" "RRE" DFP 29
-		       145, // "ESXTR" "B3EF" "RRE" DFP 30
-		       141, // "CDGTR?" "B3F1" "RRF7" DFP 31 RPI 1125
-		       141, // "CDUTR" "B3F2" "RRE" DFP 32
-		       141, // "CDSTR" "B3F3" "RRE" DFP 33
-		       142, // "CEDTR" "B3F4" "RRE" DFP 34
-		       300, // "QADTR" "B3F5" "RRF3" DFP 35
-		       343, // "IEDTR" "B3F6" "RRF2" DFP 36
-		       302, // "RRDTR" "B3F7" "RRF3" DFP 37 RPI 798
-		       141, // "CXGTR?" "B3F9" "RRF7" DFP 38 RPI 1125
-		       141, // "CXUTR" "B3FA" "RRE" DFP 39
-		       141, // "CXSTR" "B3FB" "RRE" DFP 40
-		       142, // "CEXTR" "B3FC" "RRE" DFP 41
-		       300, // "QAXTR" "B3FD" "RRF3" DFP 42
-		       343, // "IEXTR" "B3FE" "RRF2" DFP 43
-		       302, // "RRXTR" "B3FF" "RRF3" DFP 44 RPI 798
-		       100,  // 4430 "B6" "STCTL" "RS" 10
-		       100,  // 4440 "B7" "LCTL" "RS" 10
-		       144,  // 4450 "B900" "LPGR" "RRE" 14
-		       144,  // 4460 "B901" "LNGR" "RRE" 14
-		       144,  // 4470 "B902" "LTGR" "RRE" 14
-		       144,  // 4480 "B903" "LCGR" "RRE" 14
-		       144,  // 4490 "B904" "LGR" "RRE" 14
-		       144,  // 4500 "B905" "LURAG" "RRE" 14
-		       144,  //      "B906" "LGBR" "RRE" 14 Z9-10
-		       144,  //      "B907" "LGHR" "RRE" 14 Z9-11
-		       144,  // 4510 "B908" "AGR" "RRE" 14
-		       144,  // 4520 "B909" "SGR" "RRE" 14
-		       144,  // 4530 "B90A" "ALGR" "RRE" 14
-		       144,  // 4540 "B90B" "SLGR" "RRE" 14
-		       144,  // 4550 "B90C" "MSGR" "RRE" 14
-		       144,  // 4560 "B90D" "DSGR" "RRE" 14
-		       144,  // 4570 "B90E" "EREGG" "RRE" 14
-		       144,  // 4580 "B90F" "LRVGR" "RRE" 14
-		       148,  // 4590 "B910" "LPGFR" "RRE" 14
-		       148,  // 4600 "B911" "LNGFR" "RRE" 14
-		       148,  // 4610 "B912" "LTGFR" "RRE" 14
-		       148,  // 4620 "B913" "LCGFR" "RRE" 14
-		       148,  // 4630 "B914" "LGFR" "RRE" 14
-		       148,  // 4640 "B916" "LLGFR" "RRE" 14
-		       144,  // 4650 "B917" "LLGTR" "RRE" 14
-		       148,  // 4660 "B918" "AGFR" "RRE" 14
-		       148,  // 4670 "B919" "SGFR" "RRE" 14
-		       148,  // 4680 "B91A" "ALGFR" "RRE" 14
-		       148,  // 4690 "B91B" "SLGFR" "RRE" 14
-		       148,  // 4700 "B91C" "MSGFR" "RRE" 14
-		       148,  // 4710 "B91D" "DSGFR" "RRE" 14
-		       144,  // 4720 "B91E" "KMAC" "RRE" 14
-		       144,  // 4730 "B91F" "LRVR" "RRE" 14
-		       144,  // 4740 "B920" "CGR" "RRE" 14
-		       144,  // 4750 "B921" "CLGR" "RRE" 14
-		       144,  // 4760 "B925" "STURG" "RRE" 14
-		       144,  //      "B926" "LBR" "RRE" 14 Z9-12
-		       144,  //      "B927" "LHR" "RRE" 14 Z9-13
-		       144,  // "B928","PCKMO","RE4"  14 RPI 1125 Z196
-               144,  // "B92A","KMF","RRE"    14 RPI 1125 Z196
-               144,  // "B92B","KMO","RRE"    14 RPI 1125 Z196
-               144,  // "B92C","PCC","RE4"    14 RPI 1125 Z196
-               343,  // "B92D","KMCTR","RRF2" 34 RPI 1125 Z196
-		       144,  // 4770 "B92E" "KM" "RRE" 14
-		       144,  // 4780 "B92F" "KMC" "RRE" 14
-		       144,  // 4790 "B930" "CGFR" "RRE" 14
-		       144,  // 4800 "B931" "CLGFR" "RRE" 14
-		       144,  // 4810 "B93E" "KIMD" "RRE" 14
-		       144,  // 4820 "B93F" "KLMD" "RRE" 14
-		       303,    // "B941","CFDTR","RRF"  30 RPI 1125 Z196
-               305,   // "B942","CLGDTR","RRF" 30 RPI 1125 Z196
-               303,   // "B943","CLFDTR","RRF" 30 RPI 1125 Z196
-		       144,  // 4830 "B946" "BCTGR" "RRE" 14
-		       303,    // "B949","CFXTR","RRF3"   30 RPI 1125 Z196
-               305,   // "B94A","CLGXTR","RRF3"  30 RPI 1125 Z196
-               303,   // "B94B","CLFXTR","RRF3"  30 RPI 1125 Z196
-               301,    // "B951","CDFTR","RRF3"   30 RPI 1125 Z196
-               304,   // "B952","CDLGTR","RRF3"  30 RPI 1125 Z196
-               306,   // "B953","CDLFTR","RRF3"  30 RPI 1125 Z196
-               306,    // "B959","CXFTR","RRF3"   30 RPI 1125 Z196" 
-               304,   // "B95A","CXLGTR","RRF3"  30 RPI 1125 Z196
-               306,   // "B95B","CXLFTR","RRF3"  30 RPI 1125 Z196
-		       151,  // 10 "B960" "CGRT" "RRF5" 39 RPI 817
-		       151,  // 20 "B9608" "CGRTE" "RRF6" 40 RPI 817
-		       151,  // 30 "B9602" "CGRTH" "RRF6" 40 RPI 817
-		       151,  // 40 "B9604" "CGRTL" "RRF6" 40 RPI 817
-		       151,  // 50 "B9606" "CGRTNE" "RRF6" 40 RPI 817
-		       151,  // 60 "B960C" "CGRTNH" "RRF6" 40 RPI 817
-		       151,  // 70 "B960A" "CGRTNL" "RRF6" 40 RPI 817
-		       151,  // 10 "B961" "CLGRT" "RRF5" 39 RPI 817
-		       151,  // 20 "B9618" "CLGRTE" "RRF6" 40 RPI 817
-		       151,  // 30 "B9612" "CLGRTH" "RRF6" 40 RPI 817
-		       151,  // 40 "B9614" "CLGRTL" "RRF6" 40 RPI 817
-		       151,  // 50 "B9616" "CLGRTNE" "RRF6" 40 RPI 817
-		       151,  // 60 "B961C" "CLGRTNH" "RRF6" 40 RPI 817
-		       151,  // 70 "B961A" "CLGRTNL" "RRF6" 40 RPI 817
-		       152,  // 150 "B972" "CRT" "RRF5" 39 RPI 817
-		       152,  // 160 "B9728" "CRTE" "RRF6" 40 RPI 817
-		       152,  // 170 "B9722" "CRTH" "RRF6" 40 RPI 817
-		       152,  // 180 "B9724" "CRTL" "RRF6" 40 RPI 817
-		       152,  // 190 "B9726" "CRTNE" "RRF6" 40 RPI 817
-		       152,  // 200 "B972C" "CRTNH" "RRF6" 40 RPI 817
-		       152,  // 210 "B972A" "CRTNL" "RRF6" 40 RPI 817		       
-		       152,  // 80 "B973" "CLRT" "RRF5" 39 RPI 817
-		       152,  // 90 "B9738" "CLRTE" "RRF6" 40 RPI 817
-		       152,  // 100 "B9732" "CLRTH" "RRF6" 40 RPI 817
-		       152,  // 110 "B9734" "CLRTL" "RRF6" 40 RPI 817
-		       152,  // 120 "B9736" "CLRTNE" "RRF6" 40 RPI 817
-		       152,  // 130 "B973C" "CLRTNH" "RRF6" 40 RPI 817
-		       152,  // 140 "B973A" "CLRTNL" "RRF6" 40 RPI 817
-		       144,  // 4840 "B980" "NGR" "RRE" 14
-		       144,  // 4850 "B981" "OGR" "RRE" 14
-		       144,  // 4860 "B982" "XGR" "RRE" 14
-		       144,  //      "B983" "FLOGR" "RRE" 14 Z9-14
-		       144,  //      "B984" "LLGCR" "RRE" 14 Z9-15
-		       144,  //      "B985" "LLGHR" "RRE" 14 Z9-16
-		       144,  // 4870 "B986" "MLGR" "RRE" 14
-		       144,  // 4880 "B987" "DLGR" "RRE" 14
-		       144,  // 4890 "B988" "ALCGR" "RRE" 14
-		       144,  // 4900 "B989" "SLBGR" "RRE" 14
-		       144,  // 4910 "B98A" "CSPG" "RRE" 14
-		       144,  // 4920 "B98D" "EPSW" "RRE" 14
-		       340,  // 4930 "B98E" "IDTE" "RRF2" 34
-		       143,  // 4940 "B990" "TRTT" "RRE" 14
-		       143,  // 4950 "B991" "TRTO" "RRE" 14
-		       143,  // 4960 "B992" "TROT" "RRE" 14
-		       143,  // 4970 "B993" "TROO" "RRE" 14
-		       144,  //      "B994" "LLCR" "RRE" 14 Z9-17
-		       144,  //      "B995" "LLHR" "RRE" 14 Z9-18
-		       144,  // 4980 "B996" "MLR" "RRE" 14
-		       144,  // 4990 "B997" "DLR" "RRE" 14
-		       144,  // 5000 "B998" "ALCR" "RRE" 14
-		       144,  // 5010 "B999" "SLBR" "RRE" 14
-		       144,  // 5020 "B99A" "EPAIR" "RRE" 14
-		       144,  // 5030 "B99B" "ESAIR" "RRE" 14
-		       144,  // 5040 "B99D" "ESEA" "RRE" 14
-		       144,  // 5050 "B99E" "PTI" "RRE" 14
-		       144,  // 5060 "B99F" "SSAIR" "RRE" 14
-		       147,  // 10 "B9A2" "PTF" "RRE" 14  RPI 817
-		       144,  // 20 "B9AF" "PFMF" "RRF5" 39  RPI 817
-		       144,  //      "B9AA" "LPTEA" "RRE" 14 Z9-19
-		       140,  // "B9AE","RRBM","RRE"  14 RPI 1125 Z196
-		       144,  // 5070 "B9B0" "CU14" "RRE" 14
-		       144,  // 5080 "B9B1" "CU24" "RRE" 14
-		       144,  // 5090 "B9B2" "CU41" "RRE" 14
-		       144,  // 5100 "B9B3" "CU42" "RRE" 14
-		       144,  // 30 "B9BD" "TRTRE" "RRF5" 39  RPI 817
-		       144,  // 5110 "B9BE" "SRSTU" "RRE" 14
-		       144,  // 40 "B9BF" "TRTE" "RRF5" 39  RPI 817
-		       410,    // "B9C8","AHHHR","RRF5"  39 RPI 1125 Z196
-		       410,    // "B9C9","SHHHR","RRF5"  39 RPI 1125 Z196
-		       410,   // "B9CA","ALHHHR","RRF5" 39 RPI 1125 Z196
-		       410,   // "B9CB","SLHHHR","RRF5" 39 RPI 1125 Z196
-		       144,   // "B9CD","CHHR","RRE"     14 RPI 1125 Z196
-		       144,   // "B9CF","CLHHR","RRE"    14 RPI 1125 Z196
-		       410,   // "B9D8","AHHLR","RRF5 "  39 RPI 1125 Z196
-		       410,   // "B9D9","SHHLR","RRF5 "  39 RPI 1125 Z196
-		       410,   // "B9DA","ALHHLR","RRF5 " 39 RPI 1125 Z196
-		       410,   // "B9DB","SLHHLR","RRF5 " 39 RPI 1125 Z196
-		       144,   // "B9DD","CHLR","RRE"     14 RPI 1125 Z196
-		       144,    // "B9DF","CLHLR","RRE"    14 RPI 1125 Z196 		       
-		       144,  // 5115 "b9E1" "POPCNT" "RRE" 14 RPI 1125
-		       141,     // "B9E2","LOCGR","RRF5"   39 RPI 1125 Z196
-		       153,     // "B9E4","NGRK","RRF5"    39 RPI 1125 Z196
-		       153,     // "B9E6","OGRK","RRF5"    39 RPI 1125 Z196
-		       153,     // "B9E7","XGRK","RRF5"    39 RPI 1125 Z196
-		       153,     // "B9E8","AGRK","RRF5"    39 RPI 1125 Z196
-		       153,     // "B9E9","SGRK","RRF5"    39 RPI 1125 Z196
-		       153,     // "B9EA","ALGRK","RRF5"   39 RPI 1125 Z196
-		       153,     // "B9EB","SLGRK","RRF5"   39 RPI 1125 Z196
-		       142,     // "B9F2","LOCR","RRF5"    39 RPI 1125 Z196
-		       154,     // "B9F4","NRK","RRF5"     39 RPI 1125 Z196
-		       154,     // "B9F6","ORK","RRF5"     39 RPI 1125 Z196
-		       154,     // "B9F7","XRK","RRF5"     39 RPI 1125 Z196
-		       154,     // "B9F8","ARK","RRF5"     39 RPI 1125 Z196
-		       154,     // "B9F9","SRK","RRF5"     39 RPI 1125 Z196
-		       154,     // "B9FA","ALRK","RRF5"    39 RPI 1125 Z196
-		       154,     // "B9FB","SLRK","RRF5"    39 RPI 1125 Z196 		       
-		       100,  // 5120 "BA" "CS" "RS" 10
-		       100,  // 5130 "BB" "CDS" "RS" 10
-		       101,  // 5140 "BD" "CLM" "RS" 10
-		       101,  // 5150 "BE" "STCM" "RS" 10
-		       101,  // 5160 "BF" "ICM" "RS" 10
-		       162,  // 5170 "C00" "LARL" "RIL" 16
-		       160,  //      "C01" "LGFI" "RIL" 16 Z9-20
-		       330,  // 5180 "C04" "BRCL" "RIL" 16
-		       330,  // 5390 "C040" "JLNOP" "BLX" 33
-		       330,  // 5400 "C041" "BROL" "BLX" 33
-		       330,  // 5410 "C041" "JLO" "BLX" 33
-		       330,  // 5420 "C042" "BRHL" "BLX" 33
-		       330,  // 5430 "C042" "BRPL" "BLX" 33
-		       330,  // 5440 "C042" "JLH" "BLX" 33
-		       330,  // 5450 "C042" "JLP" "BLX" 33
-		       330,  // 5460 "C044" "BRLL" "BLX" 33
-		       330,  // 5470 "C044" "BRML" "BLX" 33
-		       330,  // 5480 "C044" "JLL" "BLX" 33
-		       330,  // 5490 "C044" "JLM" "BLX" 33
-		       330,  // 5500 "C047" "BRNEL" "BLX" 33
-		       330,  // 5510 "C047" "BRNZL" "BLX" 33
-		       330,  // 5520 "C047" "JLNE" "BLX" 33
-		       330,  // 5530 "C047" "JLNZ" "BLX" 33
-		       330,  // 5540 "C048" "BREL" "BLX" 33
-		       330,  // 5550 "C048" "BRZL" "BLX" 33
-		       330,  // 5560 "C048" "JLE" "BLX" 33
-		       330,  // 5570 "C048" "JLZ" "BLX" 33
-		       330,  // 5580 "C04B" "BRNLL" "BLX" 33
-		       330,  // 5590 "C04B" "BRNML" "BLX" 33
-		       330,  // 5600 "C04B" "JLNL" "BLX" 33
-		       330,  // 5610 "C04B" "JLNM" "BLX" 33
-		       330,  // 5620 "C04D" "BRNHL" "BLX" 33
-		       330,  // 5630 "C04D" "BRNPL" "BLX" 33
-		       330,  // 5640 "C04D" "JLNH" "BLX" 33
-		       330,  // 5650 "C04D" "JLNP" "BLX" 33
-		       330,  // 5660 "C04E" "BRNOL" "BLX" 33
-		       330,  // 5670 "C04E" "JLNO" "BLX" 33
-		       330,  // 5680 "C04F" "BRUL" "BLX" 33
-		       330,  // 5690 "C04F" "JLU" "BLX" 33
-		       163,  // 5210 "C05" "BRASL" "RIL" 16
-		       163,  // 5220 "C05" "JASL" "RIL" 16
-		       160,  //      "C06" "XIHF" "RIL" 16 Z9-21
-		       160,  //      "C07" "XILF" "RIL" 16 Z9-22
-		       160,  //      "C08" "IIHF" "RIL" 16 Z9-23
-		       160,  //      "C09" "IILF" "RIL" 16 Z9-24
-		       160,  //      "C0A" "NIHF" "RIL" 16 Z9-25
-		       160,  //      "C0B" "NILF" "RIL" 16 Z9-26
-		       160,  //      "C0C" "OIHF" "RIL" 16 Z9-27
-		       160,  //      "C0D" "OILF" "RIL" 16 Z9-28
-		       160,  //      "C0E" "LLIHF" "RIL" 16 Z9-29
-		       160,  //      "C0F" "LLILF" "RIL" 16 Z9-30
-		       160,  // 50 "C20" "MSGFI" "RIL" 16  RPI 817
-		       161,  // 60 "C21" "MSFI" "RIL" 16  RPI 817
-		       160,  //      "C24" "SLGFI" "RIL" 16 Z9-31
-		       161,  //      "C25" "SLFI" "RIL" 16 Z9-32
-		       160,  //      "C28" "AGFI" "RIL" 16 Z9-33
-		       161,  //      "C29" "AFI" "RIL" 16 Z9-34
-		       160,  //      "C2A" "ALGFI" "RIL" 16 Z9-35
-		       161,  //      "C2B" "ALFI" "RIL" 16 Z9-36
-		       160,  //      "C2C" "CGFI" "RIL" 16 Z9-37
-		       161,  //      "C2D" "CFI" "RIL" 16 Z9-38
-		       160,  //      "C2E" "CLGFI" "RIL" 16 Z9-39
-		       161,  //      "C2F" "CLFI" "RIL" 16 Z9-40
-		       164,  // 70 "C42" "LLHRL" "RIL" 16  RPI 817
-		       168,  // 80 "C44" "LGHRL" "RIL" 16  RPI 817
-		       164,  // 90 "C45" "LHRL" "RIL" 16  RPI 817
-		       168,  // 100 "C46" "LLGHRL" "RIL" 16  RPI 817
-		       164,  // 110 "C47" "STHRL" "RIL" 16  RPI 817
-		       165,  // 120 "C48" "LGRL" "RIL" 16  RPI 817
-		       165,  // 130 "C4B" "STGRL" "RIL" 16  RPI 817
-		       166, // 140 "C4C" "LGFRL" "RIL" 16  RPI 817
-		       167, // 150 "C4D" "LRL" "RIL" 16  RPI 817
-		       166, // 160 "C4E" "LLGFRL" "RIL" 16  RPI 817
-		       167, // 170 "C4F" "STRL" "RIL" 16  RPI 817
-		       163,  // 180 "C60" "EXRL" "RIL" 16  RPI 817
-		       169,  // 190 "C62" "PFDRL" "RIL" 16  RPI 817
-		       168,  // 200 "C64" "CGHRL" "RIL" 16  RPI 817
-		       164,  // 210 "C65" "CHRL" "RIL" 16  RPI 817
-		       168,  // 220 "C66" "CLGHRL" "RIL" 16  RPI 817
-		       164,  // 230 "C67" "CLHRL" "RIL" 16  RPI 817
-		       165,  // 240 "C68" "CGRL" "RIL" 16  RPI 817
-		       165,  // 250 "C6A" "CLGRL" "RIL" 16  RPI 817
-		       166,  // 260 "C6C" "CGFRL" "RIL" 16  RPI 817
-		       167,  // 270 "C6D" "CRL" "RIL" 16  RPI 817
-		       166,  // 280 "C6E" "CLGFRL" "RIL" 16  RPI 817
-		       167,  // 290 "C6F" "CLRL" "RIL" 16  RPI 817
-		       320,  // "C80" "MVCOS" "SSF" 32 Z9-41 RPI 817
-		       320,  // "C81" "ECTG" "SSF" 32 RPI 1013
-		       320,  // "C82" "CSST" "SSF" 32 RPI 1013
-		       321,  // "C84","LPD","SSF2"  55 RPI 1125 Z196
-		       321,  // "C85","LPDG","SSF2" 55 RPI 1125 Z196
-               163, // "CC6","BRCTH","RIL"  16 RPI 1125 Z196
-               160, // "CC8","AIH","RIL"    16  RPI 1125 Z196
-               160, // "CCA","ALSIH","RIL"  16  RPI 1125 Z196
-               160, // "CCB","ALSIHN","RIL" 16  RPI 1125 Z196
-               160, // "CCD","CIH","RIL"    16  RPI 1125 Z196
-               160, // "CCF","CLIH","RIL"   16  RPI 1125 Z196
-		       170,  // 5230 "D0" "TRTR" "SS" 17
-		       170,  // 5240 "D1" "MVN" "SS" 17
-		       170,  // 5250 "D2" "MVC" "SS" 17
-		       170,  // 5260 "D3" "MVZ" "SS" 17
-		       170,  // 5270 "D4" "NC" "SS" 17
-		       170,  // 5280 "D5" "CLC" "SS" 17
-		       170,  // 5290 "D6" "OC" "SS" 17
-		       170,  // 5300 "D7" "XC" "SS" 17
-		       170,  // 5310 "D9" "MVCK" "SS" 17
-		       170,  // 5320 "DA" "MVCP" "SS" 17
-		       170,  // 5330 "DB" "MVCS" "SS" 17
-		       170,  // 5340 "DC" "TR" "SS" 17
-		       170,  // 5350 "DD" "TRT" "SS" 17
-		       170,  // 5360 "DE" "ED" "SS" 17
-		       170,  // 5370 "DF" "EDMK" "SS" 17
-		       171,  // 5375 "E00" "XREAD" "RXSS" 38 RPI 812
-		       171,  // 5375 "E02" "XPRNT" "RXSS" 38 RPI 812
-		       171,  // 5375 "E04" "XPNCH" "RXSS" 38 RPI 812
-		       171,  // 5375 "E06" "XDUMP" "RXSS" 38 RPI 812
-		       171,  // 5375 "E08" "XLIMD" "RXSS" 38 RPI 812
-		       171,  // 5375 "E0A" "XGET"  "RXSS" 38 RPI 812
-		       171,  // 5375 "E0C" "XPUT"  "RXSS" 38 RPI 812
-		       170,  // 5380 "E1" "PKU" "SS" 17
-		       170,  // 5390 "E2" "UNPKU" "SS" 17
-		       180,  //      "E302" "LTG" "RXY" 18 Z9-42
-		       180,  // 5400 "E303" "LRAG" "RXY" 18
-		       180,  // 5410 "E304" "LG" "RXY" 18
-		       57,   // 5420 "E306" "CVBY" "RXY" 18  RPI 588
-		       180,  // 5430 "E308" "AG" "RXY" 18
-		       180,  // 5440 "E309" "SG" "RXY" 18
-		       180,  // 5450 "E30A" "ALG" "RXY" 18
-		       180,  // 5460 "E30B" "SLG" "RXY" 18
-		       180,  // 5470 "E30C" "MSG" "RXY" 18
-		       180,  // 5480 "E30D" "DSG" "RXY" 18
-		       188,  // 5490 "E30E" "CVBG" "RXY" 18  RPI 588
-		       180,  // 5500 "E30F" "LRVG" "RXY" 18
-		       180,  //      "E312" "LT" "RXY" 18 Z9-43
-		       180,  // 5510 "E313" "LRAY" "RXY" 18
-		       184,  // 5520 "E314" "LGF" "RXY" 18
-		       182,  // 5530 "E315" "LGH" "RXY" 18
-		       184,  // 5540 "E316" "LLGF" "RXY" 18
-		       180,  // 5550 "E317" "LLGT" "RXY" 18
-		       184,  // 5560 "E318" "AGF" "RXY" 18
-		       184,  // 5570 "E319" "SGF" "RXY" 18
-		       184,  // 5580 "E31A" "ALGF" "RXY" 18
-		       184,  // 5590 "E31B" "SLGF" "RXY" 18
-		       184,  // 5600 "E31C" "MSGF" "RXY" 18
-		       184,  // 5610 "E31D" "DSGF" "RXY" 18
-		       180,  // 5620 "E31E" "LRV" "RXY" 18
-		       182,  // 5630 "E31F" "LRVH" "RXY" 18
-		       180,  // 5640 "E320" "CG" "RXY" 18
-		       180,  // 5650 "E321" "CLG" "RXY" 18
-		       180,  // 5660 "E324" "STG" "RXY" 18
-		       57,   // 5670 "E326" "CVDY" "RXY" 18  RPI 588
-		       188,  // 5680 "E32E" "CVDG" "RXY" 18  RPI 588
-		       180,  // 5690 "E32F" "STRVG" "RXY" 18
-		       184,  // 5700 "E330" "CGF" "RXY" 18
-		       184,  // 5710 "E331" "CLGF" "RXY" 18
-		       184,  // 310 "E332" "LTGF" "RXY" 18  RPI 817
-		       182,  // 320 "E334" "CGH" "RXY" 18  RPI 817
-		       189,  // 330 "E336" "PFD" "RXY" 18  RPI 817
-		       180,  // 5720 "E33E" "STRV" "RXY" 18
-		       182,  // 5730 "E33F" "STRVH" "RXY" 18
-		       180,  // 5740 "E346" "BCTG" "RXY" 18
-		       50,  // 5750 "E350" "STY" "RXY" 18
-		       50,   // 5760 "E351" "MSY" "RXY" 18
-		       50,   // 5770 "E354" "NY" "RXY" 18
-		       50,   // 5780 "E355" "CLY" "RXY" 18
-		       50,   // 5790 "E356" "OY" "RXY" 18
-		       50,   // 5800 "E357" "XY" "RXY" 18
-		       50,   // 5810 "E358" "LY" "RXY" 18
-		       50,   // 5820 "E359" "CY" "RXY" 18
-		       50,   // 5830 "E35A" "AY" "RXY" 18
-		       50,   // 5840 "E35B" "SY" "RXY" 18
-		       50,  // 340 "E35C" "MFY" "RXY" 18  RPI 817
-		       50,   // 5850 "E35E" "ALY" "RXY" 18
-		       50,   // 5860 "E35F" "SLY" "RXY" 18
-		       53,  // 5870 "E370" "STHY" "RXY" 18
-		       52,  // 5880 "E371" "LAY" "RXY" 18  RPI 738 RPI 1149
-		       186,  // 5890 "E372" "STCY" "RXY" 18
-		       186,  // 5900 "E373" "ICY" "RXY" 18
-		       52,  // 350 "E375" "LAEY" "RXY" 18  RPI 817
-		       186,  // 5910 "E376" "LB" "RXY" 18
-		       185,  // 5920 "E377" "LGB" "RXY" 18
-		       53,  // 5930 "E378" "LHY" "RXY" 18
-		       53,  // 5940 "E379" "CHY" "RXY" 18
-		       53,  // 5950 "E37A" "AHY" "RXY" 18
-		       53,  // 5960 "E37B" "SHY" "RXY" 18
-		       53,  // 360 "E37C" "MHY" "RXY" 18  RPI 817
-		       180,  // 5970 "E380" "NG" "RXY" 18
-		       180,  // 5980 "E381" "OG" "RXY" 18
-		       180,  // 5990 "E382" "XG" "RXY" 18
-		       183,  // 6000 "E386" "MLG" "RXY" 18
-		       183,  // 6010 "E387" "DLG" "RXY" 18
-		       180,  // 6020 "E388" "ALCG" "RXY" 18
-		       180,  // 6030 "E389" "SLBG" "RXY" 18
-		       180,  // 6040 "E38E" "STPQ" "RXY" 18
-		       180,  // 6050 "E38F" "LPQ" "RXY" 18
-		       185,  // 6060 "E390" "LLGC" "RXY" 18
-		       182,  // 6070 "E391" "LLGH" "RXY" 18
-		       186,  //      "E394" "LLC" "RXY" 18 Z9-44
-		       53,  //      "E395" "LLH" "RXY" 18 Z9-45
-		       180,  // 6080 "E396" "ML" "RXY" 18
-		       180,  // 6090 "E397" "DL" "RXY" 18
-		       187,  // 6100 "E398" "ALC" "RXY" 18
-		       187,  // 6110 "E399" "SLB" "RXY" 18
-		       185,  // "E3C0","LBH","RXY"   18  RPI 1125 Z196
-		       185,  // "E3C2","LLCH","RXY"  18  RPI 1125 Z196
-		       185,  // "E3C3","STCH","RXY"  18  RPI 1125 Z196
-		       182,  // "E3C4","LHH","RXY"   18  RPI 1125 Z196
-		       182,  // "E3C6","LLHH","RXY"  18  RPI 1125 Z196
-		       182,  // "E3C7","STHH","RXY"  18  RPI 1125 Z196
-		       184,  // "E3CA","LFH","RXY"   18  RPI 1125 Z196
-		       184,  // "E3CB","STFH","RXY"  18  RPI 1125 Z196
-		       184,  // "E3CD","CHF","RXY"   18  RPI 1125 Z196
-		       184,  // "E3CF","CLHF","RXY"  18  RPI 1125 Z19
-		       190,  // 6120 "E500" "LASP" "SSE" 19
-		       190,  // 6130 "E501" "TPROT" "SSE" 19
-		       190,  // 6140 "E502" "STRAG" "SSE" 19
-		       190,  // 6150 "E50E" "MVCSK" "SSE" 19
-		       190,  // 6160 "E50F" "MVCDK" "SSE" 19
-		       390,  // 370 "E544" "MVHHI" "SIL" 51  RPI 817
-		       391,  // 380 "E548" "MVGHI" "SIL" 51  RPI 817
-		       392,  // 390 "E54C" "MVHI" "SIL" 51  RPI 817
-		       390,  // 400 "E554" "CHHSI" "SIL" 51  RPI 817
-		       390,  // 410 "E555" "CLHHSI" "SIL" 51  RPI 817
-		       391,  // 420 "E558" "CGHSI" "SIL" 51  RPI 817
-		       391,  // 430 "E559" "CLGHSI" "SIL" 51  RPI 817
-		       392,  // 440 "E55C" "CHSI" "SIL" 51  RPI 817
-		       392,  // 450 "E55D" "CLFHSI" "SIL" 51  RPI 817
-		       170,  // 6170 "E8" "MVCIN" "SS" 17
-		       310,  // 6180 "E9" "PKA" "SS" 31
-		       170,  // 6190 "EA" "UNPKA" "SS" 17
-		       206,  // 6200 "EB04" "LMG" "RSY" 20
-		       203,  // 6210 "EB0A" "SRAG" "RSY" 20
-		       203,  // 6220 "EB0B" "SLAG" "RSY" 20
-		       203,  // 6230 "EB0C" "SRLG" "RSY" 20
-		       203,  // 6240 "EB0D" "SLLG" "RSY" 20
-		       206,  // 6250 "EB0F" "TRACG" "RSY" 20
-		       200,  // 6260 "EB14" "CSY" "RSY" 20
-		       203,  // 6270 "EB1C" "RLLG" "RSY" 20
-		       204,  // 6280 "EB1D" "RLL" "RSY" 20
-		       201,  // 6290 "EB20" "CLMH" "RSY" 20
-		       202,  // 6300 "EB21" "CLMY" "RSY" 20
-		       206,  // 6310 "EB24" "STMG" "RSY" 20
-		       206,  // 6320 "EB25" "STCTG" "RSY" 20
-		       206,  // 6330 "EB26" "STMH" "RSY" 20
-		       201,  // 6340 "EB2C" "STCMH" "RSY" 20
-		       202,  // 6350 "EB2D" "STCMY" "RSY" 20
-		       206,  // 6360 "EB2F" "LCTLG" "RSY" 20
-		       206,  // 6370 "EB30" "CSG" "RSY" 20
-		       200,  // 6380 "EB31" "CDSY" "RSY" 20
-		       206,  // 6390 "EB3E" "CDSG" "RSY" 20
-		       205,  // 6400 "EB44" "BXHG" "RSY" 20
-		       205,  // 6410 "EB45" "BXLEG" "RSY" 20
-		       203,  // 460 "EB4C" "ECAG" "RSY" 20  RPI 817
-		       210,  // 6420 "EB51" "TMY" "SIY" 21
-		       210,  // 6430 "EB52" "MVIY" "SIY" 21
-		       210,  // 6440 "EB54" "NIY" "SIY" 21
-		       210,  // 6450 "EB55" "CLIY" "SIY" 21
-		       210,  // 6460 "EB56" "OIY" "SIY" 21
-		       210,  // 6470 "EB57" "XIY" "SIY" 21
-		       211,  // 470 "EB6A" "ASI" "SIY" 21  RPI 817
-		       211,  // 480 "EB6E" "ALSI" "SIY" 21  RPI 817
-		       212,  // 490 "EB7A" "AGSI" "SIY" 21  RPI 817
-		       212,  // 500 "EB7E" "ALGSI" "SIY" 21  RPI 817
-		       201,  // 6480 "EB80" "ICMH" "RSY" 20
-		       202,  // 6490 "EB81" "ICMY" "RSY" 20
-		       200,  // 6500 "EB8E" "MVCLU" "RSY" 20
-		       200,  // 6510 "EB8F" "CLCLU" "RSY" 20
-		       200,  // 6520 "EB90" "STMY" "RSY" 20
-		       200,  // 6530 "EB96" "LMH" "RSY" 20
-		       200,  // 6540 "EB98" "LMY" "RSY" 20
-		       200,  // 6550 "EB9A" "LAMY" "RSY" 20
-		       200,  // 6560 "EB9B" "STAMY" "RSY" 20
-		       220,  // 6570 "EBC0" "TP" "RSL" 22
-		       200,  //  "EBDC","SRAK","RSY  "  20 RPI 1125 Z196
-		       200,  //  "EBDD","SLAK","RSY  "  20 RPI 1125 Z196
-		       200,  //  "EBDE","SRLK","RSY  "  20 RPI 1125 Z196
-		       200,  //  "EBDF","SLLK","RSY  "  20 RPI 1125 Z196
-		       207,  //  "EBE2","LOCG","RSY2 "  20 RPI 1125 Z196
-		       207,  //  "EBE3","STOCG","RSY2 " 20 RPI 1125 Z196
-		       208,  //  "EBE4","LANG","RSY  "  20 RPI 1125 Z196
-		       208,  //  "EBE6","LAOG","RSY  "  20 RPI 1125 Z196
-		       208,  //  "EBE7","LAXG","RSY  "  20 RPI 1125 Z196
-		       208,  //  "EBE8","LAAG","RSY  "  20 RPI 1125 Z196
-		       208,  //  "EBEA","LAALG","RSY  " 20 RPI 1125 Z196
-		       209,  //  "EBF2","LOC","RSY2 "   20 RPI 1125 Z196
-		       209,  //  "EBF3","STOC","RSY2 "  20 RPI 1125 Z196
-		       200,  //  "EBF4","LAN","RSY  "   20 RPI 1125 Z196
-		       200,  //  "EBF6","LAO","RSY  "   20 RPI 1125 Z196
-		       200,  //  "EBF7","LAX","RSY  "   20 RPI 1125 Z196
-		       200,  //  "EBF8","LAA","RSY  "   20 RPI 1125 Z196
-		       200,  //  "EBFA","LAAL","RSY  "  20 RPI 1125 Z196
-		       230,  // 6580 "EC44" "BRXHG" "RIE" 23
-		       230,  // 6590 "EC44" "JXHG" "RIE" 23
-		       230,  // 6600 "EC45" "BRXLG" "RIE" 23
-		       230,  // 6610 "EC45" "JXLEG" "RIE" 23
-		       400,  // "EC51","RISBLG","RIE8"  52 RPI 1125 Z196
-		       400,  // 'EC51$003132','LOAD (lOW  && HIGH) RISBLGZ','LLHFR','RIE8',52  RPI 1164
-		       400,  // 'EC51$163132','LOAD LOG HW (lOW  && HIGH) RISBLGZ','LLHLHR','RIE8',52  RPI 1164
-		       400,  // 'EC51$243132','LOAD LOG CH (lOW  && HIGH) RISBLGZ','LLCLHR','RIE8',52  RPI 1164
-		       400,  // "EC51Z","RISBLGZ","RIE8"  52 RPI 1125 Z196  RPI 1164
-		       400,  // 510 "EC54" "RNSBG" "RIE8" 52  RPI 817
-		       400,     // 'EC54$003100','AND HIGH (HIGH && HIGH) RNSBG','NHHR','RIE8',52  RPI 1164
-		       400,     // 'EC54$003132','AND HIGH (HIGH && LOW ) RNSBG','NHLR','RIE8',52  RPI 1164
-		       400,     // 'EC54$326332','AND HIGH (lOW  && HIGH) RNSBG','NLHR','RIE8',52  RPI 1164
-		       400,  // 520 "EC54T" "RNSBGT" "RIE8" 52  RPI 817
-		       400,  // 530 "EC55" "RISBG" "RIE8" 52  RPI 817
-		       400,  // 540 "EC55Z" "RISBGZ" "RIE8" 52  RPI 817
-		       400,  // 550 "EC56" "ROSBG" "RIE8" 52  RPI 817
-		       400,  // 'EC56$003100','OR  HIGH (HIGH && HIGH) ROSBG','OHHR','RIE8',52  RPI 1164
-		       400,  // 'EC56$003132','OR  HIGH (HIGH && LOW ) ROSBG','OHLR','RIE8',52  RPI 1164
-		       400,  // 'EC56$326332','OR  HIGH (lOW  && HIGH) ROSBG','OLHR','RIE8',52  RPI 1164
-		       400,  // 560 "EC56T" "ROSBGT" "RIE8" 52  RPI 817
-		       400,  // 570 "EC57" "RXSBG" "RIE8" 52  RPI 817
-		       400,     // 'EC57$003100','XOR HIGH (HIGH && HIGH) RXSBG','XHHR','RIE8',52  RPI 1164
-		       400,     // 'EC57$003132','XOR HIGH (HIGH && LOW ) RXSBG','XHLR','RIE8',52  RPI 1164
-		       400,     // 'EC57$326332','AOR HIGH (lOW  && HIGH) RXSBG','XLHR','RIE8',52  RPI 1164
-		       400,  // 580 "EC57T" "RXSBGT" "RIE8" 52  RPI 817
-		       400,  // "EC5D","RISBHG","RIE8"  52 RPI 1125 Z196
-		       400,  // 'EC5D$003100','LOAD (HIGH && HIGH) RISBHGZ','LHHR','RIE8',52  RPI 1164
-		       400,  // 'EC5D$003132','LOAD (HIGH && LOW ) RISBHGZ','LHLR','RIE8',52  RPI 1164
-		       400,  // 'EC5D$163100','LOAD LOG HW (HIGH && HIGH) RISBHGZ','LLHHHR','RIE8',52  RPI 1164
-		       400,  // 'EC5D$163132','LOAD LOG HW (HIGH && LOW ) RISBHGZ','LLHHLR','RIE8',52  RPI 1164
-		       400,  // 'EC5D$243100','LOAD LOG CH (HIGH && HIGH) RISBHGZ','LLCHHR','RIE8',52  RPI 1164
-		       400,  // 'EC5D$243132','LOAD LOG CH (HIGH && LOW ) RISBHGZ','LLCHLR','RIE8',52  RPI 1164
-		       400,  // "EC5DZ","RISBHGZ","RIE8"  52 RPI 1125 Z196  RPI 1164
-		       234,  // 10 "EC64" "CGRJ" "RIE6" 49 RPI 817
-		       234,  // 20 "EC648" "CGRJE" "RIE7" 50 RPI 817
-		       234,  // 30 "EC642" "CGRJH" "RIE7" 50 RPI 817
-		       234,  // 40 "EC644" "CGRJL" "RIE7" 50 RPI 817
-		       234,  // 50 "EC646" "CGRJNE" "RIE7" 50 RPI 817
-		       234,  // 60 "EC64C" "CGRJNH" "RIE7" 50 RPI 817
-		       234,  // 70 "EC64A" "CGRJNL" "RIE7" 50 RPI 817
-		       234,  // 80 "EC65" "CLGRJ" "RIE6" 49 RPI 817
-		       234,  // 90 "EC658" "CLGRJE" "RIE7" 50 RPI 817
-		       234,  // 100 "EC652" "CLGRJH" "RIE7" 50 RPI 817
-		       234,  // 110 "EC654" "CLGRJL" "RIE7" 50 RPI 817
-		       234,  // 120 "EC656" "CLGRJNE" "RIE7" 50 RPI 817
-		       234,  // 130 "EC65C" "CLGRJNH" "RIE7" 50 RPI 817
-		       234,  // 140 "EC65A" "CLGRJNL" "RIE7" 50 RPI 817		       
-		       232,  // 1010 "EC70" "CGIT" "RIE2" 41 RPI 817
-		       232,  // 1020 "EC708" "CGITE" "RIE3" 42 RPI 817
-		       232,  // 1030 "EC702" "CGITH" "RIE3" 42 RPI 817
-		       232,  // 1040 "EC704" "CGITL" "RIE3" 42 RPI 817
-		       232,  // 1050 "EC706" "CGITNE" "RIE3" 42 RPI 817
-		       232,  // 1060 "EC70C" "CGITNH" "RIE3" 42 RPI 817
-		       232,  // 1070 "EC70A" "CGITNL" "RIE3" 42 RPI 817 
-		       232,  // 150 "EC71" "CLGIT" "RIE2" 41 RPI 817
-		       232,  // 160 "EC718" "CLGITE" "RIE3" 42 RPI 817
-		       232,  // 170 "EC712" "CLGITH" "RIE3" 42 RPI 817
-		       232,  // 180 "EC714" "CLGITL" "RIE3" 42 RPI 817
-		       232,  // 190 "EC716" "CLGITNE" "RIE3" 42 RPI 817
-		       232,  // 200 "EC71C" "CLGITNH" "RIE3" 42 RPI 817
-		       232,  // 210 "EC71A" "CLGITNL" "RIE3" 42 RPI 817
-		       231,  // 1150 "EC72" "CIT" "RIE2" 41 RPI 817
-		       231,  // 1160 "EC728" "CITE" "RIE3" 42 RPI 817
-		       231,  // 1170 "EC722" "CITH" "RIE3" 42 RPI 817
-		       231,  // 1180 "EC724" "CITL" "RIE3" 42 RPI 817
-		       231,  // 1190 "EC726" "CITNE" "RIE3" 42 RPI 817
-		       231,  // 1200 "EC72C" "CITNH" "RIE3" 42 RPI 817
-		       231,  // 1210 "EC72A" "CITNL" "RIE3" 42 RPI 817
-		       231,  // 220 "EC73" "CLFIT" "RIE2" 41 RPI 817
-		       231,  // 230 "EC738" "CLFITE" "RIE3" 42 RPI 817
-		       231,  // 240 "EC732" "CLFITH" "RIE3" 42 RPI 817
-		       231,  // 250 "EC734" "CLFITL" "RIE3" 42 RPI 817
-		       231,  // 260 "EC736" "CLFITNE" "RIE3" 42 RPI 817
-		       231,  // 270 "EC73C" "CLFITNH" "RIE3" 42 RPI 817
-		       231,  // 280 "EC73A" "CLFITNL" "RIE3" 42 RPI 817		       
-		       235,  // 150 "EC76" "CRJ" "RIE6" 49 RPI 817
-		       235,  // 160 "EC768" "CRJE" "RIE7" 50 RPI 817
-		       235,  // 170 "EC762" "CRJH" "RIE7" 50 RPI 817
-		       235,  // 180 "EC764" "CRJL" "RIE7" 50 RPI 817
-		       235,  // 190 "EC766" "CRJNE" "RIE7" 50 RPI 817
-		       235,  // 200 "EC76C" "CRJNH" "RIE7" 50 RPI 817
-		       235,  // 210 "EC76A" "CRJNL" "RIE7" 50 RPI 817
-		       235,  // 220 "EC77" "CLRJ" "RIE6" 49 RPI 817
-		       235,  // 230 "EC778" "CLRJE" "RIE7" 50 RPI 817
-		       235,  // 240 "EC772" "CLRJH" "RIE7" 50 RPI 817
-		       235,  // 250 "EC774" "CLRJL" "RIE7" 50 RPI 817
-		       235,  // 260 "EC776" "CLRJNE" "RIE7" 50 RPI 817
-		       235,  // 270 "EC77C" "CLRJNH" "RIE7" 50 RPI 817
-		       235,  // 280 "EC77A" "CLRJNL" "RIE7" 50 RPI 817
-		       233,  // 290 "EC7C" "CGIJ" "RIE4" 43 RPI 817
-		       233,  // 300 "EC7C8" "CGIJE" "RIE5" 44 RPI 817
-		       233,  // 310 "EC7C2" "CGIJH" "RIE5" 44 RPI 817
-		       233,  // 320 "EC7C4" "CGIJL" "RIE5" 44 RPI 817
-		       233,  // 330 "EC7C6" "CGIJNE" "RIE5" 44 RPI 817
-		       233,  // 340 "EC7CC" "CGIJNH" "RIE5" 44 RPI 817
-		       233,  // 350 "EC7CA" "CGIJNL" "RIE5" 44 RPI 817
-		       233,  // 360 "EC7D" "CLGIJ" "RIE4" 43 RPI 817
-		       233,  // 370 "EC7D8" "CLGIJE" "RIE5" 44 RPI 817
-		       233,  // 380 "EC7D2" "CLGIJH" "RIE5" 44 RPI 817
-		       233,  // 390 "EC7D4" "CLGIJL" "RIE5" 44 RPI 817
-		       233,  // 400 "EC7D6" "CLGIJNE" "RIE5" 44 RPI 817
-		       233,  // 410 "EC7DC" "CLGIJNH" "RIE5" 44 RPI 817
-		       233,  // 420 "EC7DA" "CLGIJNL" "RIE5" 44 RPI 817
-		       236,  // 430 "EC7E" "CIJ" "RIE4" 43 RPI 817
-		       236,  // 440 "EC7E8" "CIJE" "RIE5" 44 RPI 817
-		       236,  // 450 "EC7E2" "CIJH" "RIE5" 44 RPI 817
-		       236,  // 460 "EC7E4" "CIJL" "RIE5" 44 RPI 817
-		       236,  // 470 "EC7E6" "CIJNE" "RIE5" 44 RPI 817
-		       236,  // 480 "EC7EC" "CIJNH" "RIE5" 44 RPI 817
-		       236,  // 490 "EC7EA" "CIJNL" "RIE5" 44 RPI 817
-		       236,  // 500 "EC7F" "CLIJ" "RIE4" 43 RPI 817
-		       236,  // 510 "EC7F8" "CLIJE" "RIE5" 44 RPI 817
-		       236,  // 520 "EC7F2" "CLIJH" "RIE5" 44 RPI 817
-		       236,  // 530 "EC7F4" "CLIJL" "RIE5" 44 RPI 817
-		       236,  // 540 "EC7F6" "CLIJNE" "RIE5" 44 RPI 817
-		       236,  // 550 "EC7FC" "CLIJNH" "RIE5" 44 RPI 817
-		       236,  // 560 "EC7FA" "CLIJNL" "RIE5" 44 RPI 817
-		       420,  // "ECD8","AHIK","RIE9"    57 RPI 1125 Z196
-		       430,  // "ECD9","AGHIK","RIE9"   57 RPI 1125 Z196
-		       420,  // "ECDA","ALHSIK","RIE9"  57 RPI 1125 Z196
-		       430,  // "ECDB","ALGHSIK","RIE9"
-		       370,  // 570 "ECE4" "CGRB" "RRS1" 45 RPI 817
-		       370,  // 580 "ECE48" "CGRBE" "RRS2" 4370, RPI 817
-		       370,  // 590 "ECE42" "CGRBH" "RRS2" 46 RPI 817
-		       370,  // 600 "ECE44" "CGRBL" "RRS2" 46 RPI 817
-		       370,  // 610 "ECE46" "CGRBNE" "RRS2" 46 RPI 817
-		       370,  // 620 "ECE4C" "CGRBNH" "RRS2" 46 RPI 817
-		       370,  // 630 "ECE4A" "CGRBNL" "RRS2" 46 RPI 817
-		       370,  // 640 "ECE5" "CLGRB" "RRS1" 45 RPI 817
-		       370,  // 650 "ECE58" "CLGRBE" "RRS2" 46 RPI 817
-		       370,  // 660 "ECE52" "CLGRBH" "RRS2" 46 RPI 817
-		       370,  // 670 "ECE54" "CLGRBL" "RRS2" 46 RPI 817
-		       370,  // 680 "ECE56" "CLGRBNE" "RRS2" 46 RPI 817
-		       370,  // 690 "ECE5C" "CLGRBNH" "RRS2" 46 RPI 817
-		       370,  // 700 "ECE5A" "CLGRBNL" "RRS2" 46 RPI 817
-		       371,  // 710 "ECF6" "CRB" "RRS1" 45 RPI 817
-		       371,  // 720 "ECF68" "CRBE" "RRS2" 46 RPI 817
-		       371,  // 730 "ECF62" "CRBH" "RRS2" 46 RPI 817
-		       371,  // 740 "ECF64" "CRBL" "RRS2" 46 RPI 817
-		       371,  // 750 "ECF66" "CRBNE" "RRS1" 45 RPI 817
-		       371,  // 760 "ECF6C" "CRBNH" "RRS2" 46 RPI 817
-		       371,  // 770 "ECF6A" "CRBNL" "RRS2" 46 RPI 817
-		       371,  // 780 "ECF7" "CLRB" "RRS1" 45 RPI 817
-		       371,  // 790 "ECF78" "CLRBE" "RRS2" 46 RPI 817
-		       371,  // 800 "ECF72" "CLRBH" "RRS2" 46 RPI 817
-		       371,  // 810 "ECF74" "CLRBL" "RRS2" 46 RPI 817
-		       371,  // 820 "ECF76" "CLRBNE" "RRS2" 46 RPI 817
-		       371,  // 830 "ECF7C" "CLRBNH" "RRS2" 46 RPI 817
-		       371,  // 840 "ECF7A" "CLRBNL" "RRS2" 46 RPI 817
-		       380,  // 850 "ECFC" "CGIB" "RRS3" 47 RPI 817
-		       380,  // 860 "ECFC8" "CGIBE" "RRS4" 48 RPI 817
-		       380,  // 870 "ECFC2" "CGIBH" "RRS4" 48 RPI 817
-		       380,  // 880 "ECFC4" "CGIBL" "RRS4" 48 RPI 817
-		       380,  // 890 "ECFC6" "CGIBNE" "RRS4" 48 RPI 817
-		       380,  // 900 "ECFCC" "CGIBNH" "RRS4" 48 RPI 817
-		       380,  // 910 "ECFCA" "CGIBNL" "RRS4" 48 RPI 817
-		       380,  // 920 "ECFD" "CLGIB" "RRS3" 47 RPI 817
-		       380,  // 930 "ECFD8" "CLGIBE" "RRS4" 48 RPI 817
-		       380,  // 940 "ECFD2" "CLGIBH" "RRS4" 48 RPI 817
-		       380,  // 950 "ECFD4" "CLGIBL" "RRS4" 48 RPI 817
-		       380,  // 960 "ECFD6" "CLGIBNE" "RRS4" 48 RPI 817
-		       380,  // 970 "ECFDC" "CLGIBNH" "RRS4" 48 RPI 817
-		       380,  // 980 "ECFDA" "CLGIBNL" "RRS4" 48 RPI 817
-		       381,  // 990 "ECFE" "CIB" "RRS3" 47 RPI 817
-		       381,  // 1000 "ECFE8" "CIBE" "RRS4" 48 RPI 817
-		       381,  // 1010 "ECFE2" "CIBH" "RRS4" 48 RPI 817
-		       381,  // 1020 "ECFE4" "CIBL" "RRS4" 48 RPI 817
-		       381,  // 1030 "ECFE6" "CIBNE" "RRS4" 48 RPI 817
-		       381,  // 1040 "ECFEC" "CIBNH" "RRS4" 48 RPI 817
-		       381,  // 1050 "ECFEA" "CIBNL" "RRS4" 48 RPI 817
-		       381,  // 1060 "ECFF" "CLIB" "RRS3" 47 RPI 817
-		       381,  // 1070 "ECFF8" "CLIBE" "RRS4" 48 RPI 817
-		       381,  // 1080 "ECFF2" "CLIBH" "RRS4" 48 RPI 817
-		       381,  // 1090 "ECFF4" "CLIBL" "RRS4" 48 RPI 817
-		       381,  // 1100 "ECFF6" "CLIBNE" "RRS4" 48 RPI 817
-		       381,  // 1110 "ECFFC" "CLIBNH" "RRS4" 48 RPI 817
-		       381,  // 1120 "ECFFA" "CLIBNL" "RRS4" 48 RPI 817		       
-		       240,  // 6620 "ED04" "LDEB" "RXE" 24
-		       240,  // 6630 "ED05" "LXDB" "RXE" 24
-		       240,  // 6640 "ED06" "LXEB" "RXE" 24
-		       240,  // 6650 "ED07" "MXDB" "RXE" 24
-		       240,  // 6660 "ED08" "KEB" "RXE" 24
-		       240,  // 6670 "ED09" "CEB" "RXE" 24
-		       240,  // 6680 "ED0A" "AEB" "RXE" 24
-		       240,  // 6690 "ED0B" "SEB" "RXE" 24
-		       240,  // 6700 "ED0C" "MDEB" "RXE" 24
-		       240,  // 6710 "ED0D" "DEB" "RXE" 24
-		       250,  // 6720 "ED0E" "MAEB" "RXF" 25
-		       250,  // 6730 "ED0F" "MSEB" "RXF" 25
-		       240,  // 6740 "ED10" "TCEB" "RXE" 24
-		       240,  // 6750 "ED11" "TCDB" "RXE" 24
-		       240,  // 6760 "ED12" "TCXB" "RXE" 24
-		       240,  // 6770 "ED14" "SQEB" "RXE" 24
-		       240,  // 6780 "ED15" "SQDB" "RXE" 24
-		       240,  // 6790 "ED17" "MEEB" "RXE" 24
-		       240,  // 6800 "ED18" "KDB" "RXE" 24
-		       240,  // 6810 "ED19" "CDB" "RXE" 24
-		       240,  // 6820 "ED1A" "ADB" "RXE" 24
-		       240,  // 6830 "ED1B" "SDB" "RXE" 24
-		       240,  // 6840 "ED1C" "MDB" "RXE" 24
-		       240,  // 6850 "ED1D" "DDB" "RXE" 24
-		       250,  // 6860 "ED1E" "MADB" "RXF" 25
-		       250,  // 6870 "ED1F" "MSDB" "RXF" 25
-		       240,  // 6880 "ED24" "LDE" "RXE" 24
-		       240,  // 6890 "ED25" "LXD" "RXE" 24
-		       240,  // 6900 "ED26" "LXE" "RXE" 24
-		       250,  // 6910 "ED2E" "MAE" "RXF" 25
-		       250,  // 6920 "ED2F" "MSE" "RXF" 25
-		       240,  // 6930 "ED34" "SQE" "RXE" 24
-		       240,  // 6940 "ED35" "SQD" "RXE" 24
-		       240,  // 6950 "ED37" "MEE" "RXE" 24
-		       250,  //      "ED38" "MAYL" "RXF" 25 Z9-46
-		       250,  //      "ED39" "MYL" "RXF" 25 Z9-47
-		       250,  //      "ED3A" "MAY" "RXF" 25 Z9-48
-		       250,  //      "ED3B" "MY" "RXF" 25 Z9-49 RPI 298
-		       250,  //      "ED3C" "MAYH" "RXF" 25 Z9-50
-		       250,  //      "ED3D" "MYH" "RXF" 25 Z9-51 RPI 298
-		       250,  // 6960 "ED3E" "MAD" "RXF" 25
-		       250,  // 6970 "ED3F" "MSD" "RXF" 25
-		       251, // "SLDT" "ED40" "RXF" DFP 45
-		       251, // "SRDT" "ED41" "RXF" DFP 46
-		       251, // "SLXT" "ED48" "RXF" DFP 47
-		       251, // "SRXT" "ED49" "RXF" DFP 48
-		       241, // "TDCET" "ED50" "RXE" DFP 49
-		       241, // "TDGET" "ED51" "RXE" DFP 50
-		       241, // "TDCDT" "ED54" "RXE" DFP 51
-		       241, // "TDGDT" "ED55" "RXE" DFP 52
-		       241, // "TDCXT" "ED58" "RXE" DFP 53
-		       241, // "TDGXT" "ED59" "RXE" DFP 54
-		       180,  // 6980 "ED64" "LEY" "RXY" 18
-		       180,  // 6990 "ED65" "LDY" "RXY" 18
-		       180,  // 7000 "ED66" "STEY" "RXY" 18
-		       180,  // 7010 "ED67" "STDY" "RXY" 18
-		       270,  // 7020 "EE" "PLO" "SS3" 27
-		       280,  // 7030 "EF" "LMD" "SS4" 28
-		       290,  // 7040 "F0" "SRP" "SS5" 29
-		       260,  // 7050 "F1" "MVO" "SS2" 26
-		       260,  // 7060 "F2" "PACK" "SS2" 26
-		       260,  // 7070 "F3" "UNPK" "SS2" 26
-		       260,  // 7080 "F8" "ZAP" "SS2" 26
-		       260,  // 7090 "F9" "CP" "SS2" 26
-		       260,  // 7100 "FA" "AP" "SS2" 26
-		       260,  // 7110 "FB" "SP" "SS2" 26
-		       260,  // 7120 "FC" "MP" "SS2" 26
-		       260,  // 7130 "FD" "DP" "SS2" 26
-            };
+
+	private final static int[] op_trace_type  = {
+			00,  // comments
+			10,  //  10 "0101" "PR" "E" 1
+			10,  //  20 "0102" "UPT" "E" 1		       
+			10,  //     "0104" "PTFF" "E" 1 Z9-1
+			10,  //  30 "0107" "SCKPF" "E" 1
+			10,  //  40 "010A" "PFPO" "E" 1   RPI 1013
+			10,  //  40 "010B" "TAM" "E" 1
+			10,  //  50 "010C" "SAM24" "E" 1
+			10,  //  60 "010D" "SAM31" "E" 1
+			10,  //  70 "010E" "SAM64" "E" 1
+			10,  //  80 "01FF" "TRAP2" "E" 1
+			20,  //  90 "04" "SPM" "RR" 2
+			20,  // 100 "05" "BALR" "RR" 2
+			20,  // 110 "06" "BCTR" "RR" 2
+			30,  // 120 "07" "BCR" "RR" 2
+			30,  // 130 "07F" "BR" "BRX" 3
+			30,  // 140 "070" "NOPR" "BRX" 3
+			30,  // 150 "072" "BHR" "BRX" 3
+			30,  // 160 "074" "BLR" "BRX" 3
+			30,  // 170 "078" "BER" "BRX" 3
+			30,  // 180 "07D" "BNHR" "BRX" 3
+			30,  // 190 "07B" "BNLR" "BRX" 3
+			30,  // 200 "077" "BNER" "BRX" 3
+			30,  // 210 "072" "BPR" "BRX" 3
+			30,  // 220 "071" "BOR" "BRX" 3
+			30,  // 230 "074" "BMR" "BRX" 3
+			30,  // 240 "078" "BZR" "BRX" 3
+			30,  // 250 "07D" "BNPR" "BRX" 3
+			30,  // 260 "07B" "BNMR" "BRX" 3
+			30,  // 270 "077" "BNZR" "BRX" 3
+			30,  // 280 "07E" "BNOR" "BRX" 3
+			40,  // 290 "0A" "SVC" "I" 4
+			20,  // 300 "0B" "BSM" "RR" 2
+			20,  // 310 "0C" "BASSM" "RR" 2
+			20,  // 320 "0D" "BASR" "RR" 2
+			22,  // 330 "0E" "MVCL" "RR" 2
+			22,  // 340 "0F" "CLCL" "RR" 2
+			20,  // 350 "10" "LPR" "RR" 2
+			20,  // 360 "11" "LNR" "RR" 2
+			20,  // 370 "12" "LTR" "RR" 2
+			20,  // 380 "13" "LCR" "RR" 2
+			20,  // 390 "14" "NR" "RR" 2
+			20,  // 400 "15" "CLR" "RR" 2
+			20,  // 410 "16" "OR" "RR" 2
+			20,  // 420 "17" "XR" "RR" 2
+			20,  // 430 "18" "LR" "RR" 2
+			20,  // 440 "19" "CR" "RR" 2
+			20,  // 450 "1A" "AR" "RR" 2
+			20,  // 460 "1B" "SR" "RR" 2
+			23,  // 470 "1C" "MR" "RR" 2
+			23,  // 480 "1D" "DR" "RR" 2
+			20,  // 490 "1E" "ALR" "RR" 2
+			20,  // 500 "1F" "SLR" "RR" 2
+			21,  // 510 "20" "LPDR" "RR" 2
+			21,  // 520 "21" "LNDR" "RR" 2
+			21,  // 530 "22" "LTDR" "RR" 2
+			21,  // 540 "23" "LCDR" "RR" 2
+			21,  // 550 "24" "HDR" "RR" 2
+			21,  // 560 "25" "LDXR" "RR" 2
+			21,  // 570 "25" "LRDR" "RR" 2
+			21,  // 580 "26" "MXR" "RR" 2
+			21,  // 590 "27" "MXDR" "RR" 2
+			21,  // 600 "28" "LDR" "RR" 2
+			21,  // 610 "29" "CDR" "RR" 2
+			21,  // 620 "2A" "ADR" "RR" 2
+			21,  // 630 "2B" "SDR" "RR" 2
+			21,  // 640 "2C" "MDR" "RR" 2
+			21,  // 650 "2D" "DDR" "RR" 2
+			21,  // 660 "2E" "AWR" "RR" 2
+			21,  // 670 "2F" "SWR" "RR" 2
+			21,  // 680 "30" "LPER" "RR" 2
+			21,  // 690 "31" "LNER" "RR" 2
+			21,  // 700 "32" "LTER" "RR" 2
+			21,  // 710 "33" "LCER" "RR" 2
+			21,  // 720 "34" "HER" "RR" 2
+			21,  // 730 "35" "LEDR" "RR" 2
+			21,  // 740 "35" "LRER" "RR" 2
+			21,  // 750 "36" "AXR" "RR" 2
+			21,  // 760 "37" "SXR" "RR" 2
+			21,  // 770 "38" "LER" "RR" 2
+			21,  // 780 "39" "CER" "RR" 2
+			21,  // 790 "3A" "AER" "RR" 2
+			21,  // 800 "3B" "SER" "RR" 2
+			21,  // 810 "3C" "MDER" "RR" 2
+			21,  // 820 "3C" "MER" "RR" 2
+			21,  // 830 "3D" "DER" "RR" 2
+			21,  // 840 "3E" "AUR" "RR" 2
+			21,  // 850 "3F" "SUR" "RR" 2
+			53,  // 860 "40" "STH" "RX" 5
+			52,  // 870 "41" "LA" "RX" 5
+			56,  // 880 "42" "STC" "RX" 5
+			56,  // 890 "43" "IC" "RX" 5
+			59,  // 900 "44" "EX" "RX" 5  // RPI 1035
+			51,  // 910 "45" "BAL" "RX" 5
+			50,  // 920 "46" "BCT" "RX" 5
+			50,  // 930 "47" "BC" "RX" 5
+			60,  // 940 "47F" "B" "BCX" 6
+			60,  // 950 "470" "NOP" "BCX" 6
+			60,  // 960 "472" "BH" "BCX" 6
+			60,  // 970 "474" "BL" "BCX" 6
+			60,  // 980 "478" "BE" "BCX" 6
+			60,  // 990 "47D" "BNH" "BCX" 6
+			60,  // 1000 "47B" "BNL" "BCX" 6
+			60,  // 1010 "477" "BNE" "BCX" 6
+			60,  // 1020 "472" "BP" "BCX" 6
+			60,  // 1030 "471" "BO" "BCX" 6
+			60,  // 1040 "474" "BM" "BCX" 6
+			60,  // 1050 "478" "BZ" "BCX" 6
+			60,  // 1060 "47D" "BNP" "BCX" 6
+			60,  // 1070 "47B" "BNM" "BCX" 6
+			60,  // 1080 "477" "BNZ" "BCX" 6
+			60,  // 1090 "47E" "BNO" "BCX" 6
+			53,  // 1100 "48" "LH" "RX" 5
+			53,  // 1110 "49" "CH" "RX" 5
+			53,  // 1120 "4A" "AH" "RX" 5
+			53,  // 1130 "4B" "SH" "RX" 5
+			53,  // 1140 "4C" "MH" "RX" 5
+			50,  // 1150 "4D" "BAS" "RX" 5
+			57,  // 1160 "4E" "CVD" "RX" 5  RPI 588
+			57,  // 1170 "4F" "CVB" "RX" 5  RPI 588
+			50,  // 1180 "50" "ST" "RX" 5
+			52,  // 1190 "51" "LAE" "RX" 5
+			50,  // 1193 "52" "XDECO" "RX" 37 RPI 812
+			50,  // 1196 "53" "XDECI" "RX" 37 RPI 812	
+			50,  // 1200 "54" "N" "RX" 5
+			50,  // 1210 "55" "CL" "RX" 5
+			50,  // 1220 "56" "O" "RX" 5
+			50,  // 1230 "57" "X" "RX" 5
+			50,  // 1240 "58" "L" "RX" 5
+			50,  // 1250 "59" "C" "RX" 5
+			50,  // 1260 "5A" "A" "RX" 5
+			50,  // 1270 "5B" "S" "RX" 5
+			55,  // 1280 "5C" "M" "RX" 5
+			55,  // 1290 "5D" "D" "RX" 5
+			50,  // 1300 "5E" "AL" "RX" 5
+			50,  // 1310 "5F" "SL" "RX" 5
+			54,  // 1320 "60" "STD" "RX" 5
+			50,  // 1323 "61" "XHEXI" "RX" 37 RPI 812
+			50,  // 1326 "62" "XHEXO" "RX" 37 RPI 812
+			54,  // 1330 "67" "MXD" "RX" 5
+			54,  // 1340 "68" "LD" "RX" 5
+			54,  // 1350 "69" "CD" "RX" 5
+			54,  // 1360 "6A" "AD" "RX" 5
+			54,  // 1370 "6B" "SD" "RX" 5
+			54,  // 1380 "6C" "MD" "RX" 5
+			54,  // 1390 "6D" "DD" "RX" 5
+			54,  // 1400 "6E" "AW" "RX" 5
+			54,  // 1410 "6F" "SW" "RX" 5
+			58,  // 1420 "70" "STE" "RX" 5  // RPI 834
+			50,  // 1430 "71" "MS" "RX" 5  RPI 627
+			58,  // 1440 "78" "LE" "RX" 5  // RPI 834
+			58,  // 1450 "79" "CE" "RX" 5  // RPI 834
+			58,  // 1460 "7A" "AE" "RX" 5  // RPI 834
+			58,  // 1470 "7B" "SE" "RX" 5  // RPI 834
+			58,  // 1480 "7C" "MDE" "RX" 5  // RPI 834
+			58,  // 1490 "7C" "ME" "RX" 5  // RPI 834
+			58,  // 1500 "7D" "DE" "RX" 5  // RPI 834
+			58,  // 1510 "7E" "AU" "RX" 5  // RPI 834
+			58,  // 1520 "7F" "SU" "RX" 5  // RPI 834
+			70,  // 1530 "8000" "SSM" "S" 7
+			70,  // 1540 "8202" "LPSW" "S" 7
+			80,  // 1550 "83" "DIAGNOSE" "DM" 8
+			91,  // 1560 "84" "BRXH" "RSI" 9
+			91,  // 1570 "84" "JXH" "RSI" 9
+			91,  // 1580 "85" "BRXLE" "RSI" 9
+			91,  // 1590 "85" "JXLE" "RSI" 9
+			103,  // 1600 "86" "BXH" "RS" 10
+			103,  // 1610 "87" "BXLE" "RS" 10
+			102,  // 1620 "88" "SRL" "RS" 10
+			102,  // 1630 "89" "SLL" "RS" 10
+			102,  // 1640 "8A" "SRA" "RS" 10
+			102,  // 1650 "8B" "SLA" "RS" 10
+			102,  // 1660 "8C" "SRDL" "RS" 10
+			102,  // 1670 "8D" "SLDL" "RS" 10
+			102,  // 1680 "8E" "SRDA" "RS" 10
+			102,  // 1690 "8F" "SLDA" "RS" 10
+			100,  // 1700 "90" "STM" "RS" 10
+			110,  // 1710 "91" "TM" "SI" 11
+			110,  // 1720 "92" "MVI" "SI" 11
+			70,  // 1730 "93" "TS" "S" 7
+			110,  // 1740 "94" "NI" "SI" 11
+			110,  // 1750 "95" "CLI" "SI" 11
+			110,  // 1760 "96" "OI" "SI" 11
+			110,  // 1770 "97" "XI" "SI" 11
+			100,  // 1780 "98" "LM" "RS" 10
+			100,  // 1790 "99" "TRACE" "RS" 10
+			100,  // 1800 "9A" "LAM" "RS" 10
+			100,  // 1810 "9B" "STAM" "RS" 10
+			120,  // 1820 "A50" "IIHH" "RI" 12
+			120,  // 1830 "A51" "IIHL" "RI" 12
+			120,  // 1840 "A52" "IILH" "RI" 12
+			120,  // 1850 "A53" "IILL" "RI" 12
+			120,  // 1860 "A54" "NIHH" "RI" 12
+			120,  // 1870 "A55" "NIHL" "RI" 12
+			120,  // 1880 "A56" "NILH" "RI" 12
+			120,  // 1890 "A57" "NILL" "RI" 12
+			120,  // 1900 "A58" "OIHH" "RI" 12
+			120,  // 1910 "A59" "OIHL" "RI" 12
+			120,  // 1920 "A5A" "OILH" "RI" 12
+			120,  // 1930 "A5B" "OILL" "RI" 12
+			120,  // 1940 "A5C" "LLIHH" "RI" 12
+			120,  // 1950 "A5D" "LLIHL" "RI" 12
+			120,  // 1960 "A5E" "LLILH" "RI" 12
+			120,  // 1970 "A5F" "LLILL" "RI" 12
+			123,  // 1980 "A70" "TMLH" "RI" 12
+			123,  // 1990 "A70" "TMH" "RI" 12
+			123,  // 2000 "A71" "TMLL" "RI" 12
+			123,  // 2010 "A71" "TML" "RI" 12
+			123,  // 2020 "A72" "TMHH" "RI" 12
+			123,  // 2030 "A73" "TMHL" "RI" 12
+			130,  // 2040 "A74" "BRC" "RI" 12
+			130,  // 2050 "A74F" "J" "BRCX" 13
+			130,  // 2060 "A740" "JNOP" "BRCX" 13
+			130,  // 2070 "A74F" "BRU" "BRCX" 13
+			130,  // 2080 "A742" "BRH" "BRCX" 13
+			130,  // 2090 "A744" "BRL" "BRCX" 13
+			130,  // 2100 "A748" "BRE" "BRCX" 13
+			130,  // 2110 "A74D" "BRNH" "BRCX" 13
+			130,  // 2120 "A74B" "BRNL" "BRCX" 13
+			130,  // 2130 "A747" "BRNE" "BRCX" 13
+			130,  // 2140 "A742" "BRP" "BRCX" 13
+			130,  // 2150 "A744" "BRM" "BRCX" 13
+			130,  // 2160 "A748" "BRZ" "BRCX" 13
+			130,  // 2170 "A741" "BRO" "BRCX" 13
+			130,  // 2180 "A74D" "BRNP" "BRCX" 13
+			130,  // 2190 "A74B" "BRNM" "BRCX" 13
+			130,  // 2200 "A747" "BRNZ" "BRCX" 13
+			130,  // 2210 "A74E" "BRNO" "BRCX" 13
+			130,  // 2220 "A742" "JH" "BRCX" 13
+			130,  // 2230 "A744" "JL" "BRCX" 13
+			130,  // 2240 "A748" "JE" "BRCX" 13
+			130,  // 2250 "A74D" "JNH" "BRCX" 13
+			130,  // 2260 "A74B" "JNL" "BRCX" 13
+			130,  // 2270 "A747" "JNE" "BRCX" 13
+			130,  // 2280 "A742" "JP" "BRCX" 13 
+			130,  // 2290 "A744" "JM" "BRCX" 13
+			130,  // 2300 "A748" "JZ" "BRCX" 13
+			130,  // 2310 "A741" "JO" "BRCX" 13
+			130,  // 2320 "A74D" "JNP" "BRCX" 13
+			130,  // 2330 "A74B" "JNM" "BRCX" 13
+			130,  // 2340 "A747" "JNZ" "BRCX" 13
+			130,  // 2350 "A74E" "JNO" "BRCX" 13
+			121,  // 2360 "A75" "BRAS" "RI" 12
+			121,  // 2370 "A75" "JAS" "RI" 12
+			121,  // 2380 "A76" "BRCT" "RI" 12
+			121,  // 2390 "A76" "JCT" "RI" 12
+			121,  // 2400 "A77" "BRCTG" "RI" 12
+			121,  // 2410 "A77" "JCTG" "RI" 12
+			122,  // 2420 "A78" "LHI" "RI" 12
+			123,  // 2430 "A79" "LGHI" "RI" 12
+			122,  // 2440 "A7A" "AHI" "RI" 12
+			123,  // 2450 "A7B" "AGHI" "RI" 12
+			122,  // 2460 "A7C" "MHI" "RI" 12
+			123,  // 2470 "A7D" "MGHI" "RI" 12
+			122,  // 2480 "A7E" "CHI" "RI" 12
+			123,  // 2490 "A7F" "CGHI" "RI" 12
+			104,  // 2500 "A8" "MVCLE" "RS" 10  RPI 1112
+			104,  // 2510 "A9" "CLCLE" "RS" 10  RPI 1112
+			110,  // 2520 "AC" "STNSM" "SI" 11
+			110,  // 2530 "AD" "STOSM" "SI" 11
+			100,  // 2540 "AE" "SIGP" "RS" 10
+			110,  // 2550 "AF" "MC" "SI" 11
+			50,  // 2560 "B1" "LRA" "RX" 5
+			70,  // 2570 "B202" "STIDP" "S" 7
+			70,  // 2580 "B204" "SCK" "S" 7
+			70,  // 2590 "B205" "STCK" "S" 7
+			70,  // 2600 "B206" "SCKC" "S" 7
+			70,  // 2610 "B207" "STCKC" "S" 7
+			70,  // 2620 "B208" "SPT" "S" 7
+			70,  // 2630 "B209" "STPT" "S" 7
+			70,  // 2640 "B20A" "SPKA" "S" 7
+			70,  // 2650 "B20B" "IPK" "S" 7
+			70,  // 2660 "B20D" "PTLB" "S" 7
+			70,  // 2670 "B210" "SPX" "S" 7
+			70,  // 2680 "B211" "STPX" "S" 7
+			70,  // 2690 "B212" "STAP" "S" 7
+			70,  // 2700 "B218" "PC" "S" 7
+			70,  // 2710 "B219" "SAC" "S" 7
+			70,  // 2720 "B21A" "CFC" "S" 7
+			140,  // 2730 "B221" "IPTE" "RRE" 14
+			140,  // 2740 "B222" "IPM" "RRE" 14
+			140,  // 2750 "B223" "IVSK" "RRE" 14
+			140,  // 2760 "B224" "IAC" "RRE" 14
+			140,  // 2770 "B225" "SSAR" "RRE" 14
+			140,  // 2780 "B226" "EPAR" "RRE" 14
+			140,  // 2790 "B227" "ESAR" "RRE" 14
+			140,  // 2800 "B228" "PT" "RRE" 14
+			140,  // 2810 "B229" "ISKE" "RRE" 14
+			140,  // 2820 "B22A" "RRBE" "RRE" 14
+			140,  // 2830 "B22B" "SSKE" "RRE" 14
+			140,  // 2840 "B22C" "TB" "RRE" 14
+			142,  // 2850 "B22D" "DXR" "RRE" 14
+			140,  // 2860 "B22E" "PGIN" "RRE" 14
+			140,  // 2870 "B22F" "PGOUT" "RRE" 14
+			70,  // 2880 "B230" "CSCH" "S" 7
+			70,  // 2890 "B231" "HSCH" "S" 7
+			70,  // 2900 "B232" "MSCH" "S" 7
+			70,  // 2910 "B233" "SSCH" "S" 7
+			70,  // 2920 "B234" "STSCH" "S" 7
+			70,  // 2930 "B235" "TSCH" "S" 7
+			70,  // 2940 "B236" "TPI" "S" 7
+			70,  // 2950 "B237" "SAL" "S" 7
+			70,  // 2960 "B238" "RSCH" "S" 7
+			70,  // 2970 "B239" "STCRW" "S" 7
+			70,  // 2980 "B23A" "STCPS" "S" 7
+			70,  // 2990 "B23B" "RCHP" "S" 7
+			70,  // 3000 "B23C" "SCHM" "S" 7
+			140,  // 3010 "B240" "BAKR" "RRE" 14
+			140,  // 3020 "B241" "CKSM" "RRE" 14
+			142,  // 3030 "B244" "SQDR" "RRE" 14
+			142,  // 3040 "B245" "SQER" "RRE" 14
+			140,  // 3050 "B246" "STURA" "RRE" 14
+			140,  // 3060 "B247" "MSTA" "RRE" 14
+			140,  // 3070 "B248" "PALB" "RRE" 14
+			140,  // 3080 "B249" "EREG" "RRE" 14
+			140,  // 3090 "B24A" "ESTA" "RRE" 14
+			140,  // 3100 "B24B" "LURA" "RRE" 14
+			140,  // 3110 "B24C" "TAR" "RRE" 14
+			149,  // 3120 "B24D" "CPYA" "RRE" 14 // RPI 1055
+			149,  // 3130 "B24E" "SAR" "RRE" 14 // RPI 1055
+			149,  // 3140 "B24F" "EAR" "RRE" 14 // RPI 1055
+			140,  // 3150 "B250" "CSP" "RRE" 14
+			140,  // 3160 "B252" "MSR" "RRE" 14
+			140,  // 3170 "B254" "MVPG" "RRE" 14
+			140,  // 3180 "B255" "MVST" "RRE" 14
+			140,  // 3190 "B257" "CUSE" "RRE" 14
+			140,  // 3200 "B258" "BSG" "RRE" 14
+			140,  // 3210 "B25A" "BSA" "RRE" 14
+			140,  // 3220 "B25D" "CLST" "RRE" 14
+			140,  // 3230 "B25E" "SRST" "RRE" 14
+			140,  // 3240 "B263" "CMPSC" "RRE" 14
+			70,  // 3250 "B276" "XSCH" "S" 7
+			70,  // 3260 "B277" "RP" "S" 7
+			70,  // 3270 "B278" "STCKE" "S" 7
+			70,  // 3280 "B279" "SACF" "S" 7
+			70,  //      "B27C" "STCKF" "S" 7 Z9-2
+			70,  // 3290 "B27D" "STSI" "S" 7
+			71,  // 3300 "B299" "SRNM" "S" 7
+			72,  // 3310 "B29C" "STFPC" "S" 7
+			72,  // 3320 "B29D" "LFPC" "S" 7
+			140,  // 3330 "B2A5" "TRE" "RRE" 14
+			140,  // 3340 "B2A6" "CUUTF" "RRE" 14
+			140,  // 3350 "B2A6" "CU21" "RRE" 14
+			140,  // 3360 "B2A7" "CUTFU" "RRE" 14
+			140,  // 3370 "B2A7" "CU12" "RRE" 14
+			70,  //      "B2B0" "STFLE" "S" 7 Z9-3
+			70,  // 3380 "B2B1" "STFL" "S" 7
+			70,  // 3390 "B2B2" "LPSWE" "S" 7
+			70,  // 3392 "B2B8" "SRNMB" "S" 7 RPI 1125
+			71,  // 3395 "B2B9" "T" "S" 7 DFP 56
+			72,  // 3395 "B2BD" "LFAS"  "S" 7 DFP 55
+			70,  // 3400 "B2FF" "TRAP4" "S" 7
+			142,  // 3410 "B300" "LPEBR" "RRE" 14
+			142,  // 3420 "B301" "LNEBR" "RRE" 14
+			142,  // 3430 "B302" "LTEBR" "RRE" 14
+			142,  // 3440 "B303" "LCEBR" "RRE" 14
+			142,  // 3450 "B304" "LDEBR" "RRE" 14
+			142,  // 3460 "B305" "LXDBR" "RRE" 14
+			142,  // 3470 "B306" "LXEBR" "RRE" 14
+			142,  // 3480 "B307" "MXDBR" "RRE" 14
+			142,  // 3490 "B308" "KEBR" "RRE" 14
+			142,  // 3500 "B309" "CEBR" "RRE" 14
+			142,  // 3510 "B30A" "AEBR" "RRE" 14
+			142,  // 3520 "B30B" "SEBR" "RRE" 14
+			142,  // 3530 "B30C" "MDEBR" "RRE" 14
+			142,  // 3540 "B30D" "DEBR" "RRE" 14
+			150,  // 3550 "B30E" "MAEBR" "RRF1" 15
+			150,  // 3560 "B30F" "MSEBR" "RRF1" 15
+			142,  // 3570 "B310" "LPDBR" "RRE" 14
+			142,  // 3580 "B311" "LNDBR" "RRE" 14
+			142,  // 3590 "B312" "LTDBR" "RRE" 14
+			142,  // 3600 "B313" "LCDBR" "RRE" 14
+			142,  // 3610 "B314" "SQEBR" "RRE" 14
+			142,  // 3620 "B315" "SQDBR" "RRE" 14
+			142,  // 3630 "B316" "SQXBR" "RRE" 14
+			142,  // 3640 "B317" "MEEBR" "RRE" 14
+			142,  // 3650 "B318" "KDBR" "RRE" 14
+			142,  // 3660 "B319" "CDBR" "RRE" 14
+			142,  // 3670 "B31A" "ADBR" "RRE" 14
+			142,  // 3680 "B31B" "SDBR" "RRE" 14
+			142,  // 3690 "B31C" "MDBR" "RRE" 14
+			142,  // 3700 "B31D" "DDBR" "RRE" 14
+			150,  // 3710 "B31E" "MADBR" "RRF1" 15
+			150,  // 3720 "B31F" "MSDBR" "RRF1" 15
+			142,  // 3730 "B324" "LDER" "RRE" 14
+			142,  // 3740 "B325" "LXDR" "RRE" 14
+			142,  // 3750 "B326" "LXER" "RRE" 14
+			150,  // 3760 "B32E" "MAER" "RRF1" 15
+			150,  // 3770 "B32F" "MSER" "RRF1" 15
+			142,  // 3780 "B336" "SQXR" "RRE" 14
+			142,  // 3790 "B337" "MEER" "RRE" 14
+			150,  //      "B338" "MAYLR" "RRF1" 15 Z9-4
+			150,  //      "B339" "MYLR" "RRF1" 15 Z9-5
+			150,  //      "B33A" "MAYR" "RRF1" 15 Z9-6
+			150,  //      "B33B" "MYR" "RRF1" 15 Z9-7
+			150,  //      "B33C" "MAYHR" "RRF1" 15 Z9-8
+			150,  //      "B33D" "MYHR" "RRF1" 15 Z9-9
+			150,  // 3800 "B33E" "MADR" "RRF1" 15
+			150,  // 3810 "B33F" "MSDR" "RRF1" 15
+			142,  // 3820 "B340" "LPXBR" "RRE" 14
+			142,  // 3830 "B341" "LNXBR" "RRE" 14
+			142,  // 3840 "B342" "LTXBR" "RRE" 14
+			142,  // 3850 "B343" "LCXBR" "RRE" 14
+			142,  // 3860 "B344" "LEDBR?" "RRE" 53 RPI 1125
+			142,  // 3870 "B345" "LDXBR?" "RRE" 53 RPI 1125
+			142,  // 3880 "B346" "LEXBR?" "RRE" 53 RPI 1125
+			340,  // 3890 "B347" "FIXBR?" "RRF2" 54 RPI 1125
+			142,  // 3900 "B348" "KXBR" "RRE" 14
+			142,  // 3910 "B349" "CXBR" "RRE" 14
+			142,  // 3920 "B34A" "AXBR" "RRE" 14
+			142,  // 3930 "B34B" "SXBR" "RRE" 14
+			142,  // 3940 "B34C" "MXBR" "RRE" 14
+			142,  // 3950 "B34D" "DXBR" "RRE" 14
+			340,  // 3960 "B350" "TBEDR" "RRF2" 34
+			340,  // 3970 "B351" "TBDR" "RRF2" 34
+			300,  // 3980 "B353" "DIEBR" "RRF3" 30
+			340,  // 3990 "B357" "FIEBR?" "RRF2" 54 RPI 1125
+			142,  // 4000 "B358" "THDER" "RRE" 14
+			142,  // 4010 "B359" "THDR" "RRE" 14
+			300,  // 4020 "B35B" "DIDBR" "RRF3" 30
+			340,  // 4030 "B35F" "FIDBR?" "RRF2" 54 RPI 1125
+			142,  // 4040 "B360" "LPXR" "RRE" 14
+			142,  // 4050 "B361" "LNXR" "RRE" 14
+			142,  // 4060 "B362" "LTXR" "RRE" 14
+			142,  // 4070 "B363" "LCXR" "RRE" 14
+			142,  // 4080 "B365" "LXR" "RRE" 14
+			142,  // 4090 "B366" "LEXR" "RRE" 14
+			142,  // 4100 "B367" "FIXR" "RRE" 14
+			142,  // 4110 "B369" "CXR" "RRE" 14
+			142,  // 4115 "B370" "LPDFR" "RRE"  14 DFP
+			142,  // 4115 "B371" "LNDFR" "RRE"  14 DFP
+			340,  // 4115 "B372" "CPSDR" "RRF2" 34 DFP
+			142,  // 4115 "B373" "LCDFR" "RRE"  14 DFP
+			142,  // 4120 "B374" "LZER" "RRE" 14
+			142,  // 4130 "B375" "LZDR" "RRE" 14
+			142,  // 4140 "B376" "LZXR" "RRE" 14
+			142,  // 4150 "B377" "FIER" "RRE" 14
+			142,  // 4160 "B37F" "FIDR" "RRE" 14
+			142,  // 4170 "B384" "SFPC" "RRE" 14
+			142,  // 4175 "B385" "SFASR" "RRE" 14 DFP 57
+			142,  // 4180 "B38C" "EFPC" "RRE" 14
+			301,  //      "B390" "CELFBR" "RRF3" 30 RPI 1125 Z196
+			301,  //      "B391" "CDLFBR" "RRF3" 30 RPI 1125 Z196
+			301,  //      "B392" "CXLFBR" "RRF3" 30 RPI 1125 Z196
+			146,  // 4190 "B394" "CEFBR?" "RRE" 14  RPI 643 RPI 1125
+			146,  // 4200 "B395" "CDFBR?" "RRE" 14  RPI 643 RPI 1125
+			146,  // 4210 "B396" "CXFBR?" "RRE" 14  RPI 643 RPI 1125
+			341,  // 4220 "B398" "CFEBR?" "RRF2" 34 RPI 1125 Z196
+			341,  // 4230 "B399" "CFDBR?" "RRF2" 34 RPI 1125 Z196
+			341,  // 4240 "B39A" "CFXBR?" "RRF2" 34 RPI 1125 Z196
+			303,    // 'B39C' 'CLFEBR' 'RRF3' 30 RPI 1125 Z196
+			303,    // 'B39D' 'CLFDBR' 'RRF3' 30 RPI 1125 Z196
+			303,    // 'B39E' 'CLFXBR' 'RRF3' 30 RPI 1125 Z196
+			304,    // 'B3A0' 'CELGBR' 'RRF3' 30 RPI 1125 Z196
+			304,    // 'B3A1' 'CDLGBR' 'RRF3' 30 RPI 1125 Z196
+			304,    // 'B3A2' 'CXLGBR' 'RRF3' 30 RPI 1125 Z196		       
+			141,  // 4250 "B3A4" "CEGBR?" "RRE"  53  RPI 1125 Z196
+			141,  // 4260 "B3A5" "CDGBR?" "RRE"  53  RPI 1125 Z196
+			141,  // 4270 "B3A6" "CXGBR?" "RRE"  53  RPI 1125 Z196
+			342,  // 4280 "B3A8" "CGEBR?" "RRF2" 54  RPI 1125 Z196 
+			342,  // 4290 "B3A9" "CGDBR?" "RRF2" 54  RPI 1125 Z196
+			342,  // 4300 "B3AA" "CGXBR?" "RRF2" 54  RPI 1125 Z196
+			342,    //      "B3AC" "CLGEBR" "RRF2" 30  RPI 1125 Z196
+			342,    //      "B3AD" "CLGDBR" "RRF2" 30  RPI 1125 Z196
+			342,    //      "B3AE" "CLGXBR" "RRF2" 30  RPI 1125 Z196		       
+			146,  // 4310 "B3B4" "CEFR" "RRE" 14
+			146,  // 4320 "B3B5" "CDFR" "RRE" 14
+			146,  // 4330 "B3B6" "CXFR" "RRE" 14
+			341,  // 4340 "B3B8" "CFER" "RRF2" 34
+			341,  // 4350 "B3B9" "CFDR" "RRF2" 34
+			341,  // 4360 "B3BA" "CFXR" "RRF2" 34
+			141,  // 4365 "B3C1" "LDGR" "RRE" 14 DFP
+			141,  // 4370 "B3C4" "CEGR" "RRE" 14
+			141,  // 4380 "B3C5" "CDGR" "RRE" 14
+			141,  // 4390 "B3C6" "CXGR" "RRE" 14
+			342,  // 4400 "B3C8" "CGER" "RRF2" 34
+			342,  // 4410 "B3C9" "CGDR" "RRF2" 34
+			342,  // 4420 "B3CA" "CGXR" "RRF2" 34
+			145,  // 4425 "B3CD" "LGDR" "RRE" 14 DFP
+			360, // "MDTR?" "B3D0" "RRR" DFP 1 RPI 1125
+			360, // "DDTR?" "B3D1" "RRR" DFP 2 RPI 1125
+			360, // "ADTR?" "B3D2" "RRR" DFP 3 RPI 1125
+			360, // "SDTR?" "B3D3" "RRR" DFP 4 RPI 1125
+			350, // "LDETR" "B3D4" "RRF4" DFP 5
+			301, // "LEDTR" "B3D5" "RRF3" DFP 6
+			142, // "LTDTR" "B3D6" "RRE" DFP 7
+			301, // "FIDTR" "B3D7" "RRF3" DFP 8
+			360, // "MXTR?" "B3D8" "RRR" DFP 9  RPI 1125
+			360, // "DXTR?" "B3D9" "RRR" DFP 10 RPI 1125
+			360, // "AXTR?" "B3DA" "RRR" DFP 11 RPI 1125
+			360, // "SXTR?" "B3DB" "RRR" DFP 12 RPI 1125
+			350, // "LXDTR" "B3DC" "RRF4" DFP 13
+			301, // "LDXTR" "B3DD" "RRF3" DFP 14
+			142, // "LTXTR" "B3DE" "RRE" DFP 15
+			301, // "FIXTR" "B3DF" "RRF3" DFP 16
+			142, // "KDTR" "B3E0" "RRE" DFP 17
+			342, // "CGDTR?" "B3E1" "RRF7" DFP 18 RPI 1125
+			145, // "CUDTR" "B3E2" "RRE" DFP 19
+			351, // "CSDTR" "B3E3" "RRF4" DFP 20  // RPI 798
+			142, // "CDTR" "B3E4" "RRE" DFP 21
+			145, // "EEDTR" "B3E5" "RRE" DFP 22
+			145, // "ESDTR" "B3E7" "RRE" DFP 23
+			142, // "KXTR" "B3E8" "RRE" DFP 24
+			342, // "CGXTR?" "B3E9" "RRF7" DFP 25 RPI 1125
+			145, // "CUXTR" "B3EA" "RRE" DFP 26
+			351, // "CSXTR" "B3EB" "RRF4" DFP 27  // RPI 798
+			142, // "CXTR" "B3EC" "RRE" DFP 28
+			145, // "EEXTR" "B3ED" "RRE" DFP 29
+			145, // "ESXTR" "B3EF" "RRE" DFP 30
+			141, // "CDGTR?" "B3F1" "RRF7" DFP 31 RPI 1125
+			141, // "CDUTR" "B3F2" "RRE" DFP 32
+			141, // "CDSTR" "B3F3" "RRE" DFP 33
+			142, // "CEDTR" "B3F4" "RRE" DFP 34
+			300, // "QADTR" "B3F5" "RRF3" DFP 35
+			343, // "IEDTR" "B3F6" "RRF2" DFP 36
+			302, // "RRDTR" "B3F7" "RRF3" DFP 37 RPI 798
+			141, // "CXGTR?" "B3F9" "RRF7" DFP 38 RPI 1125
+			141, // "CXUTR" "B3FA" "RRE" DFP 39
+			141, // "CXSTR" "B3FB" "RRE" DFP 40
+			142, // "CEXTR" "B3FC" "RRE" DFP 41
+			300, // "QAXTR" "B3FD" "RRF3" DFP 42
+			343, // "IEXTR" "B3FE" "RRF2" DFP 43
+			302, // "RRXTR" "B3FF" "RRF3" DFP 44 RPI 798
+			100,  // 4430 "B6" "STCTL" "RS" 10
+			100,  // 4440 "B7" "LCTL" "RS" 10
+			144,  // 4450 "B900" "LPGR" "RRE" 14
+			144,  // 4460 "B901" "LNGR" "RRE" 14
+			144,  // 4470 "B902" "LTGR" "RRE" 14
+			144,  // 4480 "B903" "LCGR" "RRE" 14
+			144,  // 4490 "B904" "LGR" "RRE" 14
+			144,  // 4500 "B905" "LURAG" "RRE" 14
+			144,  //      "B906" "LGBR" "RRE" 14 Z9-10
+			144,  //      "B907" "LGHR" "RRE" 14 Z9-11
+			144,  // 4510 "B908" "AGR" "RRE" 14
+			144,  // 4520 "B909" "SGR" "RRE" 14
+			144,  // 4530 "B90A" "ALGR" "RRE" 14
+			144,  // 4540 "B90B" "SLGR" "RRE" 14
+			144,  // 4550 "B90C" "MSGR" "RRE" 14
+			144,  // 4560 "B90D" "DSGR" "RRE" 14
+			144,  // 4570 "B90E" "EREGG" "RRE" 14
+			144,  // 4580 "B90F" "LRVGR" "RRE" 14
+			148,  // 4590 "B910" "LPGFR" "RRE" 14
+			148,  // 4600 "B911" "LNGFR" "RRE" 14
+			148,  // 4610 "B912" "LTGFR" "RRE" 14
+			148,  // 4620 "B913" "LCGFR" "RRE" 14
+			148,  // 4630 "B914" "LGFR" "RRE" 14
+			148,  // 4640 "B916" "LLGFR" "RRE" 14
+			144,  // 4650 "B917" "LLGTR" "RRE" 14
+			148,  // 4660 "B918" "AGFR" "RRE" 14
+			148,  // 4670 "B919" "SGFR" "RRE" 14
+			148,  // 4680 "B91A" "ALGFR" "RRE" 14
+			148,  // 4690 "B91B" "SLGFR" "RRE" 14
+			148,  // 4700 "B91C" "MSGFR" "RRE" 14
+			148,  // 4710 "B91D" "DSGFR" "RRE" 14
+			144,  // 4720 "B91E" "KMAC" "RRE" 14
+			144,  // 4730 "B91F" "LRVR" "RRE" 14
+			144,  // 4740 "B920" "CGR" "RRE" 14
+			144,  // 4750 "B921" "CLGR" "RRE" 14
+			144,  // 4760 "B925" "STURG" "RRE" 14
+			144,  //      "B926" "LBR" "RRE" 14 Z9-12
+			144,  //      "B927" "LHR" "RRE" 14 Z9-13
+			144,  // "B928","PCKMO","RE4"  14 RPI 1125 Z196
+			144,  // "B92A","KMF","RRE"    14 RPI 1125 Z196
+			144,  // "B92B","KMO","RRE"    14 RPI 1125 Z196
+			144,  // "B92C","PCC","RE4"    14 RPI 1125 Z196
+			343,  // "B92D","KMCTR","RRF2" 34 RPI 1125 Z196
+			144,  // 4770 "B92E" "KM" "RRE" 14
+			144,  // 4780 "B92F" "KMC" "RRE" 14
+			144,  // 4790 "B930" "CGFR" "RRE" 14
+			144,  // 4800 "B931" "CLGFR" "RRE" 14
+			144,  // 4810 "B93E" "KIMD" "RRE" 14
+			144,  // 4820 "B93F" "KLMD" "RRE" 14
+			303,    // "B941","CFDTR","RRF"  30 RPI 1125 Z196
+			305,   // "B942","CLGDTR","RRF" 30 RPI 1125 Z196
+			303,   // "B943","CLFDTR","RRF" 30 RPI 1125 Z196
+			144,  // 4830 "B946" "BCTGR" "RRE" 14
+			303,    // "B949","CFXTR","RRF3"   30 RPI 1125 Z196
+			305,   // "B94A","CLGXTR","RRF3"  30 RPI 1125 Z196
+			303,   // "B94B","CLFXTR","RRF3"  30 RPI 1125 Z196
+			301,    // "B951","CDFTR","RRF3"   30 RPI 1125 Z196
+			304,   // "B952","CDLGTR","RRF3"  30 RPI 1125 Z196
+			306,   // "B953","CDLFTR","RRF3"  30 RPI 1125 Z196
+			306,    // "B959","CXFTR","RRF3"   30 RPI 1125 Z196" 
+			304,   // "B95A","CXLGTR","RRF3"  30 RPI 1125 Z196
+			306,   // "B95B","CXLFTR","RRF3"  30 RPI 1125 Z196
+			151,  // 10 "B960" "CGRT" "RRF5" 39 RPI 817
+			151,  // 20 "B9608" "CGRTE" "RRF6" 40 RPI 817
+			151,  // 30 "B9602" "CGRTH" "RRF6" 40 RPI 817
+			151,  // 40 "B9604" "CGRTL" "RRF6" 40 RPI 817
+			151,  // 50 "B9606" "CGRTNE" "RRF6" 40 RPI 817
+			151,  // 60 "B960C" "CGRTNH" "RRF6" 40 RPI 817
+			151,  // 70 "B960A" "CGRTNL" "RRF6" 40 RPI 817
+			151,  // 10 "B961" "CLGRT" "RRF5" 39 RPI 817
+			151,  // 20 "B9618" "CLGRTE" "RRF6" 40 RPI 817
+			151,  // 30 "B9612" "CLGRTH" "RRF6" 40 RPI 817
+			151,  // 40 "B9614" "CLGRTL" "RRF6" 40 RPI 817
+			151,  // 50 "B9616" "CLGRTNE" "RRF6" 40 RPI 817
+			151,  // 60 "B961C" "CLGRTNH" "RRF6" 40 RPI 817
+			151,  // 70 "B961A" "CLGRTNL" "RRF6" 40 RPI 817
+			152,  // 150 "B972" "CRT" "RRF5" 39 RPI 817
+			152,  // 160 "B9728" "CRTE" "RRF6" 40 RPI 817
+			152,  // 170 "B9722" "CRTH" "RRF6" 40 RPI 817
+			152,  // 180 "B9724" "CRTL" "RRF6" 40 RPI 817
+			152,  // 190 "B9726" "CRTNE" "RRF6" 40 RPI 817
+			152,  // 200 "B972C" "CRTNH" "RRF6" 40 RPI 817
+			152,  // 210 "B972A" "CRTNL" "RRF6" 40 RPI 817		       
+			152,  // 80 "B973" "CLRT" "RRF5" 39 RPI 817
+			152,  // 90 "B9738" "CLRTE" "RRF6" 40 RPI 817
+			152,  // 100 "B9732" "CLRTH" "RRF6" 40 RPI 817
+			152,  // 110 "B9734" "CLRTL" "RRF6" 40 RPI 817
+			152,  // 120 "B9736" "CLRTNE" "RRF6" 40 RPI 817
+			152,  // 130 "B973C" "CLRTNH" "RRF6" 40 RPI 817
+			152,  // 140 "B973A" "CLRTNL" "RRF6" 40 RPI 817
+			144,  // 4840 "B980" "NGR" "RRE" 14
+			144,  // 4850 "B981" "OGR" "RRE" 14
+			144,  // 4860 "B982" "XGR" "RRE" 14
+			144,  //      "B983" "FLOGR" "RRE" 14 Z9-14
+			144,  //      "B984" "LLGCR" "RRE" 14 Z9-15
+			144,  //      "B985" "LLGHR" "RRE" 14 Z9-16
+			144,  // 4870 "B986" "MLGR" "RRE" 14
+			144,  // 4880 "B987" "DLGR" "RRE" 14
+			144,  // 4890 "B988" "ALCGR" "RRE" 14
+			144,  // 4900 "B989" "SLBGR" "RRE" 14
+			144,  // 4910 "B98A" "CSPG" "RRE" 14
+			144,  // 4920 "B98D" "EPSW" "RRE" 14
+			340,  // 4930 "B98E" "IDTE" "RRF2" 34
+			143,  // 4940 "B990" "TRTT" "RRE" 14
+			143,  // 4950 "B991" "TRTO" "RRE" 14
+			143,  // 4960 "B992" "TROT" "RRE" 14
+			143,  // 4970 "B993" "TROO" "RRE" 14
+			144,  //      "B994" "LLCR" "RRE" 14 Z9-17
+			144,  //      "B995" "LLHR" "RRE" 14 Z9-18
+			144,  // 4980 "B996" "MLR" "RRE" 14
+			144,  // 4990 "B997" "DLR" "RRE" 14
+			144,  // 5000 "B998" "ALCR" "RRE" 14
+			144,  // 5010 "B999" "SLBR" "RRE" 14
+			144,  // 5020 "B99A" "EPAIR" "RRE" 14
+			144,  // 5030 "B99B" "ESAIR" "RRE" 14
+			144,  // 5040 "B99D" "ESEA" "RRE" 14
+			144,  // 5050 "B99E" "PTI" "RRE" 14
+			144,  // 5060 "B99F" "SSAIR" "RRE" 14
+			147,  // 10 "B9A2" "PTF" "RRE" 14  RPI 817
+			144,  // 20 "B9AF" "PFMF" "RRF5" 39  RPI 817
+			144,  //      "B9AA" "LPTEA" "RRE" 14 Z9-19
+			140,  // "B9AE","RRBM","RRE"  14 RPI 1125 Z196
+			144,  // 5070 "B9B0" "CU14" "RRE" 14
+			144,  // 5080 "B9B1" "CU24" "RRE" 14
+			144,  // 5090 "B9B2" "CU41" "RRE" 14
+			144,  // 5100 "B9B3" "CU42" "RRE" 14
+			144,  // 30 "B9BD" "TRTRE" "RRF5" 39  RPI 817
+			144,  // 5110 "B9BE" "SRSTU" "RRE" 14
+			144,  // 40 "B9BF" "TRTE" "RRF5" 39  RPI 817
+			410,    // "B9C8","AHHHR","RRF5"  39 RPI 1125 Z196
+			410,    // "B9C9","SHHHR","RRF5"  39 RPI 1125 Z196
+			410,   // "B9CA","ALHHHR","RRF5" 39 RPI 1125 Z196
+			410,   // "B9CB","SLHHHR","RRF5" 39 RPI 1125 Z196
+			144,   // "B9CD","CHHR","RRE"     14 RPI 1125 Z196
+			144,   // "B9CF","CLHHR","RRE"    14 RPI 1125 Z196
+			410,   // "B9D8","AHHLR","RRF5 "  39 RPI 1125 Z196
+			410,   // "B9D9","SHHLR","RRF5 "  39 RPI 1125 Z196
+			410,   // "B9DA","ALHHLR","RRF5 " 39 RPI 1125 Z196
+			410,   // "B9DB","SLHHLR","RRF5 " 39 RPI 1125 Z196
+			144,   // "B9DD","CHLR","RRE"     14 RPI 1125 Z196
+			144,    // "B9DF","CLHLR","RRE"    14 RPI 1125 Z196 		       
+			144,  // 5115 "b9E1" "POPCNT" "RRE" 14 RPI 1125
+			141,     // "B9E2","LOCGR","RRF5"   39 RPI 1125 Z196
+			153,     // "B9E4","NGRK","RRF5"    39 RPI 1125 Z196
+			153,     // "B9E6","OGRK","RRF5"    39 RPI 1125 Z196
+			153,     // "B9E7","XGRK","RRF5"    39 RPI 1125 Z196
+			153,     // "B9E8","AGRK","RRF5"    39 RPI 1125 Z196
+			153,     // "B9E9","SGRK","RRF5"    39 RPI 1125 Z196
+			153,     // "B9EA","ALGRK","RRF5"   39 RPI 1125 Z196
+			153,     // "B9EB","SLGRK","RRF5"   39 RPI 1125 Z196
+			142,     // "B9F2","LOCR","RRF5"    39 RPI 1125 Z196
+			154,     // "B9F4","NRK","RRF5"     39 RPI 1125 Z196
+			154,     // "B9F6","ORK","RRF5"     39 RPI 1125 Z196
+			154,     // "B9F7","XRK","RRF5"     39 RPI 1125 Z196
+			154,     // "B9F8","ARK","RRF5"     39 RPI 1125 Z196
+			154,     // "B9F9","SRK","RRF5"     39 RPI 1125 Z196
+			154,     // "B9FA","ALRK","RRF5"    39 RPI 1125 Z196
+			154,     // "B9FB","SLRK","RRF5"    39 RPI 1125 Z196 		       
+			100,  // 5120 "BA" "CS" "RS" 10
+			100,  // 5130 "BB" "CDS" "RS" 10
+			101,  // 5140 "BD" "CLM" "RS" 10
+			101,  // 5150 "BE" "STCM" "RS" 10
+			101,  // 5160 "BF" "ICM" "RS" 10
+			162,  // 5170 "C00" "LARL" "RIL" 16
+			160,  //      "C01" "LGFI" "RIL" 16 Z9-20
+			330,  // 5180 "C04" "BRCL" "RIL" 16
+			330,  // 5390 "C040" "JLNOP" "BLX" 33
+			330,  // 5400 "C041" "BROL" "BLX" 33
+			330,  // 5410 "C041" "JLO" "BLX" 33
+			330,  // 5420 "C042" "BRHL" "BLX" 33
+			330,  // 5430 "C042" "BRPL" "BLX" 33
+			330,  // 5440 "C042" "JLH" "BLX" 33
+			330,  // 5450 "C042" "JLP" "BLX" 33
+			330,  // 5460 "C044" "BRLL" "BLX" 33
+			330,  // 5470 "C044" "BRML" "BLX" 33
+			330,  // 5480 "C044" "JLL" "BLX" 33
+			330,  // 5490 "C044" "JLM" "BLX" 33
+			330,  // 5500 "C047" "BRNEL" "BLX" 33
+			330,  // 5510 "C047" "BRNZL" "BLX" 33
+			330,  // 5520 "C047" "JLNE" "BLX" 33
+			330,  // 5530 "C047" "JLNZ" "BLX" 33
+			330,  // 5540 "C048" "BREL" "BLX" 33
+			330,  // 5550 "C048" "BRZL" "BLX" 33
+			330,  // 5560 "C048" "JLE" "BLX" 33
+			330,  // 5570 "C048" "JLZ" "BLX" 33
+			330,  // 5580 "C04B" "BRNLL" "BLX" 33
+			330,  // 5590 "C04B" "BRNML" "BLX" 33
+			330,  // 5600 "C04B" "JLNL" "BLX" 33
+			330,  // 5610 "C04B" "JLNM" "BLX" 33
+			330,  // 5620 "C04D" "BRNHL" "BLX" 33
+			330,  // 5630 "C04D" "BRNPL" "BLX" 33
+			330,  // 5640 "C04D" "JLNH" "BLX" 33
+			330,  // 5650 "C04D" "JLNP" "BLX" 33
+			330,  // 5660 "C04E" "BRNOL" "BLX" 33
+			330,  // 5670 "C04E" "JLNO" "BLX" 33
+			330,  // 5680 "C04F" "BRUL" "BLX" 33
+			330,  // 5690 "C04F" "JLU" "BLX" 33
+			163,  // 5210 "C05" "BRASL" "RIL" 16
+			163,  // 5220 "C05" "JASL" "RIL" 16
+			160,  //      "C06" "XIHF" "RIL" 16 Z9-21
+			160,  //      "C07" "XILF" "RIL" 16 Z9-22
+			160,  //      "C08" "IIHF" "RIL" 16 Z9-23
+			160,  //      "C09" "IILF" "RIL" 16 Z9-24
+			160,  //      "C0A" "NIHF" "RIL" 16 Z9-25
+			160,  //      "C0B" "NILF" "RIL" 16 Z9-26
+			160,  //      "C0C" "OIHF" "RIL" 16 Z9-27
+			160,  //      "C0D" "OILF" "RIL" 16 Z9-28
+			160,  //      "C0E" "LLIHF" "RIL" 16 Z9-29
+			160,  //      "C0F" "LLILF" "RIL" 16 Z9-30
+			160,  // 50 "C20" "MSGFI" "RIL" 16  RPI 817
+			161,  // 60 "C21" "MSFI" "RIL" 16  RPI 817
+			160,  //      "C24" "SLGFI" "RIL" 16 Z9-31
+			161,  //      "C25" "SLFI" "RIL" 16 Z9-32
+			160,  //      "C28" "AGFI" "RIL" 16 Z9-33
+			161,  //      "C29" "AFI" "RIL" 16 Z9-34
+			160,  //      "C2A" "ALGFI" "RIL" 16 Z9-35
+			161,  //      "C2B" "ALFI" "RIL" 16 Z9-36
+			160,  //      "C2C" "CGFI" "RIL" 16 Z9-37
+			161,  //      "C2D" "CFI" "RIL" 16 Z9-38
+			160,  //      "C2E" "CLGFI" "RIL" 16 Z9-39
+			161,  //      "C2F" "CLFI" "RIL" 16 Z9-40
+			164,  // 70 "C42" "LLHRL" "RIL" 16  RPI 817
+			168,  // 80 "C44" "LGHRL" "RIL" 16  RPI 817
+			164,  // 90 "C45" "LHRL" "RIL" 16  RPI 817
+			168,  // 100 "C46" "LLGHRL" "RIL" 16  RPI 817
+			164,  // 110 "C47" "STHRL" "RIL" 16  RPI 817
+			165,  // 120 "C48" "LGRL" "RIL" 16  RPI 817
+			165,  // 130 "C4B" "STGRL" "RIL" 16  RPI 817
+			166, // 140 "C4C" "LGFRL" "RIL" 16  RPI 817
+			167, // 150 "C4D" "LRL" "RIL" 16  RPI 817
+			166, // 160 "C4E" "LLGFRL" "RIL" 16  RPI 817
+			167, // 170 "C4F" "STRL" "RIL" 16  RPI 817
+			163,  // 180 "C60" "EXRL" "RIL" 16  RPI 817
+			169,  // 190 "C62" "PFDRL" "RIL" 16  RPI 817
+			168,  // 200 "C64" "CGHRL" "RIL" 16  RPI 817
+			164,  // 210 "C65" "CHRL" "RIL" 16  RPI 817
+			168,  // 220 "C66" "CLGHRL" "RIL" 16  RPI 817
+			164,  // 230 "C67" "CLHRL" "RIL" 16  RPI 817
+			165,  // 240 "C68" "CGRL" "RIL" 16  RPI 817
+			165,  // 250 "C6A" "CLGRL" "RIL" 16  RPI 817
+			166,  // 260 "C6C" "CGFRL" "RIL" 16  RPI 817
+			167,  // 270 "C6D" "CRL" "RIL" 16  RPI 817
+			166,  // 280 "C6E" "CLGFRL" "RIL" 16  RPI 817
+			167,  // 290 "C6F" "CLRL" "RIL" 16  RPI 817
+			320,  // "C80" "MVCOS" "SSF" 32 Z9-41 RPI 817
+			320,  // "C81" "ECTG" "SSF" 32 RPI 1013
+			320,  // "C82" "CSST" "SSF" 32 RPI 1013
+			321,  // "C84","LPD","SSF2"  55 RPI 1125 Z196
+			321,  // "C85","LPDG","SSF2" 55 RPI 1125 Z196
+			163, // "CC6","BRCTH","RIL"  16 RPI 1125 Z196
+			160, // "CC8","AIH","RIL"    16  RPI 1125 Z196
+			160, // "CCA","ALSIH","RIL"  16  RPI 1125 Z196
+			160, // "CCB","ALSIHN","RIL" 16  RPI 1125 Z196
+			160, // "CCD","CIH","RIL"    16  RPI 1125 Z196
+			160, // "CCF","CLIH","RIL"   16  RPI 1125 Z196
+			170,  // 5230 "D0" "TRTR" "SS" 17
+			170,  // 5240 "D1" "MVN" "SS" 17
+			170,  // 5250 "D2" "MVC" "SS" 17
+			170,  // 5260 "D3" "MVZ" "SS" 17
+			170,  // 5270 "D4" "NC" "SS" 17
+			170,  // 5280 "D5" "CLC" "SS" 17
+			170,  // 5290 "D6" "OC" "SS" 17
+			170,  // 5300 "D7" "XC" "SS" 17
+			170,  // 5310 "D9" "MVCK" "SS" 17
+			170,  // 5320 "DA" "MVCP" "SS" 17
+			170,  // 5330 "DB" "MVCS" "SS" 17
+			170,  // 5340 "DC" "TR" "SS" 17
+			170,  // 5350 "DD" "TRT" "SS" 17
+			170,  // 5360 "DE" "ED" "SS" 17
+			170,  // 5370 "DF" "EDMK" "SS" 17
+			171,  // 5375 "E00" "XREAD" "RXSS" 38 RPI 812
+			171,  // 5375 "E02" "XPRNT" "RXSS" 38 RPI 812
+			171,  // 5375 "E04" "XPNCH" "RXSS" 38 RPI 812
+			171,  // 5375 "E06" "XDUMP" "RXSS" 38 RPI 812
+			171,  // 5375 "E08" "XLIMD" "RXSS" 38 RPI 812
+			171,  // 5375 "E0A" "XGET"  "RXSS" 38 RPI 812
+			171,  // 5375 "E0C" "XPUT"  "RXSS" 38 RPI 812
+			170,  // 5380 "E1" "PKU" "SS" 17
+			170,  // 5390 "E2" "UNPKU" "SS" 17
+			180,  //      "E302" "LTG" "RXY" 18 Z9-42
+			180,  // 5400 "E303" "LRAG" "RXY" 18
+			180,  // 5410 "E304" "LG" "RXY" 18
+			57,   // 5420 "E306" "CVBY" "RXY" 18  RPI 588
+			180,  // 5430 "E308" "AG" "RXY" 18
+			180,  // 5440 "E309" "SG" "RXY" 18
+			180,  // 5450 "E30A" "ALG" "RXY" 18
+			180,  // 5460 "E30B" "SLG" "RXY" 18
+			180,  // 5470 "E30C" "MSG" "RXY" 18
+			180,  // 5480 "E30D" "DSG" "RXY" 18
+			188,  // 5490 "E30E" "CVBG" "RXY" 18  RPI 588
+			180,  // 5500 "E30F" "LRVG" "RXY" 18
+			180,  //      "E312" "LT" "RXY" 18 Z9-43
+			180,  // 5510 "E313" "LRAY" "RXY" 18
+			184,  // 5520 "E314" "LGF" "RXY" 18
+			182,  // 5530 "E315" "LGH" "RXY" 18
+			184,  // 5540 "E316" "LLGF" "RXY" 18
+			180,  // 5550 "E317" "LLGT" "RXY" 18
+			184,  // 5560 "E318" "AGF" "RXY" 18
+			184,  // 5570 "E319" "SGF" "RXY" 18
+			184,  // 5580 "E31A" "ALGF" "RXY" 18
+			184,  // 5590 "E31B" "SLGF" "RXY" 18
+			184,  // 5600 "E31C" "MSGF" "RXY" 18
+			184,  // 5610 "E31D" "DSGF" "RXY" 18
+			180,  // 5620 "E31E" "LRV" "RXY" 18
+			182,  // 5630 "E31F" "LRVH" "RXY" 18
+			180,  // 5640 "E320" "CG" "RXY" 18
+			180,  // 5650 "E321" "CLG" "RXY" 18
+			180,  // 5660 "E324" "STG" "RXY" 18
+			57,   // 5670 "E326" "CVDY" "RXY" 18  RPI 588
+			188,  // 5680 "E32E" "CVDG" "RXY" 18  RPI 588
+			180,  // 5690 "E32F" "STRVG" "RXY" 18
+			184,  // 5700 "E330" "CGF" "RXY" 18
+			184,  // 5710 "E331" "CLGF" "RXY" 18
+			184,  // 310 "E332" "LTGF" "RXY" 18  RPI 817
+			182,  // 320 "E334" "CGH" "RXY" 18  RPI 817
+			189,  // 330 "E336" "PFD" "RXY" 18  RPI 817
+			180,  // 5720 "E33E" "STRV" "RXY" 18
+			182,  // 5730 "E33F" "STRVH" "RXY" 18
+			180,  // 5740 "E346" "BCTG" "RXY" 18
+			50,  // 5750 "E350" "STY" "RXY" 18
+			50,   // 5760 "E351" "MSY" "RXY" 18
+			50,   // 5770 "E354" "NY" "RXY" 18
+			50,   // 5780 "E355" "CLY" "RXY" 18
+			50,   // 5790 "E356" "OY" "RXY" 18
+			50,   // 5800 "E357" "XY" "RXY" 18
+			50,   // 5810 "E358" "LY" "RXY" 18
+			50,   // 5820 "E359" "CY" "RXY" 18
+			50,   // 5830 "E35A" "AY" "RXY" 18
+			50,   // 5840 "E35B" "SY" "RXY" 18
+			50,  // 340 "E35C" "MFY" "RXY" 18  RPI 817
+			50,   // 5850 "E35E" "ALY" "RXY" 18
+			50,   // 5860 "E35F" "SLY" "RXY" 18
+			53,  // 5870 "E370" "STHY" "RXY" 18
+			52,  // 5880 "E371" "LAY" "RXY" 18  RPI 738 RPI 1149
+			186,  // 5890 "E372" "STCY" "RXY" 18
+			186,  // 5900 "E373" "ICY" "RXY" 18
+			52,  // 350 "E375" "LAEY" "RXY" 18  RPI 817
+			186,  // 5910 "E376" "LB" "RXY" 18
+			185,  // 5920 "E377" "LGB" "RXY" 18
+			53,  // 5930 "E378" "LHY" "RXY" 18
+			53,  // 5940 "E379" "CHY" "RXY" 18
+			53,  // 5950 "E37A" "AHY" "RXY" 18
+			53,  // 5960 "E37B" "SHY" "RXY" 18
+			53,  // 360 "E37C" "MHY" "RXY" 18  RPI 817
+			180,  // 5970 "E380" "NG" "RXY" 18
+			180,  // 5980 "E381" "OG" "RXY" 18
+			180,  // 5990 "E382" "XG" "RXY" 18
+			183,  // 6000 "E386" "MLG" "RXY" 18
+			183,  // 6010 "E387" "DLG" "RXY" 18
+			180,  // 6020 "E388" "ALCG" "RXY" 18
+			180,  // 6030 "E389" "SLBG" "RXY" 18
+			180,  // 6040 "E38E" "STPQ" "RXY" 18
+			180,  // 6050 "E38F" "LPQ" "RXY" 18
+			185,  // 6060 "E390" "LLGC" "RXY" 18
+			182,  // 6070 "E391" "LLGH" "RXY" 18
+			186,  //      "E394" "LLC" "RXY" 18 Z9-44
+			53,  //      "E395" "LLH" "RXY" 18 Z9-45
+			180,  // 6080 "E396" "ML" "RXY" 18
+			180,  // 6090 "E397" "DL" "RXY" 18
+			187,  // 6100 "E398" "ALC" "RXY" 18
+			187,  // 6110 "E399" "SLB" "RXY" 18
+			185,  // "E3C0","LBH","RXY"   18  RPI 1125 Z196
+			185,  // "E3C2","LLCH","RXY"  18  RPI 1125 Z196
+			185,  // "E3C3","STCH","RXY"  18  RPI 1125 Z196
+			182,  // "E3C4","LHH","RXY"   18  RPI 1125 Z196
+			182,  // "E3C6","LLHH","RXY"  18  RPI 1125 Z196
+			182,  // "E3C7","STHH","RXY"  18  RPI 1125 Z196
+			184,  // "E3CA","LFH","RXY"   18  RPI 1125 Z196
+			184,  // "E3CB","STFH","RXY"  18  RPI 1125 Z196
+			184,  // "E3CD","CHF","RXY"   18  RPI 1125 Z196
+			184,  // "E3CF","CLHF","RXY"  18  RPI 1125 Z19
+			190,  // 6120 "E500" "LASP" "SSE" 19
+			190,  // 6130 "E501" "TPROT" "SSE" 19
+			190,  // 6140 "E502" "STRAG" "SSE" 19
+			190,  // 6150 "E50E" "MVCSK" "SSE" 19
+			190,  // 6160 "E50F" "MVCDK" "SSE" 19
+			390,  // 370 "E544" "MVHHI" "SIL" 51  RPI 817
+			391,  // 380 "E548" "MVGHI" "SIL" 51  RPI 817
+			392,  // 390 "E54C" "MVHI" "SIL" 51  RPI 817
+			390,  // 400 "E554" "CHHSI" "SIL" 51  RPI 817
+			390,  // 410 "E555" "CLHHSI" "SIL" 51  RPI 817
+			391,  // 420 "E558" "CGHSI" "SIL" 51  RPI 817
+			391,  // 430 "E559" "CLGHSI" "SIL" 51  RPI 817
+			392,  // 440 "E55C" "CHSI" "SIL" 51  RPI 817
+			392,  // 450 "E55D" "CLFHSI" "SIL" 51  RPI 817
+			170,  // 6170 "E8" "MVCIN" "SS" 17
+			310,  // 6180 "E9" "PKA" "SS" 31
+			170,  // 6190 "EA" "UNPKA" "SS" 17
+			206,  // 6200 "EB04" "LMG" "RSY" 20
+			203,  // 6210 "EB0A" "SRAG" "RSY" 20
+			203,  // 6220 "EB0B" "SLAG" "RSY" 20
+			203,  // 6230 "EB0C" "SRLG" "RSY" 20
+			203,  // 6240 "EB0D" "SLLG" "RSY" 20
+			206,  // 6250 "EB0F" "TRACG" "RSY" 20
+			200,  // 6260 "EB14" "CSY" "RSY" 20
+			203,  // 6270 "EB1C" "RLLG" "RSY" 20
+			204,  // 6280 "EB1D" "RLL" "RSY" 20
+			201,  // 6290 "EB20" "CLMH" "RSY" 20
+			202,  // 6300 "EB21" "CLMY" "RSY" 20
+			206,  // 6310 "EB24" "STMG" "RSY" 20
+			206,  // 6320 "EB25" "STCTG" "RSY" 20
+			206,  // 6330 "EB26" "STMH" "RSY" 20
+			201,  // 6340 "EB2C" "STCMH" "RSY" 20
+			202,  // 6350 "EB2D" "STCMY" "RSY" 20
+			206,  // 6360 "EB2F" "LCTLG" "RSY" 20
+			206,  // 6370 "EB30" "CSG" "RSY" 20
+			200,  // 6380 "EB31" "CDSY" "RSY" 20
+			206,  // 6390 "EB3E" "CDSG" "RSY" 20
+			205,  // 6400 "EB44" "BXHG" "RSY" 20
+			205,  // 6410 "EB45" "BXLEG" "RSY" 20
+			203,  // 460 "EB4C" "ECAG" "RSY" 20  RPI 817
+			210,  // 6420 "EB51" "TMY" "SIY" 21
+			210,  // 6430 "EB52" "MVIY" "SIY" 21
+			210,  // 6440 "EB54" "NIY" "SIY" 21
+			210,  // 6450 "EB55" "CLIY" "SIY" 21
+			210,  // 6460 "EB56" "OIY" "SIY" 21
+			210,  // 6470 "EB57" "XIY" "SIY" 21
+			211,  // 470 "EB6A" "ASI" "SIY" 21  RPI 817
+			211,  // 480 "EB6E" "ALSI" "SIY" 21  RPI 817
+			212,  // 490 "EB7A" "AGSI" "SIY" 21  RPI 817
+			212,  // 500 "EB7E" "ALGSI" "SIY" 21  RPI 817
+			201,  // 6480 "EB80" "ICMH" "RSY" 20
+			202,  // 6490 "EB81" "ICMY" "RSY" 20
+			200,  // 6500 "EB8E" "MVCLU" "RSY" 20
+			200,  // 6510 "EB8F" "CLCLU" "RSY" 20
+			200,  // 6520 "EB90" "STMY" "RSY" 20
+			200,  // 6530 "EB96" "LMH" "RSY" 20
+			200,  // 6540 "EB98" "LMY" "RSY" 20
+			200,  // 6550 "EB9A" "LAMY" "RSY" 20
+			200,  // 6560 "EB9B" "STAMY" "RSY" 20
+			220,  // 6570 "EBC0" "TP" "RSL" 22
+			200,  //  "EBDC","SRAK","RSY  "  20 RPI 1125 Z196
+			200,  //  "EBDD","SLAK","RSY  "  20 RPI 1125 Z196
+			200,  //  "EBDE","SRLK","RSY  "  20 RPI 1125 Z196
+			200,  //  "EBDF","SLLK","RSY  "  20 RPI 1125 Z196
+			207,  //  "EBE2","LOCG","RSY2 "  20 RPI 1125 Z196
+			207,  //  "EBE3","STOCG","RSY2 " 20 RPI 1125 Z196
+			208,  //  "EBE4","LANG","RSY  "  20 RPI 1125 Z196
+			208,  //  "EBE6","LAOG","RSY  "  20 RPI 1125 Z196
+			208,  //  "EBE7","LAXG","RSY  "  20 RPI 1125 Z196
+			208,  //  "EBE8","LAAG","RSY  "  20 RPI 1125 Z196
+			208,  //  "EBEA","LAALG","RSY  " 20 RPI 1125 Z196
+			209,  //  "EBF2","LOC","RSY2 "   20 RPI 1125 Z196
+			209,  //  "EBF3","STOC","RSY2 "  20 RPI 1125 Z196
+			200,  //  "EBF4","LAN","RSY  "   20 RPI 1125 Z196
+			200,  //  "EBF6","LAO","RSY  "   20 RPI 1125 Z196
+			200,  //  "EBF7","LAX","RSY  "   20 RPI 1125 Z196
+			200,  //  "EBF8","LAA","RSY  "   20 RPI 1125 Z196
+			200,  //  "EBFA","LAAL","RSY  "  20 RPI 1125 Z196
+			230,  // 6580 "EC44" "BRXHG" "RIE" 23
+			230,  // 6590 "EC44" "JXHG" "RIE" 23
+			230,  // 6600 "EC45" "BRXLG" "RIE" 23
+			230,  // 6610 "EC45" "JXLEG" "RIE" 23
+			400,  // "EC51","RISBLG","RIE8"  52 RPI 1125 Z196
+			400,  // 'EC51$003132','LOAD (lOW  && HIGH) RISBLGZ','LLHFR','RIE8',52  RPI 1164
+			400,  // 'EC51$163132','LOAD LOG HW (lOW  && HIGH) RISBLGZ','LLHLHR','RIE8',52  RPI 1164
+			400,  // 'EC51$243132','LOAD LOG CH (lOW  && HIGH) RISBLGZ','LLCLHR','RIE8',52  RPI 1164
+			400,  // "EC51Z","RISBLGZ","RIE8"  52 RPI 1125 Z196  RPI 1164
+			400,  // 510 "EC54" "RNSBG" "RIE8" 52  RPI 817
+			400,     // 'EC54$003100','AND HIGH (HIGH && HIGH) RNSBG','NHHR','RIE8',52  RPI 1164
+			400,     // 'EC54$003132','AND HIGH (HIGH && LOW ) RNSBG','NHLR','RIE8',52  RPI 1164
+			400,     // 'EC54$326332','AND HIGH (lOW  && HIGH) RNSBG','NLHR','RIE8',52  RPI 1164
+			400,  // 520 "EC54T" "RNSBGT" "RIE8" 52  RPI 817
+			400,  // 530 "EC55" "RISBG" "RIE8" 52  RPI 817
+			400,  // 540 "EC55Z" "RISBGZ" "RIE8" 52  RPI 817
+			400,  // 550 "EC56" "ROSBG" "RIE8" 52  RPI 817
+			400,  // 'EC56$003100','OR  HIGH (HIGH && HIGH) ROSBG','OHHR','RIE8',52  RPI 1164
+			400,  // 'EC56$003132','OR  HIGH (HIGH && LOW ) ROSBG','OHLR','RIE8',52  RPI 1164
+			400,  // 'EC56$326332','OR  HIGH (lOW  && HIGH) ROSBG','OLHR','RIE8',52  RPI 1164
+			400,  // 560 "EC56T" "ROSBGT" "RIE8" 52  RPI 817
+			400,  // 570 "EC57" "RXSBG" "RIE8" 52  RPI 817
+			400,     // 'EC57$003100','XOR HIGH (HIGH && HIGH) RXSBG','XHHR','RIE8',52  RPI 1164
+			400,     // 'EC57$003132','XOR HIGH (HIGH && LOW ) RXSBG','XHLR','RIE8',52  RPI 1164
+			400,     // 'EC57$326332','AOR HIGH (lOW  && HIGH) RXSBG','XLHR','RIE8',52  RPI 1164
+			400,  // 580 "EC57T" "RXSBGT" "RIE8" 52  RPI 817
+			400,  // "EC5D","RISBHG","RIE8"  52 RPI 1125 Z196
+			400,  // 'EC5D$003100','LOAD (HIGH && HIGH) RISBHGZ','LHHR','RIE8',52  RPI 1164
+			400,  // 'EC5D$003132','LOAD (HIGH && LOW ) RISBHGZ','LHLR','RIE8',52  RPI 1164
+			400,  // 'EC5D$163100','LOAD LOG HW (HIGH && HIGH) RISBHGZ','LLHHHR','RIE8',52  RPI 1164
+			400,  // 'EC5D$163132','LOAD LOG HW (HIGH && LOW ) RISBHGZ','LLHHLR','RIE8',52  RPI 1164
+			400,  // 'EC5D$243100','LOAD LOG CH (HIGH && HIGH) RISBHGZ','LLCHHR','RIE8',52  RPI 1164
+			400,  // 'EC5D$243132','LOAD LOG CH (HIGH && LOW ) RISBHGZ','LLCHLR','RIE8',52  RPI 1164
+			400,  // "EC5DZ","RISBHGZ","RIE8"  52 RPI 1125 Z196  RPI 1164
+			234,  // 10 "EC64" "CGRJ" "RIE6" 49 RPI 817
+			234,  // 20 "EC648" "CGRJE" "RIE7" 50 RPI 817
+			234,  // 30 "EC642" "CGRJH" "RIE7" 50 RPI 817
+			234,  // 40 "EC644" "CGRJL" "RIE7" 50 RPI 817
+			234,  // 50 "EC646" "CGRJNE" "RIE7" 50 RPI 817
+			234,  // 60 "EC64C" "CGRJNH" "RIE7" 50 RPI 817
+			234,  // 70 "EC64A" "CGRJNL" "RIE7" 50 RPI 817
+			234,  // 80 "EC65" "CLGRJ" "RIE6" 49 RPI 817
+			234,  // 90 "EC658" "CLGRJE" "RIE7" 50 RPI 817
+			234,  // 100 "EC652" "CLGRJH" "RIE7" 50 RPI 817
+			234,  // 110 "EC654" "CLGRJL" "RIE7" 50 RPI 817
+			234,  // 120 "EC656" "CLGRJNE" "RIE7" 50 RPI 817
+			234,  // 130 "EC65C" "CLGRJNH" "RIE7" 50 RPI 817
+			234,  // 140 "EC65A" "CLGRJNL" "RIE7" 50 RPI 817		       
+			232,  // 1010 "EC70" "CGIT" "RIE2" 41 RPI 817
+			232,  // 1020 "EC708" "CGITE" "RIE3" 42 RPI 817
+			232,  // 1030 "EC702" "CGITH" "RIE3" 42 RPI 817
+			232,  // 1040 "EC704" "CGITL" "RIE3" 42 RPI 817
+			232,  // 1050 "EC706" "CGITNE" "RIE3" 42 RPI 817
+			232,  // 1060 "EC70C" "CGITNH" "RIE3" 42 RPI 817
+			232,  // 1070 "EC70A" "CGITNL" "RIE3" 42 RPI 817 
+			232,  // 150 "EC71" "CLGIT" "RIE2" 41 RPI 817
+			232,  // 160 "EC718" "CLGITE" "RIE3" 42 RPI 817
+			232,  // 170 "EC712" "CLGITH" "RIE3" 42 RPI 817
+			232,  // 180 "EC714" "CLGITL" "RIE3" 42 RPI 817
+			232,  // 190 "EC716" "CLGITNE" "RIE3" 42 RPI 817
+			232,  // 200 "EC71C" "CLGITNH" "RIE3" 42 RPI 817
+			232,  // 210 "EC71A" "CLGITNL" "RIE3" 42 RPI 817
+			231,  // 1150 "EC72" "CIT" "RIE2" 41 RPI 817
+			231,  // 1160 "EC728" "CITE" "RIE3" 42 RPI 817
+			231,  // 1170 "EC722" "CITH" "RIE3" 42 RPI 817
+			231,  // 1180 "EC724" "CITL" "RIE3" 42 RPI 817
+			231,  // 1190 "EC726" "CITNE" "RIE3" 42 RPI 817
+			231,  // 1200 "EC72C" "CITNH" "RIE3" 42 RPI 817
+			231,  // 1210 "EC72A" "CITNL" "RIE3" 42 RPI 817
+			231,  // 220 "EC73" "CLFIT" "RIE2" 41 RPI 817
+			231,  // 230 "EC738" "CLFITE" "RIE3" 42 RPI 817
+			231,  // 240 "EC732" "CLFITH" "RIE3" 42 RPI 817
+			231,  // 250 "EC734" "CLFITL" "RIE3" 42 RPI 817
+			231,  // 260 "EC736" "CLFITNE" "RIE3" 42 RPI 817
+			231,  // 270 "EC73C" "CLFITNH" "RIE3" 42 RPI 817
+			231,  // 280 "EC73A" "CLFITNL" "RIE3" 42 RPI 817		       
+			235,  // 150 "EC76" "CRJ" "RIE6" 49 RPI 817
+			235,  // 160 "EC768" "CRJE" "RIE7" 50 RPI 817
+			235,  // 170 "EC762" "CRJH" "RIE7" 50 RPI 817
+			235,  // 180 "EC764" "CRJL" "RIE7" 50 RPI 817
+			235,  // 190 "EC766" "CRJNE" "RIE7" 50 RPI 817
+			235,  // 200 "EC76C" "CRJNH" "RIE7" 50 RPI 817
+			235,  // 210 "EC76A" "CRJNL" "RIE7" 50 RPI 817
+			235,  // 220 "EC77" "CLRJ" "RIE6" 49 RPI 817
+			235,  // 230 "EC778" "CLRJE" "RIE7" 50 RPI 817
+			235,  // 240 "EC772" "CLRJH" "RIE7" 50 RPI 817
+			235,  // 250 "EC774" "CLRJL" "RIE7" 50 RPI 817
+			235,  // 260 "EC776" "CLRJNE" "RIE7" 50 RPI 817
+			235,  // 270 "EC77C" "CLRJNH" "RIE7" 50 RPI 817
+			235,  // 280 "EC77A" "CLRJNL" "RIE7" 50 RPI 817
+			233,  // 290 "EC7C" "CGIJ" "RIE4" 43 RPI 817
+			233,  // 300 "EC7C8" "CGIJE" "RIE5" 44 RPI 817
+			233,  // 310 "EC7C2" "CGIJH" "RIE5" 44 RPI 817
+			233,  // 320 "EC7C4" "CGIJL" "RIE5" 44 RPI 817
+			233,  // 330 "EC7C6" "CGIJNE" "RIE5" 44 RPI 817
+			233,  // 340 "EC7CC" "CGIJNH" "RIE5" 44 RPI 817
+			233,  // 350 "EC7CA" "CGIJNL" "RIE5" 44 RPI 817
+			233,  // 360 "EC7D" "CLGIJ" "RIE4" 43 RPI 817
+			233,  // 370 "EC7D8" "CLGIJE" "RIE5" 44 RPI 817
+			233,  // 380 "EC7D2" "CLGIJH" "RIE5" 44 RPI 817
+			233,  // 390 "EC7D4" "CLGIJL" "RIE5" 44 RPI 817
+			233,  // 400 "EC7D6" "CLGIJNE" "RIE5" 44 RPI 817
+			233,  // 410 "EC7DC" "CLGIJNH" "RIE5" 44 RPI 817
+			233,  // 420 "EC7DA" "CLGIJNL" "RIE5" 44 RPI 817
+			236,  // 430 "EC7E" "CIJ" "RIE4" 43 RPI 817
+			236,  // 440 "EC7E8" "CIJE" "RIE5" 44 RPI 817
+			236,  // 450 "EC7E2" "CIJH" "RIE5" 44 RPI 817
+			236,  // 460 "EC7E4" "CIJL" "RIE5" 44 RPI 817
+			236,  // 470 "EC7E6" "CIJNE" "RIE5" 44 RPI 817
+			236,  // 480 "EC7EC" "CIJNH" "RIE5" 44 RPI 817
+			236,  // 490 "EC7EA" "CIJNL" "RIE5" 44 RPI 817
+			236,  // 500 "EC7F" "CLIJ" "RIE4" 43 RPI 817
+			236,  // 510 "EC7F8" "CLIJE" "RIE5" 44 RPI 817
+			236,  // 520 "EC7F2" "CLIJH" "RIE5" 44 RPI 817
+			236,  // 530 "EC7F4" "CLIJL" "RIE5" 44 RPI 817
+			236,  // 540 "EC7F6" "CLIJNE" "RIE5" 44 RPI 817
+			236,  // 550 "EC7FC" "CLIJNH" "RIE5" 44 RPI 817
+			236,  // 560 "EC7FA" "CLIJNL" "RIE5" 44 RPI 817
+			420,  // "ECD8","AHIK","RIE9"    57 RPI 1125 Z196
+			430,  // "ECD9","AGHIK","RIE9"   57 RPI 1125 Z196
+			420,  // "ECDA","ALHSIK","RIE9"  57 RPI 1125 Z196
+			430,  // "ECDB","ALGHSIK","RIE9"
+			370,  // 570 "ECE4" "CGRB" "RRS1" 45 RPI 817
+			370,  // 580 "ECE48" "CGRBE" "RRS2" 4370, RPI 817
+			370,  // 590 "ECE42" "CGRBH" "RRS2" 46 RPI 817
+			370,  // 600 "ECE44" "CGRBL" "RRS2" 46 RPI 817
+			370,  // 610 "ECE46" "CGRBNE" "RRS2" 46 RPI 817
+			370,  // 620 "ECE4C" "CGRBNH" "RRS2" 46 RPI 817
+			370,  // 630 "ECE4A" "CGRBNL" "RRS2" 46 RPI 817
+			370,  // 640 "ECE5" "CLGRB" "RRS1" 45 RPI 817
+			370,  // 650 "ECE58" "CLGRBE" "RRS2" 46 RPI 817
+			370,  // 660 "ECE52" "CLGRBH" "RRS2" 46 RPI 817
+			370,  // 670 "ECE54" "CLGRBL" "RRS2" 46 RPI 817
+			370,  // 680 "ECE56" "CLGRBNE" "RRS2" 46 RPI 817
+			370,  // 690 "ECE5C" "CLGRBNH" "RRS2" 46 RPI 817
+			370,  // 700 "ECE5A" "CLGRBNL" "RRS2" 46 RPI 817
+			371,  // 710 "ECF6" "CRB" "RRS1" 45 RPI 817
+			371,  // 720 "ECF68" "CRBE" "RRS2" 46 RPI 817
+			371,  // 730 "ECF62" "CRBH" "RRS2" 46 RPI 817
+			371,  // 740 "ECF64" "CRBL" "RRS2" 46 RPI 817
+			371,  // 750 "ECF66" "CRBNE" "RRS1" 45 RPI 817
+			371,  // 760 "ECF6C" "CRBNH" "RRS2" 46 RPI 817
+			371,  // 770 "ECF6A" "CRBNL" "RRS2" 46 RPI 817
+			371,  // 780 "ECF7" "CLRB" "RRS1" 45 RPI 817
+			371,  // 790 "ECF78" "CLRBE" "RRS2" 46 RPI 817
+			371,  // 800 "ECF72" "CLRBH" "RRS2" 46 RPI 817
+			371,  // 810 "ECF74" "CLRBL" "RRS2" 46 RPI 817
+			371,  // 820 "ECF76" "CLRBNE" "RRS2" 46 RPI 817
+			371,  // 830 "ECF7C" "CLRBNH" "RRS2" 46 RPI 817
+			371,  // 840 "ECF7A" "CLRBNL" "RRS2" 46 RPI 817
+			380,  // 850 "ECFC" "CGIB" "RRS3" 47 RPI 817
+			380,  // 860 "ECFC8" "CGIBE" "RRS4" 48 RPI 817
+			380,  // 870 "ECFC2" "CGIBH" "RRS4" 48 RPI 817
+			380,  // 880 "ECFC4" "CGIBL" "RRS4" 48 RPI 817
+			380,  // 890 "ECFC6" "CGIBNE" "RRS4" 48 RPI 817
+			380,  // 900 "ECFCC" "CGIBNH" "RRS4" 48 RPI 817
+			380,  // 910 "ECFCA" "CGIBNL" "RRS4" 48 RPI 817
+			380,  // 920 "ECFD" "CLGIB" "RRS3" 47 RPI 817
+			380,  // 930 "ECFD8" "CLGIBE" "RRS4" 48 RPI 817
+			380,  // 940 "ECFD2" "CLGIBH" "RRS4" 48 RPI 817
+			380,  // 950 "ECFD4" "CLGIBL" "RRS4" 48 RPI 817
+			380,  // 960 "ECFD6" "CLGIBNE" "RRS4" 48 RPI 817
+			380,  // 970 "ECFDC" "CLGIBNH" "RRS4" 48 RPI 817
+			380,  // 980 "ECFDA" "CLGIBNL" "RRS4" 48 RPI 817
+			381,  // 990 "ECFE" "CIB" "RRS3" 47 RPI 817
+			381,  // 1000 "ECFE8" "CIBE" "RRS4" 48 RPI 817
+			381,  // 1010 "ECFE2" "CIBH" "RRS4" 48 RPI 817
+			381,  // 1020 "ECFE4" "CIBL" "RRS4" 48 RPI 817
+			381,  // 1030 "ECFE6" "CIBNE" "RRS4" 48 RPI 817
+			381,  // 1040 "ECFEC" "CIBNH" "RRS4" 48 RPI 817
+			381,  // 1050 "ECFEA" "CIBNL" "RRS4" 48 RPI 817
+			381,  // 1060 "ECFF" "CLIB" "RRS3" 47 RPI 817
+			381,  // 1070 "ECFF8" "CLIBE" "RRS4" 48 RPI 817
+			381,  // 1080 "ECFF2" "CLIBH" "RRS4" 48 RPI 817
+			381,  // 1090 "ECFF4" "CLIBL" "RRS4" 48 RPI 817
+			381,  // 1100 "ECFF6" "CLIBNE" "RRS4" 48 RPI 817
+			381,  // 1110 "ECFFC" "CLIBNH" "RRS4" 48 RPI 817
+			381,  // 1120 "ECFFA" "CLIBNL" "RRS4" 48 RPI 817		       
+			240,  // 6620 "ED04" "LDEB" "RXE" 24
+			240,  // 6630 "ED05" "LXDB" "RXE" 24
+			240,  // 6640 "ED06" "LXEB" "RXE" 24
+			240,  // 6650 "ED07" "MXDB" "RXE" 24
+			240,  // 6660 "ED08" "KEB" "RXE" 24
+			240,  // 6670 "ED09" "CEB" "RXE" 24
+			240,  // 6680 "ED0A" "AEB" "RXE" 24
+			240,  // 6690 "ED0B" "SEB" "RXE" 24
+			240,  // 6700 "ED0C" "MDEB" "RXE" 24
+			240,  // 6710 "ED0D" "DEB" "RXE" 24
+			250,  // 6720 "ED0E" "MAEB" "RXF" 25
+			250,  // 6730 "ED0F" "MSEB" "RXF" 25
+			240,  // 6740 "ED10" "TCEB" "RXE" 24
+			240,  // 6750 "ED11" "TCDB" "RXE" 24
+			240,  // 6760 "ED12" "TCXB" "RXE" 24
+			240,  // 6770 "ED14" "SQEB" "RXE" 24
+			240,  // 6780 "ED15" "SQDB" "RXE" 24
+			240,  // 6790 "ED17" "MEEB" "RXE" 24
+			240,  // 6800 "ED18" "KDB" "RXE" 24
+			240,  // 6810 "ED19" "CDB" "RXE" 24
+			240,  // 6820 "ED1A" "ADB" "RXE" 24
+			240,  // 6830 "ED1B" "SDB" "RXE" 24
+			240,  // 6840 "ED1C" "MDB" "RXE" 24
+			240,  // 6850 "ED1D" "DDB" "RXE" 24
+			250,  // 6860 "ED1E" "MADB" "RXF" 25
+			250,  // 6870 "ED1F" "MSDB" "RXF" 25
+			240,  // 6880 "ED24" "LDE" "RXE" 24
+			240,  // 6890 "ED25" "LXD" "RXE" 24
+			240,  // 6900 "ED26" "LXE" "RXE" 24
+			250,  // 6910 "ED2E" "MAE" "RXF" 25
+			250,  // 6920 "ED2F" "MSE" "RXF" 25
+			240,  // 6930 "ED34" "SQE" "RXE" 24
+			240,  // 6940 "ED35" "SQD" "RXE" 24
+			240,  // 6950 "ED37" "MEE" "RXE" 24
+			250,  //      "ED38" "MAYL" "RXF" 25 Z9-46
+			250,  //      "ED39" "MYL" "RXF" 25 Z9-47
+			250,  //      "ED3A" "MAY" "RXF" 25 Z9-48
+			250,  //      "ED3B" "MY" "RXF" 25 Z9-49 RPI 298
+			250,  //      "ED3C" "MAYH" "RXF" 25 Z9-50
+			250,  //      "ED3D" "MYH" "RXF" 25 Z9-51 RPI 298
+			250,  // 6960 "ED3E" "MAD" "RXF" 25
+			250,  // 6970 "ED3F" "MSD" "RXF" 25
+			251, // "SLDT" "ED40" "RXF" DFP 45
+			251, // "SRDT" "ED41" "RXF" DFP 46
+			251, // "SLXT" "ED48" "RXF" DFP 47
+			251, // "SRXT" "ED49" "RXF" DFP 48
+			241, // "TDCET" "ED50" "RXE" DFP 49
+			241, // "TDGET" "ED51" "RXE" DFP 50
+			241, // "TDCDT" "ED54" "RXE" DFP 51
+			241, // "TDGDT" "ED55" "RXE" DFP 52
+			241, // "TDCXT" "ED58" "RXE" DFP 53
+			241, // "TDGXT" "ED59" "RXE" DFP 54
+			180,  // 6980 "ED64" "LEY" "RXY" 18
+			180,  // 6990 "ED65" "LDY" "RXY" 18
+			180,  // 7000 "ED66" "STEY" "RXY" 18
+			180,  // 7010 "ED67" "STDY" "RXY" 18
+			270,  // 7020 "EE" "PLO" "SS3" 27
+			280,  // 7030 "EF" "LMD" "SS4" 28
+			290,  // 7040 "F0" "SRP" "SS5" 29
+			260,  // 7050 "F1" "MVO" "SS2" 26
+			260,  // 7060 "F2" "PACK" "SS2" 26
+			260,  // 7070 "F3" "UNPK" "SS2" 26
+			260,  // 7080 "F8" "ZAP" "SS2" 26
+			260,  // 7090 "F9" "CP" "SS2" 26
+			260,  // 7100 "FA" "AP" "SS2" 26
+			260,  // 7110 "FB" "SP" "SS2" 26
+			260,  // 7120 "FC" "MP" "SS2" 26
+			260,  // 7130 "FD" "DP" "SS2" 26
+	};
+
 	/*
-	 * end of pz390 global variables
+	 * End of pz390 global variables
+	 */
+
+	/**
+	 * Execute 390 code at psw_addr in mem[].
 	 */
 	public void exec_pz390() {
-		/*
-		 * execute 390 code at psw_addr in mem[]
-		 */
 		psw_check = false;
 		last_psw_ins_len = 0;
-		while (!tz390.z390_abort && !psw_check) { // RPI208 run until check or													// abort
-			if (sz390.stimer_exit_request) { // RPI 323 allow opcode break on											// first stimer exit opcode
+		while (!tz390.z390_abort && !psw_check) { // RPI208 run until check or	// abort
+			if (sz390.stimer_exit_request) { // RPI 323 allow opcode break on	// first stimer exit opcode
 				sz390.start_stimer_exit();
 			}
 			if (tz390.opt_test) {
@@ -4800,9 +4480,10 @@ public class pz390 {
 			break;
 		case 0x04: // 30 "0104" "PTFF" "E" Z9-1
 			/*
-			 * perform timing facility function r0 = function r1 - parm
-			 * block address Notes: 1. Map functions 0x00-0x43 to timing
-			 * functions 0x80-C3 in svc 11
+			 * perform timing facility function
+			 * r0 = function
+			 * r1 - parm block address
+			 * Notes: 1. Map functions 0x00-0x43 to timing functions 0x80-C3 in svc(11)
 			 */
 			psw_check = false;
 			ins_setup_e();
@@ -16821,10 +16502,14 @@ public class pz390 {
 		return BigDecimal.valueOf(digits).scaleByPowerOfTen(exp);
 	}
 
-	private BigDecimal fp_ld_to_bd(ByteBuffer fp_buff, int fp_index) {
-		/*
-		 * convert LD format to big decimal
-		 */
+	/**
+	 * Convert LD format to big decimal.
+	 * @param fp_buff
+	 * @param fp_index
+	 * @return
+	 */
+	private BigDecimal fp_ld_to_bd(ByteBuffer fp_buff, int fp_index)
+	{
 		long ld1 = fp_buff.getLong(fp_index);
 		long ld2 = 0;
 		if (fp_buff == fp_reg) {
@@ -16843,14 +16528,14 @@ public class pz390 {
 		int bxcf12 = (int) (ld1 >> 46) & 0xfff;
 		int exp = ((tz390.dfp_cf5_to_exp2[cf5] << 12) + bxcf12)
 				- tz390.fp_exp_bias[tz390.fp_ld_type];
-		long digits1 = tz390.dfp_dpd_to_bcd[(int) (((ld1 & 0x3f) << 4) | (ld2 >>> 60))]
+		long digits1 =    tz390.dfp_dpd_to_bcd[(int) (((ld1 & 0x3f) << 4) | (ld2 >>> 60))]
 				+ 1000 * (tz390.dfp_dpd_to_bcd[(int) ((ld1 >>>  6) & 0x3ff)] 
                 + 1000 * (tz390.dfp_dpd_to_bcd[(int) ((ld1 >>> 16) & 0x3ff)] 
                 + 1000 * (tz390.dfp_dpd_to_bcd[(int) ((ld1 >>> 26) & 0x3ff)] 
                 + 1000 * (tz390.dfp_dpd_to_bcd[(int) ((ld1 >>> 36) & 0x3ff)]
                 + 1000 * tz390.dfp_cf5_to_bcd[cf5]   // RPI 518                                            
                          ))));
-		long digits2 = tz390.dfp_dpd_to_bcd[(int) (ld2 & 0x3ff)]
+		long digits2 =    tz390.dfp_dpd_to_bcd[(int) (ld2 & 0x3ff)]
 				+ 1000 * (tz390.dfp_dpd_to_bcd[(int) ((ld2 >>> 10) & 0x3ff)]
 	            + 1000 * (tz390.dfp_dpd_to_bcd[(int) ((ld2 >>> 20) & 0x3ff)]
                 + 1000 * (tz390.dfp_dpd_to_bcd[(int) ((ld2 >>> 30) & 0x3ff)]
@@ -17196,7 +16881,7 @@ public class pz390 {
 		fp_big_int1 = fp_big_dec2.toBigInteger();
 		tz390.fp_exp = tz390.fp_exp + tz390.fp_man_bits[tz390.fp_dh_type];
 		/*
-		 * adjust mantiss and base 2 exponent to align for assumed 1 bit for
+		 * adjust mantissa and base 2 exponent to align for assumed 1 bit for
 		 * IEEE binary or IBM base 16 hex exponent and return hex sign bit,
 		 * exponent, and mantissa bytes
 		 */		
@@ -18055,95 +17740,98 @@ public class pz390 {
 		sz390.put_ascii_string(tz390.cur_date(),zcvt_comrg_jobdate,8,' ');
 		sz390.put_ascii_string(tz390.pgm_name,zcvt_comrg_comname,8,' ');
 	}
-	private void trace_ins(){
-		/*
-		 * trace instruction based on
-		 * opcode_type
-		 */
+
+	/**
+	 * Trace instruction based on opcode_type.
+	 */
+	private void trace_ins()
+	{
 		if (tz390.opt_regs) {  // RPI 819move from main instr. loop
 			sz390.dump_gpr(-1);
 		}
-		String trace_name = get_ins_name(psw_loc);
+
+		final String trace_name = get_ins_name(psw_loc);
 		String trace_parms = "";
 		int    trace_type = 0;
 		int    maxlen = 0;
-		if (tz390.op_code_index > 0
-			&& tz390.op_code_index < op_trace_type.length){
+		if (   tz390.op_code_index > 0
+			&& tz390.op_code_index < op_trace_type.length) {
 			trace_type = op_trace_type[tz390.op_code_index];
 		}
-	try {
-		switch (trace_type){
+
+		try {
+		switch (trace_type) {
 		case 10: // "E" 8 PR oooo
 			break;
 		case 20: // "RR" 60 LR oorr
 			if (mf2 == 0                 // RPI 1149 
-				&& (opcode1 == 0x0D      // BASR,BALR,BCTR,BCR 
+				&& (    opcode1 == 0x0D      // BASR,BALR,BCTR,BCR 
 					|| (opcode1 >= 0x05
 					    && opcode1 <= 0x07))){ // RPI 1149
 				trace_parms = " R" + tz390.get_hex(mf1, 1) 
-                        + "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8);
+							+ "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8);
 			} else {
-				trace_parms = " R" + tz390.get_hex(mf1, 1) 
-                + "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
-                + " R" + tz390.get_hex(mf2, 1)
-                + "="  + tz390.get_hex(reg.getInt(rf2 + 4), 8);
+				trace_parms = " R" + tz390.get_hex(mf1, 1)
+							+ "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8)
+							+ " R" + tz390.get_hex(mf2, 1)
+							+ "="  + tz390.get_hex(reg.getInt(rf2 + 4), 8);
 			}
-		    break;
+			break;
 		case 21: // x20-3f HFP RR
 			trace_parms =" F" + tz390.get_hex(mf1, 1) 
-				        + "=" + get_fp_long_hex(rf1) + " F" + tz390.get_hex(mf2, 1)
+						+ "=" + get_fp_long_hex(rf1) + " F" + tz390.get_hex(mf2, 1)
 						+ "=" + get_fp_long_hex(rf2);
 			break;
 		case 22: // x0e, x0f clcl, mvcl
-			trace_parms = " R" + tz390.get_hex(mf1, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
-			            + " R" + tz390.get_hex(mf1 + 1, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf1 + 12), 8) 
-			            + " R" + tz390.get_hex(mf2, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf2 + 4), 8) 
-			            + " R" + tz390.get_hex(mf2 + 1, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf2 + 12), 8);
+			trace_parms = " R" + tz390.get_hex(mf1, 1)
+						+ "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8)
+						+ " R" + tz390.get_hex(mf1 + 1, 1)
+						+ "="  + tz390.get_hex(reg.getInt(rf1 + 12), 8)
+						+ " R" + tz390.get_hex(mf2, 1)
+						+ "="  + tz390.get_hex(reg.getInt(rf2 + 4), 8)
+						+ " R" + tz390.get_hex(mf2 + 1, 1)
+						+ "="  + tz390.get_hex(reg.getInt(rf2 + 12), 8);
 			break;
 		case 23: // 1c,1d mr,dr
-			trace_parms = " R" + tz390.get_hex(mf1, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
-			            + " R" + tz390.get_hex(mf1 + 1, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf1 + 12), 8) 
-			            + " R" + tz390.get_hex(mf2, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf2 + 4), 8);
+			trace_parms = " R" + tz390.get_hex(mf1, 1)
+						+ "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8)
+						+ " R" + tz390.get_hex(mf1 + 1, 1) 
+						+ "="  + tz390.get_hex(reg.getInt(rf1 + 12), 8)
+						+ " R" + tz390.get_hex(mf2, 1)
+						+ "="  + tz390.get_hex(reg.getInt(rf2 + 4), 8);
 			break;
 		case 30:// "BRX" 16 BER oomr	
 			rv2 = reg.getInt(rf2 + 4);
 			trace_parms = " R" + tz390.get_hex(mf2, 1) + "("
-			            + tz390.get_hex(rv2, 8) + ")="
-			            + get_ins_target(rv2 & psw_amode);
+						+ tz390.get_hex(rv2, 8) + ")="
+						+ get_ins_target(rv2 & psw_amode);
 			break;
 		case 40:// "I" 1 SVC 00ii
 			trace_parms = " I1=" + tz390.get_hex(if1, 2) 
-			            + " " + trace_svc();
+						+ " " + trace_svc();
 			break;
 		case 50:// "RX" 52 L oorxbddd
 			trace_parms = " R"   + tz390.get_hex(mf1, 1) 
-			            + "="    + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
-			            + " S2(" + tz390.get_hex(xbd2_loc, 8) 
-			            + ")="   + bytes_to_hex(mem, xbd2_loc, 4, 0);
+						+ "="    + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
+						+ " S2(" + tz390.get_hex(xbd2_loc, 8) 
+						+ ")="   + bytes_to_hex(mem, xbd2_loc, 4, 0);
 		    break;
 		case 51: // 45 BAL
 			trace_parms = " R"   + tz390.get_hex(mf1, 1) 
-			            + "="    + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
-			            + " S2(" + tz390.get_hex(xbd2_loc, 8) 
-			            + ")="   + get_ins_target(xbd2_loc);
+						+ "="    + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
+						+ " S2(" + tz390.get_hex(xbd2_loc, 8) 
+						+ ")="   + get_ins_target(xbd2_loc);
 			break;
 		case 52: // 41 LA
 			trace_parms = " R"   + tz390.get_hex(mf1, 1) 
-			            + "="    + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
-			            + " S2(" + tz390.get_hex(xbd2_loc & psw_amode, 8) + ")";
+						+ "="    + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
+						+ " S2(" + tz390.get_hex(xbd2_loc & psw_amode, 8) + ")";
 			break;
 		case 53: // 40, 48-4c rx half word
 			trace_parms =  " R"  + tz390.get_hex(mf1, 1) 
-			            + "="    + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
-			            + " S2(" + tz390.get_hex(xbd2_loc & psw_amode, 8) 
-			            + ")="   + bytes_to_hex(mem, xbd2_loc, 2, 0);
+						+ "="    + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
+						+ " S2(" + tz390.get_hex(xbd2_loc & psw_amode, 8) 
+						+ ")="   + bytes_to_hex(mem, xbd2_loc, 2, 0);
 			break;
 		case 54: // 60-7f RX HFP LD
 			trace_parms = " F" + tz390.get_hex(mf1, 1) + "="
@@ -18194,7 +17882,7 @@ public class pz390 {
 			break;
 		case 60:// "BCX" 16 BE oomxbddd
 			trace_parms = " S2(" + tz390.get_hex(xbd2_loc, 8) 
-			            + ")="   + get_ins_target(xbd2_loc);
+						+ ")="   + get_ins_target(xbd2_loc);
 			break;
 		case 70:// "S" 43 SPM oo00bddd
 			trace_parms = " S2(" + tz390.get_hex(bd2_loc, 8) + ")="
@@ -18247,28 +17935,28 @@ public class pz390 {
 			break;
 		case 103: // BXH, BXLE
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-			+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " R"
-			+ tz390.get_hex(mf3, 1) + "="
-			+ tz390.get_hex(reg.getInt(rf3 + 4), 8) + " S2("
-			+ tz390.get_hex(bd2_loc, 8) + ")="
-			+ get_ins_target(bd2_loc);
+						+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " R"
+						+ tz390.get_hex(mf3, 1) + "="
+						+ tz390.get_hex(reg.getInt(rf3 + 4), 8) + " S2("
+						+ tz390.get_hex(bd2_loc, 8) + ")="
+						+ get_ins_target(bd2_loc);
 			break;
 		case 104: // MVCLE, CLCLE  RPI 1112
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-			+ tz390.get_hex(reg.getInt(rf1 + 4), 8)
-			+ " R" + tz390.get_hex(mf1+1, 1) + "="
-			+ tz390.get_hex(reg.getInt(rf1 + 12), 8)
-			+ " R" + tz390.get_hex(mf3, 1) + "="
-			+ tz390.get_hex(reg.getInt(rf3 + 4), 8)
-			+ " R" + tz390.get_hex(mf3+1, 1) + "="
-			+ tz390.get_hex(reg.getInt(rf3 + 12), 8)
-			+ " PAD=" + tz390.get_hex(bd2_loc, 2);
+						+ tz390.get_hex(reg.getInt(rf1 + 4), 8)
+						+ " R" + tz390.get_hex(mf1+1, 1) + "="
+						+ tz390.get_hex(reg.getInt(rf1 + 12), 8)
+						+ " R" + tz390.get_hex(mf3, 1) + "="
+						+ tz390.get_hex(reg.getInt(rf3 + 4), 8)
+						+ " R" + tz390.get_hex(mf3+1, 1) + "="
+						+ tz390.get_hex(reg.getInt(rf3 + 12), 8)
+						+ " PAD=" + tz390.get_hex(bd2_loc, 2);
 			break;
 		case 110:// "SI" 9 CLI ooiibddd
 			trace_parms = " S2(" + tz390.get_hex(bd1_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd1_loc, 1, 0) + " I2="
-					+ tz390.get_hex(if2, 2)
-					+ "='" + tz390.ascii_printable_char(if2) + "'"; // RPI 947
+						+ bytes_to_hex(mem, bd1_loc, 1, 0) + " I2="
+						+ tz390.get_hex(if2, 2)
+						+ "='" + tz390.ascii_printable_char(if2) + "'"; // RPI 947
 			break;
 		case 120:// "RI" 37 IIHH ooroiiii
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
@@ -18306,118 +17994,118 @@ public class pz390 {
 		case 141: // b3c4-b3c6  CEGR etc.F64,R64
 			if (alt_rnd_mode != 0 || alt_fpe_mode != 0){ // RPI 1125 CEGBRA
 				trace_parms = " F" + tz390.get_hex(mf1, 1) 
-	            + "="  + get_fp_long_hex(rf1) + " M3=" + tz390.get_hex(mf3, 1)
-	            + " F" + tz390.get_hex(mf2, 1)
-				+ "="  + get_long_hex(reg.getLong(rf2)) + " M4=" + tz390.get_hex(mf4, 1);
+							+ "="  + get_fp_long_hex(rf1) + " M3=" + tz390.get_hex(mf3, 1)
+							+ " F" + tz390.get_hex(mf2, 1)
+							+ "="  + get_long_hex(reg.getLong(rf2)) + " M4=" + tz390.get_hex(mf4, 1);
 			} else {
 				trace_parms = " F" + tz390.get_hex(mf1, 1) 
-			            + "="  + get_fp_long_hex(rf1) 
-					    + " R" + tz390.get_hex(mf2, 1)
-					    + "="  + get_long_hex(reg.getLong(rf2));
+							+ "="  + get_fp_long_hex(rf1) 
+							+ " R" + tz390.get_hex(mf2, 1)
+							+ "="  + get_long_hex(reg.getLong(rf2));
 			}
 			break;
 		case 142: // b3??,b22d,b244,b245 DXR, SQDR F64,F64			
 			if (alt_rnd_mode != 0 || alt_fpe_mode != 0){ // RPI 1125
 				trace_parms = " F" + tz390.get_hex(mf1, 1) 
-	            + "="  + get_fp_long_hex(rf1) + " M3=" + tz390.get_hex(mf3, 1)
-	            + " F" + tz390.get_hex(mf2, 1)
-				+ "="  + get_fp_long_hex(rf2) + " M4=" + tz390.get_hex(mf4, 1);
+							+ "="  + get_fp_long_hex(rf1) + " M3=" + tz390.get_hex(mf3, 1)
+							+ " F" + tz390.get_hex(mf2, 1)
+							+ "="  + get_fp_long_hex(rf2) + " M4=" + tz390.get_hex(mf4, 1);
 			} else {
 				trace_parms = " F" + tz390.get_hex(mf1, 1) 
-			            + "="  + get_fp_long_hex(rf1) 
-			            + " F" + tz390.get_hex(mf2, 1)
-						+ "="  + get_fp_long_hex(rf2);
+							+ "="  + get_fp_long_hex(rf1) 
+							+ " F" + tz390.get_hex(mf2, 1)
+							+ "="  + get_fp_long_hex(rf2);
 			}
 			break;
 		case 143: // b990-b993  R1,R1+1,R2,M
 			trace_parms = " R" + tz390.get_hex(mf1, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
-			            + " R" + tz390.get_hex(mf1 + 1, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf1 + 12), 8) 
+						+ "="  + tz390.get_hex(reg.getInt(rf1 + 4), 8) 
+						+ " R" + tz390.get_hex(mf1 + 1, 1) 
+						+ "="  + tz390.get_hex(reg.getInt(rf1 + 12), 8) 
 						+ " R" + tz390.get_hex(mf2, 1) 
 						+ "="  + tz390.get_hex(reg.getInt(rf2 + 4), 8) 
 						+ " M="+ tz390.get_hex(mem.get(psw_loc + 2) >> 4, 1);
 			break;
 		case 144: // b9??  LPGR etc.  R64,r64
 			trace_parms = " R" + tz390.get_hex(mf1, 1) 
-			            + "="  + get_long_hex(reg.getLong(rf1)) 
-			            + " R" + tz390.get_hex(mf2, 1) 
-			            + "="  + get_long_hex(reg.getLong(rf2));
+						+ "="  + get_long_hex(reg.getLong(rf1)) 
+						+ " R" + tz390.get_hex(mf2, 1) 
+						+ "="  + get_long_hex(reg.getLong(rf2));
 			break;
 		case 145: // LGDR etc.  R64,F64
 			trace_parms = " R" + tz390.get_hex(mf1, 1) 
-			            + "="  + get_long_hex(reg.getLong(rf1)) 
-			            + " F" + tz390.get_hex(mf2, 1) 
-			            + "="  + get_fp_long_hex(rf2);
+						+ "="  + get_long_hex(reg.getLong(rf1)) 
+						+ " F" + tz390.get_hex(mf2, 1) 
+						+ "="  + get_fp_long_hex(rf2);
 			break;
 		case 146: // b3b4-b3b6,CEFR etc.F64,R64
 			if (alt_rnd_mode != 0 || alt_fpe_mode != 0){ // RPI 1125
 				trace_parms = " F" + tz390.get_hex(mf1, 1) 
-	            + "="  + get_fp_long_hex(rf1) + " M3=" + tz390.get_hex(mf3, 1)
-	            + " F" + tz390.get_hex(mf2, 1)
-				+ "="  + tz390.get_hex(reg.getInt(rf2+4),8) + " M4=" + tz390.get_hex(mf4, 1);
+							+ "="  + get_fp_long_hex(rf1) + " M3=" + tz390.get_hex(mf3, 1)
+							+ " F" + tz390.get_hex(mf2, 1)
+							+ "="  + tz390.get_hex(reg.getInt(rf2+4),8) + " M4=" + tz390.get_hex(mf4, 1);
 			} else {
 				trace_parms = " F" + tz390.get_hex(mf1, 1) 
-			            + "="  + get_fp_long_hex(rf1) 
-					    + " R" + tz390.get_hex(mf2, 1)
-					    + "="  + tz390.get_hex(reg.getInt(rf2+4),8);
+							+ "="  + get_fp_long_hex(rf1) 
+							+ " R" + tz390.get_hex(mf2, 1)
+							+ "="  + tz390.get_hex(reg.getInt(rf2+4),8);
 			}
 			break;	
 		case 147: // b9A2 ptf R64 rpi 817
-			trace_parms = " R" + tz390.get_hex(mf1, 1) 
-			            + "="  + get_fp_long_hex(rf1);				    
+			trace_parms = " R" + tz390.get_hex(mf1, 1)
+						+ "="  + get_fp_long_hex(rf1);
 			break;
 		case 148: // b9??  LGFR etc.  R64,R32  RPI 822
-			trace_parms = " R" + tz390.get_hex(mf1, 1) 
-			            + "="  + get_long_hex(reg.getLong(rf1)) 
-			            + " R" + tz390.get_hex(mf2, 1) 
-			            + "="  + tz390.get_hex(reg.getInt(rf2+4),8);
+			trace_parms = " R" + tz390.get_hex(mf1, 1)
+						+ "="  + get_long_hex(reg.getLong(rf1))
+						+ " R" + tz390.get_hex(mf2, 1)
+						+ "="  + tz390.get_hex(reg.getInt(rf2+4),8);
 			break;
 		case 149: // b9??  CPYA,EAR,SAR
 			if (opcode2 == 0x4d){ // CPYA RPI 1055
 				trace_parms = " AR" + tz390.get_hex(mf1, 1) 
-			      + "="  + tz390.get_hex(ar_reg.getInt(rf1 >> 1),8) 
-			      + " AR" + tz390.get_hex(mf2, 1) 
-			      + "="  + tz390.get_hex(ar_reg.getInt(rf2 >> 1),8);
+							+ "="  + tz390.get_hex(ar_reg.getInt(rf1 >> 1),8) 
+							+ " AR" + tz390.get_hex(mf2, 1) 
+							+ "="  + tz390.get_hex(ar_reg.getInt(rf2 >> 1),8);
 			} else if (opcode2 == 0x4e){ // SAR RPI 1055
 				trace_parms = " AR" + tz390.get_hex(mf1, 1) 
-                  + "="  + tz390.get_hex(ar_reg.getInt(rf1 >> 1),8) 
-                  + " R" + tz390.get_hex(mf2, 1) 
-                  + "="  + tz390.get_hex(reg.getInt(rf2+4),8);
+							+ "="  + tz390.get_hex(ar_reg.getInt(rf1 >> 1),8) 
+							+ " R" + tz390.get_hex(mf2, 1) 
+							+ "="  + tz390.get_hex(reg.getInt(rf2+4),8);
 			} else if (opcode2 == 0x4f){ // EAR RPI 1055
 				trace_parms = " R" + tz390.get_hex(mf1, 1) 
-                  + "="  + tz390.get_hex(reg.getInt(rf1 + 4),8) 
-                  + " AR" + tz390.get_hex(mf2, 1) 
-                  + "="  + tz390.get_hex(ar_reg.getInt(rf2 >> 1),8);
+							+ "="  + tz390.get_hex(reg.getInt(rf1 + 4),8) 
+							+ " AR" + tz390.get_hex(mf2, 1) 
+							+ "="  + tz390.get_hex(ar_reg.getInt(rf2 >> 1),8);
 			}
-		    break;
+			break;
 		case 150:// "RRF1" 28 MAER oooor0rr
 			trace_parms = " F" + tz390.get_hex(mf1, 1) + "="
-					+ get_fp_long_hex(rf1) + " F" + tz390.get_hex(mf3, 1) + "="
-					+ get_fp_long_hex(rf3) + " F" + tz390.get_hex(mf2, 1) + "="
-					+ get_fp_long_hex(rf2);
+						+ get_fp_long_hex(rf1) + " F" + tz390.get_hex(mf3, 1) + "="
+						+ get_fp_long_hex(rf3) + " F" + tz390.get_hex(mf2, 1) + "="
+						+ get_fp_long_hex(rf2);
 			break;
 		case 151:// "RRF2" CGRT oooom0rr RPI 817
 			trace_parms = " F" + tz390.get_hex(mf1, 1) + "="
-					+ get_long_hex(reg.getLong(rf1)) + " F" + tz390.get_hex(mf2, 1) + "="
-					+ get_long_hex(reg.getLong(rf2)) + " M3=" + tz390.get_hex(mf3, 1);
+						+ get_long_hex(reg.getLong(rf1)) + " F" + tz390.get_hex(mf2, 1) + "="
+						+ get_long_hex(reg.getLong(rf2)) + " M3=" + tz390.get_hex(mf3, 1);
 			break;
 		case 152:// "RRF2" CRT oooom0rr RPI 817
 			trace_parms = " F" + tz390.get_hex(mf1, 1) + "="
-					+ tz390.get_hex(reg.getInt(rf1+4),8) + " F" + tz390.get_hex(mf2, 1) + "="
-					+ tz390.get_hex(reg.getInt(rf2+4),8) + " M3=" + tz390.get_hex(mf3, 1);
+						+ tz390.get_hex(reg.getInt(rf1+4),8) + " F" + tz390.get_hex(mf2, 1) + "="
+						+ tz390.get_hex(reg.getInt(rf2+4),8) + " M3=" + tz390.get_hex(mf3, 1);
 			break;
 		case 153:// "RRF5" 39 NGRK R1,R2,R3 oooor0rr
 			trace_parms = " F" + tz390.get_hex(mf1, 1) + "="
-					+ get_long_hex(rf1) + " F" + tz390.get_hex(mf2, 1) + "="
-					+ get_long_hex(rf2) + " F" + tz390.get_hex(mf3, 1) + "="
-					+ get_long_hex(rf3);
+						+ get_long_hex(rf1) + " F" + tz390.get_hex(mf2, 1) + "="
+						+ get_long_hex(rf2) + " F" + tz390.get_hex(mf3, 1) + "="
+						+ get_long_hex(rf3);
 			break;
 		case 154:// "RRF5" 39 NRK R1,R2,R3 oooor0rr
 			trace_parms = " F" + tz390.get_hex(mf1, 1) + "="
-					+ tz390.get_hex(rf1+4,8) + " F" + tz390.get_hex(mf2, 1) + "="
-					+ tz390.get_hex(rf2+4,8) + " F" + tz390.get_hex(mf3, 1) + "="
-					+ tz390.get_hex(rf3+4,8);
+						+ tz390.get_hex(rf1+4,8) + " F" + tz390.get_hex(mf2, 1) + "="
+						+ tz390.get_hex(rf2+4,8) + " F" + tz390.get_hex(mf3, 1) + "="
+						+ tz390.get_hex(rf3+4,8);
 			break;
 		case 160: // c2?? AGFI etc., C01 LGFI, C06 LXHI  RPI 200
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
@@ -18436,10 +18124,10 @@ public class pz390 {
 			break;
 		case 163: // C05 BRASL
 			trace_parms =" R" + tz390.get_hex(mf1, 1) + "="
-			+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " S2("
-			+ tz390.get_hex(bd2_loc, 8) + ")="
-			+ get_ins_target(bd2_loc);
-break;
+						+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " S2("
+						+ tz390.get_hex(bd2_loc, 8) + ")="
+						+ get_ins_target(bd2_loc);
+			break;
 		case 164: // C42 LLHRL
 			trace_parms =" R" + tz390.get_hex(mf1, 1) + "="
 						+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " S2("
@@ -18472,106 +18160,105 @@ break;
 			break;
 		case 169: // C62 PFDRL
 			trace_parms = " M" + tz390.get_hex(mf1, 1) 
-			            + " S2(" + tz390.get_hex(bd2_loc & psw_amode, 8) + ")";
+						+ " S2(" + tz390.get_hex(bd2_loc & psw_amode, 8) + ")";
 			break;
 		case 170:// "SS" 32 MVC oollbdddbddd
 			maxlen = rflen;
-			if (maxlen > 16){
+			if (maxlen > 16) {
 				maxlen = 16; // RPI 395
 			}
 			int mem_loc = bd2_loc;  // RPI 975
-			if (bd2_loc > tot_mem-16){
+			if (bd2_loc > tot_mem-16) {
 				mem_loc = 0;
 			}
 			trace_parms = " S1(" + tz390.get_hex(bd1_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd1_loc, maxlen, 0) + " S2("
-					+ tz390.get_hex(bd2_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd2_loc, maxlen, 0) 
-					+ "='" + tz390.get_ascii_printable_string(mem_byte,mem_loc,maxlen) + "'"; // RPI 947
+						+ bytes_to_hex(mem, bd1_loc, maxlen, 0) + " S2("
+						+ tz390.get_hex(bd2_loc, 8) + ")="
+						+ bytes_to_hex(mem, bd2_loc, maxlen, 0) 
+						+ "='" + tz390.get_ascii_printable_string(mem_byte,mem_loc,maxlen) + "'"; // RPI 947
 			break;
 		case 171: // ASSIST RXSS I/O Instructions RPI 812
 			maxlen = bd2_loc;
-			if (maxlen <= 0 || maxlen > 8){
+			if (maxlen <= 0 || maxlen > 8) {
 				maxlen = 8; // RPI 395
 			}
-			trace_parms = 
-				" S1(X1)(" + tz390.get_hex(xbd1_loc, 8) 
-                + ")="   + bytes_to_hex(mem, xbd1_loc, maxlen, 0)
-                + " S2(" + tz390.get_hex(bd2_loc, 8) + ")";
+			trace_parms = " S1(X1)(" + tz390.get_hex(xbd1_loc, 8) 
+						+ ")="   + bytes_to_hex(mem, xbd1_loc, maxlen, 0)
+						+ " S2(" + tz390.get_hex(bd2_loc, 8) + ")";
 			break;
 		case 180:// "RXY" LTG oorxbdddhhoo
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ get_long_hex(reg.getLong(rf1)) + " S2("
-					+ tz390.get_hex(xbd2_loc, 8) + ")="
-					+ get_long_hex(get_long_xbd2()); // RPI 588
+						+ get_long_hex(reg.getLong(rf1)) + " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")="
+						+ get_long_hex(get_long_xbd2()); // RPI 588
 			break;
 		case 182: // e391 LLGH
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-							+ get_long_hex(reg.getLong(rf1)) + " S2("
-							+ tz390.get_hex(xbd2_loc, 8) + ")="
-							+ bytes_to_hex(mem, xbd2_loc, 2, 0);
+						+ get_long_hex(reg.getLong(rf1)) + " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")="
+						+ bytes_to_hex(mem, xbd2_loc, 2, 0);
 			break;
 		case 183:// "RXY" 76 MLG oorxbdddhhoo
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ get_long_hex(reg.getLong(rf1))
-					+ " R" + tz390.get_hex(mf1+1, 1) + "="
-					+ get_long_hex(reg.getLong(rf1+8)) // RPI 544
-					+ " S2("
-					+ tz390.get_hex(xbd2_loc, 8) + ")="
-					+ get_long_hex(get_long_xbd2()); // RPI 588
+						+ get_long_hex(reg.getLong(rf1))
+						+ " R" + tz390.get_hex(mf1+1, 1) + "="
+						+ get_long_hex(reg.getLong(rf1+8)) // RPI 544
+						+ " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")="
+						+ get_long_hex(get_long_xbd2()); // RPI 588
 			break;	
 		case 184: // LLGF
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-							+ get_long_hex(reg.getLong(rf1)) + " S2("
-							+ tz390.get_hex(xbd2_loc, 8) + ")="
-							+ bytes_to_hex(mem, xbd2_loc, 4, 0);
+						+ get_long_hex(reg.getLong(rf1)) + " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")="
+						+ bytes_to_hex(mem, xbd2_loc, 4, 0);
 			break;	
 		case 185: // LLGB
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-							+ get_long_hex(reg.getLong(rf1)) + " S2("
-							+ tz390.get_hex(xbd2_loc, 8) + ")="
-							+ bytes_to_hex(mem, xbd2_loc, 1, 0);
+						+ get_long_hex(reg.getLong(rf1)) + " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")="
+						+ bytes_to_hex(mem, xbd2_loc, 1, 0);
 			break;	
 		case 186: // LLC
 			trace_parms = " R"   + tz390.get_hex(mf1, 1) 
-			            + "="    + tz390.get_hex(reg.getInt(rf1+4),8)
+						+ "="    + tz390.get_hex(reg.getInt(rf1+4),8)
 						+ " S2(" + tz390.get_hex(xbd2_loc, 8) 
 						+ ")="	 + bytes_to_hex(mem, xbd2_loc, 1, 0);
 			break;
 		case 187: // SLB
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-							+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " S2("
-							+ tz390.get_hex(xbd2_loc, 8) + ")="
-							+ bytes_to_hex(mem, xbd2_loc, 4, 0);
+						+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")="
+						+ bytes_to_hex(mem, xbd2_loc, 4, 0);
 			break;
 		case 188: // CVBG, CVDG RPI 588
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-							+ get_long_hex(reg.getLong(rf1)) + " S2("
-							+ tz390.get_hex(xbd2_loc, 8) + ")="
-							+ bytes_to_hex(mem, xbd2_loc, 16, 0);
+						+ get_long_hex(reg.getLong(rf1)) + " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")="
+						+ bytes_to_hex(mem, xbd2_loc, 16, 0);
 			break;
 		case 189:// "RXY" LAY oorxbdddhhoo
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ get_long_hex(reg.getLong(rf1)) + " S2("
-					+ tz390.get_hex(xbd2_loc, 8) + ")"; // RPI 738
+						+ get_long_hex(reg.getLong(rf1)) + " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")"; // RPI 738
 			break;
 		case 190:// "SSE" 5 LASP oooobdddbddd
 			trace_parms = " S1(" + tz390.get_hex(bd1_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd1_loc, 4, 0) + " S2("
-					+ tz390.get_hex(bd2_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd2_loc, 4, 0);
+						+ bytes_to_hex(mem, bd1_loc, 4, 0) + " S2("
+						+ tz390.get_hex(bd2_loc, 8) + ")="
+						+ bytes_to_hex(mem, bd2_loc, 4, 0);
 			break;
 		case 200:// "RSY" 31 CSY  oorrbdddhhoo
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " R"
-					+ tz390.get_hex(mf3, 1) + "="
-					+ tz390.get_hex(reg.getInt(rf3 + 4), 8) + " S2("
-					+ tz390.get_hex(bd2_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd2_loc, 4, 0);
+						+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " R"
+						+ tz390.get_hex(mf3, 1) + "="
+						+ tz390.get_hex(reg.getInt(rf3 + 4), 8) + " S2("
+						+ tz390.get_hex(bd2_loc, 8) + ")="
+						+ bytes_to_hex(mem, bd2_loc, 4, 0);
 			break;
 		case 201: // eb20, eb2c, eb80 CLMH, STCM, ICMH
 			trace_parms = " R"   + tz390.get_hex(mf1, 1) 
-			            + "="    + get_long_hex(reg.getLong(rf1)) 
+						+ "="    + get_long_hex(reg.getLong(rf1)) 
 						+ " M3=" + tz390.get_hex(mf3, 1) 
 						+ " S2(" + tz390.get_hex(bd2_loc, 8) 
 						+ ")="   + bytes_to_hex(mem, bd2_loc, mask_bits[mf3], 0);
@@ -18599,35 +18286,35 @@ break;
 			break;
 		case 205:// BXHG, BXLEG
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ get_long_hex(reg.getLong(rf1)) + " R"
-					+ tz390.get_hex(mf3, 1) + "="
-					+ get_long_hex(reg.getLong(rf3)) + " S2("
-					+ tz390.get_hex(bd2_loc, 8) + ")="
-					+ get_ins_target(bd2_loc);
+						+ get_long_hex(reg.getLong(rf1)) + " R"
+						+ tz390.get_hex(mf3, 1) + "="
+						+ get_long_hex(reg.getLong(rf3)) + " S2("
+						+ tz390.get_hex(bd2_loc, 8) + ")="
+						+ get_ins_target(bd2_loc);
 			break;
 		case 206:// "RSY" 31 LMG oorrbdddhhoo
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					    + get_long_hex(reg.getLong(rf1)) 
-					    + " R" + tz390.get_hex(mf3, 1) 
-					    + "="  + get_long_hex(reg.getLong(rf3)) 
-					    + " S2(" + tz390.get_hex(bd2_loc, 8) 
-					    + ")=" + bytes_to_hex(mem, bd2_loc, 8, 0);
-			break;	
+						+ get_long_hex(reg.getLong(rf1)) 
+						+ " R" + tz390.get_hex(mf3, 1) 
+						+ "="  + get_long_hex(reg.getLong(rf3)) 
+						+ " S2(" + tz390.get_hex(bd2_loc, 8) 
+						+ ")=" + bytes_to_hex(mem, bd2_loc, 8, 0);
+			break;
 		case 207: // EBE2 LOCG R1,S2,M3
 			trace_parms = " R"   + tz390.get_hex(mf1, 1) 
-			            + "="    + get_long_hex(reg.getLong(rf1))  
+						+ "="    + get_long_hex(reg.getLong(rf1))  
 						+ " S2(" + tz390.get_hex(bd2_loc, 8) 
 						+ ")="   + bytes_to_hex(mem, bd2_loc, 8, 0)
 						+ " M3=" + tz390.get_hex(mf3, 1);
 			break;	
 		case 208://  "EBE4","LANG","RSY  "  20 RPI 1125 Z196
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ get_long_hex(reg.getLong(rf1)) + " R"
-					+ tz390.get_hex(mf3, 1) + "="
-					+ get_long_hex(reg.getLong(rf3))
-					+ " S2("
-					+ tz390.get_hex(bd2_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd2_loc, 8, 0);
+						+ get_long_hex(reg.getLong(rf1)) + " R"
+						+ tz390.get_hex(mf3, 1) + "="
+						+ get_long_hex(reg.getLong(rf3))
+						+ " S2("
+						+ tz390.get_hex(bd2_loc, 8) + ")="
+						+ bytes_to_hex(mem, bd2_loc, 8, 0);
 			break;
 		case 209: //  "EBF2","LOC","RSY2 "   20 RPI 1125 Z196
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
@@ -18638,87 +18325,87 @@ break;
 						+ " M3=" + tz390.get_hex(mf3, 1);	
 		case 210:// "SIY" 6 TMY ooiibdddhhoo
 			trace_parms = " S2(" + tz390.get_hex(bd1_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd1_loc, 1, 0) + " I2="
-					+ tz390.get_hex(if2, 2);
+						+ bytes_to_hex(mem, bd1_loc, 1, 0) + " I2="
+						+ tz390.get_hex(if2, 2);
 			break;
 		case 211:// "SIY" ASI ooiibdddhhoo
 			trace_parms = " S2(" + tz390.get_hex(bd1_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd1_loc, 4, 0) + " I2="
-					+ tz390.get_hex(if2, 2);
+						+ bytes_to_hex(mem, bd1_loc, 4, 0) + " I2="
+						+ tz390.get_hex(if2, 2);
 			break;
 		case 212:// "SIY" AGSI ooiibdddhhoo
 			trace_parms = " S2(" + tz390.get_hex(bd1_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd1_loc, 8, 0) + " I2="
-					+ tz390.get_hex(if2, 2);
-			break;	
+						+ bytes_to_hex(mem, bd1_loc, 8, 0) + " I2="
+						+ tz390.get_hex(if2, 2);
+			break;
 		case 220:// "RSL" 1 TP oor0bddd00oo
 			trace_parms = " S1(" + tz390.get_hex(bd1_loc, 8) + ")="
-					+ bytes_to_hex(mem, bd1_loc, rflen1, 0);
+						+ bytes_to_hex(mem, bd1_loc, rflen1, 0);
 			break;
 		case 230:// "RIE" 4 BRXLG oorriiii00oo
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " R3"
-					+ tz390.get_hex(mf3, 1) + "="
-					+ tz390.get_hex(reg.getInt(rf3 + 4), 8) + " I2="
-					+ tz390.get_hex(if2, 8);
+						+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " R3"
+						+ tz390.get_hex(mf3, 1) + "="
+						+ tz390.get_hex(reg.getInt(rf3 + 4), 8) + " I2="
+						+ tz390.get_hex(if2, 8);
 			break;
 		case 231:// "RIE2" CIT oor0iiiim0oo  RPI 817
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " I2="
-					+ tz390.get_hex(if2, 4)
-					+ " M3=" + tz390.get_hex(mf3, 1);
+						+ tz390.get_hex(reg.getInt(rf1 + 4), 8) + " I2="
+						+ tz390.get_hex(if2, 4)
+						+ " M3=" + tz390.get_hex(mf3, 1);
 			break;
 		case 232:// "RIE2" CGIT oor0iiiim0oo  RPI 817
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ tz390.get_long_hex(reg.getLong(rf1), 16) + " I2="
-					+ tz390.get_hex(if2, 4)
-					+ " M3=" + tz390.get_hex(mf3, 1);
+						+ tz390.get_long_hex(reg.getLong(rf1), 16) + " I2="
+						+ tz390.get_hex(if2, 4)
+						+ " M3=" + tz390.get_hex(mf3, 1);
 			break;
 		case 233:// "RIE4" CGIJ oorm444422oo  RPI 817
 			trace_parms = " R" + tz390.get_hex(mf1, 1) + "="
-					+ tz390.get_long_hex(reg.getLong(rf1), 16) + " I2="
-					+ tz390.get_hex(if2, 2)
-					+ " M3=" + tz390.get_hex(mf3, 1)
-			            + " S4(" + tz390.get_hex(bd4_loc, 8) 
-			            + ")="   + get_ins_target(bd4_loc);
+						+ tz390.get_long_hex(reg.getLong(rf1), 16) + " I2="
+						+ tz390.get_hex(if2, 2)
+						+ " M3=" + tz390.get_hex(mf3, 1)
+						+ " S4(" + tz390.get_hex(bd4_loc, 8) 
+						+ ")="   + get_ins_target(bd4_loc);
 			break;
 		case 234:// "RIE6" CGRB oorriiiim0oo
 			trace_parms = " R" + tz390.get_hex(mf1, 1)
-			        + "=" + tz390.get_long_hex(reg.getLong(rf1), 16)
-			        + " R" + tz390.get_hex(mf2, 1) + "="
-					+ tz390.get_long_hex(reg.getLong(rf2), 16)
-					+ " M=" + tz390.get_hex(mf3,1)
-					+ " S4(" + tz390.get_hex(bd4_loc,8)
-					+ "=" + get_ins_target(bd4_loc); 
-			break;	
+						+ "=" + tz390.get_long_hex(reg.getLong(rf1), 16)
+						+ " R" + tz390.get_hex(mf2, 1) + "="
+						+ tz390.get_long_hex(reg.getLong(rf2), 16)
+						+ " M=" + tz390.get_hex(mf3,1)
+						+ " S4(" + tz390.get_hex(bd4_loc,8)
+						+ "=" + get_ins_target(bd4_loc); 
+			break;
 		case 235:// "RIE6" CRB oorriiiim0oo
 			trace_parms = " R" + tz390.get_hex(mf1, 1)
-			        + "=" + tz390.get_hex(reg.getInt(rf1+4), 8)
-			        + " R" + tz390.get_hex(mf2, 1) + "="
-					+ tz390.get_hex(reg.getInt(rf2+4), 8)
-					+ " M=" + tz390.get_hex(mf3,1)
-					+ " S4(" + tz390.get_hex(bd4_loc,8)
-					+ "=" + get_ins_target(bd4_loc); 
-			break;	
+						+ "=" + tz390.get_hex(reg.getInt(rf1+4), 8)
+						+ " R" + tz390.get_hex(mf2, 1) + "="
+						+ tz390.get_hex(reg.getInt(rf2+4), 8)
+						+ " M=" + tz390.get_hex(mf3,1)
+						+ " S4(" + tz390.get_hex(bd4_loc,8)
+						+ "=" + get_ins_target(bd4_loc); 
+			break;
 		case 236:// "RIE4" CIJ oorm444422oo  RPI 817
 			trace_parms = " R" + tz390.get_hex(mf1, 1)
-			        + "=" + tz390.get_hex(reg.getInt(rf1+4), 8)
-					+ " I2=" + tz390.get_hex(if2, 2)
-					+ " M3=" + tz390.get_hex(mf3, 1)
-			            + " S4(" + tz390.get_hex(bd4_loc, 8) 
-			            + ")="   + get_ins_target(bd4_loc);
+						+ "=" + tz390.get_hex(reg.getInt(rf1+4), 8)
+						+ " I2=" + tz390.get_hex(if2, 2)
+						+ " M3=" + tz390.get_hex(mf3, 1)
+						+ " S4(" + tz390.get_hex(bd4_loc, 8) 
+						+ ")="   + get_ins_target(bd4_loc);
 			break;
 		case 240:// "RXE" 28 ADB oorxbddd00oo
 			trace_parms = " F" + tz390.get_hex(mf1, 1) + "="
-					+ get_fp_long_hex(rf1) + " S2("
-					+ tz390.get_hex(xbd2_loc, 8) + ")="
-					+ get_long_hex(get_long_xbd2()); // RPI 588
+						+ get_fp_long_hex(rf1) + " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")="
+						+ get_long_hex(get_long_xbd2()); // RPI 588
 			break;
 		case 241:// "RXE" TDCET etc.
 			trace_parms = " F" + tz390.get_hex(mf1, 1) + "="
-					+ get_fp_long_hex(rf1) + " S2("
-					+ tz390.get_hex(xbd2_loc, 8) + ")";
-			break;	
+						+ get_fp_long_hex(rf1) + " S2("
+						+ tz390.get_hex(xbd2_loc, 8) + ")";
+			break;
 		case 250:// "RXF" 8 MAE oorxbdddr0oo (note r3 before r1)
 			trace_parms =  " F" + tz390.get_hex(mf1, 1) + "="
 					+ get_fp_long_hex(rf1) + " F" + tz390.get_hex(mf3, 1) + "="
@@ -19032,143 +18719,152 @@ break;
 		               + trace_parms;
 		tz390.put_trace(ins_trace_line);  // RPI 689
 	}
-	private long get_long_xbd2(){  // RPI 808
-		/*
-		 * return long from mem.getLong(xbd2_loc)
-		 * else return -1 and avoid trap for LA etc.
-		 */
-		if (xbd2_loc > tot_mem || xbd2_loc < 0){
+
+	/**
+	 * Return long from mem.getLong(xbd2_loc)
+	 * else return -1 and avoid trap for LA etc.
+	 * @return
+	 */
+	private long get_long_xbd2()  // RPI 808
+	{
+		if (xbd2_loc > tot_mem || xbd2_loc < 0) {
 			return -1;
 		} else {
 			return mem.getLong(xbd2_loc);
 		}
 	}
-	private void rsbg_setup_and_rotate(){
-		/*
-		 * set flags, masks, and rotate
-		 */
-		if (if3 < 0){
+
+	/**
+	 * Set flags, masks, and rotate.
+	 */
+	private void rsbg_setup_and_rotate()
+	{
+		if (if3 < 0) {
 			rsbg_test = true;
 		} else {
 			rsbg_test = false;
 		}
 		if3 = if3 & 0x3f;
-		if (if4 < 0){
+		if (if4 < 0) {
 			rsbg_zero = true;
 		} else {
 			rsbg_zero = false;
 		}
 		if4 = if4 & 0x3f;
-		/*
-		 * 1.  Set rsbg_mask_ones to all 0's
-		 *     except the selected bits.
-		 * 2.  Set rsbg_mask_zeros to all 1's
-		 *     except the selected bits
-		 */
-		if (if3 <= if4){
-			if (if3 > 0){
+		// 1. Set rsbg_mask_ones to all 0's  except the selected bits.
+		// 2. Set rsbg_mask_zeros to all 1's except the selected bits.
+		if (if3 <= if4) {
+			if (if3 > 0) {
 				rsbg_mask_ones = (long)(-1) >>> if3;
 			} else {
 				rsbg_mask_ones = -1;
 			}
-		    rsbg_mask_ones = (rsbg_mask_ones >>> (63-if4)) << (63-if4);	    	
-		    rsbg_mask_zeros = rsbg_mask_ones ^ -1;
+			rsbg_mask_ones = (rsbg_mask_ones >>> (63-if4)) << (63-if4);
+			rsbg_mask_zeros = rsbg_mask_ones ^ -1;
 		} else { // selected field wraps 63-0
 			rsbg_mask_zeros = (((long)(-1) >>> (if4+1)) >>> (64-if3)) << (64-if3);	
 			rsbg_mask_ones = rsbg_mask_zeros ^ -1;
 		}
-		/*
-		 * rotate rlv1 left or right 
-		 */
-    	if (if5 != 0){
-    		if (if5 < 32){
-    			rlv2 = long_rotate_left(rlv2,if5);
-    		} else {
-    			rlv2 = long_rotate_right(rlv2,64 - if5);
-    		}
-    	}
+		// Rotate rlv1 left or right 
+		if (if5 != 0) {
+			if (if5 < 32) {
+				rlv2 = long_rotate_left(rlv2,if5);
+			} else {
+				rlv2 = long_rotate_right(rlv2,64 - if5);
+			}
+		}
 	}
-	private void risb_rotate_insert_high(boolean high){
-		/*
-		 * rotate and insert in high or low 32 bits
-		 * with optional zeros for non select bits
-		 */
-		/*
-		 * rotate rlv1 left or right 
-		 */
-    	if (if5 != 0){
-    		if (if5 < 32){
-    			rlv2 = long_rotate_left(rlv2,if5);
-    		} else {
-    			rlv2 = long_rotate_right(rlv2,64 - if5);
-    		}
-    	}
-    	/*
-    	 * set rv1 and rv2 to high or low 
-    	 */
-    	if (high){
-    		rv1 = (int)(rlv1 >>> 32);
-    		rv2 = (int)(rlv2 >>> 32);
-    	} else {
-    		rv1 = (int) rlv1;
-    		rv2 = (int) rlv2;
-    	}
+
+	/**
+	 * Rotate and insert in high or low 32 bits with optional zeros for non select bits.
+	 * @param high
+	 */
+	private void risb_rotate_insert_high(final boolean high)
+	{
+		// Rotate rlv1 left or right. 
+		if (if5 != 0) {
+			if (if5 < 32) {
+				rlv2 = long_rotate_left(rlv2,if5);
+			} else {
+				rlv2 = long_rotate_right(rlv2,64 - if5);
+			}
+		}
+		// Set rv1 and rv2 to high or low. 
+		if (high) {
+			rv1 = (int)(rlv1 >>> 32);
+			rv2 = (int)(rlv2 >>> 32);
+		} else {
+			rv1 = (int) rlv1;
+			rv2 = (int) rlv2;
+		}
 		if4 = if4 & 0x3f;
-		/*
-		 * 1.  Set rsbg_mask_ones to all 0's
-		 *     except the selected bits.
-		 * 2.  Set rsbg_mask_zeros to all 1's
-		 *     except the selected bits
-		 */
-		if (if3 <= if4){
-			if (if3 > 0){
+		// 1.  Set rsbg_mask_ones  to all 0's except the selected bits.
+		// 2.  Set rsbg_mask_zeros to all 1's except the selected bits.
+		if (if3 <= if4) {
+			if (if3 > 0) {
 				risb_mask_ones = (int)(-1) >>> if3;
 			} else {
 				risb_mask_ones = -1;
 			}
-		    risb_mask_ones = (risb_mask_ones >>> (31-if4)) << (31-if4);	    	
-		    risb_mask_zeros = risb_mask_ones ^ -1;
+			risb_mask_ones  = (risb_mask_ones >>> (31-if4)) << (31-if4);
+			risb_mask_zeros = risb_mask_ones ^ -1;
 		} else { // selected field wraps 63-0
-			risb_mask_zeros = (((int)(-1) >>> (if4+1)) >>> (32-if3)) << (32-if3);	
-			risb_mask_ones = risb_mask_zeros ^ -1;
+			risb_mask_zeros = (((int)(-1) >>> (if4+1)) >>> (32-if3)) << (32-if3);
+			risb_mask_ones  = risb_mask_zeros ^ -1;
 		}
-		if (risb_zero){
+		if (risb_zero) {
 			rv1 = rv2 & risb_mask_ones; // RPI 1164  WAS RV1 IN ERROR
 		} else {
 			rv1 = (rv1 & risb_mask_zeros) | (rv2 & risb_mask_ones);
 		}
-		if (high){
+		if (high) {
 			reg.putInt(rf1,rv1);
 		} else {
 			reg.putInt(rf1+4,rv1);
 		}
 	}
-	private long long_rotate_left(long value,int n ){
-	   /*
-	    * rotate long n bits left (0-63)
-	    */
-	   return (value << n) | (value >>> (64 - n));
+
+	/**
+	 * Rotate long n bits left (0-63).
+	 * @param value
+	 * @param n
+	 * @return
+	 */
+	private long long_rotate_left(final long value, final int n)
+	{
+		return (value << n) | (value >>> (64 - n));
 	}
-	private long long_rotate_right(long value,int n ){
-	   /*
-	    * rotate long right n bits 0-83
-	    */
-	   return (value >>> n) | (value << (64- n));
+
+	/**
+	 * Rotate long right n bits 0-83.
+	 * @param value
+	 * @param n
+	 * @return
+	 */
+	private long long_rotate_right(final long value, final int n)
+	{
+		return (value >>> n) | (value << (64- n));
 	}
-	private int int_rotate_left(int value,int n ){
-		   /*
-		    * rotate int n bits left (0-31)
-		    */
-		   return (value << n) | (value >>> (32 - n));
+
+	/**
+	 * Rotate int n bits left (0-31).
+	 * @param value
+	 * @param n
+	 * @return
+	 */
+	private int int_rotate_left(final int value, final int n)
+	{
+		return (value << n) | (value >>> (32 - n));
 	}
-	private void exec_pfpo(){
+
+	/**
+	 * Perform floating point operation.
+	 */
+	private void exec_pfpo()
+	{
 		/*
-		 * perform floating point operation
-		 *  1.  If r0 bit 32 is on, 
-		 *      check if function supported
-		 *      and set r1 rc = 0 else r1 = 3.
-		 *  2.  if r0 bit 32 zero, perform 
-		 *      floating point function:
+		 *  1.  If r0 bit 32 is on, check if function supported and set r1 rc = 0 else r1 = 3.
+		 *  2.  if r0 bit 32 zero, perform floating point function:
 		 *      a. bits 33-39 = operation
 		 *         x'01' = convert radix (FP0+2 = FP4+6)
 		 *      b. bits 40-47 = first  operand type
@@ -19177,390 +18873,398 @@ break;
 		 *      e. bit  57    = alternate exception action control
 		 *      f. bits 58-59 = target radix dependent controls
 		 *      g. bits 60-63 = rounding method  
-		 *      
-		 *        
 		 */
-		int pfpo_op    = (int)reg.get(r0);
-		int pfpo_type1 = (int)reg.get(r0+1);
-		int pfpo_type2 = (int)reg.get(r0+2);
-		int pfpo_round = (int)reg.get(r0+3) & 0xf;
-		if (pfpo_op != 1
-			&& pfpo_round == 0){
+		final int pfpo_op    = (int)reg.get(r0);
+		final int pfpo_type1 = (int)reg.get(r0+1);
+		final int pfpo_type2 = (int)reg.get(r0+2);
+		final int pfpo_round = (int)reg.get(r0+3) & 0xf;
+
+		if (pfpo_op != 1 && pfpo_round == 0) {
 			// verify not test, radix,def rnd
 			set_psw_check(psw_pic_oper);
 			return;
 		}
+
 		rf1 = 0;
 		rf2 = 8*4;
 		reg.putInt(r0,0);
 		psw_cc = psw_cc0;
-		switch (pfpo_type1){
+		switch (pfpo_type1) {
 		case 0: // 0 = HFP-SHORT
 			switch (pfpo_type2){
 			case 0: // 0 = HFP-SHORT
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_eh_type);
-			    break;
+				break;
 			case 1:   // 1 = HFP-LONG
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_dh_type);
-			    break;
+				break;
 			case 2:   // 2 = HFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_lh_type);
-			    break;
+				break;
 			case 5:   // 5 = BFP-SHORT
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_eb_type);
-			    break;
+				break;
 			case 6:   // 6 = BFP-LONG
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_db_type);
-			    break;
+				break;
 			case 7:   // 7 = BFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_lb_type);
-			    break;
+				break;
 			case 8:   // 8 = DFP-SHORT
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_ed_type);
-			    break;
+				break;
 			case 9:   // 9 = DFP-LONG
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_dd_type);
-			    break;
+				break;
 			case 0xA: // A = DFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_ld_type);
-		        break;
+				break;
 			default:
 				set_psw_check(psw_pic_spec);
-		        return;
+				return;
 			}
 			break;
 		case 1:   // 1 = HFP-LONG
 			switch (pfpo_type2){
 			case 0: // 0 = HFP-SHORT
 				fp_load_reg(rf1, tz390.fp_dh_type, fp_reg, rf2, tz390.fp_eh_type);
-			    break;
+				break;
 			case 1:   // 1 = HFP-LONG
 				fp_load_reg(rf1, tz390.fp_dh_type, fp_reg, rf2, tz390.fp_dh_type);
-			    break;
+				break;
 			case 2:   // 2 = HFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_dh_type, fp_reg, rf2, tz390.fp_lh_type);
-			    break;
+				break;
 			case 5:   // 5 = BFP-SHORT
 				fp_load_reg(rf1, tz390.fp_dh_type, fp_reg, rf2, tz390.fp_eb_type);
-			    break;
+				break;
 			case 6:   // 6 = BFP-LONG
 				fp_load_reg(rf1, tz390.fp_dh_type, fp_reg, rf2, tz390.fp_db_type);
-			    break;
+				break;
 			case 7:   // 7 = BFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_eh_type, fp_reg, rf2, tz390.fp_lb_type);
-			    break;
+				break;
 			case 8:   // 8 = DFP-SHORT
 				fp_load_reg(rf1, tz390.fp_dh_type, fp_reg, rf2, tz390.fp_ed_type);
-			    break;
+				break;
 			case 9:   // 9 = DFP-LONG
 				fp_load_reg(rf1, tz390.fp_dh_type, fp_reg, rf2, tz390.fp_dd_type);
-			    break;
+				break;
 			case 0xA: // A = DFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_dh_type, fp_reg, rf2, tz390.fp_ld_type);
-		        break;
+				break;
 			default:
 				set_psw_check(psw_pic_spec);
-		        return;
+				return;
 			}
 			break;
 		case 2:   // 2 = HFP-EXTENDED
 			switch (pfpo_type2){
 			case 0: // 0 = HFP-SHORT
 				fp_load_reg(rf1, tz390.fp_lh_type, fp_reg, rf2, tz390.fp_eh_type);
-			    break;
+				break;
 			case 1:   // 1 = HFP-LONG
 				fp_load_reg(rf1, tz390.fp_lh_type, fp_reg, rf2, tz390.fp_dh_type);
-			    break;
+				break;
 			case 2:   // 2 = HFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_lh_type, fp_reg, rf2, tz390.fp_lh_type);
-			    break;
+				break;
 			case 5:   // 5 = BFP-SHORT
 				fp_load_reg(rf1, tz390.fp_lh_type, fp_reg, rf2, tz390.fp_eb_type);
-			    break;
+				break;
 			case 6:   // 6 = BFP-LONG
 				fp_load_reg(rf1, tz390.fp_lh_type, fp_reg, rf2, tz390.fp_db_type);
-			    break;
+				break;
 			case 7:   // 7 = BFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_lh_type, fp_reg, rf2, tz390.fp_lb_type);
-			    break;
+				break;
 			case 8:   // 8 = DFP-SHORT
 				fp_load_reg(rf1, tz390.fp_lh_type, fp_reg, rf2, tz390.fp_ed_type);
-			    break;
+				break;
 			case 9:   // 9 = DFP-LONG
 				fp_load_reg(rf1, tz390.fp_lh_type, fp_reg, rf2, tz390.fp_dd_type);
-			    break;
+				break;
 			case 0xA: // A = DFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_lh_type, fp_reg, rf2, tz390.fp_ld_type);
-		        break;
+				break;
 			default:
 				set_psw_check(psw_pic_spec);
-		        return;
+				return;
 			}
 			break;
 		case 5:   // 5 = BFP-SHORT
 			switch (pfpo_type2){
 			case 0: // 0 = HFP-SHORT
 				fp_load_reg(rf1, tz390.fp_eb_type, fp_reg, rf2, tz390.fp_eh_type);
-			    break;
+				break;
 			case 1:   // 1 = HFP-LONG
 				fp_load_reg(rf1, tz390.fp_eb_type, fp_reg, rf2, tz390.fp_dh_type);
-			    break;
+				break;
 			case 2:   // 2 = HFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_eb_type, fp_reg, rf2, tz390.fp_lh_type);
-			    break;
+				break;
 			case 5:   // 5 = BFP-SHORT
 				fp_load_reg(rf1, tz390.fp_eb_type, fp_reg, rf2, tz390.fp_eb_type);
-			    break;
+				break;
 			case 6:   // 6 = BFP-LONG
 				fp_load_reg(rf1, tz390.fp_eb_type, fp_reg, rf2, tz390.fp_db_type);
-			    break;
+				break;
 			case 7:   // 7 = BFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_eb_type, fp_reg, rf2, tz390.fp_lb_type);
-			    break;
+				break;
 			case 8:   // 8 = DFP-SHORT
 				fp_load_reg(rf1, tz390.fp_eb_type, fp_reg, rf2, tz390.fp_ed_type);
-			    break;
+				break;
 			case 9:   // 9 = DFP-LONG
 				fp_load_reg(rf1, tz390.fp_eb_type, fp_reg, rf2, tz390.fp_dd_type);
-			    break;
+				break;
 			case 0xA: // A = DFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_eb_type, fp_reg, rf2, tz390.fp_ld_type);
-		        break;
+				break;
 			default:
 				set_psw_check(psw_pic_spec);
-		        return;
+				return;
 			}
 			break;
 		case 6:   // 6 = BFP-LONG
 			switch (pfpo_type2){
 			case 0: // 0 = HFP-SHORT
 				fp_load_reg(rf1, tz390.fp_db_type, fp_reg, rf2, tz390.fp_eh_type);
-			    break;
+				break;
 			case 1:   // 1 = HFP-LONG
 				fp_load_reg(rf1, tz390.fp_db_type, fp_reg, rf2, tz390.fp_dh_type);
-			    break;
+				break;
 			case 2:   // 2 = HFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_db_type, fp_reg, rf2, tz390.fp_lh_type);
-			    break;
+				break;
 			case 5:   // 5 = BFP-SHORT
 				fp_load_reg(rf1, tz390.fp_db_type, fp_reg, rf2, tz390.fp_eb_type);
-			    break;
+				break;
 			case 6:   // 6 = BFP-LONG
 				fp_load_reg(rf1, tz390.fp_db_type, fp_reg, rf2, tz390.fp_db_type);
-			    break;
+				break;
 			case 7:   // 7 = BFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_db_type, fp_reg, rf2, tz390.fp_lb_type);
-			    break;
+				break;
 			case 8:   // 8 = DFP-SHORT
 				fp_load_reg(rf1, tz390.fp_db_type, fp_reg, rf2, tz390.fp_ed_type);
-			    break;
+				break;
 			case 9:   // 9 = DFP-LONG
 				fp_load_reg(rf1, tz390.fp_db_type, fp_reg, rf2, tz390.fp_dd_type);
-			    break;
+				break;
 			case 0xA: // A = DFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_db_type, fp_reg, rf2, tz390.fp_ld_type);
-		        break;
+				break;
 			default:
 				set_psw_check(psw_pic_spec);
-		        return;
+				return;
 			}
 			break;
 		case 7:   // 7 = BFP-EXTENDED
 			switch (pfpo_type2){
 			case 0: // 0 = HFP-SHORT
 				fp_load_reg(rf1, tz390.fp_lb_type, fp_reg, rf2, tz390.fp_eh_type);
-			    break;
+				break;
 			case 1:   // 1 = HFP-LONG
 				fp_load_reg(rf1, tz390.fp_lb_type, fp_reg, rf2, tz390.fp_dh_type);
-			    break;
+				break;
 			case 2:   // 2 = HFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_lb_type, fp_reg, rf2, tz390.fp_lh_type);
-			    break;
+				break;
 			case 5:   // 5 = BFP-SHORT
 				fp_load_reg(rf1, tz390.fp_lb_type, fp_reg, rf2, tz390.fp_eb_type);
-			    break;
+				break;
 			case 6:   // 6 = BFP-LONG
 				fp_load_reg(rf1, tz390.fp_lb_type, fp_reg, rf2, tz390.fp_db_type);
-			    break;
+				break;
 			case 7:   // 7 = BFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_lb_type, fp_reg, rf2, tz390.fp_lb_type);
-			    break;
+				break;
 			case 8:   // 8 = DFP-SHORT
 				fp_load_reg(rf1, tz390.fp_lb_type, fp_reg, rf2, tz390.fp_ed_type);
-			    break;
+				break;
 			case 9:   // 9 = DFP-LONG
 				fp_load_reg(rf1, tz390.fp_lb_type, fp_reg, rf2, tz390.fp_dd_type);
-			    break;
+				break;
 			case 0xA: // A = DFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_lb_type, fp_reg, rf2, tz390.fp_ld_type);
-		        break;
+				break;
 			default:
 				set_psw_check(psw_pic_spec);
-		        return;
+				return;
 			}
 			break;
 		case 8:   // 8 = to DFP-SHORT
 			switch (pfpo_type2){
 			case 0: // 0 = HFP-SHORT
 				fp_load_reg(rf1, tz390.fp_ed_type, fp_reg, rf2, tz390.fp_eh_type);
-			    break;
+				break;
 			case 1:   // 1 = HFP-LONG
 				fp_load_reg(rf1, tz390.fp_ed_type, fp_reg, rf2, tz390.fp_dh_type);
-			    break;
+				break;
 			case 2:   // 2 = HFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_ed_type, fp_reg, rf2, tz390.fp_lh_type);
-			    break;
+				break;
 			case 5:   // 5 = BFP-SHORT
 				fp_load_reg(rf1, tz390.fp_ed_type, fp_reg, rf2, tz390.fp_eb_type);
-			    break;
+				break;
 			case 6:   // 6 = BFP-LONG
 				fp_load_reg(rf1, tz390.fp_ed_type, fp_reg, rf2, tz390.fp_db_type);
-			    break;
+				break;
 			case 7:   // 7 = BFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_ed_type, fp_reg, rf2, tz390.fp_lb_type);
-			    break;
+				break;
 			case 8:   // 8 = DFP-SHORT
 				fp_load_reg(rf1, tz390.fp_ed_type, fp_reg, rf2, tz390.fp_ed_type);
-			    break;
+				break;
 			case 9:   // 9 = DFP-LONG
 				fp_load_reg(rf1, tz390.fp_ed_type, fp_reg, rf2, tz390.fp_dd_type);
-			    break;
+				break;
 			case 0xA: // A = DFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_ed_type, fp_reg, rf2, tz390.fp_ld_type);
-		        break;
+				break;
 			default:
 				set_psw_check(psw_pic_spec);
-		        return;
+				return;
 			}
 			break;
 		case 9:   // 9 = DFP-LONG
 			switch (pfpo_type2){
 			case 0: // 0 = HFP-SHORT
 				fp_load_reg(rf1, tz390.fp_dd_type, fp_reg, rf2, tz390.fp_eh_type);
-			    break;
+				break;
 			case 1:   // 1 = HFP-LONG
 				fp_load_reg(rf1, tz390.fp_dd_type, fp_reg, rf2, tz390.fp_dh_type);
-			    break;
+				break;
 			case 2:   // 2 = HFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_dd_type, fp_reg, rf2, tz390.fp_lh_type);
-			    break;
+				break;
 			case 5:   // 5 = BFP-SHORT
 				fp_load_reg(rf1, tz390.fp_dd_type, fp_reg, rf2, tz390.fp_eb_type);
-			    break;
+				break;
 			case 6:   // 6 = BFP-LONG
 				fp_load_reg(rf1, tz390.fp_dd_type, fp_reg, rf2, tz390.fp_db_type);
-			    break;
+				break;
 			case 7:   // 7 = BFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_dd_type, fp_reg, rf2, tz390.fp_lb_type);
-			    break;
+				break;
 			case 8:   // 8 = DFP-SHORT
 				fp_load_reg(rf1, tz390.fp_dd_type, fp_reg, rf2, tz390.fp_ed_type);
-			    break;
+				break;
 			case 9:   // 9 = DFP-LONG
 				fp_load_reg(rf1, tz390.fp_dd_type, fp_reg, rf2, tz390.fp_dd_type);
-			    break;
+				break;
 			case 0xA: // A = DFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_dd_type, fp_reg, rf2, tz390.fp_ld_type);
-		        break;
+				break;
 			default:
 				set_psw_check(psw_pic_spec);
-		        return;
+				return;
 			}
 			break;
 		case 0xA: // A = DFP-EXTENDED
 			switch (pfpo_type2){
 			case 0: // 0 = HFP-SHORT
 				fp_load_reg(rf1, tz390.fp_ld_type, fp_reg, rf2, tz390.fp_eh_type);
-			    break;
+				break;
 			case 1:   // 1 = HFP-LONG
 				fp_load_reg(rf1, tz390.fp_ld_type, fp_reg, rf2, tz390.fp_dh_type);
-			    break;
+				break;
 			case 2:   // 2 = HFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_ld_type, fp_reg, rf2, tz390.fp_lh_type);
-			    break;
+				break;
 			case 5:   // 5 = BFP-SHORT
 				fp_load_reg(rf1, tz390.fp_ld_type, fp_reg, rf2, tz390.fp_eb_type);
-			    break;
+				break;
 			case 6:   // 6 = BFP-LONG
 				fp_load_reg(rf1, tz390.fp_ld_type, fp_reg, rf2, tz390.fp_db_type);
-			    break;
+				break;
 			case 7:   // 7 = BFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_ld_type, fp_reg, rf2, tz390.fp_lb_type);
-			    break;
+				break;
 			case 8:   // 8 = DFP-SHORT
 				fp_load_reg(rf1, tz390.fp_ld_type, fp_reg, rf2, tz390.fp_ed_type);
-			    break;
+				break;
 			case 9:   // 9 = DFP-LONG
 				fp_load_reg(rf1, tz390.fp_ld_type, fp_reg, rf2, tz390.fp_dd_type);
-			    break;
+				break;
 			case 0xA: // A = DFP-EXTENDED
 				fp_load_reg(rf1, tz390.fp_ld_type, fp_reg, rf2, tz390.fp_ld_type);
-		        break;
+				break;
 			default:
 				set_psw_check(psw_pic_spec);
-		        return;
+				return;
 			}
 			break;
 		default:
 			set_psw_check(psw_pic_spec);
-	        return;
+			return;
 		}
 	}
-	private void set_risb_zero(){ // RPI 1164 
-		/*
-		 * set risb_zero true if r4 high bit on (bit 24)
-		 */
-		if ((mem_byte[(psw_loc & psw_amode)+3] & 0x80) != 0){
+
+	/**
+	 * Set risb_zero true if r4 high bit on (bit 24).
+	 */
+	private void set_risb_zero() // RPI 1164 
+	{
+		if ((mem_byte[(psw_loc & psw_amode)+3] & 0x80) != 0) {
 			risb_zero = true;
 		} else {
 			risb_zero = false;
 		}
 	}
-	private void set_bfp_alt_mode_rr(){
+
+	private void set_bfp_alt_mode_rr()
+	{
 		// rpi 1125 route for rre/rrf op type A instr
-		// set alt fp_bfp_rnd if not 0 and
-		// issue S0c4 if alt_fpe_mode for now
+		// set alt fp_bfp_rnd if not 0 and issue S0c4 if alt_fpe_mode for now
 		int ins_loc = psw_loc & psw_amode;
 		alt_rnd_mode = mem_byte[ins_loc+2] >>> 4;
-		alt_fpe_mode = mem_byte[ins_loc+2] & 0xf;		
+		alt_fpe_mode = mem_byte[ins_loc+2] & 0xf;
 		if (alt_rnd_mode != 0){ // RPI 1125
-		   fp_bfp_rnd = alt_rnd_mode;
+			fp_bfp_rnd = alt_rnd_mode;
 		}
-		if (alt_fpe_mode != 0){
-			   set_psw_check(psw_pic_spec);
+		if (alt_fpe_mode != 0) {
+			set_psw_check(psw_pic_spec);
 		}
 	}
-	private void reset_bfp_alt_mode(){
+	
+	private void reset_bfp_alt_mode()
+	{
 		// rpi 1125 rtn for rre/rrf op type A instr.
 		fp_bfp_rnd = fp_bfp_rnd_default; // RPI 1125
 	}
-	private void set_dfp_alt_mode_rr(){
+
+	private void set_dfp_alt_mode_rr()
+	{
 		// rpi 1125 route for rre/rrf op type A instr
-		// set alt fp_dfp_rnd if not 0 and
-		// issue S0c4 if alt_fpe_mode for now
+		// set alt fp_dfp_rnd if not 0 and issue S0c4 if alt_fpe_mode for now
 		int ins_loc = psw_loc & psw_amode;
 		alt_rnd_mode = mem_byte[ins_loc+2] >>> 4;
-		alt_fpe_mode = mem_byte[ins_loc+2] & 0xf;		
-		if (alt_rnd_mode != 0){ // RPI 1125
-		   fp_dfp_rnd = alt_rnd_mode;
+		alt_fpe_mode = mem_byte[ins_loc+2] & 0xf;
+		if (alt_rnd_mode != 0) { // RPI 1125
+			fp_dfp_rnd = alt_rnd_mode;
 		}
-		if (alt_fpe_mode != 0){
-			   set_psw_check(psw_pic_spec);
+		if (alt_fpe_mode != 0) {
+			set_psw_check(psw_pic_spec);
 		}
 	}
-	private void set_dfp_alt_mode_rrr(){
+
+	private void set_dfp_alt_mode_rrr()
+	{
 		// rpi 1125 route for rrr op type A instr
-		// set alt fp_dfp_rnd if not 0 and
-		// issue S0c4 if alt_fpe_mode for now
-		int ins_loc = psw_loc & psw_amode;
+		// set alt fp_dfp_rnd if not 0 and issue S0c4 if alt_fpe_mode for now
+		final int ins_loc = psw_loc & psw_amode;
 		mf4 = mem_byte[ins_loc+2] & 0xf;
 		alt_rnd_mode = mf4;
-		if (alt_rnd_mode != 0){ // RPI 1125
-		   fp_dfp_rnd = alt_rnd_mode;
+		if (alt_rnd_mode != 0) {
+			fp_dfp_rnd = alt_rnd_mode;
 		}
-	}	
-	private void reset_dfp_alt_mode(){
+	}
+
+	private void reset_dfp_alt_mode()
+	{
 		// rpi 1125 rtn for rrr op type A instr.
-		fp_dfp_rnd = fp_dfp_rnd_default; // RPI 1125
+		fp_dfp_rnd = fp_dfp_rnd_default;
 	}
 }
