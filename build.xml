@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<project name="BuildMain" default="CreateNodebugJar">
+	<target name="CreateNodebugJar" description="Create no-debug z390.jar file">
+
+		<property name="src.dir" value="src"         />
+		<property name="img.dir" value="img"         />
+		<property name="dst.dir" value="bin-nodebug" />
+
+		<echo message="Creating directory ${dst.dir} ..."/>
+		<mkdir dir="${dst.dir}" />
+
+		<echo message="Clearing directory ${dst.dir} ..."/>
+		<delete>
+			<fileset dir="${dst.dir}" includes="**/*.*" />
+		</delete>
+
+		<javac destdir="${dst.dir}" source="1.8" target="1.8" includeantruntime="false" debug="false" optimize="true" failonerror="true">
+			<src path="${src.dir}" />
+		</javac>
+
+		<jar jarfile="z390.jar" basedir="${dst.dir}/" includes="**/*.class">
+			<fileset dir="${img.dir}/">
+				<include name="*.png" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="z390" />
+			</manifest>
+		</jar>
+	</target>
+</project>
