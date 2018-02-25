@@ -14,7 +14,7 @@
 			<fileset dir="${dst.dir}" includes="**/*.*" />
 		</delete>
 
-		<javac destdir="${dst.dir}" source="1.8" target="1.8" includeantruntime="false" debug="false" optimize="true" failonerror="true">
+		<javac destdir="${dst.dir}" includeantruntime="false" debug="false" optimize="true" failonerror="true">
 			<src path="${src.dir}" />
 		</javac>
 
