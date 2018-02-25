@@ -1,0 +1,55 @@
+         MACRO                                                             
+.********************************************************************
+.*             AUTHOR.   DON HIGGINS.                                      
+.*             DATE.     03/27/74.                                         
+.*             REMARKS.  MACRO TO ALLOW STRUCTURED PROGRAMMING USING       
+.*                       IF, THEN, ELSE, AND DO UP TO TEN LEVELS DEEP      
+.*                       AND NO BRANCH INSTRUCTIONS. SEE IF MACRO.         
+.********************************************************************
+.* 05/23/76 DSH - SUPPORT ELSEIF                          
+.* 05/15/06 DSH - Z390 RPI 315 UPDATE FOR COMPAT.
+.* 04/11/07 DSH - RPI 589 USE ZSTRGBL COPY AND EXPAND LEVELS TO 100         
+.* 09/23/08 DSH - RPI 909 USE ZSTRMAC SPE'S                                 
+.********************************************************************
+         ELSE  &OPT
+         COPY  ZSTRGBL
+         AIF   (&ZSTR_LVL EQ 0)
+               MNOTE 8,'ELSE - MISSING IF'                                       
+               MEXIT
+         AEND                                          
+         AIF   ('&ZSTR_LVL_TYPE(&ZSTR_LVL)' NE 'IF')
+               MNOTE 8,'ELSE - MISSING IF'                                       
+               MEXIT
+         AEND                                          
+         AIF   (T'&OPT EQ 'O' OR '&OPT' EQ 'BEGIN') 
+               ACALL ELSE_BEGIN
+         AELSEIF ('&OPT' EQ 'END')   
+               ACALL ELSE_END   
+         AEND
+         MEXIT
+.*
+.* ELSE OR ELSE BEGIN - START ELSE BLOCK
+.*
+        AENTRY ELSE_BEGIN
+        AIF   (&ZSTR_LVL_ELSE(&ZSTR_LVL))
+              MNOTE 8,'ELSE - DUPLICATE ELSE'                                       
+              MEXIT
+        AEND                                          
+        :&ZSTR_LVL_ELSE(&ZSTR_LVL) SETB 1  ELSE      
+        :&ZSTR_LVL_TEND(&ZSTR_LVL) SETB 1  REQUEST END LABEL       
+        B      #@IF_&ZSTR_LVL_TCNT(&ZSTR_LVL)_E                                                     
+#@IF_&ZSTR_LVL_TCNT(&ZSTR_LVL)_&ZSTR_LVL_BCNT(&ZSTR_LVL) DS 0H                                                     
+         AEND
+.*
+.* ELSE END (SAVE AS ENDIF)
+.*
+         AENTRY ELSE_END
+         AIF   (NOT &ZSTR_LVL_ELSE(&ZSTR_LVL))
+#@IF_&ZSTR_LVL_TCNT(&ZSTR_LVL)_&ZSTR_LVL_BCNT(&ZSTR_LVL) DS 0H    
+         AEND
+         AIF   (&ZSTR_LVL_TEND(&ZSTR_LVL))
+#@IF_&ZSTR_LVL_TCNT(&ZSTR_LVL)_E DS 0H    
+         AEND
+         :&ZSTR_LVL SETA &ZSTR_LVL-1
+         AEND
+         MEND
