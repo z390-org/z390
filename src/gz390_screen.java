@@ -15,17 +15,17 @@ import javax.swing.JScrollPane;
  * Copyright 2011 Automated Software Tools Corporation
  * Copyright 2013 Cat Herder Software, LLC
  * Copyright 2018 Joachim Bartz, Germany
- * 
+ *
  * z390 is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * z390 is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * z390; if not, write to the
  *    Free Software Foundation, Inc.
@@ -35,38 +35,43 @@ import javax.swing.JScrollPane;
 
 /**
  * Define public Graphics2D scn_panel.<br>
- *
+ *<br>
  * The gz390_screen class defines public Graphics2D panel for use by gz390 to define GUAM views:
- *  1. tn_screen
- *  2. graphic_screen
- * The method set_screen(rows,cols,font,background_color,text_color) is used
- * to initialize screen size based on the height and width of the font assuming
- * it has been set to desired font size and is a Monospace font.
- * gz390 character and graphics commands draw directly on gz390_screen buffered
- * image object which is repainted at fixed intervals whenever scn_repaint is set true.
+ * <ol><li>tn_screen
+ *     <li>graphic_screen</ol>
+ * The method set_screen(rows,cols,font,background_color,text_color) is used to initialize
+ * screen size based on the height and width of the font assuming it has been set to desired
+ * font size and is a Monospace font.<br>
+ * gz390 character and graphics commands draw directly on gz390_screen buffered image object
+ * which is repainted at fixed intervals whenever scn_repaint is set true.
  */
 public class gz390_screen extends JPanel implements Runnable
 {
 	// Global data for gz3270_screen
 	private static final long serialVersionUID = 1L;
 
-	tz390 tz390 = null;
-
 	// Input variable from set_screen
-	int       scn_rows = 0;
-	int       scn_cols = 0;
+	private int scn_rows = 0;
+	private int scn_cols = 0;
 
 	private Font scn_font  = null;
 	public  Font getScreenFont() { return scn_font; }
 
-	Color     scn_back_color;
-	Color     scn_text_color;
+	private Color scn_back_color;
+	public void setBackColor(final Color c) { scn_back_color = c; }
+
+	private Color scn_text_color;
+	public void setTextColor(final Color c) { scn_text_color = c; }
+	public Color getTextColor() { return scn_text_color; }
 
 	// Create screen image based on pixel size of character rendering
 	// using specified font_size assuming font is Monospace.
 	private BufferedImage scn_image;
-	Graphics2D        scn_grid;
-	FontRenderContext scn_context;
+	private Graphics2D    scn_grid;
+	public  Graphics2D getGrid() { return scn_grid; }
+
+	private FontRenderContext scn_context;
+	public FontRenderContext getContext() { return scn_context; }
 
 	private JScrollPane scn_panel;
 	public  JScrollPane getScreenPanel() { return scn_panel; }
@@ -78,30 +83,51 @@ public class gz390_screen extends JPanel implements Runnable
 	/**
 	 * Minimum font size.
 	 */
-	private final int   min_font_size   = 10;
+	private final int min_font_size = 10;
 
 	/**
 	 * Maximum font size.
 	 */
-	private final int   max_font_size   = 30;
+	private final int max_font_size = 30;
 
 	/**
 	 * Current font size.
 	 */
-	private       int   scn_font_size   =  0;
+	private int scn_font_size   =  0;
 
-	int                 scn_char_height =  0;
-	int                 scn_char_base   =  0; // RPI 630 offset to char baseline
-	int                 scn_char_width  =  0;
-	int                 scn_height = 0;
-	int                 scn_width  = 0;
-//	private Dimension   scn_size = null;
+	/**
+	 * Current font height in pixel.
+	 */
+	private int scn_char_height =  0;
+	/**
+	 * Get current font height in pixel.
+	 */
+	public  int getCharHeight() { return scn_char_height; }
+	/**
+	 * Get current font base in pixel.
+	 */
+	private int scn_char_base   =  0; // RPI 630 offset to char baseline
+	/**
+	 * Get current font base in pixel.
+	 */
+	public  int getCharBase()   { return scn_char_base;  }
+	/**
+	 * Current font width in pixel.
+	 */
+	private int scn_char_width  =  0;
+	/**
+	 * Get current font width in pixel.
+	 */
+	public  int getCharWidth()  { return scn_char_width; }
+
+	private int scn_height = 0;
+	public  int getScnHeight() { return scn_height; }
+	private int scn_width  = 0;
+	public  int getScnWidth() { return scn_width; }
 
 	// Screen updated at wait intervals whenever screen_update is set
 	int main_width  = 680; // RPI 630 for better font default
 	int main_height = 550;
-//	int main_panel_width  = 0;
-//	int main_panel_height = 0;
 
 	private boolean scn_ready = false;
 	public  boolean isScreenReady() { return scn_ready; }
@@ -112,22 +138,12 @@ public class gz390_screen extends JPanel implements Runnable
 	private Thread scn_update_thread = null;
 
 	private boolean scn_repaint = false;
-	public void allowRepaint(final boolean doRepaint) { scn_repaint = doRepaint; }
-
-	/**
-	 * The one and only constructor.
-	 * @param tz390
-	 */
-	public gz390_screen(final tz390 tz390)
-	{
-		this.tz390 = tz390;
-	}
+	public  void allowRepaint(final boolean doRepaint) { scn_repaint = doRepaint; }
 
 	/**
 	 * Override default paint to draw screen image in panel using current scn_background.
 	 */
-	public void paint(final Graphics g)
-	{
+	public void paint(final Graphics g) {
 		g.drawImage(scn_image,0,0,scn_width,scn_height,scn_back_color,this);
 	}
 
@@ -157,19 +173,20 @@ public class gz390_screen extends JPanel implements Runnable
 	{
 		while (scn_update_thread == Thread.currentThread())
 		{
-			try {  // RPI 423 catch repaint exception too
+			try { // RPI-423 Catch repaint exception too.
 				if (isScreenReady() && scn_repaint) {
 					repaint();
 					scn_repaint = false;
 				}
 				Thread.sleep(scn_update_wait);
-			} catch (final Exception e){
+			} catch (final Exception e) {
 			}
 		}
 	}
 
 	/**
 	 * Initialize screen panel based on rows, columns, text font and font size, background and text color.
+	 *
 	 * @param new_rows
 	 * @param new_cols
 	 * @param new_font
@@ -186,7 +203,7 @@ public class gz390_screen extends JPanel implements Runnable
 		scn_back_color = new_background_color;
 		scn_text_color = new_text_color;
 		scn_font_size = new_font.getSize();
-		scn_image = new BufferedImage(100,100,BufferedImage.TYPE_INT_ARGB); 
+		scn_image = new BufferedImage(100,100,BufferedImage.TYPE_INT_ARGB);
 		scn_grid  = scn_image.createGraphics();
 		calculateScreenSize();
 		scn_panel = new JScrollPane(this);
@@ -222,25 +239,25 @@ public class gz390_screen extends JPanel implements Runnable
 	private void calculateScreenSize()
 	{
 		scn_grid.setFont(scn_font);
-		
+
 		final FontMetrics fm = scn_grid.getFontMetrics();
-	
-		scn_context  = scn_grid.getFontRenderContext();
+
+		scn_context = scn_grid.getFontRenderContext();
 
 		scn_char_width  = fm.charWidth('8');
 		scn_char_base   = fm.getAscent();
 		scn_char_height = fm.getHeight();
 		final int scn_char_descent = scn_char_height-scn_char_base;
 		scn_char_height -= scn_char_descent / 2;
-		
+
 		scn_height = scn_rows * scn_char_height + scn_char_descent;
 		scn_width  = scn_cols * scn_char_width  + 4;
 
 		scn_image  = new BufferedImage(scn_width, scn_height, BufferedImage.TYPE_INT_ARGB);
 		scn_grid   = scn_image.createGraphics();
-		scn_grid.setFont(scn_font); 
+		scn_grid.setFont(scn_font);
 		scn_grid.setColor(scn_text_color);
-		scn_context  = scn_grid.getFontRenderContext();
+		scn_context = scn_grid.getFontRenderContext();
 		scn_grid.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}
 }

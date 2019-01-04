@@ -13,17 +13,17 @@ import javax.swing.Timer;
  * Copyright 2011 Automated Software Tools Corporation
  * Copyright 2013 Cat Herder Software, LLC
  * Copyright 2018 Joachim Bartz, Germany
- * 
+ *
  * z390 is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * z390 is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * z390; if not, write to the
  *    Free Software Foundation, Inc.
@@ -32,11 +32,15 @@ import javax.swing.Timer;
  */
 
 /**
- * ez390 is the emulator component of z390 which can be called from
- * z390 GUI interface or from command line to execute 390 load module files.  
+ * ez390 is the emulator component of z390<br>
+ * which can be called from z390 GUI interface or from command line<br>
+ * to execute 390 load module files.
  */
-public  class  ez390 implements Runnable
+public class ez390 implements Runnable
 {
+	private final static String msg_id_i = "EZ390I ";
+	private final static String msg_id_e = "EZ390E ";
+
 	// Shared global variables
 	private tz390  _tz390 = null;
 	private pz390  _pz390 = null;
@@ -48,7 +52,7 @@ public  class  ez390 implements Runnable
 //	private boolean exit_request = false;
 
 	// Monitor variables
-//	private int    ins_count = 0;  
+//	private int    ins_count = 0;
 	private int    io_count  = 0;
 	private Timer  monitor_timer = null;
 	private long   monitor_cmd_time_total = 0;
@@ -88,7 +92,7 @@ public  class  ez390 implements Runnable
 //	private int  tod_min   = 0;
 //	private int  tod_sec   = 0;
 //	private int  tod_msec  = 0;  // 0-999 fraction of sec
-//	private long time_mil   = 0;  // milli-seconds 
+//	private long time_mil   = 0;  // milli-seconds
 //	private Calendar cur_date_cal = null;
 //	private long tod_start_day = 0;
 //	private long tod_start_pgm = 0;
@@ -97,13 +101,14 @@ public  class  ez390 implements Runnable
 //	private long tod_time_limit = 0;
 //	private int  next_time_ins   = 0x1000;
 //	private int  next_time_check = next_time_ins;
-//	private boolean log_tod = true; 
+//	private boolean log_tod = true;
 	private JTextArea z390_log_text = null;
 //	private JTextField  z390_command_text = null;
 
 	/**
-	 * main is entry when executed from command line<br>
+	 * main is the entry point when executed from command line<br>
 	 * Create instance of ez390 class and pass parameters to ez390 like z390 does.
+	 *
 	 * @param args
 	 */
 	public static void main(final String[] args)
@@ -116,7 +121,7 @@ public  class  ez390 implements Runnable
 	 * Execute 390 load module file passed as first argument(s).<br>
 	 *
 	 * Note this may be called directly from z390 GUI or from main when lz370 run from windows command line.
-	 * If called from main, the log_text balect will be null and local put_log function will route to
+	 * If called from main, the JTextAreas log_text will be null and local put_log function will route to
 	 * console instead of the z390 log window.
 	 * @param args
 	 * @param log_text
@@ -137,16 +142,17 @@ public  class  ez390 implements Runnable
 
 	/**
 	 * Execute IPL pgm and/or application pgm.
+	 *
 	 * @param zcvt_pgm_addr
 	 */
-	private void run_pgm(int zcvt_pgm_addr)
+	private void run_pgm(final int zcvt_pgm_addr)
 	{
 		_pz390.reg.putInt(pz390.r13, pz390.zcvt_save);
 		_pz390.reg.putInt(pz390.r14, pz390.zcvt_exit);
-		_pz390.reg.putInt(pz390.r15, 0); // RPI 819 
+		_pz390.reg.putInt(pz390.r15, 0); // RPI 819
 		_pz390.reg.putInt(pz390.r0,  zcvt_pgm_addr);
-		_pz390.reg.putInt(pz390.r1,  pz390.zcvt_exec_parma);            // RPI 582
-		_pz390.mem.putInt(pz390.zcvt_exec_parma, pz390.zcvt_exec_parm); // RPI 582
+		_pz390.reg.putInt(pz390.r1,  pz390.zcvt_exec_parma);			// RPI-582
+		_pz390.mem.putInt(pz390.zcvt_exec_parma, pz390.zcvt_exec_parm);	// RPI-582
 		_sz390.svc_link();
 		if (_tz390.opt_trap) {
 			_pz390.psw_check = false;
@@ -155,29 +161,29 @@ public  class  ez390 implements Runnable
 				try {
 					exec_pz390();
 				} catch (final Exception e) {
-					_pz390.set_psw_check(_pz390.psw_pic_addr);
-					_pz390.psw_check = false; // retry if no abend
+					_pz390.set_psw_check(Constants.psw_pic_addr);
+					_pz390.psw_check = false; // retry if no abandon
 				}
 			}
 		} else {
-			exec_pz390(); // notrap - no exception handling
+			exec_pz390(); // no trap - no exception handling
 		}
-		if (_pz390.psw_check && _pz390.psw_pic != _pz390.psw_pic_exit) {
+		if (_pz390.psw_check && _pz390.psw_pic != Constants.psw_pic_exit) {
 			_sz390.svc_abend(_pz390.psw_pic,_sz390.svc_abend_type,_sz390.svc_req_dump);
 		}
 	}
 
 	/**
-	 * <li>1.  Check for trace msg and log if found
-	 * <li>2.  Execute test commands if test mode
-	 * <li>3.  Dump registers if reqister trace option
-	 * <li>4.  Run pz390 to next interrupt
-	 * <li>5.  Check for trace msg and log if found
-	 * <li>6.  If svc interrupt, exec svc
-	 * <li>7.  else if psw_check<br>
-	 *             if svc_exit exit normally<br>
-	 *             else psw_handler for abend<br>
-	 *                  or espie/estae restart
+	 * <ol><li>Check for trace msg and log if found
+	 *     <li>Execute test commands if test mode
+	 *     <li>Dump registers if reqister trace option
+	 *     <li>Run pz390 to next interrupt
+	 *     <li>Check for trace msg and log if found
+	 *     <li>If svc interrupt, exec svc
+	 *     <li>else if psw_check<br>
+	 *         if svc_exit exit normally<br>
+	 *         else psw_handler for abend<br>
+	 *         or espie/estae restart
 	 */
 	private void exec_pz390()
 	{
@@ -199,13 +205,14 @@ public  class  ez390 implements Runnable
 
 	/**
 	 * Initialize ez390 module.
-	 * 1.  initialize log routing
-	 * 2.  init ascii to ebcdic table
-	 * 3.  init reqular expression paser for test
-	 * 4.  set options
-	 * 5.  initialize memory
-	 * 6.  set runtime hooks for cancel
-	 * 7.  start monitor for cmd processor and timeout, and cpu rate statistics
+	 * <ol><li>Initialize log routing.
+	 *     <li>Initialize ASCII to EBCDIC table.
+	 *     <li>Initialize regular expression parser for test.
+	 *     <li>Set options.
+	 *     <li>Initialize memory.
+	 *     <li>Set runtime hooks for cancellation.
+	 *     <li>Start monitor for command processor and timeout, and CPU rate statistics.</ol>
+	 *
 	 * @param args
 	 * @param log_text
 	 * @param cmd_text
@@ -215,7 +222,6 @@ public  class  ez390 implements Runnable
 		if (log_text != null) {
 			z390_log_text = log_text;
 		}
-		// if (cmd_text != null) { z390_command_text = cmd_text; } // JBA-unused
 		_tz390 = new tz390();
 		_pz390 = new pz390();
 		_sz390 = new sz390();
@@ -224,18 +230,18 @@ public  class  ez390 implements Runnable
 
 		final InfoOS infoOS = InfoOS.getInstance();
 		if (!infoOS.isCorrectJava()) {
-			_sz390.abort_error(204,infoOS.getMessageIncorrectJavaVersion());
+			_sz390.abort_error(204, infoOS.getMessageIncorrectJavaVersion());
 		}
-		_tz390.init_options(args,_tz390.z390_type);  
+		_tz390.init_options(args, _tz390.z390_type);
 		_tz390.open_systerm("EZ390");
-		_tz390.init_codepage(_tz390.codepage); // RPI 1069
-		_vz390.init_vz390(_tz390,_pz390,_sz390);
-		_sz390.init_sz390(_tz390,_pz390,_vz390);
-		_sz390.open_files(); // RPI 357 RPI 812 moved before init_pz390
-		_pz390.init_pz390(_tz390,_sz390);
+		_tz390.init_codepage(_tz390.codepage); // RPI-1069
+		_vz390.init_vz390(_tz390, _pz390, _sz390);
+		_sz390.init_sz390(_tz390, _pz390, _vz390);
+		_sz390.open_files(); // RPI-357 RPI-812 Moved before init_pz390.
+		_pz390.init_pz390(_tz390, _sz390);
 		_tz390.force_nocon = true;
-		_sz390.put_log(_tz390.started_msg); // RPI 755
-		_tz390.force_nocon = false; // RPI 1050 moved after trace
+		_sz390.put_log(_tz390.started_msg); // RPI-755
+		_tz390.force_nocon = false; // RPI-1050 moved after trace
 		_sz390.init_time();
 		_sz390.init_test();
 		put_copyright();
@@ -248,8 +254,6 @@ public  class  ez390 implements Runnable
 	 */
 	private void monitor_startup()
 	{
-		// monitor_last_time = System.currentTimeMillis(); // JBA-unused
-		// monitor_last_ins_count = ins_count; // JBA-unused
 		try {
 			ActionListener cmd_listener = new ActionListener() {
 				public void actionPerformed(final ActionEvent evt) {
@@ -259,7 +263,7 @@ public  class  ez390 implements Runnable
 			monitor_timer = new Timer(_tz390.monitor_wait,cmd_listener);
 			monitor_timer.start();
 		} catch (final Exception e) {
-			_sz390.log_error(66,"execution startup error " + e.toString());
+			_sz390.log_error(66, "Execution startup error " + e.toString());
 		}
 	}
 
@@ -280,49 +284,50 @@ public  class  ez390 implements Runnable
 		 *     d. change PSW to r15 exit addr
 		 * 6. If GUAM TN3270 screen active, process pending typed keys
 		 */
+
 		monitor_next_time = System.currentTimeMillis();
-		// monitor_next_ins_count = ins_count; // JBA-unused
-		// monitor_next_io_count = io_count; // JBA-unused
-		// monitor_cur_interval = monitor_next_time - monitor_last_time; // JBA-unused
-		if (_tz390.opt_timing){
+
+		if (_tz390.opt_timing) {
 			_pz390.cur_date = new Date();
-			if (_tz390.opt_time 
+			if (_tz390.opt_time
 					&& !_pz390.psw_check
-					&& monitor_next_time > _sz390.tod_time_limit) { // RPI 837
-				while (pz390_running){
-					_tz390.timeout   = true; // RPI 1054 request pz390 to abend, RPI 1094 moved
-					_pz390.psw_check = true; // RPI 1054
-					if (_tz390.opt_guam){ // RPI 1094
+					&& monitor_next_time > _sz390.tod_time_limit) { // RPI-837
+				while (pz390_running) {
+					_tz390.timeout   = true; // RPI-1054 Request pz390 to abandon, RPI-1094 moved
+					_pz390.psw_check = true; // RPI-1054
+					if (_tz390.opt_guam) {   // RPI-1094
 						System.out.println("GUAM GUI window closed due to timeout");
 						System.exit(16);
 					}
-					Thread.yield(); // RPI 1040 wait to end exec before dump
+					Thread.yield(); // RPI-1040 Wait to end execution before dump.
 				}
 			}
 		}
 
 		int cmd_id = 0;
-		while (cmd_id < _sz390.tot_cmd){
-			if  ((_sz390.cmd_proc_running[cmd_id]) && _sz390.cmd_proc_rc(cmd_id) != -1){
+		while (cmd_id < _sz390.tot_cmd) {
+			if ((_sz390.cmd_processors[cmd_id].cmd_proc_running)
+			  && _sz390.cmd_processors[cmd_id].cmd_proc_rc() != -1) {
 				_sz390.put_log( "*** " + cur_date_MMddyy.format(_pz390.cur_date)
-								+ " " + cur_tod_hhmmss.format(_pz390.cur_date)
+								+ " "  + cur_tod_hhmmss.format( _pz390.cur_date)
 								+ " CMD task ended TOT SEC=" + monitor_cmd_time_total
 								+ " TOT LOG IO=" + io_count);
-				_sz390.cmd_proc_running[cmd_id] = false;
-			} else if (_tz390.opt_time && _tz390.max_time_seconds > 0){
-				if (_sz390.cmd_proc_running[cmd_id] && _sz390.cmd_proc_rc(cmd_id) == -1){
-					if  (monitor_cmd_time_total > _tz390.max_time_seconds){
-						_sz390.cmd_cancel(cmd_id);
-						_sz390.log_error(75, "CMD command timeout error " + monitor_cmd_time_total + " > " + _tz390.max_time_seconds); 
+				_sz390.cmd_processors[cmd_id].cmd_proc_running = false;
+			} else if (_tz390.opt_time && _tz390.max_time_seconds > 0) {
+				if (_sz390.cmd_processors[cmd_id].cmd_proc_running
+				 && _sz390.cmd_processors[cmd_id].cmd_proc_rc() == -1) {
+					if  (monitor_cmd_time_total > _tz390.max_time_seconds) {
+						_sz390.cmd_processors[cmd_id].cmd_cancel();
+						_sz390.log_error(75, "CMD command timeout error " + monitor_cmd_time_total + " > " + _tz390.max_time_seconds);
 					}
 				}
 			} else {
-				if ((  _sz390.cmd_proc_cmdlog[cmd_id]   // RPI 731
-					|| _tz390.max_cmd_queue_exceeded) // RPI 731
-					&& _sz390.cmd_proc_running[cmd_id]
-					&& _sz390.cmd_proc_rc(cmd_id) == -1) {
+				if ((  _sz390.cmd_processors[cmd_id].cmd_proc_cmdlog // RPI-731
+					|| _tz390.max_cmd_queue_exceeded) // RPI-731
+					&& _sz390.cmd_processors[cmd_id].cmd_proc_running
+					&& _sz390.cmd_processors[cmd_id].cmd_proc_rc() == -1) {
 					cmd_read_line = _sz390.cmd_get_queue(cmd_id);
-					while (cmd_read_line != null){
+					while (cmd_read_line != null) {
 						_sz390.put_log("CMDLOG ID=" + cmd_id + " MSG=" + cmd_read_line);
 						cmd_read_line = _sz390.cmd_get_queue(cmd_id);
 					}
@@ -345,18 +350,18 @@ public  class  ez390 implements Runnable
 					if (_sz390.wtor_reply_buff == null) {
 						_sz390.wtor_reply_buff = new BufferedReader(new InputStreamReader(System.in));
 					}
-					if (_pz390.mem.getInt(_sz390.wtor_ecb_addr) == _sz390.ecb_waiting
-						|| _sz390.wtor_reply_buff.ready()){
+					if (_pz390.mem.getInt(_sz390.wtor_ecb_addr) == sz390.ecb_waiting
+						|| _sz390.wtor_reply_buff.ready()) {
 						_sz390.wtor_reply_string = _sz390.wtor_reply_buff.readLine();
 					}
-				} catch (Exception e){
-					_sz390.log_error(93,"wtor reply I/O error - " + e.toString());
+				} catch (final Exception e) {
+					_sz390.log_error(93, "wtor reply I/O error - " + e.toString());
 				}
 			}
 			if (_sz390.wtor_reply_string != null) {
-				_sz390.put_log("" + _sz390.wtor_reply_string);  //RPI190 remove "WTOR REPLY MSG"
+				_sz390.put_log("" + _sz390.wtor_reply_string);  // RPI-190 Remove "WTOR REPLY MSG".
 				_sz390.put_ascii_string(_sz390.wtor_reply_string,_sz390.wtor_reply_addr,_sz390.wtor_reply_len,' ');
-				_sz390._pz390.mem.putInt(_sz390.wtor_ecb_addr,_sz390.ecb_posted); // post ecb for any wait
+				_sz390._pz390.mem.putInt(_sz390.wtor_ecb_addr,sz390.ecb_posted); // Post ECB for any wait.
 				_sz390.wtor_reply_pending = false;
 			}
 		}
@@ -365,24 +370,22 @@ public  class  ez390 implements Runnable
 			&& _sz390.stimer_exit_time <= monitor_next_time) {
 			_sz390.stimer_exit_request = true; // request exit
 		}
-		if (_tz390.z390_abort){  // RPI 220 shut down due to external request
-			_sz390.abort_error(203,"EZ390E monitor external shutdown request");
+		if (_tz390.z390_abort) { // RPI-220 Shut down due to external request.
+			_sz390.abort_error(203, msg_id_e + "monitor external shutdown request");
 		}
-		// monitor_last_time = monitor_next_time; // JBA-unused
-		// monitor_last_ins_count = monitor_next_ins_count; // JBA-unused
-		// monitor_last_io_count  = monitor_next_io_count; // JBA-unused
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	public void run() {
+	public void run()
+	{
 		if (pz390_thread == Thread.currentThread()) {
-			if (_tz390.opt_trap) { // RPI 423
+			if (_tz390.opt_trap) { // RPI-423
 				try {
 					_pz390.exec_pz390();
 				} catch (final Exception e) {
-					_sz390.svc_abend(_pz390.psw_pic_addr,_sz390.system_abend,_tz390.opt_dump); // RPI 536 // RPI 1054
+					_sz390.svc_abend(Constants.psw_pic_addr,_sz390.system_abend,_tz390.opt_dump); // RPI-536 // RPI-1054
 				}
 			} else {
 				_pz390.exec_pz390();
@@ -393,21 +396,21 @@ public  class  ez390 implements Runnable
 
 		int cmd_id = 0;
 		while (cmd_id < _sz390.tot_cmd) {
-			if (_sz390.cmd_proc_thread[cmd_id] == Thread.currentThread()) {
+			if (_sz390.cmd_processors[cmd_id].cmd_proc_thread == Thread.currentThread()) {
 				io_count++;
-				_sz390.cmd_proc_io[cmd_id]++;
+				_sz390.cmd_processors[cmd_id].cmd_proc_io++;
 				try {
-					_sz390.cmd_proc[cmd_id].waitFor();
+					_sz390.cmd_processors[cmd_id].cmd_proc.waitFor();
 				} catch (final Exception e) {
 					_sz390.abort_error(201,"cmd proc wait error " + e.toString());
 				}
 				return;
 			} else
-			if (_sz390.cmd_output_thread[cmd_id] == Thread.currentThread()) {
+			if (_sz390.cmd_processors[cmd_id].cmd_output_thread == Thread.currentThread()) {
 				_sz390.copy_cmd_output_to_queue(cmd_id);
 				return;
 			} else
-			if (_sz390.cmd_error_thread[cmd_id] == Thread.currentThread()) {
+			if (_sz390.cmd_processors[cmd_id].cmd_error_thread == Thread.currentThread()) {
 				_sz390.copy_cmd_error_to_queue(cmd_id);
 				return;
 			}
@@ -420,16 +423,16 @@ public  class  ez390 implements Runnable
 	 */
 	private void put_copyright()
 	{
-		_tz390.force_nocon = true;  // RPI 755
+		_tz390.force_nocon = true;  // RPI-755
 
 		if  (z390_log_text == null) {
-			_sz390.put_log("EZ390I " + Constants.sCopyright2011);
-			_sz390.put_log("EZ390I " + Constants.sCopyright2013);
-			_sz390.put_log("EZ390I " + Constants.sCopyright2018);
-			_sz390.put_log("EZ390I " + Constants.sGnuLicence);
+			_sz390.put_log(msg_id_i + Constants.sCopyright2011);
+			_sz390.put_log(msg_id_i + Constants.sCopyright2013);
+			_sz390.put_log(msg_id_i + Constants.sCopyright2018);
+			_sz390.put_log(msg_id_i + Constants.sGnuLicence);
 		}
-		_sz390.put_log("EZ390I program = " + _tz390.dir_mlc + _tz390.pgm_name + _tz390.pgm_type);
-		_sz390.put_log("EZ390I options = " + _tz390.cmd_parms);
+		_sz390.put_log(msg_id_i +"program = " + _tz390.dir_mlc + _tz390.pgm_name + _tz390.pgm_type);
+		_sz390.put_log(msg_id_i + "ptions = " + _tz390.cmd_parms);
 
 		if (_tz390.opt_stats) {
 			_tz390.put_stat_line(Constants.sCopyright2011);

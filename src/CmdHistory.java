@@ -27,7 +27,10 @@
  */
 public class CmdHistory {
 
-	private final static int max_cmd  = 100;
+	/**
+	 * Maximum number of command history items.
+	 */
+	private final static int max_cmd = 100;
 
 	/**
 	 * Index of most recent command entered.
@@ -35,17 +38,17 @@ public class CmdHistory {
 	private int cur_cmd;
 	
 	/**
-	 * Index of highest command entered.
+	 * Index of highest entered command.
 	 */
 	private int end_cmd;
 
 	/**
-	 * Index of current command in view
+	 * Index of current command in view.
 	 */
 	private int view_cmd;
 	
 	/**
-	 * RPI 603
+	 * RPI-603
 	 */
 	private boolean view_restore;
 
@@ -57,36 +60,35 @@ public class CmdHistory {
 	/**
 	 * 
 	 */
-	private String last_cmd_line; // RPI 506
+	private String last_cmd_line; // RPI-506
 
 	/**
-	 * 
+	 * Standard constructor
 	 */
-	CmdHistory()
-	{
+	CmdHistory() {
 		cur_cmd = 0;
 		end_cmd = 0;
 		view_cmd = 0;
 		view_restore = false; 
 		cmd_history = new String[max_cmd];
-		last_cmd_line = "x"; // RPI 506
-		
+		last_cmd_line = "x"; // RPI-506
+
 		reset();
 	}
 
 	/**
 	 * 
 	 */
-	public void reset()
-	{
+	public void reset() {
 		cmd_history[0] = "";
 	}
 
 	/**
 	 * Add command cmd_line to rolling history.
+	 *
+	 * @param cmd_line
 	 */
-	public void add_cmd_hist(final String cmd_line)
-	{
+	public void add_cmd_hist(final String cmd_line) {
 		if (last_cmd_line.equals(cmd_line)) {
 			return;
 		}
@@ -100,40 +102,38 @@ public class CmdHistory {
 			cur_cmd = 0;
 		}
 		cmd_history[cur_cmd] = cmd_line;
-		view_restore = true; // force cmd restore on next up/down
+		view_restore = true; // Force command restore on next up/down.
 		view_cmd = cur_cmd;
 	}
 
 	/**
 	 * Restore previous command to z390_cmd_line.
+	 *
 	 * @return
 	 */
-	public String get_prev_cmd()
-	{
+	public String get_prev_cmd() {
 		if (view_restore) {
 			view_restore = false;
 		} else {
-			view_cmd--; // RPI 603
+			view_cmd--; // RPI-603
 			if  (view_cmd < 0) {
 				view_cmd = end_cmd;
 			}
 		}
-		// z390_cmd_line.setText(cmd_history[view_cmd]);
 		return cmd_history[view_cmd];
 	}
 
 	/**
 	 * Display next command.
+	 *
 	 * @return
 	 */
-	public String get_next_cmd()
-	{
+	public String get_next_cmd() {
 		view_restore = false;
-		view_cmd++;  // RPI 603
+		view_cmd++;  // RPI-603
 		if  (view_cmd > end_cmd) {
 			view_cmd = 0;
 		}
-		// z390_cmd_line.setText(cmd_history[view_cmd]);
 		return cmd_history[view_cmd];
 	}
 }

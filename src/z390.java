@@ -80,18 +80,23 @@ import javax.swing.filechooser.FileFilter;
  */
 public class z390 extends JApplet 
 	implements MouseListener, KeyListener,
-				ActionListener, 
+				ActionListener,
 				ComponentListener,
 				Runnable,
-				FocusListener {
+				FocusListener
+{
 	/**
+	 * Serializables should have its own UID (but we don't need that feature at all).
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private final String msg_id_i = "Z390I ";
+	private final String msg_id_e = "Z390E ";
 
 	// Global command mode variables
 
 	/**
-	 * Helper class to get info about the OS and Java.
+	 * Helper class to get info about the OS and Java version.
 	 */
 	private final InfoOS infoOS = InfoOS.getInstance();
 
@@ -101,7 +106,7 @@ public class z390 extends JApplet
 	private final CmdHistory cmdHistory = new CmdHistory();
 
 	/**
-	 * Helper class offering permission information.
+	 * Helper class offering permission information mainly for running in JApplet mode.
 	 */
 	private final Permissions perms = new Permissions();
 
@@ -117,7 +122,7 @@ public class z390 extends JApplet
 	private String startup_cmd_file = null;
 
 //	// Global variable storing ECHO ON|OFF.
-//	private boolean echo_cmd = true;
+//	private boolean echo_cmd = true; // JBA-unused
 
 	/**
 	 * Global variable storing CONSOLE ON|OFF.
@@ -191,11 +196,11 @@ public class z390 extends JApplet
 	/**
 	 * Helper object to get Date in mm/dd/yy format.
 	 */
-	private final SimpleDateFormat mmddyy = new SimpleDateFormat("MM/dd/yy");
+	private final static SimpleDateFormat mmddyy = new SimpleDateFormat("MM/dd/yy");
 	/**
 	 * Helper object to get Time in hh:mm:ss format.
 	 */
-	private final SimpleDateFormat hhmmss = new SimpleDateFormat("HH:mm:ss");
+	private final static SimpleDateFormat hhmmss = new SimpleDateFormat("HH:mm:ss");
 
 	/**
 	 *  Current working directory file
@@ -220,7 +225,7 @@ public class z390 extends JApplet
 	/**
 	 * Maximum line length while logging.
 	 */
-	private final int max_line_length = 80;
+	private final static int max_line_length = 80;
 
 	// Monitor variables
 	private int     ins_count = 0;
@@ -228,7 +233,7 @@ public class z390 extends JApplet
 	private int     start_cmd_io_count;
 	private long    start_cmd_time;
 	private Timer   monitor_timer = null;
-	private final int monitor_wait = 300;
+	private final static int monitor_wait = 300;
 	private int     monitor_timeout_limit = 0 * 1000;
 	private long    monitor_cmd_time_total = 0;
 	private long    monitor_last_time = 0;
@@ -320,9 +325,10 @@ public class z390 extends JApplet
 	private JMenuItem edit_menu_cut = null;
 	private JMenuItem edit_menu_copy = null;
 	private JMenuItem edit_menu_paste = null;
-	private JMenuItem edit_menu_select_log = null; // RPI 1041
-	private JMenuItem edit_menu_select_cmd = null; // RPI 1041
+	private JMenuItem edit_menu_select_log = null; // RPI-1041
+	private JMenuItem edit_menu_select_cmd = null; // RPI-1041
 	private JMenuItem edit_menu_copy_log   = null;
+	private JMenuItem edit_menu_clear_log  = null;
 	private JMenuItem edit_menu_editor     = null;
 	private JCheckBoxMenuItem option_menu_ascii = null;
 	private JCheckBoxMenuItem option_menu_con = null;
@@ -451,6 +457,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Create instance of z390 class.
+	 *
 	 * @param args
 	 */
 	public static void main(final String[] args)
@@ -465,6 +472,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Set main program execution mode and security permissions.
+	 *
 	 * @param args
 	 * @return
 	 */
@@ -473,7 +481,7 @@ public class z390 extends JApplet
 		// Check and complain about wrong Java version...
 		if (!infoOS.isCorrectJava()) {
 			final MessageBox box = new MessageBox();
-			box.messageBox("SZ390E error ", infoOS.getMessageIncorrectJavaVersion());
+			box.messageBox(msg_id_e + "error ", infoOS.getMessageIncorrectJavaVersion());
 			if (!main_applet) {
 				exit_main(16);
 			}
@@ -494,7 +502,7 @@ public class z390 extends JApplet
 
 		//	if ( !perms.mayLog2File() ) {
 		//		if (main_batch) {
-		//			System.out.println("SZ390E error 15 batch log permission denied - aborting.");
+		//			System.out.println(msg_id_e + "error 15 batch log permission denied - aborting.");
 		//			shut_down(16);
 		//		}
 		//	}
@@ -519,6 +527,7 @@ public class z390 extends JApplet
 	 *    /NT  - no unique log file time-stamps <br>
 	 *    /RT  - regress test mode (suppress time stamps)<br> 
 	 *    /SC file - startup command mode file (.bat)
+	 *
 	 * @param args
 	 */
 	private void set_startup_parm_options(final String args[])
@@ -581,6 +590,7 @@ public class z390 extends JApplet
 	 * If OFF specified, turn log off.<br>
 	 * If file specified, open as new log file.<br>
 	 * Else error.
+	 *
 	 * @param cmd_parm1
 	 * @param cmd_parm2
 	 */
@@ -636,7 +646,7 @@ public class z390 extends JApplet
 				if (log_tod) {
 					boolean new_log = false;
 					String temp_log_name = "temp";
-					while (!new_log){
+					while (!new_log) {
 						final Date tod = new Date();
 						final SimpleDateFormat tod_format = new SimpleDateFormat("_yyyy_MMdd_HHmmss");
 						final String log_file_tod = tod_format.format(tod);
@@ -668,7 +678,7 @@ public class z390 extends JApplet
 			}
 		} else {
 			put_copyright();
-			log_error(15,"Permission to write log in current directory denied");
+			log_error(15, "Permission to write log in current directory denied.");
 		}
 		put_log("Enter command or help");
 	}
@@ -694,12 +704,13 @@ public class z390 extends JApplet
 	 */
 	private void close_all_files()
 	{
-		put_log("Z390I total errors = " + z390_errors);
+		put_log(msg_id_i + "total errors = " + z390_errors);
 		close_log_file();
 	}
 
 	/**
 	 * Write error to log file.
+	 *
 	 * @param error
 	 * @param msg
 	 */
@@ -708,9 +719,9 @@ public class z390 extends JApplet
 		z390_errors++;
 		// cmd_error = true;
 
-		// msg = "SZ390E error " + error + " " + msg;
+		// msg = msg_id_e + "error " + error + " " + msg;
 		final StringBuilder sb = new StringBuilder();
-		sb.append("SZ390E error ").append(error).append(" ").append(msg);
+		sb.append(msg_id_e).append("error ").append(error).append(" ").append(msg);
 
 		if (sb.length() > max_line_length) {
 			put_log(sb.substring(0,max_line_length));
@@ -734,6 +745,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Write error to log file and abort completely with RC 16.
+	 *
 	 * @param error
 	 * @param msg
 	 */
@@ -741,9 +753,9 @@ public class z390 extends JApplet
 	{
 		z390_errors++;
 
-	//	msg = "SZ390E " + error + " " + msg;
+	//	msg = msg_id_e + error + " " + msg;
 		final StringBuilder sb = new StringBuilder();
-		sb.append("SZ390E ").append(error).append(" ") .append(msg);
+		sb.append(msg_id_e).append(error).append(" ") .append(msg);
 		final String sMessage = sb.toString();
 
 		put_log(sMessage);
@@ -754,6 +766,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Cancel threads and exit with RC (turn off runtime shutdown exit).
+	 *
 	 * @param return_code
 	 */
 	private void shut_down(final int return_code)
@@ -768,7 +781,7 @@ public class z390 extends JApplet
 			main_frame.dispose();
 		}
 		if (main_applet) {
-			showStatus("Z390I total errors = " + z390_errors);
+			showStatus(msg_id_i + "total errors = " + z390_errors);
 		} else if (!shutdown_exit) {
 			shutdown_exit = true; //disable exit
 			System.exit(return_code);
@@ -805,15 +818,18 @@ public class z390 extends JApplet
 	 */
 	private void put_copyright()
 	{
-		put_log("Z390I " + tz390.version);
-		put_log("Copyright 2011 Automated Software Tools Corporation");
-		put_log("z390 is licensed under GNU General Public License");
+		put_log(msg_id_i + tz390.version);
+		put_log(Constants.sCopyright2011);
+		put_log(Constants.sCopyright2013);
+		put_log(Constants.sCopyright2018);
+		put_log(Constants.sGnuLicence);
 		if (mode_msg1 != null) { put_log(mode_msg1); }
 		if (mode_msg2 != null) { put_log(mode_msg2); }
 	}
 
 	/**
 	 * Write message to log file and to console if console mode or console option on.
+	 *
 	 * @param msg
 	 */
 	private synchronized void put_log(final String msg)
@@ -839,6 +855,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Parse parameters and execute z390 command if found.
+	 *
 	 * @param cmd_text
 	 */
 	private void process_command(final String cmd_text)
@@ -864,8 +881,7 @@ public class z390 extends JApplet
 		 */
 		String cmd_line = cmd_text.trim();
 		// cmd_error = false;
-		if (   cmd_line          == null
-			|| cmd_line.length() == 0) {
+		if (cmd_line == null || cmd_line.length() == 0) {
 			return;
 		}
 
@@ -908,7 +924,7 @@ public class z390 extends JApplet
 					cmd_opcode_ok = true; 
 					about_command();
 				} else
-				if (cmd_opcode.equals("AMODE31")){
+				if (cmd_opcode.equals("AMODE31")) {
 					cmd_opcode_ok = true;
 					tz390.opt_amode31 = options_command(option_menu_amode31, cmd_parm1,cmd_parm2);
 				} else
@@ -936,13 +952,22 @@ public class z390 extends JApplet
 					cmd_opcode_ok = true; 
 					cd_command(cmd_parm1); 
 				} else
+				if (cmd_opcode.equals("CLS")) {
+					cmd_opcode_ok = true;
+					if  (main_gui) {
+						log_text.requestFocus();
+						log_text.setText("");
+					} else {
+						log_error(24, "CLS not available in command mode.");
+					}
+				} else
 				if (cmd_opcode.equals("COMMANDS")) {
 					cmd_opcode_ok = true; 
 					commands_command(); 
 				} else
 				if (cmd_opcode.equals("CON")) {
 					cmd_opcode_ok = true;
-					tz390.opt_con = options_command(option_menu_con, cmd_parm1,cmd_parm2);
+					tz390.opt_con = options_command(option_menu_con, cmd_parm1, cmd_parm2);
 				} else
 				if (cmd_opcode.equals("COPYLOG")) {
 					cmd_opcode_ok = true;
@@ -951,7 +976,7 @@ public class z390 extends JApplet
 						log_text.selectAll();
 						log_text.copy();
 					} else {
-						log_error(24, "COPYLOG not available in command mode");
+						log_error(24, "COPYLOG not available in command mode.");
 					}
 				} else
 				if (cmd_opcode.equals("CMD")) {
@@ -988,7 +1013,7 @@ public class z390 extends JApplet
 					cmd_opcode_ok = true;
 					batch_cmd("DD",cmd_parm1,"",cmd_parm2);
 				} else
-				if (cmd_opcode.equals("DUMP")){
+				if (cmd_opcode.equals("DUMP")) {
 					cmd_opcode_ok = true;
 					tz390.opt_dump = options_command(option_menu_dump, cmd_parm1,cmd_parm2);
 				}
@@ -997,10 +1022,10 @@ public class z390 extends JApplet
 				//if (cmd_opcode.equals("ECHO")) {
 				//	cmd_opcode_ok = true; 
 				//	if  (cmd_parm1 != null) {
-				//		if (cmd_parm1.toUpperCase().equals("OFF")){
-				//			echo_cmd = false;
+				//		if (cmd_parm1.toUpperCase().equals("OFF")) {
+				//			echo_cmd = false; // JBA-unused
 				//		} else {
-				//			echo_cmd = true;
+				//			echo_cmd = true; // JBA-unused
 				//		}
 				//	} else {
 				//		log_error(50, "Missing immediate data parameter.");
@@ -1032,13 +1057,13 @@ public class z390 extends JApplet
 				}
 				break;
 			case 'G': 
-				if (cmd_opcode.equals("GUAM")){
+				if (cmd_opcode.equals("GUAM")) {
 					cmd_opcode_ok = true;
 					tz390.opt_guam = options_command(option_menu_guam, cmd_parm1,cmd_parm2);
 				} else
 				if (cmd_opcode.equals("GUIDE")) {
 					cmd_opcode_ok = true; 
-					//if (!main_batch){
+					//if (!main_batch) {
 					guide_command();
 					//} else {
 					//	log_error(54, "Interactive command not supported in batch.");
@@ -1182,6 +1207,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Return date and time if tz390.opt_timing.
+	 *
 	 * @return
 	 */
 	private String time_stamp()
@@ -1199,6 +1225,7 @@ public class z390 extends JApplet
 	 * Get string with or without single/double quotes.
 	 * Ignore leading spaces or commas if ignore_spaces = true,
 	 * else return null if space or comma found next.
+	 *
 	 * @param st
 	 * @param ignore_spaces
 	 * @return
@@ -1232,7 +1259,7 @@ public class z390 extends JApplet
 	private void about_command()
 	{
 		put_copyright();
-		put_log("z390 Portable mainframe macro assembler, linker, and emulator tool");
+		put_log("\nz390 Portable mainframe macro assembler, linker, and emulator tool");
 		put_log("  * edit, assemble, link, and execute mainframe assembler code");
 		put_log("  * use interactive z390 GUI, command line, or batch interface");
 		put_log("  * macro assembler compatible with HLASM");
@@ -1250,6 +1277,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Reset font size for log, and command line and menu pop-ups.
+	 *
 	 * @param cmd_parm1
 	 * @param cmd_parm2
 	 */
@@ -1269,7 +1297,7 @@ public class z390 extends JApplet
 				update_main_view();
 			}
 		} else {
-			log_error(63, "Font outside fixed width font limits.");
+			log_error(63, "Font outside fixed width font limits [8..72 pt].");
 		}
 	}
 
@@ -1300,6 +1328,7 @@ public class z390 extends JApplet
 			edit_menu_select_log.setFont(newFont);
 			edit_menu_select_cmd.setFont(newFont);
 			edit_menu_copy_log.setFont(newFont);
+			edit_menu_clear_log.setFont(newFont);
 			edit_menu_editor.setFont(newFont);
 
 		option_menu.setFont(newFont);
@@ -1339,6 +1368,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Return integer from immediate decimal parameter.
+	 *
 	 * @param cmd_parm
 	 * @return
 	 */
@@ -1353,6 +1383,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Return integer from immediate hex parameter:or reg.
+	 *
 	 * @param hex_base
 	 * @param cmd_parm
 	 * @return
@@ -1385,6 +1416,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Return int value of char or 0 if not printable.
+	 *
 	 * @param work_int
 	 * @return
 	 */
@@ -1402,15 +1434,19 @@ public class z390 extends JApplet
 	private void help_command()
 	{
 		put_log("\nz390 help command summary");
-		put_log("File menu selections");
-		put_log("  EDIT  - open source file to edit");
-		put_log("  MAC   - expand MLC macro source to BAL assembler source");
-		put_log("  ASM   - assemble MLC to relocatable OBJ file");
-		put_log("  ASML  - assemble and link MLC to 390 load module file");
-		put_log("  ASMLG - assemble, link, and execule 390 load module file");
-		put_log("  JOB   - execute selected batch job");
-		put_log("  LINK  - link OBJ files into 390 load module file");
-		put_log("  EXEC  - execute 390 load module file");
+		put_log("\nFile menu selections");
+		put_log("   EDIT  - open source file to edit");
+		put_log("   MAC   - expand MLC macro source to BAL assembler source");
+		put_log("   ASM   - assemble MLC to relocatable OBJ file");
+		put_log("   ASML  - assemble and link MLC to 390 load module file");
+		put_log("   ASMLG - assemble, link, and execule 390 load module file");
+		put_log("   JOB   - execute selected batch job");
+		put_log("   LINK  - link OBJ files into 390 load module file");
+		put_log("   EXEC  - execute 390 load module file");
+		put_log("Edit menu selections");
+		put_log("   Cut, Copy, Paste        - working on the command line");
+		put_log("   Select Cmd              - working on the command line");
+		put_log("   Select, Copy, Clear Log - working on the log area");
 		put_log("Option menu - toggle default options for above cmds");
 		put_log("View menu - toggle status line and cmd input mode");
 		put_log("Type COMMANDS for alphabetical list of all commands");
@@ -1444,6 +1480,7 @@ public class z390 extends JApplet
 	 * Start Windows command processor with synchronized buffered output to log.<br>
 	 * If cmd_line is null, set cmd_mode and start command processor without command.
 	 * Future commands in cmd_mode will be passed to processor via cmd_exec_input_writer.
+	 *
 	 * @param cmd_line
 	 * @return
 	 */
@@ -1539,17 +1576,14 @@ public class z390 extends JApplet
 	}
 
 	/**
-	 * 
+	 * 1.  At monitor_wait intervals, update the z390 GUI title date and time and the status line information.
+	 * 2.  If CMD mode and monitor_wait_total > timeout_interval then abort CMD.
+	 * 3.  If monitor_wait_total > status_interval then update and log status line in batch or command mode.
+	 * 4.  If current time beyond main_demo timeout terminate.
+	 * 5.  Reset focus to z390_cmd_line after update
 	 */
 	private void monitor_update()
 	{
-		/*
-		 * 1.  At monitor_wait intervals, update the z390 GUI title date and time and the status line information.
-		 * 2.  If CMD mode and monitor_wait_total > timeout_interval then abort CMD.
-		 * 3.  If monitor_wait_total > status_interval then update and log status line in batch or command mode.
-		 * 4.  If current time beyond main_demo timeout terminate.
-		 * 5.  Reset focus to z390_cmd_line after update
-		 */
 		if (tz390.z390_abort) {
 			exit_command();
 		}
@@ -1672,6 +1706,7 @@ public class z390 extends JApplet
 	 * If number <= 0, return all spaces.<br>
 	 * If number > 1000000, return M.<br>
 	 * If number > 1000, return K.
+	 *
 	 * @param num
 	 * @param pad
 	 * @return
@@ -1718,9 +1753,10 @@ public class z390 extends JApplet
 
 	/**
 	 * Load shared tables and file routines.
+	 *
 	 * @param args
 	 */
-	private void init_z390(String[] args)
+	private void init_z390(final String[] args)
 	{
 		// 2009-09-26 - RPI-1080 Replace init_tables with init_tz390.
 		tz390.init_tz390();
@@ -1889,6 +1925,7 @@ public class z390 extends JApplet
 			edit_menu_select_log = new JMenuItem("Select Log"); // RPI 1041
 			edit_menu_select_cmd = new JMenuItem("Select Cmd"); // RPI 1041
 			edit_menu_copy_log   = new JMenuItem("Copy Log");
+			edit_menu_clear_log  = new JMenuItem("Clear Log");
 			edit_menu_editor     = new JMenuItem("Editor");
 		option_menu              = new JMenu("Options");
 			option_menu_ascii    = new JCheckBoxMenuItem("ASCII");
@@ -1939,7 +1976,8 @@ public class z390 extends JApplet
 			edit_menu_select_log.setMnemonic(KeyEvent.VK_S);
 			edit_menu_select_cmd.setMnemonic(KeyEvent.VK_M);
 			edit_menu_copy_log.setMnemonic(  KeyEvent.VK_L);
-			edit_menu_editor.setMnemonic(    KeyEvent.VK_N);
+			edit_menu_clear_log.setMnemonic( KeyEvent.VK_A);
+			edit_menu_editor.setMnemonic(    KeyEvent.VK_E);
 		//tion_menu.setMnemonic(             KeyEvent.VK_ );
 			option_menu_ascii.setMnemonic(   KeyEvent.VK_I);
 			option_menu_con.setMnemonic(     KeyEvent.VK_C);
@@ -2006,6 +2044,7 @@ public class z390 extends JApplet
 		edit_menu_select_log.addActionListener(this);
 		edit_menu_select_cmd.addActionListener(this);
 		edit_menu_copy_log.addActionListener(this);
+		edit_menu_clear_log.addActionListener(this);
 		edit_menu_editor.addActionListener(this);
 		option_menu_ascii.addActionListener(this);
 		option_menu_con.addActionListener(this);
@@ -2044,6 +2083,7 @@ public class z390 extends JApplet
 		edit_menu.add(edit_menu_select_log);
 		edit_menu.add(edit_menu_select_cmd);
 		edit_menu.add(edit_menu_copy_log);
+		edit_menu.add(edit_menu_clear_log);
 		edit_menu.add(edit_menu_editor);
 		option_menu.add(option_menu_ascii);
 		option_menu.add(option_menu_con);
@@ -2091,6 +2131,7 @@ public class z390 extends JApplet
 		edit_menu_select_log.setToolTipText(text_font_pfx + "Select all log text" + text_font_sfx);
 		edit_menu_select_cmd.setToolTipText(text_font_pfx + "Select all cmd text" + text_font_sfx);
 		edit_menu_copy_log.setToolTipText(text_font_pfx + "Copy current log file to clipboard" + text_font_sfx);
+		edit_menu_clear_log.setToolTipText(text_font_pfx + "Clear log" + text_font_sfx);
 		edit_menu_editor.setToolTipText(text_font_pfx + "Launch editor to edit selected data on clipboard" + text_font_sfx);
 		option_menu_ascii.setToolTipText(text_font_pfx + "ASCII use ASCII versus EBCDIC for character set" + text_font_sfx);
 		option_menu_con.setToolTipText(text_font_pfx + "CON List statistics and log output on console" + text_font_sfx);
@@ -2212,8 +2253,12 @@ public class z390 extends JApplet
 					z390_cmd_line.copy();
 				}
 			} else
+			if (event_name.equals("CLEAR LOG")) {
+				// event_ok = true;
+				z390_cmd_line.setText("CLS");
+			} else
 			if (event_name.equals("COPY LOG")) {
-				event_ok = true;
+				// event_ok = true;
 				z390_cmd_line.setText("COPYLOG");
 			} else
 			if (event_name.equals("CUT")) {
@@ -2426,7 +2471,7 @@ public class z390 extends JApplet
 		} catch (final Exception e) {
 			put_log("Java Version Permission denied.");
 		}
-		put_log("Z390I Version = " + tz390.version);
+		put_log(msg_id_i + "Version = " + tz390.version);
 	}
 
 	/**
@@ -2551,7 +2596,7 @@ public class z390 extends JApplet
 				cmd_exec_cancel();
 			}
 		} else {
-			abort_error(78,"Aborting due to external shutdown request.");
+			abort_error(78, "Aborting due to external shutdown request.");
 			exit_main(16);
 		}
 	}
@@ -2577,7 +2622,8 @@ public class z390 extends JApplet
 	}
 
 	/**
-	 * 
+	 * Display key event information (additionally).
+	 *
 	 * @param e
 	 * @param s
 	 */
@@ -2711,6 +2757,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Set location of main window x, y.
+	 *
 	 * @param cmd_parm1
 	 * @param cmd_parm2
 	 */
@@ -2754,6 +2801,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Resize main window.
+	 *
 	 * @param cmd_parm1
 	 * @param cmd_parm2
 	 */
@@ -2770,7 +2818,7 @@ public class z390 extends JApplet
 			if (x > tz390.max_main_width - main_loc_x) {
 				x = tz390.max_main_width - main_loc_x;
 			}
-			if (y < tz390.min_main_height){
+			if (y < tz390.min_main_height) {
 				y = tz390.min_main_height;
 			} else
 			if (y > tz390.max_main_height - main_loc_y) {
@@ -2787,6 +2835,7 @@ public class z390 extends JApplet
 	/**
 	 * Set status line display on or off, or set interval for logging status.
 	 * If seconds specified as 0 or null, logging status is turned off.
+	 *
 	 * @param cmd_parm1
 	 * @param cmd_parm2
 	 */
@@ -2830,6 +2879,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Set GUI window title.
+	 *
 	 * @param cmd_parm1
 	 * @param cmd_parm2
 	 */
@@ -2845,6 +2895,7 @@ public class z390 extends JApplet
 	 * Set timeout interval in seconds used to timeout commands when not in command mode.
 	 * Default is 3 seconds.  Issue command with no argument to turn off timeout.
 	 * Commands can be cancelled via BREAK.
+	 *
 	 * @param cmd_parm1
 	 * @param cmd_parm2
 	 */
@@ -2864,7 +2915,8 @@ public class z390 extends JApplet
 	}
 
 	/**
-	 * Check or un-check option menu item and update option parameter lists for commands.
+	 * (Un)check option menu item and update option parameter lists for commands.
+	 *
 	 * @param option_men
 	 * @param cmd_parm1
 	 * @param cmd_parm2
@@ -2887,6 +2939,7 @@ public class z390 extends JApplet
 		job_opt   = "";
 		link_opt  = "";
 		exec_opt  = "";
+
 		if (option_menu_ascii.isSelected()) {  // do last to override trace setting NOCON
 			mac_opt   += " ASCII";
 			asm_opt   += " ASCII";
@@ -3033,6 +3086,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Create dialog with file chooser to select current directory.
+	 *
 	 * @param select_dir_chooser
 	 */
 	private void create_select_dir(final JFileChooser select_dir_chooser)
@@ -3075,7 +3129,7 @@ public class z390 extends JApplet
 						cd_command("CD " + "\"" + selected_dir_name + "\"");
 					}
 				} else {
-					log_error(37, "Directory not selected");
+					log_error(37, "No directory selected.");
 				}
 				select_dir_frame.setVisible(false);
 				if (main_gui) {
@@ -3095,7 +3149,8 @@ public class z390 extends JApplet
 	/**
 	 * Invoke file chooser dialog to set selected_file_name within select_file_type if any.<br>
 	 * Notes:<br>
-	 *   1.  Note dialog is kept for non GUI mode to avoid dispose causing GUI shutdown on last window)
+	 * Note: Dialog is kept for non GUI mode to avoid dispose causing GUI shutdown on last window)
+	 *
 	 * @param file_cmd
 	 * @param file_type
 	 * @param file_opt
@@ -3106,40 +3161,42 @@ public class z390 extends JApplet
 		select_file_type = file_type;
 		select_opt       = file_opt;
 		
-		if ( perms.maySelect() ) {
-			final JFileChooser select_file_chooser = new JFileChooser();
-			// 2007-01-20 - RPI-0541 Correct Z390 GUI file selection dialog cancel action
-			// Rebuild every time
-			select_file_chooser.resetChoosableFileFilters();
-			select_file_chooser.setAcceptAllFileFilterUsed(true);
-			if (select_file_type.length() > 0) {
-				select_file_chooser.addChoosableFileFilter(new SelectFileType());
-				select_file_chooser.setAcceptAllFileFilterUsed(false);
-			} else {
-				select_file_type = "ALL";
-			}
-			create_select_file(select_file_chooser);
-			if (main_gui) {
-				main_frame.setVisible(false);
-			}
-			select_file_frame.setLocation(100,100);
-			select_file_frame.setVisible(true);
-		} else {
+		if (!perms.maySelect()) {
 			log_error(39, "Permission for file selection denied.");
+			return;
 		}
+
+		final JFileChooser select_file_chooser = new JFileChooser();
+		// 2007-01-20 - RPI-0541 Correct Z390 GUI file selection dialog cancel action
+		// Rebuild every time
+		select_file_chooser.resetChoosableFileFilters();
+		select_file_chooser.setAcceptAllFileFilterUsed(true);
+		if (select_file_type.length() > 0) {
+			select_file_chooser.addChoosableFileFilter(new SelectFileType());
+			select_file_chooser.setAcceptAllFileFilterUsed(false);
+		} else {
+			select_file_type = "ALL";
+		}
+		create_select_file(select_file_chooser);
+		if (main_gui) {
+			main_frame.setVisible(false);
+		}
+		select_file_frame.setLocation(100,100);
+		select_file_frame.setVisible(true);
 	}
 
 	/**
 	 * Create select file frame with chooser on first call.  It is updated after that.
+	 *
 	 * @param select_file_chooser
 	 */
 	private void create_select_file(final JFileChooser select_file_chooser)
 	{
 		select_file_frame = new JFrame(main_title + " Select " + select_file_type + " file for " + select_cmd);
 		select_file_frame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
+			public void windowClosing(final WindowEvent e) {
 				select_file_frame.setVisible(false);
-				if (main_gui){
+				if (main_gui) {
 					main_frame.setVisible(true);
 				}
 			}
@@ -3156,7 +3213,7 @@ public class z390 extends JApplet
 				String selected_file_name = null;
 				final String state = (String)e.getActionCommand();
 				// 2007-01-20 - RPI-0541 Correct Z390 GUI file selection dialog cancel action
-				if (state.equals(JFileChooser.APPROVE_SELECTION)){
+				if (state.equals(JFileChooser.APPROVE_SELECTION)) {
 					selected_file = select_file_chooser.getSelectedFile();
 				} else {
 					select_file_frame.setVisible(false);
@@ -3175,26 +3232,26 @@ public class z390 extends JApplet
 					if (main_gui) {
 						if (select_cmd.equals("EDIT")) {
 							if (!tz390.exec_cmd(infoOS.get_z390_editor() + " " + selected_file_name)) {
-								log_error(19, "start editor failed - " + infoOS.get_z390_editor());
+								log_error(19, "Editor start failed - " + infoOS.get_z390_editor());
 							}
 						} else if (select_cmd.equals("JOB")) {
 							selected_file_name = get_short_file_name(selected_file_name);
-							z390_cmd_line.setText(selected_file_name + select_opt);
+							z390_cmd_line.setText(selected_file_name + " " + (select_opt != null ? select_opt : ""));
 							z390_cmd_line.postActionEvent();
 						} else {
 							select_cmd = get_short_file_name(install_loc + File.separator + select_cmd);
 							selected_file_name = get_short_file_name(selected_file_name);
-							z390_cmd_line.setText(select_cmd + " " + selected_file_name + " " + select_opt);
+							z390_cmd_line.setText(select_cmd + " " + selected_file_name + " " + (select_opt != null ? select_opt : ""));
 							z390_cmd_line.postActionEvent();
 						}
 					} else {
 						process_command(select_cmd + " " + get_short_file_name(selected_file_name));
 					}
 				} else {
-					log_error(37,"file not selected");
+					log_error(37, "No file selected.");
 				}
 				select_file_frame.setVisible(false);
-				if (main_gui){
+				if (main_gui) {
 					main_frame.setVisible(true);
 				}
 			}});
@@ -3205,6 +3262,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Return shortest file name possible with quotes if LSN.
+	 *
 	 * @param file_name
 	 * @return
 	 */
@@ -3242,6 +3300,7 @@ public class z390 extends JApplet
 		put_log("ASML     MLC file        submit assembly and link MLC source to 390 load module file");
 		put_log("ASMLG    MLC file        submit assembly, link, and execute 390 load module file");
 		put_log("CD       directory path  change directory");
+		put_log("CLS                      clear the entire log text (GUI only)");
 		put_log("CMD      command         set cmd mode and submit batch cmd");
 		put_log("Copy                     copy selected text to clipboard (GUI right click)");
 		put_log("COMMANDS                 alphabetical list of all commands");
@@ -3279,6 +3338,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Returns an ImageIcon, or null if the path was invalid.
+	 *
 	 * @param path
 	 * @param description
 	 * @return
@@ -3382,14 +3442,15 @@ public class z390 extends JApplet
 
 	/**
 	 * 1. Terminate any prior executed process with error if non zero completion.
-     * 2. Start new process running on separate thread.  
-     *
-     * Note: Cmd monitor will issue exec_term if timeout limit is reached before
-     *       next start command does it. Error will be issued by exec_term if
-     *       non zero return code or if process had to be cancelled.
-     * @param exec_cmd
-     * @return
-     */
+	 * 2. Start new process running on separate thread.  
+	 *
+	 * Note: Command monitor will issue exec_term if timeout limit is reached before
+	 *       next start command does it. Error will be issued by exec_term if
+	 *       non zero return code or if process had to be cancelled.
+	 *
+	 * @param exec_cmd
+	 * @return
+	 */
 	public int cmd_exec_start(final String[] exec_cmd)
 	{
 		if  (cmd_exec_process != null) {
@@ -3399,7 +3460,7 @@ public class z390 extends JApplet
 					log_error(75, "Previous command execution cancelled."); // RPI 792
 					cmd_exec_cancel();
 				} else {
-					log_error(71, "Previous command execution ended with rc =" + rc + ".");
+					log_error(71, "Previous command execution ended with rc = " + rc + ".");
 				}
 			}
 		}
@@ -3433,6 +3494,7 @@ public class z390 extends JApplet
 
 	/**
 	 * Send input to executing command in process.
+	 *
 	 * @param cmd_line
 	 */
 	private void cmd_exec_input(final String cmd_line)
@@ -3454,6 +3516,7 @@ public class z390 extends JApplet
 	/**
 	 * Return ending RC else -1<br>
 	 * Return 0 if no process defined.
+	 *
 	 * @return
 	 */
 	private int cmd_exec_rc()
@@ -3526,7 +3589,7 @@ public class z390 extends JApplet
 			}
 		} catch (final Exception ex) {
 			if (cmd_exec_rc() == -1) {  // RPI 731
-				log_error(67,"exec execution output error");
+				log_error(67, "Exec execution output error");
 				cmd_exec_cancel();
 			}
 		}
@@ -3544,9 +3607,9 @@ public class z390 extends JApplet
 				cmd_exec_error_msg = cmd_exec_error_reader.readLine();
 			}
 		} catch (final Exception ex) {
-			if (cmd_exec_rc() == -1) {  // RPI 731
+			if (cmd_exec_rc() == -1) {  // RPI-731
 				// 2008-01-30 RPI-0792 Remove put error message before checking for null
-				log_error(73, "Exec execution output error");
+				log_error(73, "Exec execution output error.");
 				cmd_exec_cancel();
 			}
 		}
@@ -3576,31 +3639,29 @@ public class z390 extends JApplet
 	{
 		select_cmd = bat_cmd;
 		select_opt = bat_opt;
-		if (select_opt == null) {
-			select_opt = "";
+
+		if (!perms.mayExecFiles()) {
+			log_error(17, "Permission for file execute denied.");
+			return;
 		}
 
-		if ( perms.mayExecFiles() ) {
-			if (   bat_file_name == null
-				|| bat_file_name.length() == 0) {
-				select_file(bat_cmd, bat_file_type, bat_opt);
-			} else {
-				if (bat_cmd.equals("EDIT")) {
-					if (!tz390.exec_cmd("\"" + infoOS.get_z390_editor() + "\" \"" + bat_file_name + "\"")) {
-						log_error(19, "Start editor failed - " + infoOS.get_z390_editor());
-					}
-				} else
-				if (select_cmd.equals("JOB")) {
-					cmd_command(get_short_file_name(bat_file_name) + select_opt);
-				} else {
-					cmd_command(get_short_file_name(install_loc + File.separator + bat_cmd)
-						+ " " + get_short_file_name(bat_file_name) 
-						+ " " + select_opt);
-				}
-			}
-		} else {
-			log_error(17, "Permission for file execute denied.");
+		if (bat_file_name == null || bat_file_name.length() == 0) {
+			select_file(bat_cmd, bat_file_type, bat_opt);
+			return;
 		}
+		if (bat_cmd.equals("EDIT")) {
+			if (!tz390.exec_cmd("\"" + infoOS.get_z390_editor() + "\" \"" + bat_file_name + "\"")) {
+				log_error(19, "Editor start failed - " + infoOS.get_z390_editor());
+			}
+			return;
+		}
+
+		String cmd = "";
+		if (!select_cmd.equals("JOB")) {
+			cmd = get_short_file_name(install_loc + File.separator + bat_cmd) + " ";
+		}
+		cmd = cmd + get_short_file_name(bat_file_name) + " " + (select_opt != null ? select_opt : "");
+		cmd_command(cmd.trim());
 	}
 
 	/**

@@ -20,17 +20,17 @@ import javax.swing.JPanel;
  * Copyright 2011 Automated Software Tools Corporation
  * Copyright 2013 Cat Herder Software, LLC
  * Copyright 2018 Joachim Bartz, Germany
- * 
+ *
  * z390 is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * z390 is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * z390; if not, write to the
  *    Free Software Foundation, Inc.
@@ -39,7 +39,8 @@ import javax.swing.JPanel;
  */
 
 /**
- * 
+ * Test screen with graphical menu items.
+ *
  * @author jba68/z390
  */
 public class TestScreenMenu implements ActionListener
@@ -74,21 +75,22 @@ public class TestScreenMenu implements ActionListener
 	private final static Color   colorBG = Color.BLACK;
 	private final static Color   colorTX = Color.YELLOW;
 	private final static Color[] colorsTN = {	Color.BLACK,   //0
-												Color.BLUE,    //1 
+												Color.BLUE,    //1
 												Color.RED,     //2
-												Color.PINK,    //3 
-												Color.GREEN,   //4 
-												Color.MAGENTA, //5 ? TURQUOISE 
+												Color.PINK,    //3
+												Color.GREEN,   //4
+												Color.MAGENTA, //5 ? TURQUOISE
 												Color.YELLOW,  //6
 												Color.WHITE    //7
 	};
 
 	private Font fontASCII = null;
 
-	private final gz390_screen tnScreen = new gz390_screen(null);
-	
+	private final gz390_screen tnScreen = new gz390_screen();
+
 	/**
 	 * Start a test window for gz390_screen.
+	 *
 	 * @param argv
 	 */
 	public static void main(final String argv[]) {
@@ -145,11 +147,11 @@ public class TestScreenMenu implements ActionListener
 
 		mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0,2,2,2));
-		mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
+		mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 	}
 
 	/**
-	 * Create the TN screen with current font size and given number of rows/cols.
+	 * Create the TN screen with current font size and given number of rows/columns.
 	 */
 	private void createScreen() {
 		fontASCII = new Font(Font.MONOSPACED, Font.BOLD, fontSize);
@@ -161,8 +163,7 @@ public class TestScreenMenu implements ActionListener
 	 * Add TN screen panel to mainPanel and pack the main frame.
 	 */
 	private void addScreenToFrame() {
-
-		tnScreen.getScreenPanel().setPreferredSize(new Dimension(tnScreen.scn_width, tnScreen.scn_height));
+		tnScreen.getScreenPanel().setPreferredSize(new Dimension(tnScreen.getScnWidth(), tnScreen.getScnHeight()));
 		//main_view.createVerticalScrollBar();
 		//main_view.createHorizontalScrollBar();
 
@@ -181,19 +182,19 @@ public class TestScreenMenu implements ActionListener
 		final String sDE = " - Zwölf Boxkämpfer jagen Eva und Erwin quer über den großen Sylter Deich.";
 		final String sEN = " - The quick brown fox jumps over the lazy dog. The quick brown fox jumps!";
 
-		int y = tnScreen.scn_char_base;
+		int y = tnScreen.getCharBase();
 		int x = 1;
 		for ( int i=1 ; i <= numRows+1 ; ++i ) {
 			String s;
-			tnScreen.scn_grid.setColor(colorsTN[(i%7) + 1]);
+			tnScreen.getGrid().setColor(colorsTN[(i%7) + 1]);
 			if ( i % 2 == 0 ) {
 				s = "Line " + i + sDE;
 			} else {
 				s = "Line " + i + sEN;
 			}
-			tnScreen.setScreenLayout( new TextLayout(s, fontASCII, tnScreen.scn_context) );
-			tnScreen.getScreenLayout().draw(tnScreen.scn_grid, x, y);
-			y += tnScreen.scn_char_height;
+			tnScreen.setScreenLayout( new TextLayout(s, fontASCII, tnScreen.getContext()) );
+			tnScreen.getScreenLayout().draw(tnScreen.getGrid(), x, y);
+			y += tnScreen.getCharHeight();
 		}
 		tnScreen.allowRepaint(true);
 	}
@@ -201,6 +202,7 @@ public class TestScreenMenu implements ActionListener
 	/**
 	 * Update Rows menu items.<br>
 	 * Only one menu item may be checked.
+	 *
 	 * @param currentSize
 	 */
 	private void updateSizeMenuOptions(final int currentSize) {
@@ -215,6 +217,7 @@ public class TestScreenMenu implements ActionListener
 	/**
 	 * Update Font Size menu items.<br>
 	 * Only one menu item may be checked.
+	 *
 	 * @param currentFontSize
 	 */
 	private void updateFontMenuOptions(final int currentFontSize) {

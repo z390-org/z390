@@ -15,17 +15,17 @@ import javax.swing.JScrollPane;
  * Copyright 2011 Automated Software Tools Corporation
  * Copyright 2013 Cat Herder Software, LLC
  * Copyright 2018 Joachim Bartz, Germany
- * 
+ *
  * z390 is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * z390 is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * z390; if not, write to the
  *    Free Software Foundation, Inc.
@@ -34,11 +34,12 @@ import javax.swing.JScrollPane;
  */
 
 /**
- * 
+ * Test screen w/o menu items.
  */
 public class TestScreen {
 	/**
 	 * Start a test window for gz390_screen.
+	 *
 	 * @param argv
 	 */
 	public static void main(final String argv[]) {
@@ -49,7 +50,7 @@ public class TestScreen {
 		final Color colorTX  = Color.YELLOW;
 		final Font  fontASCII = new Font(Font.MONOSPACED,Font.BOLD, fontSize);
 
-		final gz390_screen tn_scn = new gz390_screen(null);
+		final gz390_screen tn_scn = new gz390_screen();
 		tn_scn.setScreen(numRows, numCols, fontASCII, colorBG, colorTX);
 
 		final JFrame mainFrame = new JFrame("Test z390 gz390_screen graphic2d panel class");
@@ -64,7 +65,7 @@ public class TestScreen {
 		mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
 
 		final JScrollPane mainView = tn_scn.getScreenPanel();
-		mainView.setPreferredSize(new Dimension(tn_scn.scn_width, tn_scn.scn_height));
+		mainView.setPreferredSize(new Dimension(tn_scn.getScnWidth(), tn_scn.getScnHeight()));
 		mainView.createVerticalScrollBar();
 		mainView.createHorizontalScrollBar();
 
@@ -74,14 +75,14 @@ public class TestScreen {
 		mainFrame.pack();
 		mainFrame.setVisible(true);
 
-		int y = tn_scn.scn_char_base;
+		int y = tn_scn.getCharBase();
 		int x = 1;
 		for ( int i=1 ; i <= numRows+1 ; ++i ) {
-			tn_scn.scn_grid.setColor(colorTX);
+			tn_scn.getGrid().setColor(colorTX);
 			tn_scn.setScreenLayout( new TextLayout("Line " + i + " - The quick brown fox jumps over the lazy dog. The quick brown fox jumps!",
-									fontASCII, tn_scn.scn_context) );
-			tn_scn.getScreenLayout().draw(tn_scn.scn_grid, x, y);
-			y += tn_scn.scn_char_height;
+									fontASCII, tn_scn.getContext()) );
+			tn_scn.getScreenLayout().draw(tn_scn.getGrid(), x, y);
+			y += tn_scn.getCharHeight();
 		}
 		tn_scn.allowRepaint(true);
 	}

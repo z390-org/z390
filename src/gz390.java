@@ -49,17 +49,17 @@ import javax.swing.Timer;
  * Copyright 2011 Automated Software Tools Corporation
  * Copyright 2013 Cat Herder Software, LLC
  * Copyright 2018 Joachim Bartz, Germany
- * 
+ *
  * z390 is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * z390 is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * z390; if not, write to the
  *    Free Software Foundation, Inc.
@@ -68,7 +68,7 @@ import javax.swing.Timer;
  */
 
 /**
- * 
+ *
  */
 public class gz390 implements MouseListener, KeyListener, ActionListener, ComponentListener, FocusListener {
 
@@ -88,11 +88,11 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private final static Color   bg_color =	Color.BLACK;
 	private       static Color   tx_color =	Color.YELLOW;
 	private final static Color[] tn_color = {	Color.BLACK,   //0
-												Color.BLUE,    //1 
+												Color.BLUE,    //1
 												Color.RED,     //2
-												Color.PINK,    //3 
-												Color.GREEN,   //4 
-												Color.MAGENTA, //5 ? TURQUOISE 
+												Color.PINK,    //3
+												Color.GREEN,   //4
+												Color.MAGENTA, //5 ? TURQUOISE
 												Color.YELLOW,  //6
 												Color.WHITE    //7
 	};
@@ -120,9 +120,9 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private final Permissions perms = new Permissions();
 
-	boolean console_log = false;
-	int gz390_errors = 0;
-	boolean cmd_error = false;
+//	private boolean	console_log	 = false;
+	private int		gz390_errors = 0;
+//	private boolean	cmd_error	 = false;
 
 	/**
 	 * Global variable containing the main title.<br>
@@ -138,7 +138,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 
 //	// Global variable indicating the license.
 //	// Set if permissions are OK.
-//	private boolean main_lic  = false; 
+//	private boolean main_lic  = false;
 //	private Date lic_end_date = null;
 
 	/**
@@ -155,99 +155,120 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private final static SimpleDateFormat hhmmss = new SimpleDateFormat("HH:mm:ss");
 
 	// Monitor variables
-	int     ins_count = 0;  
-	int     io_count  = 0;
-	int     start_cmd_io_count;
-	long    start_cmd_time;
-	Timer   monitor_timer = null;
-	int     monitor_wait = 300; // RPI 224 
-	int     monitor_timeout_limit = 0 * 1000;
-	long    monitor_cmd_time_total = 0;
-	long    monitor_last_time = 0;
-	long    monitor_next_time = 0;
-	long    monitor_cur_interval = 0;
-	int     monitor_last_ins_count = 0;
-	int     monitor_next_ins_count = 0;
-	int     monitor_last_io_count = 0;
-	int     monitor_next_io_count = 0;
-	long    monitor_cur_ins  = 0;
-	long    monitor_cur_int  = 0;
-	long    monitor_cur_rate = 0;
-	boolean monitor_last_cmd_mode = false;
+	private Timer   monitor_timer = null;
+	final private static int monitor_wait = 300; // RPI 224
+//	private int     ins_count	= 0;
+//	private int     io_count	= 0;
+//	private int     start_cmd_io_count;
+//	private long    start_cmd_time;
+//	private int     monitor_timeout_limit	= 0 * 1000;
+//	private long    monitor_cmd_time_total	= 0;
+//	private long    monitor_last_time		= 0;
+//	private long    monitor_next_time		= 0;
+//	private long    monitor_cur_interval	= 0;
+//	private int     monitor_last_ins_count	= 0;
+//	private int     monitor_next_ins_count	= 0;
+//	private int     monitor_last_io_count	= 0;
+//	private int     monitor_next_io_count	= 0;
+//	private long    monitor_cur_ins			= 0;
+//	private long    monitor_cur_int			= 0;
+//	private long    monitor_cur_rate		= 0;
+//	private boolean monitor_last_cmd_mode = false;
 
 	// GUAM GUI screen view variables.
 	private GuamViewTypes guam_view = GuamViewTypes.MCS;
 
-	int guam_tot_key  = 0;
-	int guam_next_key = 0;
-	int[] guam_key_code_char = new int[max_keys];
-	int guam_cur_row = 1;
-	int guam_cur_col = 1;
+	private int   guam_tot_key	= 0;
+	private int   guam_next_key	= 0;
+	private int[] guam_key_code_char = new int[max_keys];
+	private int   guam_cur_row	= 1;
+	private int   guam_cur_col	= 1;
 
-	// Status interval display variables
-	int     status_interval =  0;
-	long    status_last_time = 0;
-	long    status_next_time = 0;
-	int     status_last_ins_count = 0;
-	int     status_next_ins_count = 0;
-	int     status_next_io_count = 0;
-	int     status_last_io_count = 0;
-	long    status_cur_ins  = 0;
-	long    status_cur_int  = 0;
-	long    status_cur_rate = 0;
+	// Status interval display variables - completely unused - no output
+//	private int  status_interval		= 0;
+//	private long status_last_time		= 0;
+//	private long status_next_time		= 0;
+//	private int  status_last_ins_count	= 0;
+//	private int  status_next_ins_count	= 0;
+//	private int  status_next_io_count	= 0;
+//	private int  status_last_io_count	= 0;
+//	private long status_cur_ins			= 0;
+//	private long status_cur_int			= 0;
+//	private long status_cur_rate		= 0;
 
 	// WTOR reply thread variables
-	boolean wtor_running = false;
-	Thread wtor_thread = null;
-	String wtor_reply_string = null;
-	int wtor_ecb_addr = -1;
-	boolean shutdown_exit = false;
+	private boolean	wtor_running = false;
+	private String	wtor_reply_string = null;
+	private int		wtor_ecb_addr = -1;
+	private boolean	shutdown_exit = false;
 
 	// Global TGET/TPUT TN3290 objects
-	int tpg_rc         = 0;    // return code
-	int tpg_flags      = 0;    // from high byte R1
-	int tpg_op_mask    = 0x80; // 1=TGET, 0=TPUT
-	int tpg_op_tget    = 0x80;
-	int tpg_op_tput    = 0x00;
-	int tpg_wait_mask  = 0x10; // 1=NOWAIT, 0=WAIT
-	int tpg_wait       = 0x00; // 0=WAIT
-	int tpg_nowait     = 0x10;
-	int tpg_type         = 0;
-	int tpg_type_mask    = 0x03; // 00=EDIT 01=ASIS 10=CONTROL 11=FULLSCR
-	int tpg_type_edit    = 0x00;
-	int tpg_type_asis    = 0x01;
-	int tpg_type_control = 0x02;
-	int tpg_type_fullscr = 0x03;
-	byte[] tget_byte = new byte[max_buff];
-	ByteBuffer tget_buff = ByteBuffer.wrap(tget_byte);
-	int tget_index = 0;
-	int tget_len   = 0;
-	byte[] tput_byte = new byte[max_buff];
-	ByteBuffer tput_buff = ByteBuffer.wrap(tput_byte);
-	int tput_index = 0;
-	int tput_len = 0;
-	int tput_buff_byte = 0;
+	private int tpg_rc         = 0;    // return code
+	public	int getTpgRC() { return tpg_rc; }
+	public	void setTpgRC( final int rc ) { tpg_rc = rc; }
+
+	private int tpg_flags      = 0;    // from high byte R1
+//	public	int getTpgFlags() { return tpg_flags; }
+	public	void setTpgFlags( final int flags ) { tpg_flags = flags; }
+
+//	private int tpg_op_mask		= 0x80; // 1=TGET, 0=TPUT
+//	private int tpg_op_tget   	= 0x80;
+//	private int tpg_op_tput		= 0x00;
+	private int tpg_wait_mask	= 0x10; // 1=NOWAIT, 0=WAIT
+	private int tpg_wait		= 0x00; // 0=WAIT
+//	private int tpg_nowait		= 0x10;
+	private int tpg_type		= 0;
+//	public	int getTpgType() { return tpg_type; }
+	public	void setTpgType(final int type) { tpg_type = type; }
+
+	private int tpg_type_mask    = 0x03; // 00=EDIT 01=ASIS 10=CONTROL 11=FULLSCR
+//	private int tpg_type_edit    = 0x00;
+	private int tpg_type_asis    = 0x01;
+//	private int tpg_type_control = 0x02;
+	private int tpg_type_fullscr = 0x03;
+	private byte[] tget_byte = new byte[max_buff];
+	public	byte[] getTgetByte() {return tget_byte;}
+	private ByteBuffer tget_buff = ByteBuffer.wrap(tget_byte);
+	public	ByteBuffer getTgetBuff() { return tget_buff;}
+
+	private int tget_index = 0;
+
+	private int tget_len   = 0;
+	public	int getTgetLen() {return tget_len; }
+	public	void setTgetLen(final int len) { tget_len = len; }
+
+	private byte[] tput_byte = new byte[max_buff];
+	private ByteBuffer tput_buff = ByteBuffer.wrap(tput_byte);
+	public	ByteBuffer getTputBuff() { return tput_buff;}
+
+	private int tput_index		= 0;
+	private int tput_len		= 0;
+	public	int getTputLen() { return tput_len; }
+	public	void setTputLen(final int len) { tput_len = len; }
+	private int tput_buff_byte	= 0;
 
 	// Global tn3270 data
-	byte tn_tab_code       = 0x09;
-	byte tn_pa1_code       = 0x6c; // RPI 856
-	byte tn_pa2_code       = 0x6e; // RPI 856
-	byte tn_pa3_code       = 0x6b; // RPI 856
-	byte tn_clear_code     = 0x6d; // RPI 856
-	byte tn_enter_code     = 0x7d;
-	byte tn_sba_cmd = 0x11; // set buffer addr (sba)
-	byte tn_sf_cmd  = 0x1d; // set field (attr byte)
-	byte tn_ic_cmd  = 0x13; // insert cursor
-	byte tn_pt_cmd  = 0x05; // program tab 
-	byte tn_ra_cmd  = 0x3c; // repeat to addr (sba,char)
-	byte tn_eua_cmd = 0x12; // erase unprotected to addr (sba)
-	byte tn_sa_cmd  = 0x28; // eds set attribute
-	byte tn_sfe_cmd = 0x29; // eds start field
-	boolean tn_delete_request = false;  // RPI 630
-	boolean tn_cursor = false;
-	boolean tn_cursor_alt = false;
-	char tn_cursor_sym = '?';      // alternate cursor char ?
-	char tn_cursor_sym_alt = ' ';  // alternate cursor space if ?
+//	final private static byte tn_tab_code	= 0x09;
+	final private static byte tn_pa1_code	= 0x6c; // RPI 856
+	final private static byte tn_pa2_code	= 0x6e; // RPI 856
+	final private static byte tn_pa3_code	= 0x6b; // RPI 856
+	final private static byte tn_clear_code	= 0x6d; // RPI 856
+	final private static byte tn_enter_code	= 0x7d;
+	final private static byte tn_sba_cmd	= 0x11; // set buffer addr (sba)
+//	final private static byte tn_sf_cmd  	= 0x1d; // set field (attr byte)
+//	final private static byte tn_ic_cmd  	= 0x13; // insert cursor
+//	final private static byte tn_pt_cmd  	= 0x05; // program tab
+//	final private static byte tn_ra_cmd  	= 0x3c; // repeat to addr (sba,char)
+//	final private static byte tn_eua_cmd 	= 0x12; // erase unprotected to addr (sba)
+//	final private static byte tn_sa_cmd  	= 0x28; // eds set attribute
+//	final private static byte tn_sfe_cmd 	= 0x29; // eds start field
+
+	private boolean tn_delete_request = false;	// RPI 630
+
+	private boolean tn_cursor     = false;
+	private boolean tn_cursor_alt = false;
+	final private static char tn_cursor_sym     = '?';  // alternate cursor char ?
+	final private static char tn_cursor_sym_alt = ' ';  // alternate cursor space if ?
 	char ff_char = '@'; // RPI 927
 	int tn_cursor_scn_addr = 0;
 	int tn_cursor_count = 1;
@@ -256,9 +277,9 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	byte tn_null  = 0;
 	byte tn_field = 1;
 	byte tn_char  = 2;
-	int tn_protect_mask = 0x20; // mask for protected field attribute bit 
+	int tn_protect_mask = 0x20; // mask for protected field attribute bit
 	int tn_numeric_mask = 0x10; // numeric field
-	int tn_mdt_mask     = 0x01; // mask for modified data attribute bit  
+	int tn_mdt_mask     = 0x01; // mask for modified data attribute bit
 	int tn_mdt_off      = 0xfe; // turn off mdt
 	int tn_noaid = 0x60;       // no aid available
 	int tn_aid = 0x60;         // set from PF key or enter if unlocked
@@ -268,7 +289,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	int tn_erase_write = 0xF5; // tput tso erase write
 	int tn_write_alt = 0xF1;   // tput tso write screen
 	int tn_write_eau = 0x6F;   // RPI 628
-	byte tn_attr_prot_text = 0x30; // protected unmodified text 
+	byte tn_attr_prot_text = 0x30; // protected unmodified text
 	boolean tn_kb_lock = true;  // no TN3270 key input allowed
 	boolean tn_scn_lock = true; // no TN3270 key mapping to screen
 	boolean tn_attn = false;
@@ -294,7 +315,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private int[]  scn_attr   = null;
 	private int[]  scn_hl     = null;
 	private int[]  scn_color  = null;
-	private char[] scn_char   = null; // set to display char else blank   
+	private char[] scn_char   = null; // set to display char else blank
 	private int    scn_addr   = 0;
 
 	private final static int[] sba_to_ebc = {
@@ -303,7 +324,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		0x50,0xD1,0xD2,0xD3,0xD4,0xD5,0xD6,0xD7, //10
 		0xD8,0xD9,0x5A,0x5B,0x5C,0x5D,0x5E,0x5F, //18
 		0x60,0x61,0xE2,0xE3,0xE4,0xE5,0xE6,0xE7, //20
-		0xE8,0xE9,0x6A,0x6B,0x6C,0x6D,0x6E,0x6F, //28      
+		0xE8,0xE9,0x6A,0x6B,0x6C,0x6D,0x6E,0x6F, //28
 		0xF0,0xF1,0xF2,0xF3,0xF4,0xF5,0xF6,0xF7, //30
 		0xF8,0xF9,0x7A,0x7B,0x7C,0x7D,0x7E,0x7F  //38
 	};
@@ -345,7 +366,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private int  font_size = Constants.numDefaultFontSize; //see FONT command RPI 630 was 12
 	private Font char_font = null;
 
-	// Global GUAM GUI objects 
+	// Global GUAM GUI objects
 //	int ascii_lf = 10;
 //	int ascii_cr = 13;
 //	int ebcdic_space = 0x40;
@@ -354,10 +375,10 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	boolean main_status  = true;
 	boolean main_view_changed = false;
 
-	private int main_loc_x = Constants.posMainFrameX;
-	private int main_loc_y = Constants.posMainFrameY;
+//	private int main_loc_x = Constants.posMainFrameX;
+//	private int main_loc_y = Constants.posMainFrameY;
 
-	private JFrame main_frame = null; 
+	private JFrame main_frame = null;
 	private JPanel main_panel = null;
 	private JTextArea log_text = null;
 	private JScrollPane main_view = null;
@@ -394,7 +415,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private JMenuItem help_menu_about   = null;
 
 	// Pop-up edit menu variables (right click)
-	private JPopupMenu popup_edit_menu = null; 
+	private JPopupMenu popup_edit_menu = null;
 	private Component focus_comp = null;
 
 	/**
@@ -402,37 +423,37 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private final static char[] apl_char = {
 			0X0020,0X0020,0X0020,0X0020, //00
-			0X0020,0X0020,0X0020,0X0020, //04 
+			0X0020,0X0020,0X0020,0X0020, //04
 			0X0020,0X0020,0X0020,0X0020, //08
 			0X0020,0X0020,0X0020,0X0020, //0C
 			0X0020,0X0020,0X0020,0X0020, //10
-			0X0020,0X0020,0X0020,0X0020, //14 
+			0X0020,0X0020,0X0020,0X0020, //14
 			0X0020,0X0020,0X0020,0X0020, //18
 			0X0020,0X0020,0X0020,0X0020, //1C
 			0X0020,0X0020,0X0020,0X0020, //20
-			0X0020,0X0020,0X0020,0X0020, //24 
+			0X0020,0X0020,0X0020,0X0020, //24
 			0X0020,0X0020,0X0020,0X0020, //28
 			0X0020,0X0020,0X0020,0X0020, //2C
 			0X0020,0X0020,0X0020,0X0020, //30
-			0X0020,0X0020,0X0020,0X0020, //34 
+			0X0020,0X0020,0X0020,0X0020, //34
 			0X0020,0X0020,0X0020,0X0020, //38
-			0X0020,0X0020,0X0020,0X0020, //3C        
+			0X0020,0X0020,0X0020,0X0020, //3C
 			0X0020,0x0041,0x0042,0x0043, //40 41-49=A-I
-			0x0044,0x0045,0x0046,0x0047, //44 
+			0x0044,0x0045,0x0046,0x0047, //44
 			0x0048,0x0049,0X0020,0X0020, //48
 			0X0020,0X0020,0X0020,0X0020, //4C
 			0X0020,0x004A,0x004B,0x004C, //50 4A-52=J-R
-			0x004D,0x004E,0x004F,0x0050, //54 
+			0x004D,0x004E,0x004F,0x0050, //54
 			0x0051,0x0052,0X0020,0X0020, //58
 			0X0020,0X0020,0X0020,0X0020, //5C
 			0X0020,0X0020,0x0053,0x0054, //60 53-5A=S-Z
-			0x0055,0x0056,0x0057,0x0058, //64 
+			0x0055,0x0056,0x0057,0x0058, //64
 			0x0059,0x005A,0X0020,0X0020, //68
 			0X0020,0X0020,0X0020,0X0020, //6C
 			0x25CA,0x005E,0x00A8,0x25D8, //70 DIAMOND,UP ARROW, DIAERESIS, INVERSE BULLET
 			0X0020,0X20AC,0X251C,0X251D, //74 ?,EURO,VERT-RIGHT,VERT-LEFT
 			0X0076,0X0020,0X0020,0X0020, //78 v
-			0X0020,0X0020,0X0020,0X0020, //7C 
+			0X0020,0X0020,0X0020,0X0020, //7C
 			0X007E,0X2551,0X2550,0X2502, //80 TILDE,VERT BARS,HORZ BARS,VERT LEFT BAR
 			0X2502,0X2502,0X0020,0X0020, //84 VERT BAR RIGHT, VERT BAR CENTER
 			0X0020,0X0020,0X2191,0X2193, //88 ,,UP ARROW,DOWN ARROW
@@ -458,9 +479,9 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			0X00B6,0X0020,0X0049,0X0021, //D8 PILCROW,,I,!
 			0X25BC,0X25B2,0X25A1,0X0041, //DC ARROW DOWN, ARROW UP, BLK, A
 			0X2261,0X0031,0X0032,0X0033, //E0 IDENTICAL,1,2,3
-			0X0020,0X0020,0X0020,0X0020, //E4 
+			0X0020,0X0020,0X0020,0X0020, //E4
 			0X0020,0X0020,0X0078,0X0078, //E8 ,,X?,X?
-			0X003A,0X03B8,0X25A1,0X03A6, //EC COLON?,THETA+TOP BAR, BOX, 
+			0X003A,0X03B8,0X25A1,0X03A6, //EC COLON?,THETA+TOP BAR, BOX,
 			0X0030,0X0031,0X0032,0X0033, //F0 0-3
 			0X0034,0X0035,0X0036,0X0037, //F4 4-7
 			0X0038,0X0039,0X25BC,0X25B2, //F8 8,9,TILDE+DOWN ARROW, UP ARROW+UNDERLINE
@@ -484,7 +505,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * Set security permissions.
 	 * Notes:
 	 *   1. Called from main() or init before gz390 instance started so only set class variables.
-  	 * 
+  	 *
 	 * @param args
 	 * @return
 	 */
@@ -529,7 +550,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		sb.append("GZ390E error ").append(error).append(" ").append(msg);
 
 		gz390_errors++;
-		cmd_error = true;
+		// cmd_error = true;
 		guam_put_log(sb.toString());
 
 		if (tz390.max_errors != 0 && gz390_errors > tz390.max_errors) {
@@ -587,24 +608,24 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	/**
 	 * 1. Parse parameters and execute gz390 command if found.
 	 *    a. * in position 1 is a comment
-	 *    e. space or null logged as blank line 
+	 *    e. space or null logged as blank line
 	 * 2. If not a known gz390 command, issue CMD Windows command.
 	 * @param cmd_line
 	 */
 	private void process_command(final String cmd_line)
 	{
-		/* 
+		/*
 		 * Notes:
 		 * 1.  gz390_cmd_line event handler routes input to CMD processor when in cmd_mode.
 		 * 2.  Some commands will issue retry or cancel error message if command
 		 *     running on separate thread to avoid file conflicts or deadlocks.  Other
-		 *     non destructive commands will proceed in parallel which may cause log 
+		 *     non destructive commands will proceed in parallel which may cause log
 		 *     messages to be intermixed.
 		 * 3.  Status bar shows progress of command processes on separate threads.
 		 * 4.  Use EXIT or BREAK event to abort CMD process. CTRL-C works in command mode only.
 		 */
 		try {
-			cmd_error = false;
+			// cmd_error = false;
 			if  (cmd_line == null || cmd_line.length() == 0 || cmd_line.equals(" ")) {
 				return;
 			}
@@ -619,7 +640,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 					while (st.hasMoreTokens()) {
 						final String next_token = st.nextToken();
 						if (next_token != null && !next_token.equals(" ")) {
-							cmd_parm2 = cmd_parm2 + " " + next_token; 
+							cmd_parm2 = cmd_parm2 + " " + next_token;
 						}
 					}
 				}
@@ -696,8 +717,10 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private void about_command()
 	{
 		guam_put_log("\nz390 GUAM GUI gz390 Graphical User Access Method " + tz390.version);
-		guam_put_log("Copyright 2011 Automated Software Tools Corporation");
-		guam_put_log("z390 is licensed under GNU General Public License");
+		guam_put_log(Constants.sCopyright2011);
+		guam_put_log(Constants.sCopyright2013);
+		guam_put_log(Constants.sCopyright2018);
+		guam_put_log(Constants.sGnuLicence);
 		guam_put_log("gz390 supports MCS, TN3270, and Graphic panel views");
 		guam_put_log("gz390 J2SE Java source is distributed as part of z390");
 		guam_put_log("Visit www.z390.org for additional information and support");
@@ -725,7 +748,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	}
 
 	/**
-	 * Reset font size for menu, log, cmd and status line. 
+	 * Reset font size for menu, log, cmd and status line.
 	 */
 	private void set_text_font()
 	{
@@ -734,9 +757,9 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		file_menu.setFont(           char_font);
 		edit_menu.setFont(           char_font);
 		view_menu.setFont(           char_font);
-		help_menu.setFont(           char_font); 
+		help_menu.setFont(           char_font);
 		file_menu_exit.setFont(      char_font);
-		edit_menu_cut.setFont(       char_font); 
+		edit_menu_cut.setFont(       char_font);
 		edit_menu_copy.setFont(      char_font);
 		edit_menu_paste.setFont(     char_font);
 		edit_menu_select_all.setFont(char_font);
@@ -764,7 +787,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		guam_put_log("View menu MCS     - Display WTO and WTOR scrolling window (default)");
 		guam_put_log("View menu TN3270  - Display TPUT and TGET TN3270 window");
 		guam_put_log("View menu Graph   - Display graph drawn by gz390 GKS commands");
-		guam_put_log("Help menu Support - Link to www.z390.org"); 
+		guam_put_log("Help menu Support - Link to www.z390.org");
 	}
 
 	/**
@@ -772,12 +795,12 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private void monitor_startup()
 	{
-		monitor_last_time = System.currentTimeMillis();
-		monitor_last_ins_count = ins_count;
-		status_last_time = monitor_last_time;
-		status_last_ins_count = ins_count;
+		// monitor_last_time = System.currentTimeMillis();
+		// monitor_last_ins_count = ins_count;
+		// status_last_time = monitor_last_time;
+		// status_last_ins_count = ins_count;
 		try {
-			ActionListener cmd_listener = new ActionListener() {
+			final ActionListener cmd_listener = new ActionListener() {
 				public void actionPerformed(final ActionEvent evt) {
 					monitor_update();
 				}
@@ -797,25 +820,25 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private void monitor_update()
 	{
 		refresh_wait = false;  // reset main_view wait
-		monitor_next_time = System.currentTimeMillis();
-		monitor_next_ins_count = ins_count;
-		monitor_next_io_count = io_count;
-		monitor_cur_interval = monitor_next_time - monitor_last_time;
-		monitor_cmd_time_total = (monitor_next_time - start_cmd_time)/1000;
+		// monitor_next_time = System.currentTimeMillis();
+		// monitor_next_ins_count = ins_count;
+		// monitor_next_io_count = io_count;
+		// monitor_cur_interval = monitor_next_time - monitor_last_time;
+		// monitor_cmd_time_total = (monitor_next_time - start_cmd_time)/1000;
 		title_update();
 		if (!tn_scn_lock) {
-			process_typed_keys(); // RPI 861		
+			process_typed_keys(); // RPI 861
 		}
-		check_main_view(); 
-		monitor_last_time = monitor_next_time;
-		monitor_last_ins_count  = monitor_next_ins_count;
-		monitor_last_io_count   = monitor_next_io_count;
+		check_main_view();
+		// monitor_last_time = monitor_next_time;
+		// monitor_last_ins_count = monitor_next_ins_count;
+		// monitor_last_io_count  = monitor_next_io_count;
 	}
 
 	/*
 	 **************************************************
 	 * Command support functions
-	 **************************************************  
+	 **************************************************
 	 */
 
 	/**
@@ -823,14 +846,14 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private void init_tn3270_screen()
 	{
-		tn_scn = new gz390_screen(tz390);
+		tn_scn = new gz390_screen();
 		// tn_scn.tz390 = tz390; // RPI 671
 		set_char_font();
 		init_tn3270_arrays(max_rows, max_cols);
 		tn_scn.setScreen(max_rows, max_cols, char_font, bg_color, tx_color);
 		tn_clear_screen();
 	}
-	
+
 	private void init_tn3270_arrays(final int rows, final int cols)
 	{
 		max_cols = cols;
@@ -848,7 +871,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		scn_attr  = new int[    max_addr];
 		scn_hl    = new int[    max_addr];
 		scn_color = new int[    max_addr];
-		scn_char  = new char[   max_addr]; // set to display char else blank   
+		scn_char  = new char[   max_addr]; // set to display char else blank
 		scn_addr  = 0;
 	}
 
@@ -862,7 +885,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		main_frame = new JFrame();
 		title_update();
 		main_frame.setSize(tn_scn.main_width, tn_scn.main_height);
-		main_frame.setLocation(main_loc_x, main_loc_y);
+		main_frame.setLocation(Constants.posMainFrameX, Constants.posMainFrameY);
 		main_frame.addComponentListener(this);
 		build_main_panel();
 		set_char_font();
@@ -880,7 +903,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	{
 		main_panel = new JPanel();
 		main_panel.setBorder(BorderFactory.createEmptyBorder(0, Constants.numBorderWidth, Constants.numBorderWidth, Constants.numBorderWidth));
-		main_panel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
+		main_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		build_menu_items();
 		set_tooltips();
 		build_log_view();
@@ -907,7 +930,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	}
 
 	/**
-	 * 
+	 *
 	 * @param rc
 	 */
 	private void exit_main(final int rc)
@@ -933,7 +956,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		main_view = new JScrollPane(log_text);
 		main_view.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
 			public void adjustmentValueChanged(final AdjustmentEvent e) {
-				if (main_view_changed){
+				if (main_view_changed) {
 					main_view_changed = false;
 					main_view.getVerticalScrollBar().setValue(main_view.getVerticalScrollBar().getMaximum());
 				}
@@ -1040,7 +1063,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		help_menu_support.addActionListener(this);
 		help_menu_about.addActionListener(this);
 
-		file_menu.add(file_menu_exit); 
+		file_menu.add(file_menu_exit);
 		edit_menu.add(edit_menu_cut);
 		edit_menu.add(edit_menu_copy);
 		edit_menu.add(edit_menu_paste);
@@ -1119,7 +1142,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			break;
 		//case 'B':
 		//	break;
-		case 'C':	
+		case 'C':
 			if (event_name.equals("COPY")) {
 				event_ok = true;
 				if  (log_text == focus_comp) {
@@ -1137,7 +1160,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			}
 			if (event_name.equals("CUT")) {
 				event_ok = true;
-				if  (gz390_cmd_line ==  focus_comp){
+				if  (gz390_cmd_line ==  focus_comp) {
 					gz390_cmd_line.cut();
 				}
 			}
@@ -1191,7 +1214,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 					guam_put_log(getClipboard()); // append to log
 					guam_put_log("PASTE from clipboard ending   " + time_stamp());
 				}
-				if  (gz390_cmd_line ==  focus_comp){
+				if  (gz390_cmd_line ==  focus_comp) {
 					gz390_cmd_line.paste();
 				}
 			}
@@ -1199,16 +1222,16 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		//case 'R':
 		//	break;
 		case 'S':
-			if (event_name.equals("SELECT ALL")){
+			if (event_name.equals("SELECT ALL")) {
 				event_ok = true;
-				if  (log_text == focus_comp){
+				if  (log_text == focus_comp) {
 					log_text.selectAll();
 				}
-				if  (gz390_cmd_line ==  focus_comp){
+				if  (gz390_cmd_line ==  focus_comp) {
 					gz390_cmd_line.selectAll();
 				}
 			}
-			if (event_name.equals("SUPPORT")){
+			if (event_name.equals("SUPPORT")) {
 				event_ok = true;
 				final InfoOS infoOS = InfoOS.getInstance();
 				exec_cmd(infoOS.get_z390_browser() + " http://www.z390.org");
@@ -1238,7 +1261,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private String time_stamp()
 	{
-		final Date temp_date = new Date(); 
+		final Date temp_date = new Date();
 		return mmddyy.format(temp_date) + " " + hhmmss.format(temp_date);
 	}
 
@@ -1252,7 +1275,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			cmd_line = " ";
 		}
 		reset_gz390_cmd();
-		process_command(cmd_line); 
+		process_command(cmd_line);
 	}
 
 	/**
@@ -1271,7 +1294,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private boolean exec_cmd(final String cmd)
 	{
-		if (perms.mayExecFiles()) { // if (perm_file_execute){
+		if (perms.mayExecFiles()) { // if (perm_file_execute) {
 			try {
 				Runtime.getRuntime().exec(cmd);
 				return true;
@@ -1314,22 +1337,22 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	/**
 	 * Handle key pressed events.
 	 */
-	public void keyPressed(KeyEvent e)
+	public void keyPressed(final KeyEvent e)
 	{
-		// displayInfo(e, "KEY PRESSED: "); //dsh 
+		// displayInfo(e, "KEY PRESSED: "); //dsh
 		final int key_code = e.getKeyCode();
-		final int key_mods = e.getModifiers();
-		if  (e.isActionKey()){
+		final int key_mods = e.getModifiersEx();
+		if  (e.isActionKey()) {
 			process_action_key_pressed(key_code,key_mods,e);
 		} else {  // not action key
-			process_non_action_key_pressed(key_code,key_mods,e);        	   
+			process_non_action_key_pressed(key_code,key_mods,e);
 		}
 		if (    key_code == KeyEvent.VK_CLEAR
-			|| (key_code == KeyEvent.VK_C && key_mods == KeyEvent.CTRL_MASK)){
-			if (!tn_kb_lock){
+			|| (key_code == KeyEvent.VK_C && (key_mods & KeyEvent.CTRL_DOWN_MASK) == KeyEvent.CTRL_DOWN_MASK)) {
+			if (!tn_kb_lock) {
 				tn_aid = tn_clear_code; // clear key
 				tn_attn = true;
-				tn_clear_screen(); 
+				tn_clear_screen();
 			}
 		}
 	}
@@ -1343,9 +1366,9 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private void process_action_key_pressed(int key_code,int key_mods, KeyEvent e)
 	{
 		process_typed_keys();
-		if (tn_kb_lock){
+		if (tn_kb_lock) {
 			// MCS mode action keys
-			switch (key_code){
+			switch (key_code) {
 			case KeyEvent.VK_UP:
 				gz390_cmd_line.setText(cmdHistory.get_prev_cmd()); // get_prev_cmd();
 				return;
@@ -1379,88 +1402,90 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 				return;
 			}
 		}
-		if (key_mods == KeyEvent.CTRL_MASK){
-			switch (key_code){
-			case KeyEvent.VK_F1: 
+		// if (key_mods == KeyEvent.CTRL_MASK) {
+		if ((key_mods & KeyEvent.CTRL_DOWN_MASK) == KeyEvent.CTRL_DOWN_MASK) {
+			switch (key_code) {
+			case KeyEvent.VK_F1:
 				// CTRL-F1 = PA1
-				if (!tn_kb_lock){
+				if (!tn_kb_lock) {
 					tn_aid = tn_pa1_code;  // PA1
 					tn_attn = true;
 				}
 				return;
 			case KeyEvent.VK_F2:
 				// CTRL-F2 = PA2
-				if (!tn_kb_lock){
+				if (!tn_kb_lock) {
 					tn_aid = tn_pa2_code;  //PA2
 					tn_attn = true;
 				}
 				return;
-			case KeyEvent.VK_F3:   
+			case KeyEvent.VK_F3:
 				// CTRL-F3 = PA3
-				if (!tn_kb_lock){
+				if (!tn_kb_lock) {
 					tn_aid = tn_pa3_code;  //PA3
 					tn_attn = true;
 				}
 				return;
-			case KeyEvent.VK_F6:   
+			case KeyEvent.VK_F6:
 				// CTRL-F6 = EEOF erase to end of current field
 				if (!tn_kb_lock
-						&& tn_input_field()){
+						&& tn_input_field()) {
 					tn_erase_to_end(); // RPI 628
 					tn_modify_field();  // RPI 861
 				} else {
 					sound_alarm_beep();
 				}
 				return;
-			case KeyEvent.VK_F7:   
+			case KeyEvent.VK_F7:
 				// CTRL-F7 = EINF erase all unprotected fields
-				if (!tn_kb_lock){
+				if (!tn_kb_lock) {
 					tn_erase_all_unprotected(); // RPI 628
 				}
 				return;
 			}
 			return;
 		}
-		if (key_mods == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK)){ 
+		// if (key_mods == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK)) {
+		if ( (key_mods & (KeyEvent.ALT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK)) == (KeyEvent.ALT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK) ) {
 			// RPI 216  CTRL-ALT-F1-12 = F13-24
 			if (   key_code >= KeyEvent.VK_F1
-				&& key_code <= KeyEvent.VK_F9){
-				if (!tn_kb_lock){
+				&& key_code <= KeyEvent.VK_F9) {
+				if (!tn_kb_lock) {
 					tn_aid = 0xc1 + key_code - KeyEvent.VK_F1;
 					tn_attn = true;
 				}
 				return;
 			}
 			if (   key_code >= KeyEvent.VK_F10
-				&& key_code <= KeyEvent.VK_F12){
-				if (!tn_kb_lock){
+				&& key_code <= KeyEvent.VK_F12) {
+				if (!tn_kb_lock) {
 					tn_aid = 0x4a + key_code - KeyEvent.VK_F10;
 					tn_attn = true;
 				}
-				if (key_code == KeyEvent.VK_F10){
+				if (key_code == KeyEvent.VK_F10) {
 					e.consume(); // RPI 630 consume Windows annoying file menu popup for PF10
 				}
 				return;
 			}
 			return;
 		}
-		switch (key_code){
+		switch (key_code) {
 		case KeyEvent.VK_F1:   // F1 help
-			if (!tn_kb_lock){
+			if (!tn_kb_lock) {
 				tn_aid = 0xf1;
 				tn_attn = true;
 			} else {
 				help_command();
 			}
 			return;
-		case KeyEvent.VK_F2:   
-			if (!tn_kb_lock){
+		case KeyEvent.VK_F2:
+			if (!tn_kb_lock) {
 				tn_aid = 0xf2;
 				tn_attn = true;
 			}
 			return;
 		case KeyEvent.VK_F3:   // F3 exit
-			if (!tn_kb_lock){
+			if (!tn_kb_lock) {
 				tn_aid = 0xf3;
 				tn_attn = true;
 				return;
@@ -1471,7 +1496,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		}
 		if (   key_code >= KeyEvent.VK_F4
 			&& key_code <= KeyEvent.VK_F9) {
-			if (!tn_kb_lock){
+			if (!tn_kb_lock) {
 				tn_aid = 0xf4 + key_code - KeyEvent.VK_F4;
 				tn_attn = true;
 			}
@@ -1479,7 +1504,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		}
 		if (   key_code >= KeyEvent.VK_F10
 			&& key_code <= KeyEvent.VK_F12) {
-			if (!tn_kb_lock){
+			if (!tn_kb_lock) {
 				tn_aid = 0x7a + key_code - KeyEvent.VK_F10;
 				tn_attn = true;
 			}
@@ -1490,7 +1515,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		}
 		if (   key_code >= KeyEvent.VK_F13
 			&& key_code <= KeyEvent.VK_F21) {
-			if (!tn_kb_lock){
+			if (!tn_kb_lock) {
 				tn_aid = 0xc1 + key_code - KeyEvent.VK_F13;
 				tn_attn = true;
 			}
@@ -1498,7 +1523,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		}
 		if (   key_code >= KeyEvent.VK_F22
 			&& key_code <= KeyEvent.VK_F24) {
-			if (!tn_kb_lock){
+			if (!tn_kb_lock) {
 				tn_aid = 0x4a + key_code - KeyEvent.VK_F22;
 				tn_attn = true;
 			}
@@ -1514,26 +1539,26 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private void process_non_action_key_pressed(final int key_code, final int key_mods, final KeyEvent e)
 	{
-		switch (key_code){
+		switch (key_code) {
 		case KeyEvent.VK_ENTER:
-			if (!tn_kb_lock){
+			if (!tn_kb_lock) {
 				process_typed_keys();
 				tn_attn = true;
 				tn_aid = tn_enter_code;
 			}
 			break;
 		case KeyEvent.VK_BACK_SPACE:
-			if (!tn_kb_lock){
+			if (!tn_kb_lock) {
 				process_typed_keys();
 				tn_scn_addr_dec();
 				tn_update_cursor();
 			}
 			break;
 		case KeyEvent.VK_DELETE: // RPI 630
-			if (!tn_kb_lock){
+			if (!tn_kb_lock) {
 				process_typed_keys();
 			}
-			tn_delete_request = true; 
+			tn_delete_request = true;
 			break;
 		case KeyEvent.VK_CANCEL:
 			process_typed_keys();
@@ -1564,7 +1589,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	public void keyTyped(final KeyEvent e)
 	{
 		// displayInfo(e, "KEY TYPED: "); //dsh
-		if (guam_tot_key < max_keys){
+		if (guam_tot_key < max_keys) {
 			guam_key_code_char[guam_tot_key] = e.getKeyCode() << 16
 					| (int) e.getKeyChar();
 			guam_tot_key++;
@@ -1580,7 +1605,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		int index = 0;
 		while (index < guam_tot_key) {
 			key_char = (char) guam_key_code_char[index];
-			switch (key_char){
+			switch (key_char) {
 			case KeyEvent.VK_TAB:
 				if (!tn_kb_lock) {
 					tn_tab();
@@ -1588,19 +1613,19 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 				break;
 			case KeyEvent.VK_ENTER:
 			case KeyEvent.VK_BACK_SPACE:
-			case KeyEvent.VK_DELETE: // RPI 630 
+			case KeyEvent.VK_DELETE: // RPI 630
 			case KeyEvent.VK_CANCEL:
 				// ignore keys handled in keypress
 				break;
 			default:
-				if (!tn_kb_lock){
+				if (!tn_kb_lock) {
 					if (tn_input_field()) {
 						if ((scn_attr[cur_fld_addr] & tn_numeric_mask) == tn_numeric_mask
 							&& (key_char < '0' || key_char > '9')) {
 							sound_alarm_beep();
 							status_line.setText(status_line_view + " Alarm - invalid key for numeric field");
 							guam_tot_key = 0;
-							return; 
+							return;
 						} else {
 							tn_modify_field();
 							scn_char[scn_addr] = key_char;
@@ -1751,10 +1776,10 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 
 		final Component temp_comp = e.getComponent();
 
-		if (temp_comp == log_text || focus_comp == main_view){
+		if (temp_comp == log_text || focus_comp == main_view) {
 			focus_comp = log_text;
 		}
-		if (temp_comp == gz390_cmd_line){
+		if (temp_comp == gz390_cmd_line) {
 			focus_comp = temp_comp;
 		}
 	}
@@ -1769,7 +1794,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	}
 
 	/**
-	 * 
+	 *
 	 * @param path
 	 * @param description
 	 * @return
@@ -1920,7 +1945,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		if (rows > 0) { // user request for new screen size
 			init_tn3270_arrays(rows, cols);
 		}
-		if (tn_scn == null || rows != 0) { 
+		if (tn_scn == null || rows != 0) {
 			init_tn3270_screen();
 			tn_clear_screen();  // RPI 671
 		}
@@ -1980,7 +2005,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			main_view = new JScrollPane(log_text);
 			main_view.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 			main_view.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-				public void adjustmentValueChanged(final AdjustmentEvent e){
+				public void adjustmentValueChanged(final AdjustmentEvent e) {
 					if (main_view_changed) {
 						main_view_changed = false;
 						main_view.getVerticalScrollBar().setValue(main_view.getVerticalScrollBar().getMaximum());
@@ -2029,12 +2054,12 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 
 //		main_panel.setSize(cxPanel, cyPanel);
 //		main_panel.setPreferredSize(new Dimension(cxPanel, cyPanel));
-		
+
 		tn_scn.resizeScreen(cxLogVw,cyLogVw);
-		
+
 		main_view = tn_scn.getScreenPanel();
-		main_view.setSize(tn_scn.scn_width, tn_scn.scn_height);
-		main_view.setPreferredSize(new Dimension(tn_scn.scn_width, tn_scn.scn_height));
+		main_view.setSize(                       tn_scn.getScnWidth(), tn_scn.getScnHeight() );
+		main_view.setPreferredSize(new Dimension(tn_scn.getScnWidth(), tn_scn.getScnHeight()));
 
 		tn_repaint_screen();
 
@@ -2042,7 +2067,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	}
 
 	/**
-	 * Adjust command line and status line text field according to new width. 
+	 * Adjust command line and status line text field according to new width.
 	 * @param cxView
 	 */
 	private void set_main_view_textfields(final int cxView)
@@ -2107,13 +2132,13 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 
 		// Add the optional labels and lines
 		main_panel.add(cmd_label);
-		// gz390_cmd_line.setFont(tn_scn.getScreenFont()); // RPI 686 
+		// gz390_cmd_line.setFont(tn_scn.getScreenFont()); // RPI 686
 		// status_line.setFont(   tn_scn.getScreenFont()); // RPI 686
 		// command_columns = tn_scn.scn_cols - 10;  // RPI 686
 		gz390_cmd_line.setColumns(Constants.numDefaultCommandColumns);
 
 		// disable focus subsystem to process tab key
-		gz390_cmd_line.setFocusTraversalKeysEnabled(false); 
+		gz390_cmd_line.setFocusTraversalKeysEnabled(false);
 		main_panel.add(gz390_cmd_line);
 		main_panel.add(status_label);
 		main_panel.add(status_line);
@@ -2152,7 +2177,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		  .append("; new size: ").append(c.getSize().width).append(", ").append(c.getSize().height);
 		System.out.println(sb.toString());
 
-	*/	check_main_view(); 
+	*/	check_main_view();
 		update_main_view();
 	}
 
@@ -2180,24 +2205,24 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		int text_start = 0;
 		int text_end   = 0;
 		guam_cur_col = 1;
-		while (text_start < text.length()){
-			if (guam_cur_row == 1){
+		while (text_start < text.length()) {
+			if (guam_cur_row == 1) {
 				scn_addr = 0;
 			} else {
 				scn_addr = (guam_cur_row-1)*max_cols;
 			}
 			text_end = text_start + max_cols;
-			if (text_end > text.length()){
+			if (text_end > text.length()) {
 				text_end = text.length();
 			}
 			int index = text_start;
 			int addr  = scn_addr;
-			while (index < text_end){
+			while (index < text_end) {
 				scn_char[addr] = text.charAt(index);
 				tn_update_scn(addr);
 				index++;
 				addr++;
-				if (addr >= max_addr){
+				if (addr >= max_addr) {
 					addr = 0;
 				}
 			}
@@ -2218,7 +2243,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		switch (tpg_type) {
 		case 0x01: // asis and noedit  RPI 219
 			tn_get_tput_byte(); // first byte always write
-			if (tput_buff_byte == tn_erase_write){
+			if (tput_buff_byte == tn_erase_write) {
 				tn_clear_screen();
 			}
 			tn_get_tput_byte(); // second byte always wcc
@@ -2226,11 +2251,11 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			break;
 		case 0x03: // fullscr
 			tn_get_tput_byte(); // first byte esc or wcc
-			if (tput_buff_byte == tn_esc){
+			if (tput_buff_byte == tn_esc) {
 				tn_get_tput_byte(); // wrt,wcc follows esc
-				if (tput_buff_byte == tn_erase_write){
+				if (tput_buff_byte == tn_erase_write) {
 					tn_clear_screen();
-				} else if (tput_buff_byte == tn_write_eau){ 
+				} else if (tput_buff_byte == tn_write_eau) {
 					tn_erase_all_unprotected(); // RPI 628
 				}
 				tn_get_tput_byte(); // wcc following esc,wrt
@@ -2246,7 +2271,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 				break;
 			case 0x08: // GE  graphic escape
 				tn_get_tput_byte();
-				scn_char[scn_addr] = apl_char[tput_buff_byte]; 		  
+				scn_char[scn_addr] = apl_char[tput_buff_byte];
 				tn_update_scn(scn_addr);
 				tn_next_field_addr();
 				break;
@@ -2273,17 +2298,17 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 				tn_ra();
 				break;
 			default: // write data in next input field postion
-				if (scn_addr >= max_addr){
+				if (scn_addr >= max_addr) {
 					scn_addr = scn_addr - max_addr; // RPI 927
 				}
-				if (scn_fld[scn_addr]){ // RPI 861
+				if (scn_fld[scn_addr]) { // RPI 861
 					tn_drop_field(scn_addr);
 				}
 				scn_attr[scn_addr]  = cur_fld_attr;
 				scn_hl[scn_addr]    = cur_fld_hl;
 				scn_color[scn_addr] = cur_fld_color;
 				scn_char[scn_addr] = (char)tz390.ebcdic_to_ascii[tput_buff_byte];
-				if ((tput_buff_byte & 0xff) == 255){
+				if ((tput_buff_byte & 0xff) == 255) {
 					scn_char[scn_addr] = ff_char;  // RPi 927
 				}
 				tn_update_scn(scn_addr);
@@ -2291,7 +2316,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			}
 		}
 		scn_addr = tn_cursor_scn_addr; // RPI 630 reset to last insert cursor
-		tn_scn.startScreenUpdates(); 
+		tn_scn.startScreenUpdates();
 	}
 
 	/**
@@ -2305,7 +2330,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	{
 		int first_input_sba = -1;
 		int index = 0;
-		while (index < fld_mdt_tot){
+		while (index < fld_mdt_tot) {
 			if ((scn_char[fld_mdt_addr[index]] & tn_protect_mask) == 0) {
 				scn_addr = fld_mdt_addr[index]+1;
 				if (first_input_sba == -1) {
@@ -2317,7 +2342,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		}
 		tn_reset_mdt();
 		if (first_input_sba == -1) {
-			first_input_sba = 0; 
+			first_input_sba = 0;
 		}
 		scn_addr = first_input_sba;
 		tn_update_cursor();
@@ -2332,14 +2357,14 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private void tn_erase_to_end() // RPI 628
 	{
 		int index = scn_addr;
-		while (!scn_fld[index]){  // RPI 861
+		while (!scn_fld[index]) {  // RPI 861
 			scn_char[index] = scn_null;
 			tn_update_scn(index);
 			index++;
-			if (index > max_addr){
+			if (index > max_addr) {
 				index = 0;
 			}
-			if (index == scn_addr){
+			if (index == scn_addr) {
 				return;
 			}
 		}
@@ -2407,13 +2432,13 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	{
 		final int sba_end = tn_get_buff_addr();
 		while (scn_addr != sba_end) {
-			if (tn_input_field()) {  // RPI 861 
+			if (tn_input_field()) {  // RPI 861
 				// erase and reset mdt in unprotected fields
 				scn_char[scn_addr] = scn_null;
 				tn_update_scn(scn_addr);
 			}
 			tn_scn_addr_inc();
-		}	
+		}
 	}
 
 	/**
@@ -2438,7 +2463,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			scn_hl[sba]    = cur_fld_hl;    // RPI 1091
 			scn_color[sba] = cur_fld_color; // RPI 1091
 			scn_char[sba] = (char)tz390.ebcdic_to_ascii[ra_byte & 0xff]; // RPI 628
-			if ((ra_byte & 0xff) == 255){
+			if ((ra_byte & 0xff) == 255) {
 				scn_char[sba] = ff_char;  // RPi 927
 			}
 			tn_update_scn(sba);
@@ -2469,13 +2494,13 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		int sba_next = max_addr;
 		int index = 0;
 		int save_cur_fld_addr = cur_fld_addr;;
-		while (index < fld_mdt_tot){
-			cur_fld_addr = fld_mdt_addr[index]; 
+		while (index < fld_mdt_tot) {
+			cur_fld_addr = fld_mdt_addr[index];
 			if (   cur_fld_addr > scn_addr
 				&& cur_fld_addr < sba_next
 				&& (scn_attr[cur_fld_addr] & tn_protect_mask) == 0  // RPI 1094 skip prot fields
 				) {
-				sba_next = cur_fld_addr; 
+				sba_next = cur_fld_addr;
 			} else if (cur_fld_addr < sba_first
 				&& (scn_attr[cur_fld_addr] & tn_protect_mask) == 0  // RPI 1094 skip prot fields
 				) {
@@ -2508,7 +2533,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private boolean tn_input_field()
 	{
-		cur_fld_addr = 0; 
+		cur_fld_addr = 0;
 		if (fld_tot == 0) {
 			return true;
 		}
@@ -2560,7 +2585,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			tn_cursor_alt = false; // RPI 630
 			tn_update_scn(tn_cursor_scn_addr);
 		}
-		if (scn_addr >= max_addr){
+		if (scn_addr >= max_addr) {
 			tn_cursor_scn_addr = 0; // RPI 861
 		}
 		tn_cursor_scn_addr = scn_addr;
@@ -2581,11 +2606,11 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		if (save_char == (char)0x00 || (scn_attr[sba] & fld_attr_nd) == fld_attr_nd) { // RPI 850
 			scn_char[sba] = ' '; // RPI 638
 		}
-		tn_scn.setScreenLayout( new TextLayout("" + scn_char[sba],tn_scn.getScreenFont(), tn_scn.scn_context) ); // RPI 630 scn_addr > sba
+		tn_scn.setScreenLayout( new TextLayout("" + scn_char[sba],tn_scn.getScreenFont(), tn_scn.getContext()) ); // RPI 630 scn_addr > sba
 		final int row = sba / max_cols;
 		final int col = sba - row * max_cols;
-		final int x   = col * tn_scn.scn_char_width;
-		final int y   = row * tn_scn.scn_char_height + tn_scn.scn_char_base;
+		final int x   = col * tn_scn.getCharWidth();
+		final int y   = row * tn_scn.getCharHeight() + tn_scn.getCharBase();
 		if (scn_color[sba] != 0) {						// RPI 630 scn_addr > sba
 			int tn_color_index = scn_color[sba] & 0xf;	// RPI 630 scn_addr > sba
 			if (tn_color_index > tn_color.length) {
@@ -2593,17 +2618,17 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			}
 			tx_color = tn_color[tn_color_index];
 		} else {
-			tx_color = tn_scn.scn_text_color;
+			tx_color = tn_scn.getTextColor();
 		}
 		if (scn_hl[sba] != 0 || (scn_attr[sba] & fld_attr_hl) != 0) {  // RPI 630 scn_addr > sba
-			tn_scn.scn_grid.setColor(tx_color.brighter());
+			tn_scn.getGrid().setColor(tx_color.brighter());
 		} else {
-			tn_scn.scn_grid.setColor(tx_color);
+			tn_scn.getGrid().setColor(tx_color);
 		}
 
-		tn_scn.scn_grid.clearRect(x-1, y-tn_scn.scn_char_base, tn_scn.scn_char_width+1, tn_scn.scn_char_height);
-		tn_scn.scn_grid.drawChars(scn_char,sba,1, x, y);  // RPI 630
-		
+		tn_scn.getGrid().clearRect(x-1, y-tn_scn.getCharBase(), tn_scn.getCharWidth()+1, tn_scn.getCharHeight());
+		tn_scn.getGrid().drawChars(scn_char,sba,1, x, y);  // RPI 630
+
 		scn_char[sba] = save_char; // RPI 628
 		tn_scn.allowRepaint(true);
 	}
@@ -2613,12 +2638,12 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 *   1, action key  = enter, PF, PA, or clear key)
 	 *   2, sba of cursor (if enter or PF only) RPI 856
 	 *   3. sba code x'11', sba addr, modified data bytes for each mdt field else
-	 *   4. Modified data bytes for unformatted screen with no mdt fields 
+	 *   4. Modified data bytes for unformatted screen with no mdt fields
 	 */
 	private void tn_get_screen_input()
 	{
 		tget_byte[0] = (byte) tn_aid;
-		if ( tget_len == 1 
+		if ( tget_len == 1
 			|| tn_aid == tn_clear_code // RPI 856
 			|| tn_aid == tn_pa1_code   // RPI 856
 			|| tn_aid == tn_pa2_code   // RPI 856
@@ -2629,7 +2654,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		}
 		tget_byte[1] = (byte)sba_to_ebc[scn_addr >> 6];
 		tget_byte[2] = (byte)sba_to_ebc[scn_addr & 0x3f];
-		if (fld_mdt_tot == 0){
+		if (fld_mdt_tot == 0) {
 			tn_unformatted_input();
 		} else {
 			tn_formatted_input();
@@ -2659,19 +2684,19 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			}
 			sba++;
 		}
-		if (tget_index < tget_len){
+		if (tget_index < tget_len) {
 			tget_len = tget_index; // set actual length
 		}
 	}
 
 	/**
-	 * Return modified input fields preceeded with sba code x'11' and sba addr
+	 * Return modified input fields preceded with sba code x'11' and sba addr
 	 */
 	private void tn_formatted_input()
 	{
 		tget_index = 3;
 		int index = 0;
-		while (index < fld_mdt_tot){
+		while (index < fld_mdt_tot) {
 			cur_fld_addr = fld_mdt_addr[index];
 			if ((scn_attr[cur_fld_addr] & tn_mdt_mask) == tn_mdt_mask) {
 				int input_sba = cur_fld_addr+1; // RPI 940
@@ -2725,7 +2750,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	{
 	/*
 	 * WCC 0xC3 = clear screen, reset KB and MDT's
-	 * bit 0   - even bit count 
+	 * bit 0   - even bit count
 	 * bit 1   - reset screen
 	 * bit 2-3 - printout format
 	 * bit 4   - start print
@@ -2736,7 +2761,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		if ((tput_buff_byte & 0x40) != 0) { // reset screen
 			// RPI 222 removed tn_clear_screen()
 		}
-		if ((tput_buff_byte & 0x04) != 0) { // sound alarm	
+		if ((tput_buff_byte & 0x04) != 0) { // sound alarm
 			sound_alarm_beep();
 			status_line.setText(status_line_view + " Alarm message");
 		}
@@ -2746,7 +2771,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			tn_kb_lock = true;
 			status_line.setText(status_line_view + " Display only with keyboard locked");
 		}
-		if ((tput_buff_byte & tn_mdt_mask) == tn_mdt_mask){  // reset mult data tags
+		if ((tput_buff_byte & tn_mdt_mask) == tn_mdt_mask) {  // reset mult data tags
 			tn_reset_mdt();
 		}
 	}
@@ -2774,15 +2799,15 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		Arrays.fill(scn_char,0,max_addr,scn_null); // RPI 856
 		Arrays.fill(scn_fld, 0,max_addr,false);    // RPI 861
 		Arrays.fill(scn_attr,0,max_addr,0);
-		// JBA - Why not the other arrays???
+		// JBA - Why not filling up the other arrays???
 		// fld_addr + scn_hl + scn_color
-		fld_tot = 0;
+		fld_tot     = 0;
 		fld_mdt_tot = 0;
-		scn_addr = 0;
-		tn_cursor_scn_addr = 0; 
+		scn_addr           = 0;
+		tn_cursor_scn_addr = 0;
 		tn_cursor = true;
 		tn_cursor_alt = false;
-		tn_scn.scn_grid.clearRect(0,0,tn_scn.scn_width,tn_scn.scn_height);
+		tn_scn.getGrid().clearRect(0,0,tn_scn.getScnWidth(),tn_scn.getScnHeight());
 	}
 
 	/**
@@ -2830,12 +2855,12 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private void tn_start_field()
 	{
-		/* 
+		/*
 		 *   1.  Set current tn_field_attr.
 		 *   2.  Set 1 protected blank at start of field.
 		 *   3.  Save unique unprotected fields in ascending order until next wcc
 		 *       clears them all.
-		 * 
+		 *
 		 * field attribute byte
 		 * bit  0-1 - set to form EBCDIC/ASCII graphic symbol rpi 572
 		 * bit  2   - protected output
@@ -2853,7 +2878,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		cur_fld_color = 0;
 		scn_attr[scn_addr] = cur_fld_attr;
 		tput_index++;
-		tn_add_field_addr(); 
+		tn_add_field_addr();
 		if (   (cur_fld_attr & tn_protect_mask) == 0
 			|| (cur_fld_attr & tn_mdt_mask) == 1) { // RPI 1061 add PA-MDT fields
 			tn_add_input_field_addr();
@@ -2938,7 +2963,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	private void tn_drop_input_field(final int sba)
 	{
 		int index = 0;
-		while (index < fld_mdt_tot){
+		while (index < fld_mdt_tot) {
 			if (fld_mdt_addr[index] == sba) {
 				index++;
 				while (index < fld_mdt_tot) {
@@ -2957,18 +2982,18 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 */
 	private void tn_eds_start_field()
 	{
-		/* 
+		/*
 		 * Extended data stream start field first byte is count of attribute pairs type attribute
 		 *   C0   basic field attribute
 		 *   41   extended highlighting
 		 *   42   color
-		 *   
+		 *
 		 *   1.  Set current tn_field_attr
 		 *                   tn_field_highlight
 		 *                   tn_color.
 		 *   2.  Set 1 protected blank at start of field.
 		 *   3.  Save unique unprotected fields in ascending order until next wcc clears them all.
-		 * 
+		 *
 		 * basic field attribute byte following x'C0'
 		 * bit  0-1 - set based on remaining bits
 		 * bit  2   - protected output
@@ -2980,13 +3005,13 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 		 *              11 - field not displayed
 		 * bit  6   - reserved
 		 * bit  7   - modified data tag
-		 * 
+		 *
 		 * highlight attribute byte following x'41'
 		 * 00 - normal
 		 * F1 - blink
 		 * F2 - reverse video
 		 * F4 - underscore
-		 * 
+		 *
 		 * color attribute byte following x'42' color attr byte
 		 * 00 Default		F4 Green
 	     * F1 Blue			F5 Turquoise
@@ -3021,12 +3046,12 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 			break;
 		case 0x41: // highlighting
 			cur_fld_hl = tput_byte[tput_index] & 0xff;
-			scn_hl[scn_addr] = cur_fld_hl; // RPI 1151 
+			scn_hl[scn_addr] = cur_fld_hl; // RPI 1151
 			tput_index++;
 			break;
 		case 0x42:  // color
 			cur_fld_color = tput_byte[tput_index] & 0xff;
-			scn_color[scn_addr] = cur_fld_color; // RPI 1151 
+			scn_color[scn_addr] = cur_fld_color; // RPI 1151
 			tput_index++;
 			break;
 		default:
@@ -3095,7 +3120,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	{
 		guam_cur_col = 1;
 		guam_cur_row++;
-		if (guam_cur_row > max_rows){
+		if (guam_cur_row > max_rows) {
 			status_line.setText(status_line_view + " Press enter for next screen.");
 			update_main_view();
 			guam_keyboard_read((tpg_flags & tpg_wait_mask) == tpg_wait);
@@ -3172,7 +3197,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 				wtor_ecb_addr = -1;
 				return wtor_reply_string;
 			} else {
-				log_error(23, "wtor reply error");
+				log_error(23, "wtor reply error.");
 			}
 		}
 		return null;
@@ -3200,8 +3225,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 *   1.  Called from ez390 with ez390_pgm at initialization time if option GUAM.
 	 * @param title
 	 */
-	public void guam_window_title(final String title)
-	{
+	public void guam_window_title(final String title) {
 		main_title = title;
 	}
 
@@ -3210,9 +3234,8 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * Append any output from CMD still in buffers to front of message with \n.
 	 * @param msg
 	 */
-	public synchronized void guam_put_log(final String msg)
-	{
-		io_count++;
+	public synchronized void guam_put_log(final String msg) {
+		// io_count++;
 		log_text.append(msg + "\n");
 		main_view_changed = true;
 	}
@@ -3222,8 +3245,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param x
 	 * @param y
 	 */
-	public void guam_window_loc(int x,int y)
-	{
+	public void guam_window_loc(int x,int y) {
 		if (x < 0) {
 			x = 0;
 		} else
@@ -3246,9 +3268,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 				tn_scn.main_height = tz390.max_main_height - y;
 			}
 		}
-		main_loc_x = x;
-		main_loc_y = y;
-		main_frame.setLocation(main_loc_x, main_loc_y);
+		main_frame.setLocation(x, y);
 		main_frame.setSize(tn_scn.main_width, tn_scn.main_height);
 		refresh_request = true;
 	}
@@ -3258,22 +3278,21 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param x
 	 * @param y
 	 */
-	public void guam_window_size(int x,int y)
-	{
-		main_loc_x = (int) main_frame.getLocation().getX();
-		main_loc_y = (int) main_frame.getLocation().getY();
-		if  (x < tz390.min_main_width){
+	public void guam_window_size(int x,int y) {
+		final int posX = (int) main_frame.getLocation().getX();
+		final int posY = (int) main_frame.getLocation().getY();
+		if (x < tz390.min_main_width) {
 			x = tz390.min_main_width;
 		} else {
-			if (x > tz390.max_main_width - main_loc_x) {
-				x = tz390.max_main_width - main_loc_x;
+			if (x > tz390.max_main_width - posX) {
+				x = tz390.max_main_width - posX;
 			}
 		}
-		if  (y < tz390.min_main_height){
+		if (y < tz390.min_main_height) {
 			y = tz390.min_main_height;
 		} else {
-			if (y > tz390.max_main_height - main_loc_y){
-				y = tz390.max_main_height - main_loc_y;
+			if (y > tz390.max_main_height - posY) {
+				y = tz390.max_main_height - posY;
 			}
 		}
 		tn_scn.main_width  = x;
@@ -3286,13 +3305,12 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * Set font size.
 	 * @param font
 	 */
-	public void guam_window_font(final int font)
-	{
+	public void guam_window_font(final int font) {
 		font_command(font);
 	}
 
 	/**
-	 * set window view  
+	 * set window view
 	 *   1 = MCS console view
 	 *   2 = TN3270 screen view
 	 *   3 = graphics view
@@ -3301,8 +3319,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param y
 	 * @param color
 	 */
-	public void guam_window_view(final GuamViewTypes view, final int x, final int y, final int color)
-	{
+	public void guam_window_view(final GuamViewTypes view, final int x, final int y, final int color) {
 		switch (view) {
 		case MCS: // MCS console view
 			set_view_mcs();
@@ -3324,8 +3341,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 *   3 = graphics view
 	 * @return
 	 */
-	public GuamViewTypes guam_window_getview()
-	{
+	public GuamViewTypes guam_window_getview() {
 		return guam_view;
 	}
 
@@ -3337,8 +3353,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param lbuff
 	 * @param color
 	 */
-	public void guam_screen_write(final int row, final int col, final ByteBuffer buff, final int lbuff, final int color)
-	{
+	public void guam_screen_write(final int row, final int col, final ByteBuffer buff, final int lbuff, final int color) {
 		// TODO
 	}
 
@@ -3349,8 +3364,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param wait
 	 * @return
 	 */
-	public ByteBuffer guam_screen_read(final int lbuff, final boolean wait)
-	{
+	public ByteBuffer guam_screen_read(final int lbuff, final boolean wait) {
 		final byte[] temp_byte = new byte[lbuff];
 		final ByteBuffer temp_buff = ByteBuffer.wrap(temp_byte,0,lbuff);
 		while (guam_tot_key == 0 && wait) {
@@ -3365,8 +3379,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param col
 	 * @param lfield
 	 */
-	public void guam_screen_field(int row, int col, int lfield)
-	{
+	public void guam_screen_field(final int row, final int col, final int lfield) {
 		// TODO
 	}
 
@@ -3376,8 +3389,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param col
 	 * @param type
 	 */
-	public void guam_screen_cursor(final int row, final int col, final int type)
-	{
+	public void guam_screen_cursor(final int row, final int col, final int type) {
 		// TODO
 	}
 
@@ -3386,13 +3398,14 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param bg_color
 	 * @param text_color
 	 */
-	public void guam_screen_color(final int bg_color, final int tx_color)
-	{
-		tn_scn.scn_back_color = new Color(bg_color);
-		tn_scn.scn_grid.setBackground(tn_scn.scn_back_color);
+	public void guam_screen_color(final int bg_color, final int tx_color) {
+		final Color cBg = new Color(bg_color);
+		tn_scn.setBackColor(cBg);
+		tn_scn.getGrid().setBackground(cBg);
 
-		tn_scn.scn_text_color = new Color(tx_color);
-		tn_scn.scn_grid.setColor(     tn_scn.scn_text_color);
+		final Color cTxt = new Color(tx_color);
+		tn_scn.setTextColor(cTxt);
+		tn_scn.getGrid().setColor(cTxt);
 	}
 
 	/**
@@ -3401,8 +3414,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param y
 	 * @param color
 	 */
-	public void guam_graph_point(final int x, final int y, final int color)
-	{
+	public void guam_graph_point(final int x, final int y, final int color) {
 		// TODO
 	}
 
@@ -3414,8 +3426,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param y2
 	 * @param color
 	 */
-	public void guam_graph_line(final int x1, final int y1, final int x2, final int y2, final int color)
-	{
+	public void guam_graph_line(final int x1, final int y1, final int x2, final int y2, final int color) {
 		// TODO
 	}
 
@@ -3427,8 +3438,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param y2
 	 * @param color
 	 */
-	public void guam_graph_fill(final int x1, final int y1, final int x2, final int y2, final int color)
-	{
+	public void guam_graph_fill(final int x1, final int y1, final int x2, final int y2, final int color) {
 		// TODO
 	}
 
@@ -3439,8 +3449,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param text
 	 * @param color
 	 */
-	public void guam_graph_text(final int x1, final int y1, final String text, final int color)
-	{
+	public void guam_graph_text(final int x1, final int y1, final String text, final int color) {
 		// TODO
 	}
 
@@ -3450,8 +3459,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * @param wait
 	 * @return
 	 */
-	public int guam_keyboard_read(final boolean wait)
-	{
+	public int guam_keyboard_read(final boolean wait) {
 		while (guam_tot_key == 0 && wait) {
 			try {
 				Thread.sleep(monitor_wait);
@@ -3477,8 +3485,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * Return int[4] with x,y,left,right.
 	 * @return
 	 */
-	public int[] guam_mouse_read()
-	{
+	public int[] guam_mouse_read() {
 		final int[] mouse = new int[4];
 		return mouse;
 	}
@@ -3487,8 +3494,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * Play wav_file.
 	 * @param wav_file
 	 */
-	public void guam_sound_play(final String wav_file)
-	{}
+	public void guam_sound_play(final String wav_file) {}
 
 	/**
 	 * 1.  Return last tn3270 data stream input if available following keyboard enter
@@ -3498,8 +3504,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	 * 3.  Set tget_len to actual bytes returns if less than requested length.
 	 * 4.  Set R1=length of data buffer returned and R15=0 or 4 if none and NOWAIT
 	 */
-	public void guam_tget()
-	{
+	public void guam_tget() {
 		tpg_rc = 0; // assume RC = 0
 		if (guam_view != GuamViewTypes.SCREEN) {
 			set_view_screen(0,0,0);
@@ -3515,7 +3520,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 					tz390.sleep_now(monitor_wait);
 				}
 			} else if (!tn_attn) {
-				tpg_rc = 4; // RPI 221 return 4 if NOWAIT and no data 
+				tpg_rc = 4; // RPI 221 return 4 if NOWAIT and no data
 				return;
 			}
 			if (tn_attn) {
@@ -3533,8 +3538,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	/**
 	 * Display TN3290 data stream buffer on GUAM GUI 3270 screen and return true if OK.
 	 */
-	public void guam_tput()
-	{
+	public void guam_tput() {
 		tpg_rc = 0; // RPI 221 assume OK
 		if (guam_view != GuamViewTypes.SCREEN) {
 			set_view_screen(0,0,0);
@@ -3553,8 +3557,7 @@ public class gz390 implements MouseListener, KeyListener, ActionListener, Compon
 	/**
 	 * Repaint scn_char for new font size screen.
 	 */
-	private void tn_repaint_screen()
-	{
+	private void tn_repaint_screen() {
 		tn_scn.stopScreenUpdates();
 
 		int sba = 0;

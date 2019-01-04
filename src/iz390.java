@@ -25,14 +25,19 @@ import java.io.FileReader;
  */
 
 /**
- * iz390 is a stand-alone installation verification program which
- * displays current version of the following components:
- *  1. z390.jar - version from tz390
- *  2. OS from  - os.name J2SE property 
+ * iz390 is a stand-alone installation verification program<br>
+ * which displays current version of the following components:
+ * <ol><li>z390.jar - version from tz390
+ *     <li>OS from  - os.name J2SE property
+ * </ol>
  */
 public class iz390
 {
-	public static void main(final String argv[]) {
+	/**
+	 * 
+	 */
+	public static void main(final String argv[])
+	{
 		// Initialize tz390
 		final tz390 tz390 = new tz390();
 
