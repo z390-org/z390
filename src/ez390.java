@@ -431,8 +431,8 @@ public class ez390 implements Runnable
 			_sz390.put_log(msg_id_i + Constants.sCopyright2018);
 			_sz390.put_log(msg_id_i + Constants.sGnuLicence);
 		}
-		_sz390.put_log(msg_id_i +"program = " + _tz390.dir_mlc + _tz390.pgm_name + _tz390.pgm_type);
-		_sz390.put_log(msg_id_i + "ptions = " + _tz390.cmd_parms);
+		_sz390.put_log(msg_id_i + "program = " + _tz390.dir_mlc + _tz390.pgm_name + _tz390.pgm_type);
+		_sz390.put_log(msg_id_i + "options = " + _tz390.cmd_parms);
 
 		if (_tz390.opt_stats) {
 			_tz390.put_stat_line(Constants.sCopyright2011);

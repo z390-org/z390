@@ -870,7 +870,7 @@ public class mz390
 			try {
 				process_mac();
 			} catch (final Exception e) {
-				abort_error(84,"internal system exception - " + e.toString());
+				abort_error(84,"Internal system exception - " + e.toString());
 			}
 		} else {
 			process_mac();
@@ -968,7 +968,7 @@ public class mz390
 					+ "|([&])"								// RPI-192
 			);
 		} catch (final Exception e) {
-			abort_error(1, "var pattern errror - " + e.toString());
+			abort_error(1, "Var pattern errror - " + e.toString());
 		}
 		/*
 		 * proto_pattern is any one of 6 choices:
@@ -999,7 +999,7 @@ public class mz390
 			  		+ "|([^',()\\s]+)"   // RPI-223, RPI-250 // any other text
 			);
 		} catch (final Exception e) {
-			abort_error(2, "proto pattern error - " + e.toString());
+			abort_error(2, "Proto pattern error - " + e.toString());
 		}
 		/*
 		 * exec_pattern same as proto_pattern plus ; for comments RPI-640
@@ -1030,7 +1030,7 @@ public class mz390
 					+ "|([.]+)"   // RPI-223, RPI-250, RPI-805 // any other text
 			);
 		} catch (final Exception e) {
-			abort_error(2, "exec pattern error - " + e.toString());
+			abort_error(2, "Exec pattern error - " + e.toString());
 		}
 		// macro label_pattern  .lll
 		try {
@@ -1038,7 +1038,7 @@ public class mz390
 					"([.][a-zA-Z$@#_][a-zA-Z0-9$@#_]*)"  // RPI-253
 			);
 		} catch (final Exception e) {
-			abort_error(3,"label pattern error - " + e.toString());
+			abort_error(3,"Label pattern error - " + e.toString());
 		}
 		// Assembler symbol_pattern A-Z09#$%_
 		try {
@@ -1046,7 +1046,7 @@ public class mz390
 					"([a-zA-Z$@#_][a-zA-Z0-9$@#_]*)"  // RPI-253
 			);
 		} catch (final Exception e) {
-			abort_error(3,"label pattern error - " + e.toString());
+			abort_error(3,"Label pattern error - " + e.toString());
 		}
 
 		// pch_pattern for quoted string:
@@ -1059,7 +1059,7 @@ public class mz390
 					+ "|(['&])"
 			);
 		} catch (final Exception e) {
-			abort_error(1,"pch pattern error - " + e.toString());
+			abort_error(1,"Pch pattern error - " + e.toString());
 		}
 		/*
 		 * macro set/aif expression pattern
@@ -1089,7 +1089,7 @@ public class mz390
 					+ "|([^'&]+)"  // RPI-268                 // string text
 			);
 		} catch (final Exception e) {
-			abort_error(4, "expression pattern error - " + e.toString());
+			abort_error(4, "Expression pattern error - " + e.toString());
 		}
 	}
 
@@ -1252,7 +1252,7 @@ public class mz390
 				} else if (end_found
 							&& bal_line.length() > 0
 							&& bal_line.charAt(0) != '*') {
-						abort_error(223,"batch assemblies not supported"); // RPI-1062
+						abort_error(223,"Batch assemblies not supported"); // RPI-1062
 				}
 				put_bal_line(bal_line);
 			}
@@ -1476,7 +1476,7 @@ public class mz390
 		case 1: // macro file
 			if (!macro_op_found   // RPI-935
 				|| load_macro_mend_level != 0) {
-				abort_error(134,"unbalanced macro mend in " + load_macro_name);
+				abort_error(134,"Unbalanced macro mend in " + load_macro_name);
 			}
 			tot_mac_line = mac_line_index;
 			mac_name_line_end[mac_name_index] = tot_mac_line;
@@ -1891,7 +1891,7 @@ public class mz390
 			mac_name_line_start[mac_name_index] = mac_line_index;
 			mac_name_lab_start[mac_name_index]  = tot_mac_lab;
 		} else {
-			abort_error(27,"max macros exceeded");
+			abort_error(27,"Max macros exceeded");
 		}
 	}
 
@@ -2897,7 +2897,7 @@ public class mz390
 		cur_mac_file++;
 		if (cur_mac_file >= tz390.opt_maxfile) {
 			cur_mac_file--;
-			abort_error(100,"maximum nested copy files exceeded");
+			abort_error(100,"Maximum nested copy files exceeded");
 			return;
 		}
 		set_default_ictl(); // RPI-1019
@@ -3057,7 +3057,7 @@ public class mz390
 		try {
 			put_continued_text(bal_file_buff,text_line);
 			if (bal_file.length() > tz390.max_file_size) {
-				abort_error(119,"maximum bal file size exceeded");
+				abort_error(119,"Maximum BAL file size exceeded");
 			}
 		} catch (final Exception e) { // RPI-1
 			log_to_bal = false;
@@ -3275,7 +3275,7 @@ public class mz390
 				if (parm_value == null
 					&& !bal_text.substring(bal_text_index1,bal_text_index1+8).equals("&SYSLIST")) { // RPI-1161
 					mac_abort = false;
-					log_error(288,"undefined set variable = " + bal_text.substring(bal_text_index1));
+					log_error(288,"Undefined set variable = " + bal_text.substring(bal_text_index1));
 				}
 				mac_abort = false; // RPI-1139
 				if (parm_value != null) {
@@ -3303,7 +3303,7 @@ public class mz390
 					symbol_match = symbol_pattern.matcher(parm_value);
 					if (!symbol_match.find()
 						|| symbol_match.start() > 0) {
-						log_error(218,"invalid charcter in variable label - " + parm_value);
+						log_error(218,"Invalid character in variable label - " + parm_value);
 					}
 			}
 			new_text = new_text + parm_value;
@@ -3511,7 +3511,7 @@ public class mz390
 						trace_break();
 					}
 				} else {
-					abort_error(236,"undefine ago label " + bal_parms);
+					abort_error(236,"Undefined ago label " + bal_parms);
 				}
 				return;
 			} else {
@@ -3589,7 +3589,7 @@ public class mz390
 							// for reuse with or without pseudo code
 							if  (tz390.find_key_index('A',"" + mac_line_index) == -1) {
 								if (!tz390.add_key_index(ago_gbla_index)) {
-									abort_error(203,"key index table overflow for ago");
+									abort_error(203,"Key index table overflow for ago");
 									return;
 								}
 							}
@@ -4500,7 +4500,7 @@ public class mz390
 			}
 			return text;
 		} else {
-			abort_error(72,"aread past end of inline AREAD data");
+			abort_error(72,"Aread past end of inline AREAD data");
 			return "";
 		}
 	}
@@ -4700,7 +4700,7 @@ public class mz390
 				} else {
 					pch_file_buff[pch_file_index].write(pch_text + tz390.newline); // RPI-500
 					if (pch_file[pch_file_index].length() > tz390.max_file_size) {
-						abort_error(120,"maximum pch file size exceeded");
+						abort_error(120,"Maximum pch file size exceeded");
 					}
 				}
 			} catch (final Exception e) {
@@ -6978,7 +6978,7 @@ public class mz390
 				az390.sym_def[index] = az390.sym_def_lookahead;
 			}
 		} else {
-			abort_error(188,"symbol table overflow adding " + sym_lab);
+			abort_error(188,"Symbol table overflow adding " + sym_lab);
 		}
 	}
 
@@ -7056,7 +7056,7 @@ public class mz390
 		case 21:  // lcl seta
 			if (new_size < 1
 					|| tot_lcl_seta + new_size >= tz390.opt_maxlcl) {
-				abort_error(44,"lcla size out of range " + set_name + "(" + new_size + ")");
+				abort_error(44,"Lcla size out of range " + set_name + "(" + new_size + ")");
 				return -1;
 			}
 			lcl_set_start[var_name_index] = tot_lcl_seta;
@@ -7078,7 +7078,7 @@ public class mz390
 		case 22:  // lcl setb
 			if (new_size < 1
 					|| tot_lcl_setb + new_size >= tz390.opt_maxlcl) {
-				abort_error(45,"lclb size out of range " + set_name + "(" + new_size + ")");
+				abort_error(45,"Lclb size out of range " + set_name + "(" + new_size + ")");
 				return -1;
 			}
 			lcl_set_start[var_name_index] = tot_lcl_setb;
@@ -7100,7 +7100,7 @@ public class mz390
 		case 23:  // lcl setc
 			if (new_size < 1
 					|| tot_lcl_setc + new_size >= tz390.opt_maxlcl) {
-				abort_error(46,"lclc size out of range " + set_name + "(" + new_size + ")");
+				abort_error(46,"Lclc size out of range " + set_name + "(" + new_size + ")");
 				return -1;
 			}
 			lcl_set_start[var_name_index] = tot_lcl_setc;
@@ -7137,12 +7137,12 @@ public class mz390
 	private void add_gbl_set(final String new_name, final byte new_type, final int new_size, final boolean set_array)
 	{
 		if (tot_gbl_name >= tz390.opt_maxsym) {
-			abort_error(55,"maximum global variables exceeded");
+			abort_error(55,"Maximum global variables exceeded");
 			return;
 		}
 		var_name_index = tot_gbl_name;
 		if (!tz390.add_key_index(var_name_index)) {
-			abort_error(174,"key search table exceeded adding " + new_name);
+			abort_error(174,"Key search table exceeded adding " + new_name);
 		}
 		tot_gbl_name++;
 		var_loc   = var_gbl_loc;
@@ -7160,7 +7160,7 @@ public class mz390
 		case 21:  // gbl seta
 			if (new_size < 1
 					|| tot_gbl_seta + new_size >= tz390.opt_maxgbl) {
-				abort_error(56,"gbla size out of range " + set_name + "(" + new_size + ")");
+				abort_error(56,"Gbla size out of range " + set_name + "(" + new_size + ")");
 				return;
 			}
 			gbl_set_start[var_name_index] = tot_gbl_seta;
@@ -7179,7 +7179,7 @@ public class mz390
 		case 22:  // gbl setb
 			if (new_size < 1
 					|| tot_gbl_setb + new_size >= tz390.opt_maxgbl) {
-				abort_error(57,"gblb size out of range " + set_name + "(" + new_size + ")");
+				abort_error(57,"GBLB size out of range " + set_name + "(" + new_size + ")");
 				return;
 			}
 			gbl_set_start[var_name_index] = tot_gbl_setb;
@@ -7198,7 +7198,7 @@ public class mz390
 		case 23:  // gbl setc
 			if (new_size < 1
 					|| tot_gbl_setc + new_size >= tz390.opt_maxgbl) {
-				abort_error(58,"gblc size out of range " + set_name + "(" + new_size + ")");
+				abort_error(58,"GBLC size out of range " + set_name + "(" + new_size + ")");
 				return;
 			}
 			gbl_set_start[var_name_index] = tot_gbl_setc;
@@ -7474,7 +7474,7 @@ public class mz390
 			switch (expand_type) {
 			case 21:
 				if (tot_lcl_seta + expand_sub + expand_inc > tz390.opt_maxlcl) {
-					abort_error(48,"lcl seta sub out of range - " + lcl_set_name[expand_name_index] + "(" + expand_sub +")");
+					abort_error(48,"LCL seta sub out of range - " + lcl_set_name[expand_name_index] + "(" + expand_sub +")");
 					return -1;
 				}
 				// move existing elements to end if not already there
@@ -7501,7 +7501,7 @@ public class mz390
 						+ expand_sub - 1;
 			case 22:
 				if (tot_lcl_setb + expand_sub + expand_inc > tz390.opt_maxlcl) {
-					abort_error(49,"lcl setb sub out of range - "
+					abort_error(49,"LCL setb sub out of range - "
 							+ lcl_set_name[expand_name_index]
 							+ "(" + expand_sub +")");
 					return -1;
@@ -7530,7 +7530,7 @@ public class mz390
 						+ expand_sub - 1;
 			case 23:
 				if (tot_lcl_setc + expand_sub + expand_inc > tz390.opt_maxlcl) {
-					abort_error(50,"lcl setc sub out of range - "
+					abort_error(50,"LCL setc sub out of range - "
 							+ lcl_set_name[expand_name_index]
 							+ "(" + expand_sub +")");
 					return -1;
@@ -7568,7 +7568,7 @@ public class mz390
 			switch (expand_type) {
 			case 21:
 				if (tot_gbl_seta + expand_sub + expand_inc > tz390.opt_maxgbl) {
-					abort_error(59,"gbl seta sub out of range - " + gbl_set_name[expand_name_index] + "(" + expand_sub +")");
+					abort_error(59,"GBL seta sub out of range - " + gbl_set_name[expand_name_index] + "(" + expand_sub +")");
 					return -1;
 				}
 				// move existing elements to end if not already there
@@ -7594,7 +7594,7 @@ public class mz390
 						+ expand_sub - 1;
 			case 22:
 				if (tot_gbl_setb + expand_sub + expand_inc > tz390.opt_maxgbl) {
-					abort_error(61,"gbl setb sub out of range - "
+					abort_error(61,"GBL setb sub out of range - "
 							+ gbl_set_name[expand_name_index]
 							+ "(" + expand_sub +")");
 					return -1;
@@ -7622,7 +7622,7 @@ public class mz390
 						+ expand_sub - 1;
 			case 23:
 				if (tot_gbl_setc + expand_sub + expand_inc > tz390.opt_maxgbl) {
-					abort_error(65,"gbl setc sub out of range - "
+					abort_error(65,"GBL setc sub out of range - "
 							+ gbl_set_name[expand_name_index]
 									+ "(" + expand_sub +")");
 					return -1;
@@ -7885,7 +7885,7 @@ public class mz390
 				trace_break();
 			}
 		} else {
-			abort_error(30,"max level of nested macros exceeded");
+			abort_error(30,"Maximum level of nested macros exceeded");
 		}
 	}
 
@@ -8257,7 +8257,7 @@ public class mz390
 		if (tz390.find_key_index('G',sys_name) == -1) {
 			add_gbl_set(sys_name,sys_type,1,false); // RPI-1162
 		} else {
-			abort_error(160,"add global var failed - " + sys_name);
+			abort_error(160,"Add global var failed - " + sys_name);
 		}
 	}
 
@@ -8591,7 +8591,7 @@ public class mz390
 	{
 		pos_parm_name = pos_parm_name.toUpperCase(); // RPI-366
 		if (tot_pos_parm +1 > tz390.opt_maxparm) {
-			abort_error(144,"maximum positional parms exceeded");
+			abort_error(144,"Maximum positional parms exceeded");
 		}
 		mac_call_pos_name[tot_pos_parm] = pos_parm_name;
 		mac_call_pos_parm[tot_pos_parm] = "";
@@ -8599,7 +8599,7 @@ public class mz390
 			if (find_lcl_key_index("P:" + pos_parm_name) == -1) {
 				add_lcl_key_index(tot_pos_parm);
 			} else {
-				log_error(90,"duplicate positional parm - " + pos_parm_name);
+				log_error(90,"Duplicate positional parm - " + pos_parm_name);
 			}
 		}
 		tot_pos_parm++;
@@ -8617,7 +8617,7 @@ public class mz390
 	private void init_key_parm(final String kwd_parm_name, final String kwd_parm_value)
 	{
 		if (tot_kwd_parm +1 > tz390.opt_maxparm) {
-			abort_error(145,"maximum key word parms exceeded");
+			abort_error(145,"Maximum key word parms exceeded");
 		}
 		mac_call_kwd_name[tot_kwd_parm] = kwd_parm_name;
 		mac_call_kwd_parm[tot_kwd_parm] = kwd_parm_value;
@@ -9085,7 +9085,7 @@ public class mz390
 		 && az390.tz390.opt_errsum) {  // RPI-694 (see az390 log_error also)
 			if (error == 101 || error == 266) {  // RPI-694 RPI-1051
 				if (!az390.add_missing_copy(mac_parms)) {
-					abort_error(219,"max missing copy exceeded");
+					abort_error(219,"Maximum missing copy exceeded");
 				}
 			}
 		}
@@ -9095,7 +9095,7 @@ public class mz390
 		put_log(error_msg);
 		tz390.put_systerm(error_msg);
 		if (tz390.max_errors != 0 && mz390_errors > tz390.max_errors) {
-			abort_error(83,"maximum errors exceeded");
+			abort_error(83,"Maximum errors exceeded");
 		}
 	}
 
@@ -9246,7 +9246,7 @@ public class mz390
 	private void add_lcl_key_index(int user_index)
 	{
 		if (lcl_key_index_last < 0 || lcl_key_index_last > lcl_key_tab_key.length) {
-			abort_error(191,"invalid key index add sequence");
+			abort_error(191,"Invalid key index add sequence");
 		}
 		if (lcl_key_tab_key[lcl_key_index_last] == null) {
 			lcl_key_index = lcl_key_index_last;
@@ -9255,7 +9255,7 @@ public class mz390
 				lcl_key_index = tot_lcl_key_tab;
 				tot_lcl_key_tab++;
 			} else {
-				abort_error(89,"lcl key search table exceeded");
+				abort_error(89,"LCL key search table exceeded");
 			}
 			if (lcl_key_hash < lcl_key_tab_hash[lcl_key_index_last]) {
 				lcl_key_tab_low[lcl_key_index_last] = lcl_key_index;
@@ -11609,7 +11609,7 @@ public class mz390
 				if (tz390.opt_tracep) {
 					ago_err = ago_err + " label=" + gbl_setc[gbl_seta[ago_gbla_index] + ago_index - 1];
 				}
-				abort_error(235,"exec ago computed label undefined " + ago_err);
+				abort_error(235,"Exec ago computed label undefined " + ago_err);
 			}
 			mac_branch = true; // RPI-900
 		}
@@ -12365,7 +12365,7 @@ public class mz390
 				}
 			}
 		} catch (final Exception e) {
-			abort_error(206,"file I/O error " + e.toString());
+			abort_error(206,"File I/O error " + e.toString());
 		}
 	}
 

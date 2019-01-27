@@ -923,7 +923,7 @@ public class sz390 implements Runnable
 				put_stat_line("DCB get               = " + tot_dcb_get);
 				put_stat_line("DCB put               = " + tot_dcb_put);
 				put_stat_line("DCB read              = " + tot_dcb_read);
-				put_stat_line("stats DCB write             = " + tot_dcb_write);
+				put_stat_line("DCB write             = " + tot_dcb_write);
 			}
 			put_stat_line("VSAM operations       = " + _vz390.tot_vsam_oper);
 			if (_vz390.tot_vsam_oper > 0) { // RPI 566
