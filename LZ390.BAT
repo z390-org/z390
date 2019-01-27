@@ -22,4 +22,4 @@
 @IF NOT "%9" == "" @ECHO      %9
 
 :doJava_lz390
-java -classpath %~dps0z390.jar -Xrs %J2SEOPTIONS% lz390 %1 %2 %3 %4 %5 %6 %7 %8 %9
+@java -classpath %~dps0z390.jar -Xrs %J2SEOPTIONS% lz390 %1 %2 %3 %4 %5 %6 %7 %8 %9

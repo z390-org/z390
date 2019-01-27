@@ -1,16 +1,13 @@
 @ECHO OFF
-@ECHO.
-@ECHO asml assemble and link to generate load module 390 from mlc
-@ECHO.
-
 @SETLOCAL
 @IF /I "%1" == "TRON" (
 	@SET trace=TRON
-	@ECHO Setting ECHO ON...
 	@SHIFT
 )
 
 @IF "%trace%" == "TRON" (
+	@ECHO.
+	@ECHO asml - assemble and link to generate load module 390 from mlc
 	@ECHO.
 	@ECHO Removing working and temp files...
 )

@@ -1,16 +1,13 @@
 @ECHO OFF
-@ECHO.
-@ECHO asmlg assemble, link, and go from mlc to 390 execution
-@ECHO.
-
 @SETLOCAL
 @IF /I "%1" == "TRON" (
 	@SET trace=TRON
-	@ECHO Setting ECHO ON...
 	@SHIFT
 )
 
 @IF "%trace%" == "TRON" (
+	@ECHO.
+	@ECHO asmlg - assemble, link, and go from mlc to 390 execution
 	@ECHO.
 	@ECHO Removing working and temp files...
 )

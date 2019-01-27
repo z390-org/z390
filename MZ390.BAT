@@ -1,8 +1,26 @@
-rem execute mz390 runtime with java runtime options:
-rem 01/15/09 DSH added 150 MB init and max mem for zcobol
-rem -classpath  path to jar file
-rem -verbose:gc trace garbage collection to detect memory leaks
-rem -XmsnK      set initial memory allocation to nK
-rem -XmxnK      set max     memory allocation to nK
-rem -Xrs        allow control break interruption of java tasks
-java -classpath %~dps0z390.jar -Xrs -Xms150000K -Xmx150000K %J2SEOPTIONS% mz390 %1 %2 %3 %4 %5 %6 %7 %8 %9
+@REM execute mz390 runtime with java runtime options:
+@REM 2009-01-15  DSH Added 150 MB init and max mem for zCobol
+@REM -classpath  path to jar file
+@REM -verbose:gc trace garbage collection to detect memory leaks
+@REM -XmsnK      set initial memory allocation to nK
+@REM -XmxnK      set max     memory allocation to nK
+@REM -Xrs        allow control break interruption of java tasks
+
+@IF NOT "%trace%" == "TRON" GOTO doJava_mz390
+
+@ECHO.
+@ECHO java -classpath %~dps0z390.jar
+@ECHO      -Xrs -Xms150000K -Xmx150000K
+@IF NOT "%J2SEOPTIONS%" == "" @ECHO      %J2SEOPTIONS%
+@ECHO      mz390 %1
+@IF NOT "%2" == "" @ECHO      %2
+@IF NOT "%3" == "" @ECHO      %3
+@IF NOT "%4" == "" @ECHO      %4
+@IF NOT "%5" == "" @ECHO      %5
+@IF NOT "%6" == "" @ECHO      %6
+@IF NOT "%7" == "" @ECHO      %7
+@IF NOT "%8" == "" @ECHO      %8
+@IF NOT "%9" == "" @ECHO      %9
+
+:doJava_mz390
+@java -classpath %~dps0z390.jar -Xrs -Xms150000K -Xmx150000K %J2SEOPTIONS% mz390 %1 %2 %3 %4 %5 %6 %7 %8 %9
