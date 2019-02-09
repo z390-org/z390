@@ -733,7 +733,7 @@ public class sz390 implements Runnable
 			svc_systrace(); // RPI 1149
 			break;
 		default:
-			abort_error(23,"undefined svc - " + svc_id);
+			abort_error(23, "Undefined svc - " + svc_id);
 			break;
 		}
 	}
@@ -775,10 +775,10 @@ public class sz390 implements Runnable
 					tz390.systerm_io++;
 					log_file_buff.write(msg + tz390.newline); // RPI 500
 					if (log_file.length() > tz390.max_file_size) {
-						abort_error(107,"maximum log file size exceeded");
+						abort_error(107, "Maximum log file size exceeded.");
 					}
 				} catch (final Exception e) {
-					tz390.abort_error(6,"I/O error on log file write msg - " + msg); //   RPI 661
+					tz390.abort_error(6, "I/O error on log file write msg - " + msg); //   RPI 661
 				}
 			} else {
 				put_con(msg);
@@ -809,7 +809,7 @@ public class sz390 implements Runnable
 		tz390.put_systerm(error_msg);
 		ez390_errors++;
 		if (tz390.max_errors != 0 && ez390_errors > tz390.max_errors) {
-			abort_error(5,"max errors exceeded");
+			abort_error(5, "Maximum errors exceeded.");
 		}
 	}
 
@@ -820,7 +820,7 @@ public class sz390 implements Runnable
 	 */
 	public synchronized void abort_error(final int error, String msg) { // RPI 646
 		if (ez390_recursive_abort) { // RPI 935
-			System.out.println("EZ390E abort recersive exit");
+			System.out.println("EZ390E abort recersive exit.");
 			System.exit(16);
 		}
 		ez390_recursive_abort = true;
@@ -1004,7 +1004,7 @@ public class sz390 implements Runnable
 			try {
 				log_file_buff.close();
 			} catch (final Exception e) {
-				tz390.abort_error(3,"I/O error on log file close - " + e.toString()); // RPI 646
+				tz390.abort_error(3, "I/O error on log file close - " + e.toString()); // RPI 646
 			}
 		}
 		ast_close_file(_pz390.ast_xread_tiot);
@@ -1368,7 +1368,7 @@ public class sz390 implements Runnable
 				load_pgm_name = z390_file.readLine().toUpperCase();
 				load_file_name = tz390.find_file_name(load_pgm_dir,load_pgm_name,load_pgm_type,tz390.dir_cur);
 				if (load_file_name == null) {
-					abort_error(118,"ALIAS LOAD FAILED FOR " + load_pgm_name);
+					abort_error(118, "ALIAS LOAD FAILED FOR " + load_pgm_name);
 				}
 				z390_file = new RandomAccessFile(load_file_name,"r");
 			}
@@ -1398,7 +1398,7 @@ public class sz390 implements Runnable
 				z390_file.read(_pz390.mem_byte,load_code_load,load_code_len);
 				load_code_ent = load_code_ent + load_code_load;
 			} else {
-				abort_error(15, "getmain for svc 8 load failed - PGM=" + tz390.pgm_name + "LEN=" + load_code_len);
+				abort_error(15, "Getmain for svc 8 load failed - PGM=" + tz390.pgm_name + "LEN=" + load_code_len);
 			}
 			svc_load_rlds();
 			z390_file.close();
@@ -1431,7 +1431,7 @@ public class sz390 implements Runnable
 					rld_field = _pz390.mem.getInt();
 					rld_field = (rld_field >>> 16) + load_code_load;
 					if (rld_field > 0xffff) { // RPI 894
-						abort_error(120,"loader 2 byte RLD address too high in - " + tz390.pgm_name);
+						abort_error(120, "Loader 2 byte RLD address too high in - " + tz390.pgm_name);
 					}
 					_pz390.mem.position(load_code_load + rld_loc);
 					_pz390.mem.putShort((short)(rld_field));
@@ -1441,7 +1441,7 @@ public class sz390 implements Runnable
 					rld_field = _pz390.mem.getInt();
 					rld_field = (rld_field >>> 8) + load_code_load;
 					if (rld_field > 0xffffff) { // RPI 894
-						abort_error(121,"loader 3 byte RLD address too high in - " + tz390.pgm_name);
+						abort_error(121, "Loader 3 byte RLD address too high in - " + tz390.pgm_name);
 					}
 					_pz390.mem.position(load_code_load + rld_loc);
 					_pz390.mem.putShort((short)(rld_field >>> 8));
@@ -1463,12 +1463,12 @@ public class sz390 implements Runnable
 					_pz390.mem.putInt(rld_field);
 					break;
 				default:
-					abort_error(119,"invalid RLD length in load module -" + tz390.pgm_name);
+					abort_error(119, "Invalid RLD length in load module -" + tz390.pgm_name);
 				}
 				cur_rld++;
 			}
 		} catch (final Exception e) {
-			abort_error(86, "svc 8 I/O error reading RLD");
+			abort_error(86, "Svc 8 I/O error reading RLD");
 		}
 	}
 
@@ -1508,7 +1508,7 @@ public class sz390 implements Runnable
 					load_code_load = load_code_load | pz390.psw_amode31_bit;
 				}
 			} else {
-				abort_error(15, "getmain for svc 8 load failed - PGM=" + tz390.pgm_name + "LEN=" + load_code_len);
+				abort_error(15, "Getmain for svc 8 load failed - PGM=" + tz390.pgm_name + "LEN=" + load_code_len);
 			}
 			z390_file.close();
 			add_cde();
@@ -1733,7 +1733,7 @@ public class sz390 implements Runnable
 			}
 			return true;
 		} else {
-			abort_error(88,"delete cde system error");
+			abort_error(88, "Delete cde system error");
 			return false;
 		}
 	}
@@ -1748,7 +1748,7 @@ public class sz390 implements Runnable
 				cur_cde = tot_cde;
 				tot_cde++;
 				if (!tz390.add_key_index(cur_cde)) {
-					abort_error(21, "key search table exceeded");
+					abort_error(21, "Key search table exceeded");
 				}
 			} else {
 				abort_error(55, "CDE maximum 390 load modules exceeded");
@@ -1773,7 +1773,7 @@ public class sz390 implements Runnable
 			if (_pz390.reg.getInt(pz390.r15) == 0) {
 				cde_addr[cur_cde] = _pz390.reg.getInt(pz390.r1);
 			} else {
-				abort_error(123,"error allocating CDE for LOAD");
+				abort_error(123, "Error allocating CDE for LOAD");
 			}
 			_pz390.mem.putInt(cde_addr[cur_cde]+pz390.cde_cdchain,_pz390.mem.getInt(pz390.cvt_cde));
 			_pz390.mem.putInt(pz390.cvt_cde,cde_addr[cur_cde]);
@@ -1819,7 +1819,7 @@ public class sz390 implements Runnable
 				gz390 = new gz390();
 				gz390.start_guam(ez390_pgm,tz390);
 				if (tz390.z390_abort) {
-					abort_error(58,"GUAM GUI startup abort");
+					abort_error(58, "GUAM GUI startup abort");
 				}
 			}
 		}
@@ -2487,7 +2487,7 @@ public class sz390 implements Runnable
 		dump_req(req_dump || tz390.opt_dump);  // RPI 821 add dump option
 		if (!tz390.opt_test) {
 			ez390_errors--; // don't count abend twice
-			abort_error(12,"program aborting due to abend " + abend_code);
+			abort_error(12, "Program aborting due to abend " + abend_code);
 		} else {
 			_pz390.test_trace_count = 1; // stop test G/Z/T
 			_pz390.psw_check = false; // reset default
@@ -2759,7 +2759,7 @@ public class sz390 implements Runnable
 						get_dcb_locate_buffer();
 					}
 				} catch (final Exception e) {
-					dcb_synad_error(23,"i/o error on open - " + e.toString());
+					dcb_synad_error(23, "I/O error on open - " + e.toString());
 					return;
 				}
 				break;
@@ -2772,7 +2772,7 @@ public class sz390 implements Runnable
 						get_dcb_locate_buffer();
 					}
 				} catch (final Exception e) {
-					dcb_synad_error(23,"i/o error on open - " + e.toString());
+					dcb_synad_error(23, "I/O error on open - " + e.toString());
 					return;
 				}
 				break;
@@ -2781,7 +2781,7 @@ public class sz390 implements Runnable
 					tiot_file[cur_tiot_index] = new RandomAccessFile(cur_dcb_file_name,"rw");
 					tiot_eof_rba[cur_tiot_index] = tiot_file[cur_tiot_index].length();
 				} catch (final Exception e) {
-					dcb_synad_error(23,"i/o error on open - " + e.toString());
+					dcb_synad_error(23,"I/O error on open - " + e.toString());
 					return;
 				}
 				break;
@@ -2809,7 +2809,7 @@ public class sz390 implements Runnable
 		if (_pz390.reg.getInt(pz390.r15) == 0) {
 			_pz390.mem.putInt(cur_dcb_addr + dcb_rec,_pz390.reg.getInt(pz390.r1));
 		} else {
-			abort_error(122,"getmain for svc 19 open failed - PGM=" + tz390.pgm_name + "LEN=" + load_code_len);
+			abort_error(122, "Getmain for svc 19 open failed - PGM=" + tz390.pgm_name + "LEN=" + load_code_len);
 		}
 	}
 
@@ -3179,10 +3179,10 @@ public class sz390 implements Runnable
 					}
 					tiot_cur_rba[cur_tiot_index] = tiot_cur_rba[cur_tiot_index]+cur_dcb_lrecl_f;
 					if (tiot_file[cur_tiot_index].length() > tz390.max_file_size) {
-						abort_error(101,"maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
+						abort_error(101, "Maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
 					}
 				} catch (final Exception e) {
-					dcb_synad_error(34,"i/o error on put move fixed - " + e.toString());
+					dcb_synad_error(34, "I/O error on put move fixed - " + e.toString());
 					return;
 				}
 				break;
@@ -3205,10 +3205,10 @@ public class sz390 implements Runnable
 					}
 					tiot_cur_rba[cur_tiot_index] = tiot_cur_rba[cur_tiot_index]+cur_vrec_lrecl;
 					if (tiot_file[cur_tiot_index].length() > tz390.max_file_size) {
-						abort_error(102,"maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
+						abort_error(102, "Maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
 					}
 				} catch (final Exception e) {
-					dcb_synad_error(36,"i/o error on put move variable - " + e.toString());
+					dcb_synad_error(36, "I/O error on put move variable - " + e.toString());
 					return;
 				}
 				break;
@@ -3248,14 +3248,14 @@ public class sz390 implements Runnable
 						dump_mem(_pz390.mem,cur_dcb_area,cur_vrec_lrecl);
 					}
 					if (tiot_file[cur_tiot_index].length() > tz390.max_file_size) {
-						abort_error(103,"maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
+						abort_error(103, "Maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
 					}
 				} catch (final Exception e) {
-					dcb_synad_error(40,"i/o error on put move variable - " + e.toString());
+					dcb_synad_error(40, "I/O error on put move variable - " + e.toString());
 					return;
 				}
 				break;
-			case 0x60: // put variable to ascii text
+			case 0x60: // put variable to ASCII text
 				try {
 					if (cur_dcb_lrecl_f == 0) {
 						cur_dcb_lrecl_f = cur_dcb_blksi_f;
@@ -3264,7 +3264,7 @@ public class sz390 implements Runnable
 					cur_rec_len = (_pz390.mem.getInt(cur_dcb_area) >> 16)-4;
 					check_mem_area(cur_dcb_area,cur_rec_len+4); // RPI 668 RPI 677
 					if (cur_rec_len < 1 || cur_rec_len > (cur_dcb_lrecl_f - 4)) {
-						dcb_synad_error(48,"variable record too long - " + cur_rec_len);
+						dcb_synad_error(48, "Variable record too long - " + cur_rec_len);
 						return;
 					}
 					cur_rec_text = get_ascii_string(cur_dcb_area+4,cur_rec_len,false);
@@ -3276,14 +3276,14 @@ public class sz390 implements Runnable
 					}
 					tiot_cur_rba[cur_tiot_index] = tiot_file[cur_tiot_index].getFilePointer();
 					if (tiot_file[cur_tiot_index].length() > tz390.max_file_size) {
-						abort_error(104,"maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
+						abort_error(104, "Maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
 					}
 				} catch (final Exception e) {
-					dcb_synad_error(47,"i/o error on get move variable from ascii - " + e.toString());
+					dcb_synad_error(47, "I/O error on get move variable from ascii - " + e.toString());
 					return;
 				}
 				break;
-			case 0xa0: // put fixed to ascii text
+			case 0xa0: // put fixed to ASCII text
 				try {
 					if (cur_dcb_lrecl_f == 0) {
 						cur_dcb_lrecl_f = cur_dcb_blksi_f;
@@ -3300,19 +3300,19 @@ public class sz390 implements Runnable
 						dump_mem(_pz390.mem,cur_dcb_area,cur_dcb_lrecl_f);
 					}
 					if (tiot_file[cur_tiot_index].length() > tz390.max_file_size) {
-						abort_error(105,"maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
+						abort_error(105, "Maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
 					}
 				} catch (final Exception e) {
-					dcb_synad_error(45,"i/o error on put move fixed to ascii - " + e.toString());
+					dcb_synad_error(45, "I/O error on put move fixed to ascii - " + e.toString());
 					return;
 				}
 				break;
 			default:
-				dcb_synad_error(41,"invalid dcb record format for put move - " + tz390.get_hex(cur_dcb_recfm,2));
+				dcb_synad_error(41, "Invalid dcb record format for put move - " + tz390.get_hex(cur_dcb_recfm,2));
 				return;
 			}
 		} else {
-			dcb_synad_error(42,"file not found");
+			dcb_synad_error(42, "File not found");
 			return;
 		}
 		_pz390.reg.putInt(pz390.r15,0);
@@ -3382,7 +3382,7 @@ public class sz390 implements Runnable
 				tiot_file[cur_tiot_index].write(_pz390.mem_byte,cur_dcb_area,cur_dcb_lrecl_f);
 				tiot_cur_rba[cur_tiot_index] = tiot_cur_rba[cur_tiot_index]+cur_dcb_lrecl_f;
 				if (tiot_file[cur_tiot_index].length() > tz390.max_file_size) {
-					abort_error(106,"maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
+					abort_error(106, "Maximum file size exceeded for " + tiot_dsn[cur_tiot_index]);
 				}
 			} catch (final Exception e) {
 				_pz390.mem_byte[cur_decb_addr + decb_ecb] = (byte) 0x41; // post ecb for check synad exit
@@ -3390,7 +3390,7 @@ public class sz390 implements Runnable
 			}
 			_pz390.mem_byte[cur_decb_addr + decb_ecb] = (byte) 0x40; // post ecb normal exit
 		} else {
-			dcb_synad_error(52,"file not found");
+			dcb_synad_error(52, "File not found");
 		}
 	}
 
@@ -3411,7 +3411,7 @@ public class sz390 implements Runnable
 			dcb_eodad_exit();
 			return;
 		} else {
-			dcb_synad_error(90,"I/O error on read/write ECB=" + tz390.get_hex(_pz390.mem.getInt(cur_decb_addr + decb_ecb),8)); //RPI112
+			dcb_synad_error(90, "I/O error on read/write ECB=" + tz390.get_hex(_pz390.mem.getInt(cur_decb_addr + decb_ecb),8)); //RPI112
 		}
 	}
 
@@ -3479,7 +3479,7 @@ public class sz390 implements Runnable
 			cur_dcb_eodad = _pz390.mem.getInt(cur_dcb_addr + dcb_eodad) & _pz390.psw_amode;
 		}
 		if (cur_dcb_eodad == 0) {
-			abort_error(31,"read at end of file and no EODAD for " + tiot_ddnam[cur_tiot_index]);
+			abort_error(31, "Read at end of file and no EODAD for " + tiot_ddnam[cur_tiot_index]);
 		} else {
 			_pz390.set_psw_loc(cur_dcb_eodad);
 		}
@@ -3495,7 +3495,7 @@ public class sz390 implements Runnable
 		dcb_synad_recur = false; // RPI 377
 		if (cur_dcb_addr/4*4 != cur_dcb_addr  // RPI 152
 		 || !get_ascii_string(cur_dcb_addr + dcb_id,8,true).equals(tz390.dcb_id_ver)) {
-			abort_error(80,"invalid DCB address or ID at DCB=("
+			abort_error(80, "Invalid DCB address or ID at DCB=("
 					+ tz390.get_hex(cur_dcb_addr,8)
 					+ ")=" + _pz390.bytes_to_hex(_pz390.mem,cur_dcb_addr + dcb_id,8,0));
 		}
@@ -3503,7 +3503,7 @@ public class sz390 implements Runnable
 	}
 
 	/**
-	 * 1.  Using cur_dcb addr from R1 or DECB get cur_tiot index from DCBIOBAD (x'1C').
+	 * 1.  Using cur_dcb address from R1 or DECB get cur_tiot index from DCBIOBAD (x'1C').
 	 * 2.  reduce index in DCBIOBAD by 1.
 	 * 3.  If index not -1, verify tiot_dcb_addr and that dcb is open.
 	 * 4.  If index = -1 or dcb's don't match add new entry for DCBDDNAM.
@@ -3516,7 +3516,7 @@ public class sz390 implements Runnable
 			 && cur_dcb_addr == tiot_dcb_addr[cur_tiot_index]) {
 				return;
 			} else {
-				abort_error(20,"dcb tiot index invalid DCB=" + tz390.get_hex(cur_dcb_addr,8));
+				abort_error(20, "DCB tiot index invalid DCB=" + tz390.get_hex(cur_dcb_addr,8));
 			}
 		} else {
 			cur_dcb_ddnam = get_ascii_string(cur_dcb_addr + dcb_ddnam,8,true);
@@ -3546,7 +3546,7 @@ public class sz390 implements Runnable
 			tiot_dcb_addr[cur_tiot_index] = dcb_addr;
 			return cur_tiot_index + 1;
 		} else {
-			abort_error(21,"maximum tiot files open exceeded");
+			abort_error(21, "Maximum tiot files open exceeded");
 			return -1;
 		}
 	}
@@ -3845,7 +3845,7 @@ public class sz390 implements Runnable
 				try {
 					cmd_processors[cmd_id].cmd_proc.waitFor();
 				} catch (final Exception e) {
-					abort_error(79,"Cmd proc wait error " + e.toString());
+					abort_error(79, "Cmd proc wait error " + e.toString());
 				}
 				return;
 			} else if (cmd_processors[cmd_id].cmd_proc_running // RPI-592
@@ -4602,12 +4602,12 @@ public class sz390 implements Runnable
 		wtor_reply_len  = _pz390.reg.getInt(pz390.r14) & 0xff;
 		wtor_ecb_addr = _pz390.reg.getInt(pz390.r15) & _pz390.psw_amode;
 		wto_msg("",wto_fld+4,wto_len-4);  // RPI190 remove "WTOR MSG"
-		_pz390.mem.putInt(wtor_ecb_addr,ecb_waiting); // ecb waiting for post by monitor wtorit
+		_pz390.mem.putInt(wtor_ecb_addr,ecb_waiting); // ECB waiting for post by monitor wtorit
 		if (tz390.opt_guam) {
 			gz390.wtor_request_reply(wtor_ecb_addr);
 		}
 		if (tz390.z390_abort) {
-			abort_error(63, "guam wtor reply abort.");
+			abort_error(63, "GUAM WTOR reply abort.");
 		}
 		if (wtor_reply_buff == null) {
 			wtor_reply_buff = new BufferedReader(new InputStreamReader(System.in));
@@ -4617,7 +4617,7 @@ public class sz390 implements Runnable
 				wtor_reply_string = wtor_reply_buff.readLine();
 			}
 		} catch (final Exception e) {
-			abort_error(115, "WTOR REPLY FLUSH I/O ERROR.");
+			abort_error(115, "WTOR REPLY flush I/O error.");
 		}
 		wtor_reply_string  = null;
 		wtor_reply_pending = true;
@@ -5217,7 +5217,7 @@ public class sz390 implements Runnable
 			} else {
 				test_loop_count++;
 				if (test_loop_count > 3) {
-					abort_error(65,"test loop detected - aborting");
+					abort_error(65, "Test loop detected - aborting.");
 				}
 			}
 		}
@@ -5611,7 +5611,7 @@ public class sz390 implements Runnable
 				dump_cde();
 				break;
 			case 'Q': // quit test mode
-				abort_error(109,"quitting test mode"); //RPI121
+				abort_error(109, "Quitting test mode"); //RPI121
 				break;
 			case 'R':  // dump gpr regs
 				test_token = get_next_test_token();
@@ -6792,7 +6792,7 @@ public class sz390 implements Runnable
 			tcp_conn_server_port[conn_index] = 0;
 			tcp_conn_socket[conn_index] = null;
 		} else {
-			abort_error(23,"TCPIO free conn internal error - aborting");
+			abort_error(23, "TCPIO free conn internal error - aborting.");
 		}
 	}
 
@@ -6849,7 +6849,7 @@ public class sz390 implements Runnable
 					tiot_file[cur_tiot_index] = new RandomAccessFile(cur_dcb_file_name,"r");
 					tiot_eof_rba[cur_tiot_index] = tiot_file[cur_tiot_index].length();
 				} catch (final Exception e) {
-					dcb_synad_error(23,"i/o error on open - " + e.toString());
+					dcb_synad_error(23, "I/O error on open - " + e.toString());
 					_pz390.psw_cc = pz390.psw_cc3;
 					return cur_tiot_index;
 				}
@@ -6858,7 +6858,7 @@ public class sz390 implements Runnable
 					tiot_file[cur_tiot_index] = new RandomAccessFile(cur_dcb_file_name,"rw");
 					tiot_file[cur_tiot_index].setLength(0);
 				} catch (final Exception e) {
-					dcb_synad_error(23,"i/o error on open - " + e.toString());
+					dcb_synad_error(23, "I/O error on open - " + e.toString());
 					return -1;
 				}
 			}
@@ -7288,7 +7288,7 @@ public class sz390 implements Runnable
 			zsort_sortwk02_file.setLength(0);
 			zsort_sortwk02_file.close();
 		} catch (final Exception e) {
-			abort_error(125,"ZSORT CLOSE FAILED " + e);
+			abort_error(125, "ZSORT CLOSE FAILED " + e);
 		}
 	}
 
@@ -7329,7 +7329,7 @@ public class sz390 implements Runnable
 	 */
 	private void zsort_error(final String msg) {
 		_pz390.reg.putInt(pz390.r15,16);
-		abort_error(124,msg);
+		abort_error(124, msg);
 		// zsort_abort = true; // JBA - unused
 	}
 
