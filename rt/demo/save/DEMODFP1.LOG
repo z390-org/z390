@@ -1,0 +1,13 @@
+DEMODFP1  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = demo\DEMODFP1.390
+EZ390I options = notiming stats systerm(demo\RTDEMO)
+DEMODFP1 DEMO DIFFERENCE BETWEEN FP DH AND DD CALC
+DH 1.1+2.2 =   3.3
+DD 1.1+2.2 =   3.3
+TESTDFP1 ENDED OK
+EZ390I total errors         = 0
+DEMODFP1  EZ390 ENDED RC= 0 IO=168 INS=33

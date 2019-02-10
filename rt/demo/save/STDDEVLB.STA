@@ -1,0 +1,481 @@
+STDDEVLB  MZ390 START
+STDDEVLB  MZ390 Copyright 2011 Automated Software Tools Corporation
+STDDEVLB  MZ390 Copyright 2013 Cat Herder Software, LLC
+STDDEVLB  MZ390 Copyright 2018 Joachim Bartz, Germany
+STDDEVLB  MZ390 z390 is licensed under GNU General Public License
+STDDEVLB  MZ390 program = demo\STDDEVLB.MLC
+STDDEVLB  MZ390 options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) notiming stats 
+  systerm(demo\RTDEMO)
+STDDEVLB  MZ390 final_options=ALIGN
+STDDEVLB  MZ390 final_options=NOALLOW
+STDDEVLB  MZ390 final_options=NOAMODE24
+STDDEVLB  MZ390 final_options=AMODE31
+STDDEVLB  MZ390 final_options=NOASCII
+STDDEVLB  MZ390 final_options=ASM
+STDDEVLB  MZ390 final_options=NOASSIST
+STDDEVLB  MZ390 final_options=AUTOLINK
+STDDEVLB  MZ390 final_options=NOBAL
+STDDEVLB  MZ390 final_options=NOBS2000
+STDDEVLB  MZ390 final_options=EDF
+STDDEVLB  MZ390 final_options=NOCICS
+STDDEVLB  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+STDDEVLB  MZ390 final_options=COMMENT
+STDDEVLB  MZ390 final_options=CON
+STDDEVLB  MZ390 final_options=NODUMP
+STDDEVLB  MZ390 final_options=EPILOG
+STDDEVLB  MZ390 final_options=NOERRSUM
+STDDEVLB  MZ390 final_options=EXTEND
+STDDEVLB  MZ390 final_options=FLOAT(DECIMAL)
+STDDEVLB  MZ390 final_options=NOGUAM
+STDDEVLB  MZ390 final_options=INIT
+STDDEVLB  MZ390 final_options=LIST
+STDDEVLB  MZ390 final_options=LISTCALL
+STDDEVLB  MZ390 final_options=LISTUSE
+STDDEVLB  MZ390 final_options=LOADHIGH
+STDDEVLB  MZ390 final_options=NOMCALL
+STDDEVLB  MZ390 final_options=NOMOD
+STDDEVLB  MZ390 final_options=OBJ
+STDDEVLB  MZ390 final_options=NOOBJHEX
+STDDEVLB  MZ390 final_options=PC
+STDDEVLB  MZ390 final_options=PCOPT
+STDDEVLB  MZ390 final_options=NOPDSMEM8
+STDDEVLB  MZ390 final_options=NOPRINTALL
+STDDEVLB  MZ390 final_options=PROLOG
+STDDEVLB  MZ390 final_options=PROTECT
+STDDEVLB  MZ390 final_options=R64
+STDDEVLB  MZ390 final_options=NOREFORMAT
+STDDEVLB  MZ390 final_options=NOREGS
+STDDEVLB  MZ390 final_options=RMODE24
+STDDEVLB  MZ390 final_options=NORMODE31
+STDDEVLB  MZ390 final_options=STATS
+STDDEVLB  MZ390 final_options=NOTEST
+STDDEVLB  MZ390 final_options=THREAD
+STDDEVLB  MZ390 final_options=NOTIME
+STDDEVLB  MZ390 final_options=NOTIMING
+STDDEVLB  MZ390 final_options=NOTRACE
+STDDEVLB  MZ390 final_options=NOTRACEA
+STDDEVLB  MZ390 final_options=NOTRACEALL
+STDDEVLB  MZ390 final_options=NOTRACEC
+STDDEVLB  MZ390 final_options=NOTRACEG
+STDDEVLB  MZ390 final_options=NOTRACEI
+STDDEVLB  MZ390 final_options=NOTRACEL
+STDDEVLB  MZ390 final_options=NOTRACEM
+STDDEVLB  MZ390 final_options=NOTRACEP
+STDDEVLB  MZ390 final_options=NOTRACEQ
+STDDEVLB  MZ390 final_options=NOTRACES
+STDDEVLB  MZ390 final_options=NOTRACET
+STDDEVLB  MZ390 final_options=NOTRACEV
+STDDEVLB  MZ390 final_options=TRAP
+STDDEVLB  MZ390 final_options=NOTRUNC
+STDDEVLB  MZ390 final_options=NOTS
+STDDEVLB  MZ390 final_options=VCB
+STDDEVLB  MZ390 final_options=WARN
+STDDEVLB  MZ390 final_options=XREF
+STDDEVLB  MZ390 final_options=ZSTRMAC
+STDDEVLB  MZ390 final_options=CHKMAC=0
+STDDEVLB  MZ390 final_options=CHKSRC=1
+STDDEVLB  MZ390 final_options=ERR=100
+STDDEVLB  MZ390 final_options=MAXCALL=50
+STDDEVLB  MZ390 final_options=MAXDISPLAY=80
+STDDEVLB  MZ390 final_options=MAXESD=1000
+STDDEVLB  MZ390 final_options=MAXFILE=1000
+STDDEVLB  MZ390 final_options=MAXGBL=100000
+STDDEVLB  MZ390 final_options=MAXHEIGHT=600
+STDDEVLB  MZ390 final_options=MAXLCL=100000
+STDDEVLB  MZ390 final_options=MAXLEN=80
+STDDEVLB  MZ390 final_options=MAXLINE=200000
+STDDEVLB  MZ390 final_options=MAXLOG=1000000
+STDDEVLB  MZ390 final_options=MAXPARM=10000
+STDDEVLB  MZ390 final_options=MAXPASS=2
+STDDEVLB  MZ390 final_options=MAXPC=50000
+STDDEVLB  MZ390 final_options=MAXQUE=1000
+STDDEVLB  MZ390 final_options=MAXRLD=10000
+STDDEVLB  MZ390 final_options=MAXSIZE=52428800
+STDDEVLB  MZ390 final_options=MAXSYM=50000
+STDDEVLB  MZ390 final_options=MAXWARN=4
+STDDEVLB  MZ390 final_options=MAXWIDTH=800
+STDDEVLB  MZ390 final_options=MEM=1
+STDDEVLB  MZ390 final_options=MINHEIGHT=150
+STDDEVLB  MZ390 final_options=MINWIDTH=150
+STDDEVLB  MZ390 final_options=MNOTE=0
+STDDEVLB  MZ390 final_options=PARM=
+STDDEVLB  MZ390 final_options=PROFILE=
+STDDEVLB  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\demo\STDDEVLB.STA
+STDDEVLB  MZ390 final_options=SYSPARM=
+STDDEVLB  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\demo\RTDEMO.ERR
+STDDEVLB  MZ390 final_options=TESTDD=
+STDDEVLB  MZ390 final_options=TIME=15
+STDDEVLB  MZ390 final_options=TRACE=
+STDDEVLB  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+STDDEVLB  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+STDDEVLB  MZ390 final_options=Z390COMMAND=cmd.exe
+STDDEVLB  MZ390 final_options=Z390EDITOR=notepad.exe
+STDDEVLB  MZ390 final_options=INSTALL=
+STDDEVLB  MZ390 final_options=IPL=
+STDDEVLB  MZ390 final_options=LOG=
+STDDEVLB  MZ390 final_options=SYS390=demo\+linklib
+STDDEVLB  MZ390 final_options=SYSBAL=demo\
+STDDEVLB  MZ390 final_options=SYSCPY=C:\Users\Achim\GitHub\z390\mac+.
+STDDEVLB  MZ390 final_options=SYSDAT=demo\
+STDDEVLB  MZ390 final_options=SYSERR=demo\
+STDDEVLB  MZ390 final_options=SYSLOG=demo\
+STDDEVLB  MZ390 final_options=SYSLST=demo\
+STDDEVLB  MZ390 final_options=SYSMAC=C:\Users\Achim\GitHub\z390\mac+.
+STDDEVLB  MZ390 final_options=SYSMLC=demo\
+STDDEVLB  MZ390 final_options=SYSPCH=demo\
+STDDEVLB  MZ390 final_options=SYSPRN=demo\
+STDDEVLB  MZ390 final_options=SYSOBJ=demo\
+STDDEVLB  MZ390 final_options=SYSOPT=demo\
+STDDEVLB  MZ390 final_options=SYSTRC=demo\
+STDDEVLB  MZ390 total MLC/MAC loaded  = 686
+STDDEVLB  MZ390 total BAL output lines= 335
+STDDEVLB  MZ390 total BAL instructions= 41
+STDDEVLB  MZ390 total macros          = 14
+STDDEVLB  MZ390 total macro loads     = 14
+STDDEVLB  MZ390 total macro calls     = 43
+STDDEVLB  MZ390 total AENTRY blocks   = 6
+STDDEVLB  MZ390 total ACALL  calls    = 6
+STDDEVLB  MZ390 total AIF    blocks   = 42
+STDDEVLB  MZ390 total ACASE  blocks   = 0
+STDDEVLB  MZ390 total AWHILE calls    = 5
+STDDEVLB  MZ390 total AUNTIL blocks   = 0
+STDDEVLB  MZ390 total global set names= 80
+STDDEVLB  MZ390 tot global seta cells = 318
+STDDEVLB  MZ390 tot global setb cells = 279
+STDDEVLB  MZ390 tot global setc cells = 542
+STDDEVLB  MZ390 max local pos parms   = 8
+STDDEVLB  MZ390 max local key parms   = 11
+STDDEVLB  MZ390 max local set names   = 25
+STDDEVLB  MZ390 max local seta cells  = 8
+STDDEVLB  MZ390 max local setb cells  = 1
+STDDEVLB  MZ390 max local setc cells  = 25
+STDDEVLB  MZ390 total array expansions= 1
+STDDEVLB  MZ390 total Keys            = 2252
+STDDEVLB  MZ390 Key searches          = 8520
+STDDEVLB  MZ390 Key avg comps         = 0
+STDDEVLB  MZ390 Key max comps         = 3
+STDDEVLB  MZ390 total macro line exec = 1184
+STDDEVLB  MZ390 total pcode line exec = 348
+STDDEVLB  MZ390 total pcode line gen. = 124
+STDDEVLB  MZ390 total pcode line reuse= 0
+STDDEVLB  MZ390 total pcode op   gen. = 541
+STDDEVLB  MZ390 total pcode op   exec = 1725
+STDDEVLB  MZ390 total pcode gen  opt  = 155
+STDDEVLB  MZ390 total pcode exec opt  = 10
+STDDEVLB  MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\demo\STDDEVLB.MLC
+STDDEVLB  MZ390 FID=  2 ERR= 0 C:\Users\Achim\GitHub\z390\mac\ASMMSP.CPY
+STDDEVLB  MZ390 FID=  3 ERR= 0 C:\Users\Achim\GitHub\z390\mac\ZSTRMAC.CPY
+STDDEVLB  MZ390 FID=  4 ERR= 0 C:\Users\Achim\GitHub\z390\mac\SUBENTRY.MAC
+STDDEVLB  MZ390 FID=  5 ERR= 0 C:\Users\Achim\GitHub\z390\mac\CALL.MAC
+STDDEVLB  MZ390 FID=  6 ERR= 0 C:\Users\Achim\GitHub\z390\mac\ZCALL.MAC
+STDDEVLB  MZ390 FID=  7 ERR= 0 C:\Users\Achim\GitHub\z390\mac\IF.MAC
+STDDEVLB  MZ390 FID=  8 ERR= 0 C:\Users\Achim\GitHub\z390\mac\ZSTRGBL.CPY
+STDDEVLB  MZ390 FID=  9 ERR= 0 C:\Users\Achim\GitHub\z390\mac\ZSTREQU.MAC
+STDDEVLB  MZ390 FID= 10 ERR= 0 C:\Users\Achim\GitHub\z390\mac\WTO.MAC
+STDDEVLB  MZ390 FID= 11 ERR= 0 C:\Users\Achim\GitHub\z390\mac\ABEND.MAC
+STDDEVLB  MZ390 FID= 12 ERR= 0 C:\Users\Achim\GitHub\z390\mac\ENDIF.MAC
+STDDEVLB  MZ390 FID= 13 ERR= 0 C:\Users\Achim\GitHub\z390\mac\CTD.MAC
+STDDEVLB  MZ390 FID= 14 ERR= 0 C:\Users\Achim\GitHub\z390\mac\SUBEXIT.MAC
+STDDEVLB  MZ390 FID= 15 ERR= 0 C:\Users\Achim\GitHub\z390\mac\EQUREGS.MAC
+STDDEVLB  MZ390 FID= 16 ERR= 0 C:\Users\Achim\GitHub\z390\mac\DO.MAC
+STDDEVLB  MZ390 FID= 17 ERR= 0 C:\Users\Achim\GitHub\z390\mac\ENDDO.MAC
+STDDEVLB  MZ390 total mnote warnings  = 0
+STDDEVLB  MZ390 total mnote errors    = 0
+STDDEVLB  MZ390 max   mnote level     = 0
+STDDEVLB  MZ390 total mz390 errors    = 0
+STDDEVLB  AZ390 BAL lines             = 335
+STDDEVLB  AZ390 symbols               = 90
+STDDEVLB  AZ390 Literals              = 5
+STDDEVLB  AZ390 alloc passes          = 3
+STDDEVLB  AZ390 Keys                  = 1414
+STDDEVLB  AZ390 Key searches          = 3830
+STDDEVLB  AZ390 Key avg comps         = 0
+STDDEVLB  AZ390 Key max comps         = 3
+STDDEVLB  AZ390 ESD symbols           = 3
+STDDEVLB  AZ390 object bytes          = 924
+STDDEVLB  AZ390 object rlds           = 10
+STDDEVLB  AZ390 total mnote warnings  = 0
+STDDEVLB  AZ390 total mnote errors    = 0
+STDDEVLB  AZ390 max   mnote level     = 0
+STDDEVLB  AZ390 total mz390 errors    = 0
+STDDEVLB  AZ390 total az390 errors    = 0
+STDDEVLB  MZ390 ENDED RC= 0 IO=3078
+STDDEVLB  LZ390 START
+STDDEVLB  LZ390 Copyright 2011 Automated Software Tools Corporation
+STDDEVLB  LZ390 Copyright 2013 Cat Herder Software, LLC
+STDDEVLB  LZ390 Copyright 2018 Joachim Bartz, Germany
+STDDEVLB  LZ390 z390 is licensed under GNU General Public License
+STDDEVLB  LZ390 options = notiming stats systerm(demo\RTDEMO)
+STDDEVLB  LZ390 program = demo\STDDEVLB.OBJ
+STDDEVLB  LZ390 final_options=ALIGN
+STDDEVLB  LZ390 final_options=NOALLOW
+STDDEVLB  LZ390 final_options=NOAMODE24
+STDDEVLB  LZ390 final_options=AMODE31
+STDDEVLB  LZ390 final_options=NOASCII
+STDDEVLB  LZ390 final_options=ASM
+STDDEVLB  LZ390 final_options=NOASSIST
+STDDEVLB  LZ390 final_options=AUTOLINK
+STDDEVLB  LZ390 final_options=NOBAL
+STDDEVLB  LZ390 final_options=NOBS2000
+STDDEVLB  LZ390 final_options=EDF
+STDDEVLB  LZ390 final_options=NOCICS
+STDDEVLB  LZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+STDDEVLB  LZ390 final_options=COMMENT
+STDDEVLB  LZ390 final_options=CON
+STDDEVLB  LZ390 final_options=NODUMP
+STDDEVLB  LZ390 final_options=EPILOG
+STDDEVLB  LZ390 final_options=NOERRSUM
+STDDEVLB  LZ390 final_options=EXTEND
+STDDEVLB  LZ390 final_options=FLOAT(DECIMAL)
+STDDEVLB  LZ390 final_options=NOGUAM
+STDDEVLB  LZ390 final_options=INIT
+STDDEVLB  LZ390 final_options=LIST
+STDDEVLB  LZ390 final_options=LISTCALL
+STDDEVLB  LZ390 final_options=LISTUSE
+STDDEVLB  LZ390 final_options=LOADHIGH
+STDDEVLB  LZ390 final_options=NOMCALL
+STDDEVLB  LZ390 final_options=NOMOD
+STDDEVLB  LZ390 final_options=OBJ
+STDDEVLB  LZ390 final_options=NOOBJHEX
+STDDEVLB  LZ390 final_options=PC
+STDDEVLB  LZ390 final_options=PCOPT
+STDDEVLB  LZ390 final_options=NOPDSMEM8
+STDDEVLB  LZ390 final_options=NOPRINTALL
+STDDEVLB  LZ390 final_options=PROLOG
+STDDEVLB  LZ390 final_options=PROTECT
+STDDEVLB  LZ390 final_options=R64
+STDDEVLB  LZ390 final_options=NOREFORMAT
+STDDEVLB  LZ390 final_options=NOREGS
+STDDEVLB  LZ390 final_options=RMODE24
+STDDEVLB  LZ390 final_options=NORMODE31
+STDDEVLB  LZ390 final_options=STATS
+STDDEVLB  LZ390 final_options=NOTEST
+STDDEVLB  LZ390 final_options=THREAD
+STDDEVLB  LZ390 final_options=NOTIME
+STDDEVLB  LZ390 final_options=NOTIMING
+STDDEVLB  LZ390 final_options=NOTRACE
+STDDEVLB  LZ390 final_options=NOTRACEA
+STDDEVLB  LZ390 final_options=NOTRACEALL
+STDDEVLB  LZ390 final_options=NOTRACEC
+STDDEVLB  LZ390 final_options=NOTRACEG
+STDDEVLB  LZ390 final_options=NOTRACEI
+STDDEVLB  LZ390 final_options=NOTRACEL
+STDDEVLB  LZ390 final_options=NOTRACEM
+STDDEVLB  LZ390 final_options=NOTRACEP
+STDDEVLB  LZ390 final_options=NOTRACEQ
+STDDEVLB  LZ390 final_options=NOTRACES
+STDDEVLB  LZ390 final_options=NOTRACET
+STDDEVLB  LZ390 final_options=NOTRACEV
+STDDEVLB  LZ390 final_options=TRAP
+STDDEVLB  LZ390 final_options=NOTRUNC
+STDDEVLB  LZ390 final_options=NOTS
+STDDEVLB  LZ390 final_options=VCB
+STDDEVLB  LZ390 final_options=WARN
+STDDEVLB  LZ390 final_options=XREF
+STDDEVLB  LZ390 final_options=ZSTRMAC
+STDDEVLB  LZ390 final_options=CHKMAC=0
+STDDEVLB  LZ390 final_options=CHKSRC=1
+STDDEVLB  LZ390 final_options=ERR=100
+STDDEVLB  LZ390 final_options=MAXCALL=50
+STDDEVLB  LZ390 final_options=MAXDISPLAY=80
+STDDEVLB  LZ390 final_options=MAXESD=1000
+STDDEVLB  LZ390 final_options=MAXFILE=1000
+STDDEVLB  LZ390 final_options=MAXGBL=100000
+STDDEVLB  LZ390 final_options=MAXHEIGHT=600
+STDDEVLB  LZ390 final_options=MAXLCL=100000
+STDDEVLB  LZ390 final_options=MAXLEN=80
+STDDEVLB  LZ390 final_options=MAXLINE=200000
+STDDEVLB  LZ390 final_options=MAXLOG=1000000
+STDDEVLB  LZ390 final_options=MAXPARM=10000
+STDDEVLB  LZ390 final_options=MAXPASS=2
+STDDEVLB  LZ390 final_options=MAXPC=50000
+STDDEVLB  LZ390 final_options=MAXQUE=1000
+STDDEVLB  LZ390 final_options=MAXRLD=10000
+STDDEVLB  LZ390 final_options=MAXSIZE=52428800
+STDDEVLB  LZ390 final_options=MAXSYM=50000
+STDDEVLB  LZ390 final_options=MAXWARN=4
+STDDEVLB  LZ390 final_options=MAXWIDTH=800
+STDDEVLB  LZ390 final_options=MEM=1
+STDDEVLB  LZ390 final_options=MINHEIGHT=150
+STDDEVLB  LZ390 final_options=MINWIDTH=150
+STDDEVLB  LZ390 final_options=MNOTE=0
+STDDEVLB  LZ390 final_options=PARM=
+STDDEVLB  LZ390 final_options=PROFILE=
+STDDEVLB  LZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\demo\STDDEVLB.STA
+STDDEVLB  LZ390 final_options=SYSPARM=
+STDDEVLB  LZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\demo\RTDEMO.ERR
+STDDEVLB  LZ390 final_options=TESTDD=
+STDDEVLB  LZ390 final_options=TIME=15
+STDDEVLB  LZ390 final_options=TRACE=
+STDDEVLB  LZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+STDDEVLB  LZ390 final_options=Z390BROWSER=cmd.exe /c Start
+STDDEVLB  LZ390 final_options=Z390COMMAND=cmd.exe
+STDDEVLB  LZ390 final_options=Z390EDITOR=notepad.exe
+STDDEVLB  LZ390 final_options=INSTALL=
+STDDEVLB  LZ390 final_options=IPL=
+STDDEVLB  LZ390 final_options=LOG=
+STDDEVLB  LZ390 final_options=SYS390=demo\+linklib
+STDDEVLB  LZ390 final_options=SYSBAL=demo\
+STDDEVLB  LZ390 final_options=SYSCPY=demo\
+STDDEVLB  LZ390 final_options=SYSDAT=demo\
+STDDEVLB  LZ390 final_options=SYSERR=demo\
+STDDEVLB  LZ390 final_options=SYSLOG=demo\
+STDDEVLB  LZ390 final_options=SYSLST=demo\
+STDDEVLB  LZ390 final_options=SYSMAC=demo\
+STDDEVLB  LZ390 final_options=SYSMLC=demo\
+STDDEVLB  LZ390 final_options=SYSPCH=demo\
+STDDEVLB  LZ390 final_options=SYSPRN=demo\
+STDDEVLB  LZ390 final_options=SYSOBJ=demo\
+STDDEVLB  LZ390 final_options=SYSOPT=demo\
+STDDEVLB  LZ390 final_options=SYSTRC=demo\
+STDDEVLB  LZ390 Stats total obj files = 1
+STDDEVLB  LZ390 Stats total esds      = 2
+STDDEVLB  LZ390 Stats total csects    = 2
+STDDEVLB  LZ390 Stats total entries   = 0
+STDDEVLB  LZ390 Stats missing wxtrn's = 0
+STDDEVLB  LZ390 Stats Keys            = 2
+STDDEVLB  LZ390 Stats Key searches    = 6
+STDDEVLB  LZ390 Stats Key avg comps   = 0
+STDDEVLB  LZ390 Stats Key max comps   = 1
+STDDEVLB  LZ390 Stats total obj byte  = 924
+STDDEVLB  LZ390 Stats total obj rlds  = 10
+STDDEVLB  LZ390 total errors          = 0
+STDDEVLB  LZ390 ENDED RC= 0 IO=344
+STDDEVLB  EZ390 START
+STDDEVLB  EZ390 Copyright 2011 Automated Software Tools Corporation
+STDDEVLB  EZ390 Copyright 2013 Cat Herder Software, LLC
+STDDEVLB  EZ390 Copyright 2018 Joachim Bartz, Germany
+STDDEVLB  EZ390 z390 is licensed under GNU General Public License
+STDDEVLB  EZ390 program = demo\STDDEVLB.390
+STDDEVLB  EZ390 options = notiming stats systerm(demo\RTDEMO)
+STDDEVLB  EZ390 final_options=ALIGN
+STDDEVLB  EZ390 final_options=NOALLOW
+STDDEVLB  EZ390 final_options=NOAMODE24
+STDDEVLB  EZ390 final_options=AMODE31
+STDDEVLB  EZ390 final_options=NOASCII
+STDDEVLB  EZ390 final_options=ASM
+STDDEVLB  EZ390 final_options=NOASSIST
+STDDEVLB  EZ390 final_options=AUTOLINK
+STDDEVLB  EZ390 final_options=NOBAL
+STDDEVLB  EZ390 final_options=NOBS2000
+STDDEVLB  EZ390 final_options=EDF
+STDDEVLB  EZ390 final_options=NOCICS
+STDDEVLB  EZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+STDDEVLB  EZ390 final_options=COMMENT
+STDDEVLB  EZ390 final_options=CON
+STDDEVLB  EZ390 final_options=NODUMP
+STDDEVLB  EZ390 final_options=EPILOG
+STDDEVLB  EZ390 final_options=NOERRSUM
+STDDEVLB  EZ390 final_options=EXTEND
+STDDEVLB  EZ390 final_options=FLOAT(DECIMAL)
+STDDEVLB  EZ390 final_options=NOGUAM
+STDDEVLB  EZ390 final_options=INIT
+STDDEVLB  EZ390 final_options=LIST
+STDDEVLB  EZ390 final_options=LISTCALL
+STDDEVLB  EZ390 final_options=LISTUSE
+STDDEVLB  EZ390 final_options=LOADHIGH
+STDDEVLB  EZ390 final_options=NOMCALL
+STDDEVLB  EZ390 final_options=NOMOD
+STDDEVLB  EZ390 final_options=OBJ
+STDDEVLB  EZ390 final_options=NOOBJHEX
+STDDEVLB  EZ390 final_options=PC
+STDDEVLB  EZ390 final_options=PCOPT
+STDDEVLB  EZ390 final_options=NOPDSMEM8
+STDDEVLB  EZ390 final_options=NOPRINTALL
+STDDEVLB  EZ390 final_options=PROLOG
+STDDEVLB  EZ390 final_options=PROTECT
+STDDEVLB  EZ390 final_options=R64
+STDDEVLB  EZ390 final_options=NOREFORMAT
+STDDEVLB  EZ390 final_options=NOREGS
+STDDEVLB  EZ390 final_options=RMODE24
+STDDEVLB  EZ390 final_options=NORMODE31
+STDDEVLB  EZ390 final_options=STATS
+STDDEVLB  EZ390 final_options=NOTEST
+STDDEVLB  EZ390 final_options=THREAD
+STDDEVLB  EZ390 final_options=NOTIME
+STDDEVLB  EZ390 final_options=NOTIMING
+STDDEVLB  EZ390 final_options=NOTRACE
+STDDEVLB  EZ390 final_options=NOTRACEA
+STDDEVLB  EZ390 final_options=NOTRACEALL
+STDDEVLB  EZ390 final_options=NOTRACEC
+STDDEVLB  EZ390 final_options=NOTRACEG
+STDDEVLB  EZ390 final_options=NOTRACEI
+STDDEVLB  EZ390 final_options=NOTRACEL
+STDDEVLB  EZ390 final_options=NOTRACEM
+STDDEVLB  EZ390 final_options=NOTRACEP
+STDDEVLB  EZ390 final_options=NOTRACEQ
+STDDEVLB  EZ390 final_options=NOTRACES
+STDDEVLB  EZ390 final_options=NOTRACET
+STDDEVLB  EZ390 final_options=NOTRACEV
+STDDEVLB  EZ390 final_options=TRAP
+STDDEVLB  EZ390 final_options=NOTRUNC
+STDDEVLB  EZ390 final_options=NOTS
+STDDEVLB  EZ390 final_options=VCB
+STDDEVLB  EZ390 final_options=WARN
+STDDEVLB  EZ390 final_options=XREF
+STDDEVLB  EZ390 final_options=ZSTRMAC
+STDDEVLB  EZ390 final_options=CHKMAC=0
+STDDEVLB  EZ390 final_options=CHKSRC=1
+STDDEVLB  EZ390 final_options=ERR=100
+STDDEVLB  EZ390 final_options=MAXCALL=50
+STDDEVLB  EZ390 final_options=MAXDISPLAY=80
+STDDEVLB  EZ390 final_options=MAXESD=1000
+STDDEVLB  EZ390 final_options=MAXFILE=1000
+STDDEVLB  EZ390 final_options=MAXGBL=100000
+STDDEVLB  EZ390 final_options=MAXHEIGHT=600
+STDDEVLB  EZ390 final_options=MAXLCL=100000
+STDDEVLB  EZ390 final_options=MAXLEN=80
+STDDEVLB  EZ390 final_options=MAXLINE=200000
+STDDEVLB  EZ390 final_options=MAXLOG=1000000
+STDDEVLB  EZ390 final_options=MAXPARM=10000
+STDDEVLB  EZ390 final_options=MAXPASS=2
+STDDEVLB  EZ390 final_options=MAXPC=50000
+STDDEVLB  EZ390 final_options=MAXQUE=1000
+STDDEVLB  EZ390 final_options=MAXRLD=10000
+STDDEVLB  EZ390 final_options=MAXSIZE=52428800
+STDDEVLB  EZ390 final_options=MAXSYM=50000
+STDDEVLB  EZ390 final_options=MAXWARN=4
+STDDEVLB  EZ390 final_options=MAXWIDTH=800
+STDDEVLB  EZ390 final_options=MEM=1
+STDDEVLB  EZ390 final_options=MINHEIGHT=150
+STDDEVLB  EZ390 final_options=MINWIDTH=150
+STDDEVLB  EZ390 final_options=MNOTE=0
+STDDEVLB  EZ390 final_options=PARM=
+STDDEVLB  EZ390 final_options=PROFILE=
+STDDEVLB  EZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\demo\STDDEVLB.STA
+STDDEVLB  EZ390 final_options=SYSPARM=
+STDDEVLB  EZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\demo\RTDEMO.ERR
+STDDEVLB  EZ390 final_options=TESTDD=
+STDDEVLB  EZ390 final_options=TIME=15
+STDDEVLB  EZ390 final_options=TRACE=
+STDDEVLB  EZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+STDDEVLB  EZ390 final_options=Z390BROWSER=cmd.exe /c Start
+STDDEVLB  EZ390 final_options=Z390COMMAND=cmd.exe
+STDDEVLB  EZ390 final_options=Z390EDITOR=notepad.exe
+STDDEVLB  EZ390 final_options=INSTALL=
+STDDEVLB  EZ390 final_options=IPL=
+STDDEVLB  EZ390 final_options=LOG=C:\Users\Achim\GitHub\z390\demo\STDDEVLB.LOG
+STDDEVLB  EZ390 final_options=SYS390=demo\+linklib
+STDDEVLB  EZ390 final_options=SYSBAL=demo\
+STDDEVLB  EZ390 final_options=SYSCPY=demo\
+STDDEVLB  EZ390 final_options=SYSDAT=demo\
+STDDEVLB  EZ390 final_options=SYSERR=demo\
+STDDEVLB  EZ390 final_options=SYSLOG=demo\
+STDDEVLB  EZ390 final_options=SYSLST=demo\
+STDDEVLB  EZ390 final_options=SYSMAC=demo\
+STDDEVLB  EZ390 final_options=SYSMLC=demo\
+STDDEVLB  EZ390 final_options=SYSPCH=demo\
+STDDEVLB  EZ390 final_options=SYSPRN=demo\
+STDDEVLB  EZ390 final_options=SYSOBJ=demo\
+STDDEVLB  EZ390 final_options=SYSOPT=demo\
+STDDEVLB  EZ390 final_options=SYSTRC=demo\
+STDDEVLB  EZ390 TCPIO operations      = 0
+STDDEVLB  EZ390 DCB operations        = 0
+STDDEVLB  EZ390 VSAM operations       = 0
+STDDEVLB  EZ390 Keys                  = 2467
+STDDEVLB  EZ390 Key searches          = 2
+STDDEVLB  EZ390 Key avg comps         = 0
+STDDEVLB  EZ390 Key max comps         = 0
+STDDEVLB  EZ390 total errors          = 0
+STDDEVLB  EZ390 ENDED RC= 0 IO=179 INS=151

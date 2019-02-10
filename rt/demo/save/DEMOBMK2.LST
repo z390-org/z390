@@ -1,0 +1,11 @@
+DEMOBMK2  LZ390 START
+LZ390I Copyright 2011 Automated Software Tools Corporation
+LZ390I Copyright 2013 Cat Herder Software, LLC
+LZ390I Copyright 2018 Joachim Bartz, Germany
+LZ390I z390 is licensed under GNU General Public License
+LZ390I options = notiming stats systerm(demo\RTDEMO)
+LZ390I program = demo\DEMOBMK2.OBJ
+LZ390I ESD=TESTBMK2 LOC=00000000 LEN=00000138
+LZ390I INCLUDE = demo\DEMOBMK2.OBJ
+LZ390I total errors         = 0
+DEMOBMK2  LZ390 ENDED RC= 0 IO=207

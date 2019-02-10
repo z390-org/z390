@@ -1,0 +1,469 @@
+DEMODFP1  MZ390 START
+DEMODFP1  MZ390 Copyright 2011 Automated Software Tools Corporation
+DEMODFP1  MZ390 Copyright 2013 Cat Herder Software, LLC
+DEMODFP1  MZ390 Copyright 2018 Joachim Bartz, Germany
+DEMODFP1  MZ390 z390 is licensed under GNU General Public License
+DEMODFP1  MZ390 program = demo\DEMODFP1.MLC
+DEMODFP1  MZ390 options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) notiming stats 
+  systerm(demo\RTDEMO)
+DEMODFP1  MZ390 final_options=ALIGN
+DEMODFP1  MZ390 final_options=NOALLOW
+DEMODFP1  MZ390 final_options=NOAMODE24
+DEMODFP1  MZ390 final_options=AMODE31
+DEMODFP1  MZ390 final_options=NOASCII
+DEMODFP1  MZ390 final_options=ASM
+DEMODFP1  MZ390 final_options=NOASSIST
+DEMODFP1  MZ390 final_options=AUTOLINK
+DEMODFP1  MZ390 final_options=NOBAL
+DEMODFP1  MZ390 final_options=NOBS2000
+DEMODFP1  MZ390 final_options=EDF
+DEMODFP1  MZ390 final_options=NOCICS
+DEMODFP1  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+DEMODFP1  MZ390 final_options=COMMENT
+DEMODFP1  MZ390 final_options=CON
+DEMODFP1  MZ390 final_options=NODUMP
+DEMODFP1  MZ390 final_options=EPILOG
+DEMODFP1  MZ390 final_options=NOERRSUM
+DEMODFP1  MZ390 final_options=EXTEND
+DEMODFP1  MZ390 final_options=FLOAT(DECIMAL)
+DEMODFP1  MZ390 final_options=NOGUAM
+DEMODFP1  MZ390 final_options=INIT
+DEMODFP1  MZ390 final_options=LIST
+DEMODFP1  MZ390 final_options=LISTCALL
+DEMODFP1  MZ390 final_options=LISTUSE
+DEMODFP1  MZ390 final_options=LOADHIGH
+DEMODFP1  MZ390 final_options=NOMCALL
+DEMODFP1  MZ390 final_options=NOMOD
+DEMODFP1  MZ390 final_options=OBJ
+DEMODFP1  MZ390 final_options=NOOBJHEX
+DEMODFP1  MZ390 final_options=PC
+DEMODFP1  MZ390 final_options=PCOPT
+DEMODFP1  MZ390 final_options=NOPDSMEM8
+DEMODFP1  MZ390 final_options=NOPRINTALL
+DEMODFP1  MZ390 final_options=PROLOG
+DEMODFP1  MZ390 final_options=PROTECT
+DEMODFP1  MZ390 final_options=R64
+DEMODFP1  MZ390 final_options=NOREFORMAT
+DEMODFP1  MZ390 final_options=NOREGS
+DEMODFP1  MZ390 final_options=RMODE24
+DEMODFP1  MZ390 final_options=NORMODE31
+DEMODFP1  MZ390 final_options=STATS
+DEMODFP1  MZ390 final_options=NOTEST
+DEMODFP1  MZ390 final_options=THREAD
+DEMODFP1  MZ390 final_options=NOTIME
+DEMODFP1  MZ390 final_options=NOTIMING
+DEMODFP1  MZ390 final_options=NOTRACE
+DEMODFP1  MZ390 final_options=NOTRACEA
+DEMODFP1  MZ390 final_options=NOTRACEALL
+DEMODFP1  MZ390 final_options=NOTRACEC
+DEMODFP1  MZ390 final_options=NOTRACEG
+DEMODFP1  MZ390 final_options=NOTRACEI
+DEMODFP1  MZ390 final_options=NOTRACEL
+DEMODFP1  MZ390 final_options=NOTRACEM
+DEMODFP1  MZ390 final_options=NOTRACEP
+DEMODFP1  MZ390 final_options=NOTRACEQ
+DEMODFP1  MZ390 final_options=NOTRACES
+DEMODFP1  MZ390 final_options=NOTRACET
+DEMODFP1  MZ390 final_options=NOTRACEV
+DEMODFP1  MZ390 final_options=TRAP
+DEMODFP1  MZ390 final_options=NOTRUNC
+DEMODFP1  MZ390 final_options=NOTS
+DEMODFP1  MZ390 final_options=VCB
+DEMODFP1  MZ390 final_options=WARN
+DEMODFP1  MZ390 final_options=XREF
+DEMODFP1  MZ390 final_options=ZSTRMAC
+DEMODFP1  MZ390 final_options=CHKMAC=0
+DEMODFP1  MZ390 final_options=CHKSRC=1
+DEMODFP1  MZ390 final_options=ERR=100
+DEMODFP1  MZ390 final_options=MAXCALL=50
+DEMODFP1  MZ390 final_options=MAXDISPLAY=80
+DEMODFP1  MZ390 final_options=MAXESD=1000
+DEMODFP1  MZ390 final_options=MAXFILE=1000
+DEMODFP1  MZ390 final_options=MAXGBL=100000
+DEMODFP1  MZ390 final_options=MAXHEIGHT=600
+DEMODFP1  MZ390 final_options=MAXLCL=100000
+DEMODFP1  MZ390 final_options=MAXLEN=80
+DEMODFP1  MZ390 final_options=MAXLINE=200000
+DEMODFP1  MZ390 final_options=MAXLOG=1000000
+DEMODFP1  MZ390 final_options=MAXPARM=10000
+DEMODFP1  MZ390 final_options=MAXPASS=2
+DEMODFP1  MZ390 final_options=MAXPC=50000
+DEMODFP1  MZ390 final_options=MAXQUE=1000
+DEMODFP1  MZ390 final_options=MAXRLD=10000
+DEMODFP1  MZ390 final_options=MAXSIZE=52428800
+DEMODFP1  MZ390 final_options=MAXSYM=50000
+DEMODFP1  MZ390 final_options=MAXWARN=4
+DEMODFP1  MZ390 final_options=MAXWIDTH=800
+DEMODFP1  MZ390 final_options=MEM=1
+DEMODFP1  MZ390 final_options=MINHEIGHT=150
+DEMODFP1  MZ390 final_options=MINWIDTH=150
+DEMODFP1  MZ390 final_options=MNOTE=0
+DEMODFP1  MZ390 final_options=PARM=
+DEMODFP1  MZ390 final_options=PROFILE=
+DEMODFP1  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\demo\DEMODFP1.STA
+DEMODFP1  MZ390 final_options=SYSPARM=
+DEMODFP1  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\demo\RTDEMO.ERR
+DEMODFP1  MZ390 final_options=TESTDD=
+DEMODFP1  MZ390 final_options=TIME=15
+DEMODFP1  MZ390 final_options=TRACE=
+DEMODFP1  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+DEMODFP1  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+DEMODFP1  MZ390 final_options=Z390COMMAND=cmd.exe
+DEMODFP1  MZ390 final_options=Z390EDITOR=notepad.exe
+DEMODFP1  MZ390 final_options=INSTALL=
+DEMODFP1  MZ390 final_options=IPL=
+DEMODFP1  MZ390 final_options=LOG=
+DEMODFP1  MZ390 final_options=SYS390=demo\+linklib
+DEMODFP1  MZ390 final_options=SYSBAL=demo\
+DEMODFP1  MZ390 final_options=SYSCPY=C:\Users\Achim\GitHub\z390\mac+.
+DEMODFP1  MZ390 final_options=SYSDAT=demo\
+DEMODFP1  MZ390 final_options=SYSERR=demo\
+DEMODFP1  MZ390 final_options=SYSLOG=demo\
+DEMODFP1  MZ390 final_options=SYSLST=demo\
+DEMODFP1  MZ390 final_options=SYSMAC=C:\Users\Achim\GitHub\z390\mac+.
+DEMODFP1  MZ390 final_options=SYSMLC=demo\
+DEMODFP1  MZ390 final_options=SYSPCH=demo\
+DEMODFP1  MZ390 final_options=SYSPRN=demo\
+DEMODFP1  MZ390 final_options=SYSOBJ=demo\
+DEMODFP1  MZ390 final_options=SYSOPT=demo\
+DEMODFP1  MZ390 final_options=SYSTRC=demo\
+DEMODFP1  MZ390 total MLC/MAC loaded  = 244
+DEMODFP1  MZ390 total BAL output lines= 91
+DEMODFP1  MZ390 total BAL instructions= 21
+DEMODFP1  MZ390 total macros          = 5
+DEMODFP1  MZ390 total macro loads     = 5
+DEMODFP1  MZ390 total macro calls     = 8
+DEMODFP1  MZ390 total AENTRY blocks   = 0
+DEMODFP1  MZ390 total ACALL  calls    = 0
+DEMODFP1  MZ390 total AIF    blocks   = 0
+DEMODFP1  MZ390 total ACASE  blocks   = 0
+DEMODFP1  MZ390 total AWHILE calls    = 0
+DEMODFP1  MZ390 total AUNTIL blocks   = 0
+DEMODFP1  MZ390 total global set names= 58
+DEMODFP1  MZ390 tot global seta cells = 2
+DEMODFP1  MZ390 tot global setb cells = 14
+DEMODFP1  MZ390 tot global setc cells = 42
+DEMODFP1  MZ390 max local pos parms   = 2
+DEMODFP1  MZ390 max local key parms   = 11
+DEMODFP1  MZ390 max local set names   = 13
+DEMODFP1  MZ390 max local seta cells  = 5
+DEMODFP1  MZ390 max local setb cells  = 0
+DEMODFP1  MZ390 max local setc cells  = 9
+DEMODFP1  MZ390 total array expansions= 0
+DEMODFP1  MZ390 total Keys            = 1586
+DEMODFP1  MZ390 Key searches          = 2558
+DEMODFP1  MZ390 Key avg comps         = 0
+DEMODFP1  MZ390 Key max comps         = 3
+DEMODFP1  MZ390 total macro line exec = 178
+DEMODFP1  MZ390 total pcode line exec = 26
+DEMODFP1  MZ390 total pcode line gen. = 38
+DEMODFP1  MZ390 total pcode line reuse= 0
+DEMODFP1  MZ390 total pcode op   gen. = 150
+DEMODFP1  MZ390 total pcode op   exec = 109
+DEMODFP1  MZ390 total pcode gen  opt  = 56
+DEMODFP1  MZ390 total pcode exec opt  = 0
+DEMODFP1  MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\demo\DEMODFP1.MLC
+DEMODFP1  MZ390 FID=  2 ERR= 0 C:\Users\Achim\GitHub\z390\mac\SUBENTRY.MAC
+DEMODFP1  MZ390 FID=  3 ERR= 0 C:\Users\Achim\GitHub\z390\mac\WTO.MAC
+DEMODFP1  MZ390 FID=  4 ERR= 0 C:\Users\Achim\GitHub\z390\mac\CTD.MAC
+DEMODFP1  MZ390 FID=  5 ERR= 0 C:\Users\Achim\GitHub\z390\mac\SUBEXIT.MAC
+DEMODFP1  MZ390 total mnote warnings  = 0
+DEMODFP1  MZ390 total mnote errors    = 0
+DEMODFP1  MZ390 max   mnote level     = 0
+DEMODFP1  MZ390 total mz390 errors    = 0
+DEMODFP1  AZ390 BAL lines             = 91
+DEMODFP1  AZ390 symbols               = 20
+DEMODFP1  AZ390 Literals              = 8
+DEMODFP1  AZ390 alloc passes          = 2
+DEMODFP1  AZ390 Keys                  = 1347
+DEMODFP1  AZ390 Key searches          = 1870
+DEMODFP1  AZ390 Key avg comps         = 0
+DEMODFP1  AZ390 Key max comps         = 3
+DEMODFP1  AZ390 ESD symbols           = 1
+DEMODFP1  AZ390 object bytes          = 453
+DEMODFP1  AZ390 object rlds           = 4
+DEMODFP1  AZ390 total mnote warnings  = 0
+DEMODFP1  AZ390 total mnote errors    = 0
+DEMODFP1  AZ390 max   mnote level     = 0
+DEMODFP1  AZ390 total mz390 errors    = 0
+DEMODFP1  AZ390 total az390 errors    = 0
+DEMODFP1  MZ390 ENDED RC= 0 IO=1287
+DEMODFP1  LZ390 START
+DEMODFP1  LZ390 Copyright 2011 Automated Software Tools Corporation
+DEMODFP1  LZ390 Copyright 2013 Cat Herder Software, LLC
+DEMODFP1  LZ390 Copyright 2018 Joachim Bartz, Germany
+DEMODFP1  LZ390 z390 is licensed under GNU General Public License
+DEMODFP1  LZ390 options = notiming stats systerm(demo\RTDEMO)
+DEMODFP1  LZ390 program = demo\DEMODFP1.OBJ
+DEMODFP1  LZ390 final_options=ALIGN
+DEMODFP1  LZ390 final_options=NOALLOW
+DEMODFP1  LZ390 final_options=NOAMODE24
+DEMODFP1  LZ390 final_options=AMODE31
+DEMODFP1  LZ390 final_options=NOASCII
+DEMODFP1  LZ390 final_options=ASM
+DEMODFP1  LZ390 final_options=NOASSIST
+DEMODFP1  LZ390 final_options=AUTOLINK
+DEMODFP1  LZ390 final_options=NOBAL
+DEMODFP1  LZ390 final_options=NOBS2000
+DEMODFP1  LZ390 final_options=EDF
+DEMODFP1  LZ390 final_options=NOCICS
+DEMODFP1  LZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+DEMODFP1  LZ390 final_options=COMMENT
+DEMODFP1  LZ390 final_options=CON
+DEMODFP1  LZ390 final_options=NODUMP
+DEMODFP1  LZ390 final_options=EPILOG
+DEMODFP1  LZ390 final_options=NOERRSUM
+DEMODFP1  LZ390 final_options=EXTEND
+DEMODFP1  LZ390 final_options=FLOAT(DECIMAL)
+DEMODFP1  LZ390 final_options=NOGUAM
+DEMODFP1  LZ390 final_options=INIT
+DEMODFP1  LZ390 final_options=LIST
+DEMODFP1  LZ390 final_options=LISTCALL
+DEMODFP1  LZ390 final_options=LISTUSE
+DEMODFP1  LZ390 final_options=LOADHIGH
+DEMODFP1  LZ390 final_options=NOMCALL
+DEMODFP1  LZ390 final_options=NOMOD
+DEMODFP1  LZ390 final_options=OBJ
+DEMODFP1  LZ390 final_options=NOOBJHEX
+DEMODFP1  LZ390 final_options=PC
+DEMODFP1  LZ390 final_options=PCOPT
+DEMODFP1  LZ390 final_options=NOPDSMEM8
+DEMODFP1  LZ390 final_options=NOPRINTALL
+DEMODFP1  LZ390 final_options=PROLOG
+DEMODFP1  LZ390 final_options=PROTECT
+DEMODFP1  LZ390 final_options=R64
+DEMODFP1  LZ390 final_options=NOREFORMAT
+DEMODFP1  LZ390 final_options=NOREGS
+DEMODFP1  LZ390 final_options=RMODE24
+DEMODFP1  LZ390 final_options=NORMODE31
+DEMODFP1  LZ390 final_options=STATS
+DEMODFP1  LZ390 final_options=NOTEST
+DEMODFP1  LZ390 final_options=THREAD
+DEMODFP1  LZ390 final_options=NOTIME
+DEMODFP1  LZ390 final_options=NOTIMING
+DEMODFP1  LZ390 final_options=NOTRACE
+DEMODFP1  LZ390 final_options=NOTRACEA
+DEMODFP1  LZ390 final_options=NOTRACEALL
+DEMODFP1  LZ390 final_options=NOTRACEC
+DEMODFP1  LZ390 final_options=NOTRACEG
+DEMODFP1  LZ390 final_options=NOTRACEI
+DEMODFP1  LZ390 final_options=NOTRACEL
+DEMODFP1  LZ390 final_options=NOTRACEM
+DEMODFP1  LZ390 final_options=NOTRACEP
+DEMODFP1  LZ390 final_options=NOTRACEQ
+DEMODFP1  LZ390 final_options=NOTRACES
+DEMODFP1  LZ390 final_options=NOTRACET
+DEMODFP1  LZ390 final_options=NOTRACEV
+DEMODFP1  LZ390 final_options=TRAP
+DEMODFP1  LZ390 final_options=NOTRUNC
+DEMODFP1  LZ390 final_options=NOTS
+DEMODFP1  LZ390 final_options=VCB
+DEMODFP1  LZ390 final_options=WARN
+DEMODFP1  LZ390 final_options=XREF
+DEMODFP1  LZ390 final_options=ZSTRMAC
+DEMODFP1  LZ390 final_options=CHKMAC=0
+DEMODFP1  LZ390 final_options=CHKSRC=1
+DEMODFP1  LZ390 final_options=ERR=100
+DEMODFP1  LZ390 final_options=MAXCALL=50
+DEMODFP1  LZ390 final_options=MAXDISPLAY=80
+DEMODFP1  LZ390 final_options=MAXESD=1000
+DEMODFP1  LZ390 final_options=MAXFILE=1000
+DEMODFP1  LZ390 final_options=MAXGBL=100000
+DEMODFP1  LZ390 final_options=MAXHEIGHT=600
+DEMODFP1  LZ390 final_options=MAXLCL=100000
+DEMODFP1  LZ390 final_options=MAXLEN=80
+DEMODFP1  LZ390 final_options=MAXLINE=200000
+DEMODFP1  LZ390 final_options=MAXLOG=1000000
+DEMODFP1  LZ390 final_options=MAXPARM=10000
+DEMODFP1  LZ390 final_options=MAXPASS=2
+DEMODFP1  LZ390 final_options=MAXPC=50000
+DEMODFP1  LZ390 final_options=MAXQUE=1000
+DEMODFP1  LZ390 final_options=MAXRLD=10000
+DEMODFP1  LZ390 final_options=MAXSIZE=52428800
+DEMODFP1  LZ390 final_options=MAXSYM=50000
+DEMODFP1  LZ390 final_options=MAXWARN=4
+DEMODFP1  LZ390 final_options=MAXWIDTH=800
+DEMODFP1  LZ390 final_options=MEM=1
+DEMODFP1  LZ390 final_options=MINHEIGHT=150
+DEMODFP1  LZ390 final_options=MINWIDTH=150
+DEMODFP1  LZ390 final_options=MNOTE=0
+DEMODFP1  LZ390 final_options=PARM=
+DEMODFP1  LZ390 final_options=PROFILE=
+DEMODFP1  LZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\demo\DEMODFP1.STA
+DEMODFP1  LZ390 final_options=SYSPARM=
+DEMODFP1  LZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\demo\RTDEMO.ERR
+DEMODFP1  LZ390 final_options=TESTDD=
+DEMODFP1  LZ390 final_options=TIME=15
+DEMODFP1  LZ390 final_options=TRACE=
+DEMODFP1  LZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+DEMODFP1  LZ390 final_options=Z390BROWSER=cmd.exe /c Start
+DEMODFP1  LZ390 final_options=Z390COMMAND=cmd.exe
+DEMODFP1  LZ390 final_options=Z390EDITOR=notepad.exe
+DEMODFP1  LZ390 final_options=INSTALL=
+DEMODFP1  LZ390 final_options=IPL=
+DEMODFP1  LZ390 final_options=LOG=
+DEMODFP1  LZ390 final_options=SYS390=demo\+linklib
+DEMODFP1  LZ390 final_options=SYSBAL=demo\
+DEMODFP1  LZ390 final_options=SYSCPY=demo\
+DEMODFP1  LZ390 final_options=SYSDAT=demo\
+DEMODFP1  LZ390 final_options=SYSERR=demo\
+DEMODFP1  LZ390 final_options=SYSLOG=demo\
+DEMODFP1  LZ390 final_options=SYSLST=demo\
+DEMODFP1  LZ390 final_options=SYSMAC=demo\
+DEMODFP1  LZ390 final_options=SYSMLC=demo\
+DEMODFP1  LZ390 final_options=SYSPCH=demo\
+DEMODFP1  LZ390 final_options=SYSPRN=demo\
+DEMODFP1  LZ390 final_options=SYSOBJ=demo\
+DEMODFP1  LZ390 final_options=SYSOPT=demo\
+DEMODFP1  LZ390 final_options=SYSTRC=demo\
+DEMODFP1  LZ390 Stats total obj files = 1
+DEMODFP1  LZ390 Stats total esds      = 1
+DEMODFP1  LZ390 Stats total csects    = 1
+DEMODFP1  LZ390 Stats total entries   = 0
+DEMODFP1  LZ390 Stats missing wxtrn's = 0
+DEMODFP1  LZ390 Stats Keys            = 1
+DEMODFP1  LZ390 Stats Key searches    = 2
+DEMODFP1  LZ390 Stats Key avg comps   = 0
+DEMODFP1  LZ390 Stats Key max comps   = 1
+DEMODFP1  LZ390 Stats total obj byte  = 453
+DEMODFP1  LZ390 Stats total obj rlds  = 4
+DEMODFP1  LZ390 total errors          = 0
+DEMODFP1  LZ390 ENDED RC= 0 IO=245
+DEMODFP1  EZ390 START
+DEMODFP1  EZ390 Copyright 2011 Automated Software Tools Corporation
+DEMODFP1  EZ390 Copyright 2013 Cat Herder Software, LLC
+DEMODFP1  EZ390 Copyright 2018 Joachim Bartz, Germany
+DEMODFP1  EZ390 z390 is licensed under GNU General Public License
+DEMODFP1  EZ390 program = demo\DEMODFP1.390
+DEMODFP1  EZ390 options = notiming stats systerm(demo\RTDEMO)
+DEMODFP1  EZ390 final_options=ALIGN
+DEMODFP1  EZ390 final_options=NOALLOW
+DEMODFP1  EZ390 final_options=NOAMODE24
+DEMODFP1  EZ390 final_options=AMODE31
+DEMODFP1  EZ390 final_options=NOASCII
+DEMODFP1  EZ390 final_options=ASM
+DEMODFP1  EZ390 final_options=NOASSIST
+DEMODFP1  EZ390 final_options=AUTOLINK
+DEMODFP1  EZ390 final_options=NOBAL
+DEMODFP1  EZ390 final_options=NOBS2000
+DEMODFP1  EZ390 final_options=EDF
+DEMODFP1  EZ390 final_options=NOCICS
+DEMODFP1  EZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+DEMODFP1  EZ390 final_options=COMMENT
+DEMODFP1  EZ390 final_options=CON
+DEMODFP1  EZ390 final_options=NODUMP
+DEMODFP1  EZ390 final_options=EPILOG
+DEMODFP1  EZ390 final_options=NOERRSUM
+DEMODFP1  EZ390 final_options=EXTEND
+DEMODFP1  EZ390 final_options=FLOAT(DECIMAL)
+DEMODFP1  EZ390 final_options=NOGUAM
+DEMODFP1  EZ390 final_options=INIT
+DEMODFP1  EZ390 final_options=LIST
+DEMODFP1  EZ390 final_options=LISTCALL
+DEMODFP1  EZ390 final_options=LISTUSE
+DEMODFP1  EZ390 final_options=LOADHIGH
+DEMODFP1  EZ390 final_options=NOMCALL
+DEMODFP1  EZ390 final_options=NOMOD
+DEMODFP1  EZ390 final_options=OBJ
+DEMODFP1  EZ390 final_options=NOOBJHEX
+DEMODFP1  EZ390 final_options=PC
+DEMODFP1  EZ390 final_options=PCOPT
+DEMODFP1  EZ390 final_options=NOPDSMEM8
+DEMODFP1  EZ390 final_options=NOPRINTALL
+DEMODFP1  EZ390 final_options=PROLOG
+DEMODFP1  EZ390 final_options=PROTECT
+DEMODFP1  EZ390 final_options=R64
+DEMODFP1  EZ390 final_options=NOREFORMAT
+DEMODFP1  EZ390 final_options=NOREGS
+DEMODFP1  EZ390 final_options=RMODE24
+DEMODFP1  EZ390 final_options=NORMODE31
+DEMODFP1  EZ390 final_options=STATS
+DEMODFP1  EZ390 final_options=NOTEST
+DEMODFP1  EZ390 final_options=THREAD
+DEMODFP1  EZ390 final_options=NOTIME
+DEMODFP1  EZ390 final_options=NOTIMING
+DEMODFP1  EZ390 final_options=NOTRACE
+DEMODFP1  EZ390 final_options=NOTRACEA
+DEMODFP1  EZ390 final_options=NOTRACEALL
+DEMODFP1  EZ390 final_options=NOTRACEC
+DEMODFP1  EZ390 final_options=NOTRACEG
+DEMODFP1  EZ390 final_options=NOTRACEI
+DEMODFP1  EZ390 final_options=NOTRACEL
+DEMODFP1  EZ390 final_options=NOTRACEM
+DEMODFP1  EZ390 final_options=NOTRACEP
+DEMODFP1  EZ390 final_options=NOTRACEQ
+DEMODFP1  EZ390 final_options=NOTRACES
+DEMODFP1  EZ390 final_options=NOTRACET
+DEMODFP1  EZ390 final_options=NOTRACEV
+DEMODFP1  EZ390 final_options=TRAP
+DEMODFP1  EZ390 final_options=NOTRUNC
+DEMODFP1  EZ390 final_options=NOTS
+DEMODFP1  EZ390 final_options=VCB
+DEMODFP1  EZ390 final_options=WARN
+DEMODFP1  EZ390 final_options=XREF
+DEMODFP1  EZ390 final_options=ZSTRMAC
+DEMODFP1  EZ390 final_options=CHKMAC=0
+DEMODFP1  EZ390 final_options=CHKSRC=1
+DEMODFP1  EZ390 final_options=ERR=100
+DEMODFP1  EZ390 final_options=MAXCALL=50
+DEMODFP1  EZ390 final_options=MAXDISPLAY=80
+DEMODFP1  EZ390 final_options=MAXESD=1000
+DEMODFP1  EZ390 final_options=MAXFILE=1000
+DEMODFP1  EZ390 final_options=MAXGBL=100000
+DEMODFP1  EZ390 final_options=MAXHEIGHT=600
+DEMODFP1  EZ390 final_options=MAXLCL=100000
+DEMODFP1  EZ390 final_options=MAXLEN=80
+DEMODFP1  EZ390 final_options=MAXLINE=200000
+DEMODFP1  EZ390 final_options=MAXLOG=1000000
+DEMODFP1  EZ390 final_options=MAXPARM=10000
+DEMODFP1  EZ390 final_options=MAXPASS=2
+DEMODFP1  EZ390 final_options=MAXPC=50000
+DEMODFP1  EZ390 final_options=MAXQUE=1000
+DEMODFP1  EZ390 final_options=MAXRLD=10000
+DEMODFP1  EZ390 final_options=MAXSIZE=52428800
+DEMODFP1  EZ390 final_options=MAXSYM=50000
+DEMODFP1  EZ390 final_options=MAXWARN=4
+DEMODFP1  EZ390 final_options=MAXWIDTH=800
+DEMODFP1  EZ390 final_options=MEM=1
+DEMODFP1  EZ390 final_options=MINHEIGHT=150
+DEMODFP1  EZ390 final_options=MINWIDTH=150
+DEMODFP1  EZ390 final_options=MNOTE=0
+DEMODFP1  EZ390 final_options=PARM=
+DEMODFP1  EZ390 final_options=PROFILE=
+DEMODFP1  EZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\demo\DEMODFP1.STA
+DEMODFP1  EZ390 final_options=SYSPARM=
+DEMODFP1  EZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\demo\RTDEMO.ERR
+DEMODFP1  EZ390 final_options=TESTDD=
+DEMODFP1  EZ390 final_options=TIME=15
+DEMODFP1  EZ390 final_options=TRACE=
+DEMODFP1  EZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+DEMODFP1  EZ390 final_options=Z390BROWSER=cmd.exe /c Start
+DEMODFP1  EZ390 final_options=Z390COMMAND=cmd.exe
+DEMODFP1  EZ390 final_options=Z390EDITOR=notepad.exe
+DEMODFP1  EZ390 final_options=INSTALL=
+DEMODFP1  EZ390 final_options=IPL=
+DEMODFP1  EZ390 final_options=LOG=C:\Users\Achim\GitHub\z390\demo\DEMODFP1.LOG
+DEMODFP1  EZ390 final_options=SYS390=demo\+linklib
+DEMODFP1  EZ390 final_options=SYSBAL=demo\
+DEMODFP1  EZ390 final_options=SYSCPY=demo\
+DEMODFP1  EZ390 final_options=SYSDAT=demo\
+DEMODFP1  EZ390 final_options=SYSERR=demo\
+DEMODFP1  EZ390 final_options=SYSLOG=demo\
+DEMODFP1  EZ390 final_options=SYSLST=demo\
+DEMODFP1  EZ390 final_options=SYSMAC=demo\
+DEMODFP1  EZ390 final_options=SYSMLC=demo\
+DEMODFP1  EZ390 final_options=SYSPCH=demo\
+DEMODFP1  EZ390 final_options=SYSPRN=demo\
+DEMODFP1  EZ390 final_options=SYSOBJ=demo\
+DEMODFP1  EZ390 final_options=SYSOPT=demo\
+DEMODFP1  EZ390 final_options=SYSTRC=demo\
+DEMODFP1  EZ390 TCPIO operations      = 0
+DEMODFP1  EZ390 DCB operations        = 0
+DEMODFP1  EZ390 VSAM operations       = 0
+DEMODFP1  EZ390 Keys                  = 2467
+DEMODFP1  EZ390 Key searches          = 2
+DEMODFP1  EZ390 Key avg comps         = 2
+DEMODFP1  EZ390 Key max comps         = 2
+DEMODFP1  EZ390 total errors          = 0
+DEMODFP1  EZ390 ENDED RC= 0 IO=168 INS=33

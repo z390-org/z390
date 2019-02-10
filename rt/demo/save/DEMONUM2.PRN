@@ -1,0 +1,120 @@
+DEMONUM2  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = demo\DEMONUM2
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) notiming stats 
+  systerm(demo\RTDEMO)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000140 TYPE=CST NAME=DEMONUM2
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH Initial version                                   *
+000000                                      (1/13)13 *********************************************************************
+000000                                      (1/14)14 *
+000000                                      (1/15)15 DEMONUM2 SUBENTRY 
+000000                                      (2/78)16+DEMONUM2 CSECT 
+000000 90ECD00C                            (2/168)17+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)18+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)19+         DC    18F'0'
+000050 C4C5D4D6D5E4D4F2                    (2/171)20+         DC    CL8'DEMONUM2'
+000058 F0F161F0F261F0F5                    (2/172)21+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)22+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)23+         ST    15,8(13)
+00006C 50DF0004                            (2/175)24+         ST    13,4(15)
+000070 18DF                                (2/176)25+         LR    13,15
+000072                                     (2/189)26+         USING DEMONUM2+8,13
+LISTUSE DEMONUM2 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/16)28          WTO   'DEMONUM2 PRIMES FROM 1 TO 4000 USING 390 CODE'
+000072 A715001B                0000A8       (3/49)30+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00310000C4C5D4D6                     (3/50)31+         DC    AL2(WTO#0002_EOT-*,0),C'DEMONUM2 PRIMES FROM 1 TO 4000 USING 390 CODE'
+0000A7                  000000A7            (3/51)33+WTO#0002_EOT     EQU *
+0000A8 0A23                                 (3/52)34+         SVC   35
+0000AA A748FFFF                             (1/17)36          LHI   N,-1
+0000AE                  000000AE            (1/18)37 NEXT     EQU   *
+0000AE A74A0002                             (1/19)38          AHI   N,2
+0000B2 A74E0FA0                             (1/20)39          CHI   N,4000
+0000B6 4720D102                00010A       (1/21)40          BH    EXIT
+0000BA A7580003                             (1/22)41          LHI   TD,3
+0000BE                  000000BE            (1/23)42 TEST     EQU   *
+0000BE A7080000                             (1/24)43          LHI   TR,0    SET DIVIDEND FROM N
+0000C2 1814                                 (1/25)44          LR    TQ,N
+0000C4 1D05                                 (1/26)45          DR    TR,TD   DIVIDE N GIVING REMAINDER, QUOTENT IN TR,TQ
+0000C6 1915                                 (1/27)46          CR    TQ,TD   HAVE WE PASSED SQUARE ROOT
+0000C8 4740D0D4                0000DC       (1/28)47          BL    PRIME   YES, THEN N MUST BE PRIME
+0000CC A70E0000                             (1/29)48          CHI   TR,0    IS THERE A RMAINDER
+0000D0 4780D0A6                0000AE       (1/30)49          BZ    NEXT    NO, THEN N IS NOT PRIME
+0000D4 A75A0002                             (1/31)50          AHI   TD,2    TRY NEXT ODD DIVISOR
+0000D8 47F0D0B6                0000BE       (1/32)51          B     TEST
+0000DC                  000000DC            (1/33)52 PRIME    EQU   *
+0000DC A73A0001                             (1/34)53          AHI   NP,1
+0000E0 4E30D118                000120       (1/35)54          CVD   NP,PWORK
+0000E4 D205D124D130     00012C 000138       (1/36)55          MVC   DNP,=X'402020202020'
+0000EA DE05D124D11D     00012C 000125       (1/37)56          ED    DNP,PWORK+5
+0000F0 4E40D118                000120       (1/38)57          CVD   N,PWORK
+0000F4 D205D12AD130     000132 000138       (1/39)58          MVC   DN,=X'402020202020'
+0000FA DE05D12AD11D     000132 000125       (1/40)59          ED    DN,PWORK+5
+000100 4110D120                000128       (1/41)60          LA    1,WTOMSG
+000104 0A23                                 (1/42)61          SVC   35
+000106 47F0D0A6                0000AE       (1/43)62          B     NEXT
+00010A                  0000010A            (1/44)63 EXIT     EQU   *
+00010A                                      (1/45)64          SUBEXIT 
+00010A 41F00000                             (4/33)65+         LA    15,0
+00010E 58D0D004                             (4/50)66+         L     13,4(,13)
+000112 58E0D00C                             (4/51)67+         L     14,12(,13)
+000116 982CD01C                             (4/52)68+         LM    2,12,28(13)
+00011A 07FE                                 (4/53)69+         BR    14
+00011C                  00000000            (1/46)71 TR       EQU   0  TEST REMAINED (TR AND TQ = DIVIDEND)
+00011C                  00000001            (1/47)72 TQ       EQU   1  TEST QUOTENT
+00011C                  00000003            (1/48)73 NP       EQU   3  NUMBER OF PRIMES
+00011C                  00000004            (1/49)74 N        EQU   4  CURRENT PRIME
+00011C                  00000005            (1/50)75 TD       EQU   5  TRIAL DIVISOR UP TO SQUARE ROOT
+000120                                      (1/51)76 PWORK    DS    D
+000128 00100000                             (1/52)77 WTOMSG   DC    AL2(WTOEND-*,0)
+00012C 40D5D5D5D5D5                         (1/53)78 DNP      DC    C' NNNNN'
+000132 40D5D5D5D5D5                         (1/54)79 DN       DC    C' NNNNN'
+000138                  00000138            (1/55)80 WTOEND   EQU   *
+000138                                      (1/56)81          END 
+000138 402020202020     =X'402020202020'
+
+Symbol Table Listing
+
+ SYM=DEMONUM2 LOC=00000000 LEN=00000140 ESD=0001 TYPE=CST  XREF=16 26 
+ SYM=DN       LOC=00000132 LEN=00000006 ESD=0001 TYPE=REL  XREF=79 58 59 
+ SYM=DNP      LOC=0000012C LEN=00000006 ESD=0001 TYPE=REL  XREF=78 55 56 
+ SYM=EXIT     LOC=0000010A LEN=00000001 ESD=0001 TYPE=REL  XREF=63 40 
+ SYM=N        LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=74 36 38 39 44 57 
+ SYM=NEXT     LOC=000000AE LEN=00000001 ESD=0001 TYPE=REL  XREF=37 49 62 
+ SYM=NP       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=73 53 54 
+ SYM=PRIME    LOC=000000DC LEN=00000001 ESD=0001 TYPE=REL  XREF=52 47 
+ SYM=PWORK    LOC=00000120 LEN=00000008 ESD=0001 TYPE=REL  XREF=76 54 56 57 59 
+ SYM=TD       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=75 41 45 46 50 
+ SYM=TEST     LOC=000000BE LEN=00000001 ESD=0001 TYPE=REL  XREF=42 51 
+ SYM=TQ       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=72 44 46 
+ SYM=TR       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=71 43 45 48 
+ SYM=WTO#0002_EOT LOC=000000A7 LEN=00000001 ESD=0001 TYPE=REL  XREF=33 30 31 
+ SYM=WTOEND   LOC=00000138 LEN=00000001 ESD=0001 TYPE=REL  XREF=80 77 
+ SYM=WTOMSG   LOC=00000128 LEN=00000002 ESD=0001 TYPE=REL  XREF=77 60 
+
+Literal Table Listing
+
+ LIT=X'402020202020' LOC=00000138 LEN=00000006 ESD=0001 POOL=0001 XREF=55 58 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+DEMONUM2  MZ390 ENDED RC= 0 IO=553

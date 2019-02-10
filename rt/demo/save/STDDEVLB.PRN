@@ -1,0 +1,398 @@
+STDDEVLB  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = demo\STDDEVLB
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) notiming stats 
+  systerm(demo\RTDEMO)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000001A0 TYPE=CST NAME=STDDEV
+ ESD=0003 LOC=000001A0 LEN=00000238 TYPE=CST NAME=STDDEVLB
+ ESD=0002 LOC=00000000 LEN=00000000 TYPE=EXT NAME=STDDEVLB
+Assembler Listing
+000000                                        (1/1)1          TITLE 'STDDEVLB.MLC - Calc. BFP 128 Bit Standard Deviation'
+000000                                        (1/2)2 *********************************************************************
+000000                                        (1/3)3 * Copyright 2007 Automated Software Tools Corporation               *
+000000                                        (1/4)4 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/5)5 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/6)6 *                                                                   *
+000000                                        (1/7)7 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/8)8 *                                                                   *
+000000                                        (1/9)9 * The z390 package is distributed under GNU general public license  *
+000000                                      (1/10)10 *                                                                   *
+000000                                      (1/11)11 * Author - Don Higgins                                              *
+000000                                      (1/12)12 *********************************************************************
+000000                                      (1/13)13 * 1986-12-19  DSH Initial version                                   *
+000000                                      (1/14)14 * 2007-06-20  DSH ???                                               *
+000000                                      (1/15)15 *********************************************************************
+000000                                      (1/16)16 *
+000000                                      (1/17)17 STDDEV   SUBENTRY          SAVE REGS AND DEFINE BASE REG
+000000                                      (4/78)19+STDDEV   CSECT 
+000000 90ECD00C                            (4/168)20+         STM   14,12,12(13)
+000004 45FF0068                            (4/169)21+         BAL   15,104(15)
+000008 0000000000000000                    (4/170)22+         DC    18F'0'
+000050 E2E3C4C4C5E54040                    (4/171)23+         DC    CL8'STDDEV'
+000058 F0F161F0F261F0F5                    (4/172)24+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (4/173)25+         DC    CL8'22.33'
+000068 50FD0008                            (4/174)26+         ST    15,8(13)
+00006C 50DF0004                            (4/175)27+         ST    13,4(15)
+000070 18DF                                (4/176)28+         LR    13,15
+000072                                     (4/189)29+         USING STDDEV+8,13
+LISTUSE STDDEV   ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/18)31          COPY  ASMMSP      STRUCTURED PROGRAMMING MACRO LIBRARY
+000072                                       (2/1)32=         COPY ZSTRMAC  Z390 STRUCTURED PROGRAMMING MACROS
+000072                                      (1/19)33          CALL  STDDEVLB,(LBX,N,LBSD)  CALCULATE STANDARD DEVIATION
+000072 0700                                 (6/29)37+         CNOP  0,4
+000074 A7150008                000084       (6/57)38+         BRAS   1,*+4+3*4
+000078 0000010000000140                     (6/58)39+         DC     A(LBX,N,LBSD)
+000084 C4FD00000036            0000F0       (6/79)40+         LRL    15,=V(STDDEVLB)
+00008A 05EF                                 (6/84)41+         BALR      14,15
+00008C                                      (1/20)44          IF    (CHI,R15,NE,0)         ABORT IF RC NE 0
+00008C A7FE0000                             (7/47)70+         CHI   R15,0
+000090 4780D0C6                0000CE       (7/49)71+         BC    15-NE,#@IF_1_2
+000094                                      (1/21)73                WTO 'CALCLBSD RETURN CODE ERROR - ABORTING'
+000094 A7150017                0000C2      (10/49)75+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+000098 00290000C3C1D3C3                    (10/50)76+         DC    AL2(WTO#0006_EOT-*,0),C'CALCLBSD RETURN CODE ERROR - ABORTING'
+0000C1                  000000C1           (10/51)78+WTO#0006_EOT     EQU *
+0000C2 0A23                                (10/52)79+         SVC   35
+0000C4                                      (1/22)81                ABEND 111,DUMP
+0000C4 4110006F                            (11/39)82+         LA   1,111
+0000C8 A51A8000                            (11/45)83+         OILH 1,X'8000'
+0000CC 0A0D                                (11/47)84+         SVC  13 ABEND R1=COMP CODE AND HIGH BIT = DUMP PGM STORAGE
+0000CE                                      (1/23)86          ENDIF 
+0000CE                                     (12/20)89+#@IF_1_2                                                 DS 0H
+0000CE                                      (1/24)91          CTD   CTD_LB,IN=LBSD,OUT=DLBSD,LINKAGE=SVC DISPLAY STD. DEV.
+0000CE                  00000001           (13/53)93+CTD_INT128 EQU 1 CONVERT 128 BIT INT TO 45 BYTE EBCDIC DECIMAL
+0000CE                  00000002           (13/54)94+CTD_EH   EQU   2 CONVERT HFP SHORT EH TO 45 BYTE EBCDIC N.N( 6)+ENNNN
+0000CE                  00000003           (13/55)95+CTD_EB   EQU   3 CONVERT BFP SHORT EB TO 45 BYTE EBCDIC N.N( 7)+ENNNN
+0000CE                  00000004           (13/56)96+CTD_DH   EQU   4 CONVERT HFP LONG  DH TO 45 BYTE EBCDIC N.N(14)+ENNNN
+0000CE                  00000005           (13/57)97+CTD_DB   EQU   5 CONVERT BFP LONG  DB TO 45 BYTE EBCDIC N.N(15)+ENNNN
+0000CE                  00000006           (13/58)98+CTD_LH   EQU   6 CONVERT HFP EXT.  LH TO 45 BYTE EBCDIC N.N(34)+ENNNN
+0000CE                  00000007           (13/59)99+CTD_LB   EQU   7 CONVERT BFP EXT.  LB TO 45 BYTE EBCDIC N.N(34)+ENNNN
+0000CE                  00000008          (13/60)100+CTD_DD   EQU   8 CONVERT DFP LONG  DD TO 45 BYTE EBCDIC N.N(16)+ENNNN
+0000CE                  00000009          (13/61)101+CTD_ED   EQU   9 CONVERT DFP SHORT ED TO 45 BYTE EBCDIC N.N( 7)+ENNNN
+0000CE                  0000000A          (13/62)102+CTD_LD   EQU  10 CONVERT DFP EXT.  LD TO 45 BYTE EBCDIC N.N(34)+ENNNN
+0000CE 4110D0EC                0000F4     (13/65)103+         LA    1,=A(CTD_LB,LBSD,DLBSD)
+0000D2 0AAA                               (13/82)104+         SVC   170 CTD R1=A(TYPE,IN,OUT)
+0000D4                                     (1/25)106          WTO   MF=(E,WTOMSG)
+0000D4 4110D150                000158     (10/61)107+         LA    1,WTOMSG
+0000D8 0A23                               (10/66)108+         SVC   35
+0000DA                                     (1/26)110          SUBEXIT           RESTORE REGS AND EXIT
+0000DA 41F00000                           (14/33)111+         LA    15,0
+0000DE 58D0D004                           (14/50)112+         L     13,4(,13)
+0000E2 58E0D00C                           (14/51)113+         L     14,12(,13)
+0000E6 982CD01C                           (14/52)114+         LM    2,12,28(13)
+0000EA 07FE                               (14/53)115+         BR    14
+0000EC                                     (1/27)117          EQUREGS REGS=GPR,TYPE=DEC  EQU'S FOR R0-R15
+0000EC                  00000000          (15/41)119+R0     EQU 0
+0000EC                  00000001          (15/41)120+R1     EQU 1
+0000EC                  00000002          (15/41)121+R2     EQU 2
+0000EC                  00000003          (15/41)122+R3     EQU 3
+0000EC                  00000004          (15/41)123+R4     EQU 4
+0000EC                  00000005          (15/41)124+R5     EQU 5
+0000EC                  00000006          (15/41)125+R6     EQU 6
+0000EC                  00000007          (15/41)126+R7     EQU 7
+0000EC                  00000008          (15/41)127+R8     EQU 8
+0000EC                  00000009          (15/41)128+R9     EQU 9
+0000EC                  0000000A          (15/41)129+R10    EQU 10
+0000EC                  0000000B          (15/41)130+R11    EQU 11
+0000EC                  0000000C          (15/41)131+R12    EQU 12
+0000EC                  0000000D          (15/41)132+R13    EQU 13
+0000EC                  0000000E          (15/41)133+R14    EQU 14
+0000EC                  0000000F          (15/41)134+R15    EQU 15
+0000EC                                     (1/28)136          EQUREGS REGS=FPC,TYPE=DEC  EQU'S FOR F0-F15
+0000EC                  00000000          (15/41)138+F0     EQU 0
+0000EC                  00000001          (15/41)139+F1     EQU 1
+0000EC                  00000002          (15/41)140+F2     EQU 2
+0000EC                  00000003          (15/41)141+F3     EQU 3
+0000EC                  00000004          (15/41)142+F4     EQU 4
+0000EC                  00000005          (15/41)143+F5     EQU 5
+0000EC                  00000006          (15/41)144+F6     EQU 6
+0000EC                  00000007          (15/41)145+F7     EQU 7
+0000EC                  00000008          (15/41)146+F8     EQU 8
+0000EC                  00000009          (15/41)147+F9     EQU 9
+0000EC                  0000000A          (15/41)148+F10    EQU 10
+0000EC                  0000000B          (15/41)149+F11    EQU 11
+0000EC                  0000000C          (15/41)150+F12    EQU 12
+0000EC                  0000000D          (15/41)151+F13    EQU 13
+0000EC                  0000000E          (15/41)152+F14    EQU 14
+0000EC                  0000000F          (15/41)153+F15    EQU 15
+0000EC                                     (1/29)155          LTORG 
+0000F0 00000000         =V(STDDEVLB)
+0000F4 0000000700000148 =A(CTD_LB,LBSD,DLBSD)
+000100 3FFF000000000000                    (1/30)156 LBX      DC    LB'1,2,3,6' BINARY EXTENDED PRECISION (BFP) ARRAY
+000140 00000004                            (1/31)157 N        DC    F'4'        INTEGER NUMBER OF ARRAY ELEMENTS
+000148 0000000000000000                    (1/32)158 LBSD     DC    LB'0'       STANDARD DEVIATION BFP VALUE
+000158 00450000E2E3C1D5                    (1/33)159 WTOMSG   DC    AL2(WTOEND-*,0),C'STANDARD DEVIATION ='
+000170 4040404040404040                    (1/34)160 DLBSD    DC    CL45' '     STANDARD DEVIATION IN SCIENTIFIC NOTATION
+00019D                  0000019D           (1/35)161 WTOEND   EQU   *
+00019D                                     (1/36)162 *
+00019D                                     (1/37)163 *
+00019D                                     (1/38)164 STDDEVLB SUBENTRY 
+0001A0                                     (4/78)165+STDDEVLB CSECT 
+0001A0 90ECD00C                           (4/168)166+         STM   14,12,12(13)
+0001A4 45FF0068                           (4/169)167+         BAL   15,104(15)
+0001A8 0000000000000000                   (4/170)168+         DC    18F'0'
+0001F0 E2E3C4C4C5E5D3C2                   (4/171)169+         DC    CL8'STDDEVLB'
+0001F8 F0F161F0F261F0F5                   (4/172)170+         DC    CL8'01/02/05'
+000200 F2F24BF3F3404040                   (4/173)171+         DC    CL8'22.33'
+000208 50FD0008                           (4/174)172+         ST    15,8(13)
+00020C 50DF0004                           (4/175)173+         ST    13,4(15)
+000210 18DF                               (4/176)174+         LR    13,15
+000212                                    (4/189)175+         USING STDDEVLB+8,13
+LISTUSE STDDEVLB ESD=0003 LOC=000001A8 LEN=01000 REG=D OFF=00000 LAB=
+000212                                     (1/39)177 *
+000212                                     (1/40)178 * CALCULATE BFP 128 BIT STANDARD DEVIATION FOR ARRAY OF BFP ELEMENTS
+000212                                     (1/41)179 *
+000212                                     (1/42)180 * CALL PARAMETERS:
+000212                                     (1/43)181 *  1 = INPUT  ADDRESS OF BFP ARRAY ELEMENTS (16 BYTE BFP LB FORMAT)
+000212                                     (1/44)182 *  2 - INPUT  FULL WORD ARRAY ELEMENT COUNT (MUST BE >= 1)
+000212                                     (1/45)183 *  3 - OUTPUT STANDARD DEVIATION IN 16 BYTEBFP LB FORMAT
+000212                                     (1/46)184 *
+000212                                     (1/47)185 * RETURN CODES:
+000212                                     (1/48)186 *   0 - STANDARD DEVIATION STORED SUCCESSFULLY IN PARAMETER 3
+000212                                     (1/49)187 *  16 - ELEMENT COUNT LESS THAN 1 (STD.DEV. UNDEFINED)
+000212                                     (1/50)188 *
+000212                                     (1/51)189 * CALCULATE BFP LBXM MEAN = (SUM X(I))/N AND SAVE IN F4+F6
+000212                                     (1/52)190 *
+000212 98351000                            (1/53)191          LM    R3,R5,0(R1) R3=A(ARRAY) R4=A(N) R5=A(LBSD)
+000216 58440000                            (1/54)192          L     R4,0(R4)    R4=N ELEMENT COUNT
+00021A 1863                                (1/55)193          LR    R6,R3       R6=AARRY ELEMENT ADDRESS
+00021C 1874                                (1/56)194          LR    R7,R4       R7=ELEMENTS TO PROCESS IN LOOP
+00021E                                     (1/57)195          IF    (CHI,R7,LT,1)
+00021E A77E0001                            (7/47)198+         CHI   R7,1
+000222 47B0D090                000238      (7/49)199+         BC    15-LT,#@IF_2_2
+000226                                     (1/58)201                SUBEXIT RC=16  EXIT WITH RC=16 IF COUNT < 1
+000226 41F00010                           (14/33)203+         LA    15,16
+00022A 58D0D004                           (14/50)204+         L     13,4(,13)
+00022E 58E0D00C                           (14/51)205+         L     14,12(,13)
+000232 982CD01C                           (14/52)206+         LM    2,12,28(13)
+000236 07FE                               (14/53)207+         BR    14
+000238                                     (1/59)209          ENDIF 
+000238                                    (12/20)212+#@IF_2_2                                                 DS 0H
+000238 B29C0008                            (1/60)214          STFPC  R8      SAVE FPC IN R8
+00023C 1818                                (1/61)215          LR     R1,R8
+00023E                  01000000           (1/62)216 FPC_MASK_UNF EQU X'01000000' BFP UNDERFLOW MASK BIT
+00023E 5410D210                0003B8      (1/63)217          N      R1,=A(X'FFFFFFFF'-FPC_MASK_UNF)  TURN OFF UNDERFLOW
+000242 B29D0001                            (1/64)218          LFPC   R1
+000246 B34B0044                            (1/65)219          SXBR  F4,F4       F4+F6 = SUM X(I) TO CALC MEAN
+00024A                                     (1/66)220          DO    WHILE=(CHI,R7,GT,0)
+00024A                                    (16/63)223+#@DO_1_T                         DS 0H
+00024A A77E0000                            (7/47)227+         CHI   R7,0
+00024E 47D0D0AE                000256      (7/49)228+         BC    15-GT,#@IF_3_2
+000252 47F0D0B2                00025A     (16/66)230+               B   #@DO_1_1
+000256                                    (12/20)234+#@IF_3_2                                                 DS 0H
+000256 47F0D0CA                000272     (16/68)236+         B     #@DO_1_E
+00025A                                    (16/69)237+#@DO_1_1                         DS 0H
+00025A 68160000                            (1/67)239                LD  F1,0(R6) F1+F3 = ELEMENT
+00025E 68360008                            (1/68)240                LD  F3,8(R6)
+000262 B34A0041                            (1/69)241                AXBR F4,F1  ADD ELEMENT TO SUM
+000266 A76A0010                            (1/70)242                AHI R6,16   NEXT ELEMENT
+00026A A77AFFFF                            (1/71)243                AHI R7,-1   REDUCE ELEMENTS REMAINING
+00026E                                     (1/72)244          ENDDO 
+00026E 47F0D0A2                00024A     (16/55)248+         B     #@DO_1_T
+000272                                    (16/56)249+#@DO_1_E                         DS 0H
+000272 B3960014                            (1/73)252          CXFBR F1,R4       F1+F3 = N
+000276 B34D0041                            (1/74)253          DXBR  F4,F1       F4+F6 = F4+F6 / F1+F3 = BFP LB MEAN
+00027A                                     (1/75)254 *
+00027A                                     (1/76)255 * DISPLAY MEAN FOR DEBUGGING PURPOSES
+00027A                                     (1/77)256 *
+00027A 6040D160                000308      (1/78)257          STD   F4,LBXM
+00027E 6060D168                000310      (1/79)258          STD   F6,LBXM+8
+000282                                     (1/80)259          CTD   CTD_LB,IN=LBXM,OUT=DLBXM,LINKAGE=SVC DISPLAY STD. DEV.
+000282 4110D214                0003BC     (13/65)261+         LA    1,=A(CTD_LB,LBXM,DLBXM)
+000286 0AAA                               (13/82)262+         SVC   170 CTD R1=A(TYPE,IN,OUT)
+000288                                     (1/81)264          WTO   MF=(E,WTOXM)
+000288 4110D180                000328     (10/61)265+         LA    1,WTOXM
+00028C 0A23                               (10/66)266+         SVC   35
+00028E                                     (1/82)268 *
+00028E                                     (1/83)269 * CALCULATE SUM OF VARIANCE SQUARED IN F0+F2
+00028E                                     (1/84)270 *
+00028E 1863                                (1/85)271          LR    R6,R3       R6 = ADDRESS FIRST ARRAY ELEMENT
+000290 1874                                (1/86)272          LR    R7,R4       R7 = ELEMENTS TO PROCESS IN LOOP
+000292 3700                                (1/87)273          SXR   F0,F0       F0+F2 = (SUM X(I)-MEAN)**2
+000294                                     (1/88)274          DO    WHILE=(CHI,R7,GT,0)
+000294                                    (16/63)277+#@DO_2_T                         DS 0H
+000294 A77E0000                            (7/47)281+         CHI   R7,0
+000298 47D0D0F8                0002A0      (7/49)282+         BC    15-GT,#@IF_4_2
+00029C 47F0D0FC                0002A4     (16/66)284+               B   #@DO_2_1
+0002A0                                    (12/20)288+#@IF_4_2                                                 DS 0H
+0002A0 47F0D11C                0002C4     (16/68)290+         B     #@DO_2_E
+0002A4                                    (16/69)291+#@DO_2_1                         DS 0H
+0002A4 68160000                            (1/89)293                LD  F1,0(R6) F1+F3 = BFP LB ELEMENT
+0002A8 68360008                            (1/90)294                LD  F3,8(R6)
+0002AC B34B0014                            (1/91)295                SXBR F1,F4  SUBTRACT MEAN
+0002B0 B34C0011                            (1/92)296                MXBR F1,F1  SQUARE   DIFF
+0002B4 B34A0001                            (1/93)297                AXBR F0,F1  ADD      DIFF * DIFF
+0002B8 A76A0010                            (1/94)298                AHI R6,16   NEXT ELEMENT
+0002BC A77AFFFF                            (1/95)299                AHI R7,-1   REDUCE ELEMENTS REMAINING
+0002C0                                     (1/96)300          ENDDO 
+0002C0 47F0D0EC                000294     (16/55)304+         B     #@DO_2_T
+0002C4                                    (16/56)305+#@DO_2_E                         DS 0H
+0002C4 B3960014                            (1/97)308          CXFBR F1,R4       F1+F3 = N
+0002C8 B34D0001                            (1/98)309          DXBR  F0,F1       F0+F2 = F0+F2 / F1+F3 = (SUM DIFF*DIFF)/N
+0002CC                                     (1/99)310 *
+0002CC                                    (1/100)311 * DISPLAY (SUM OF VARIANCE SQUARED)/N FOR DEBUGGING PURPOSES
+0002CC                                    (1/101)312 *
+0002CC 6000D170                000318     (1/102)313          STD   F0,LBXV2    DSHX2
+0002D0 6020D178                000320     (1/103)314          STD   F2,LBXV2+8
+0002D4                                    (1/104)315          CTD   CTD_LB,IN=LBXV2,OUT=DLBV2,LINKAGE=SVC DISPLAY (SUM V2)/N
+0002D4 4110D220                0003C8     (13/65)317+         LA    1,=A(CTD_LB,LBXV2,DLBV2)
+0002D8 0AAA                               (13/82)318+         SVC   170 CTD R1=A(TYPE,IN,OUT)
+0002DA                                    (1/105)320          WTO   MF=(E,WTOV2)
+0002DA 4110D1C5                00036D     (10/61)321+         LA    1,WTOV2
+0002DE 0A23                               (10/66)322+         SVC   35
+0002E0                                    (1/106)324 *
+0002E0                                    (1/107)325 * CALCULATE STANDARD DEVIATION
+0002E0                                    (1/108)326 *
+0002E0 B3160000                           (1/109)327          SQXBR F0,F0     CALC SQRT SUM OF VAR**2 IN F0+F2
+0002E4 60050000                           (1/110)328          STD   F0,0(R5)  STORE F0+F2 LB STANDARD DEVIATION RESULT
+0002E8 60250008                           (1/111)329          STD   F2,8(R5)
+0002EC B29D0008                           (1/112)330          LFPC  R8        RESTORE FPC REG
+0002F0                                    (1/113)331          SUBEXIT RC=0
+0002F0 41F00000                           (14/33)332+         LA    15,0
+0002F4 58D0D004                           (14/50)333+         L     13,4(,13)
+0002F8 58E0D00C                           (14/51)334+         L     14,12(,13)
+0002FC 982CD01C                           (14/52)335+         LM    2,12,28(13)
+000300 07FE                               (14/53)336+         BR    14
+000308                                    (1/114)338 LBXM     DS    LB        VARIANCE FOR DEBUG DISPLAY
+000318                                    (1/115)339 LBXV2    DS    LB        (SUM DIFF*DIFF)/N FOR DEBUG DISPLAY
+000328 00450000D4C5C1D5                   (1/116)340 WTOXM    DC    AL2(WTOXMEND-*,0),C'MEAN               ='
+000340 4040404040404040                   (1/117)341 DLBXM    DC    CL45' '     MEAIN IN SCIENTIFIC NOTATION
+00036D                  0000036D          (1/118)342 WTOXMEND EQU   *
+00036D 00450000E2E4D440                   (1/119)343 WTOV2    DC    AL2(WTOV2END-*,0),C'SUM VAR. SQUARED   ='
+000385 4040404040404040                   (1/120)344 DLBV2    DC    CL45' '     MEAIN IN SCIENTIFIC NOTATION
+0003B2                  000003B2          (1/121)345 WTOV2END EQU   *
+0003B2                                    (1/122)346          LTORG 
+0003B8 FEFFFFFF         =A(X'FFFFFFFF'-FPC_MASK_UNF)
+0003BC 0000000700000308 =A(CTD_LB,LBXM,DLBXM)
+0003C8 0000000700000318 =A(CTD_LB,LBXV2,DLBV2)
+0003D4                                    (1/123)347          END 
+Relocation Definitions
+ ESD=0001 LOC=00000078 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=0000007C LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000080 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000000F0 LEN=4 SIGN=+ XESD=0002
+ ESD=0001 LOC=000000F8 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000000FC LEN=4 SIGN=+ XESD=0001
+ ESD=0003 LOC=00000220 LEN=4 SIGN=+ XESD=0003
+ ESD=0003 LOC=00000224 LEN=4 SIGN=+ XESD=0003
+ ESD=0003 LOC=0000022C LEN=4 SIGN=+ XESD=0003
+ ESD=0003 LOC=00000230 LEN=4 SIGN=+ XESD=0003
+
+Symbol Table Listing
+
+ SYM=#@DO_1_1 LOC=0000025A LEN=00000002 ESD=0003 TYPE=REL  XREF=237 230 
+ SYM=#@DO_1_E LOC=00000272 LEN=00000002 ESD=0003 TYPE=REL  XREF=249 236 
+ SYM=#@DO_1_T LOC=0000024A LEN=00000002 ESD=0003 TYPE=REL  XREF=223 248 
+ SYM=#@DO_2_1 LOC=000002A4 LEN=00000002 ESD=0003 TYPE=REL  XREF=291 284 
+ SYM=#@DO_2_E LOC=000002C4 LEN=00000002 ESD=0003 TYPE=REL  XREF=305 290 
+ SYM=#@DO_2_T LOC=00000294 LEN=00000002 ESD=0003 TYPE=REL  XREF=277 304 
+ SYM=#@IF_1_2 LOC=000000CE LEN=00000002 ESD=0001 TYPE=REL  XREF=89 71 
+ SYM=#@IF_2_2 LOC=00000238 LEN=00000002 ESD=0003 TYPE=REL  XREF=212 199 
+ SYM=#@IF_3_2 LOC=00000256 LEN=00000002 ESD=0003 TYPE=REL  XREF=234 228 
+ SYM=#@IF_4_2 LOC=000002A0 LEN=00000002 ESD=0003 TYPE=REL  XREF=288 282 
+ SYM=CTD_DB   LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=97 
+ SYM=CTD_DD   LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=100 
+ SYM=CTD_DH   LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=96 
+ SYM=CTD_EB   LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=95 
+ SYM=CTD_ED   LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=101 
+ SYM=CTD_EH   LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=94 
+ SYM=CTD_INT128 LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=93 
+ SYM=CTD_LB   LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=99 103 155 261 317 
+  346 
+ SYM=CTD_LD   LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=102 
+ SYM=CTD_LH   LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=98 
+ SYM=DLBSD    LOC=00000170 LEN=0000002D ESD=0001 TYPE=REL  XREF=160 103 155 
+ SYM=DLBV2    LOC=00000385 LEN=0000002D ESD=0003 TYPE=REL  XREF=344 317 346 
+ SYM=DLBXM    LOC=00000340 LEN=0000002D ESD=0003 TYPE=REL  XREF=341 261 346 
+ SYM=E        LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=51 
+ SYM=EQ       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=63 
+ SYM=F0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=138 273 297 309 313 
+  327 328 
+ SYM=F10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=148 
+ SYM=F1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=139 239 241 252 253 
+  293 295 296 297 308 309 
+ SYM=F11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=149 
+ SYM=F12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=150 
+ SYM=F13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=151 
+ SYM=F14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=152 
+ SYM=F15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=153 
+ SYM=F2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=140 314 329 
+ SYM=F3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=141 240 294 
+ SYM=F4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=142 219 241 253 257 
+  295 
+ SYM=F5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=143 
+ SYM=F6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=144 258 
+ SYM=F7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=145 
+ SYM=F8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=146 
+ SYM=F9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=147 
+ SYM=FPC_MASK_UNF LOC=01000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=216 217 346 
+ SYM=GE       LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=66 
+ SYM=GT       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=64 228 282 
+ SYM=H        LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=49 
+ SYM=L        LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=50 
+ SYM=LBSD     LOC=00000148 LEN=00000010 ESD=0001 TYPE=REL  XREF=158 39 103 155 
+ SYM=LBX      LOC=00000100 LEN=00000010 ESD=0001 TYPE=REL  XREF=156 39 
+ SYM=LBXM     LOC=00000308 LEN=00000010 ESD=0003 TYPE=REL  XREF=338 257 258 261 346 
+ SYM=LBXV2    LOC=00000318 LEN=00000010 ESD=0003 TYPE=REL  XREF=339 313 314 317 346 
+ SYM=LE       LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=67 
+ SYM=LT       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=65 199 
+ SYM=M        LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=57 
+ SYM=N        LOC=00000140 LEN=00000004 ESD=0001 TYPE=REL  XREF=157 39 
+ SYM=NE       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=54 71 
+ SYM=NH       LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=52 
+ SYM=NL       LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=53 
+ SYM=NM       LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=60 
+ SYM=NO       LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=62 
+ SYM=NP       LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=59 
+ SYM=NZ       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=61 
+ SYM=O        LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=55 
+ SYM=P        LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=56 
+ SYM=R0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=119 
+ SYM=R10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=129 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=120 191 215 217 218 
+ SYM=R11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=130 
+ SYM=R12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=131 
+ SYM=R13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=132 
+ SYM=R14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=133 
+ SYM=R15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=134 70 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=121 
+ SYM=R3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=122 191 193 271 
+ SYM=R4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=123 192 194 252 272 
+  308 
+ SYM=R5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=124 191 328 329 
+ SYM=R6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=125 193 239 240 242 
+  271 293 294 298 
+ SYM=R7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=126 194 198 227 243 
+  272 281 299 
+ SYM=R8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=127 214 215 330 
+ SYM=R9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=128 
+ SYM=STDDEV   LOC=00000000 LEN=000001A0 ESD=0001 TYPE=CST  XREF=19 29 
+ SYM=STDDEVLB LOC=00000000 LEN=00000000 ESD=0002 TYPE=EXT  XREF=40 155 
+ SYM=STDDEVLB LOC=000001A0 LEN=00000238 ESD=0003 TYPE=CST  XREF=165 175 
+ SYM=WTO#0006_EOT LOC=000000C1 LEN=00000001 ESD=0001 TYPE=REL  XREF=78 75 76 
+ SYM=WTOEND   LOC=0000019D LEN=00000001 ESD=0001 TYPE=REL  XREF=161 159 
+ SYM=WTOMSG   LOC=00000158 LEN=00000002 ESD=0001 TYPE=REL  XREF=159 107 
+ SYM=WTOV2    LOC=0000036D LEN=00000002 ESD=0003 TYPE=REL  XREF=343 321 
+ SYM=WTOV2END LOC=000003B2 LEN=00000001 ESD=0003 TYPE=REL  XREF=345 343 
+ SYM=WTOXM    LOC=00000328 LEN=00000002 ESD=0003 TYPE=REL  XREF=340 265 
+ SYM=WTOXMEND LOC=0000036D LEN=00000001 ESD=0003 TYPE=REL  XREF=342 340 
+ SYM=Z        LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=58 
+
+Literal Table Listing
+
+ LIT=A(CTD_LB,LBSD,DLBSD) LOC=000000F4 LEN=00000004 ESD=0001 POOL=0001 XREF=103 
+ LIT=A(CTD_LB,LBXM,DLBXM) LOC=000003BC LEN=00000004 ESD=0003 POOL=0002 XREF=261 
+ LIT=A(CTD_LB,LBXV2,DLBV2) LOC=000003C8 LEN=00000004 ESD=0003 POOL=0002 XREF=317 
+ LIT=A(X'FFFFFFFF'-FPC_MASK_UNF) LOC=000003B8 LEN=00000004 ESD=0003 POOL=0002 XREF=217 
+ LIT=V(STDDEVLB) LOC=000000F0 LEN=00000004 ESD=0001 POOL=0001 XREF=40 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+STDDEVLB  MZ390 ENDED RC= 0 IO=1702

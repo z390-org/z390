@@ -1,0 +1,171 @@
+DEMONUM1  MZ390 START
+DEMONUM1  MZ390 Copyright 2011 Automated Software Tools Corporation
+DEMONUM1  MZ390 Copyright 2013 Cat Herder Software, LLC
+DEMONUM1  MZ390 Copyright 2018 Joachim Bartz, Germany
+DEMONUM1  MZ390 z390 is licensed under GNU General Public License
+DEMONUM1  MZ390 program = demo\DEMONUM1.MLC
+DEMONUM1  MZ390 options = bal noasm 
+  sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) chksrc(0) chkmac(0) notiming stats
+DEMONUM1  MZ390 final_options=ALIGN
+DEMONUM1  MZ390 final_options=NOALLOW
+DEMONUM1  MZ390 final_options=NOAMODE24
+DEMONUM1  MZ390 final_options=AMODE31
+DEMONUM1  MZ390 final_options=NOASCII
+DEMONUM1  MZ390 final_options=NOASM
+DEMONUM1  MZ390 final_options=NOASSIST
+DEMONUM1  MZ390 final_options=AUTOLINK
+DEMONUM1  MZ390 final_options=BAL
+DEMONUM1  MZ390 final_options=NOBS2000
+DEMONUM1  MZ390 final_options=EDF
+DEMONUM1  MZ390 final_options=NOCICS
+DEMONUM1  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+DEMONUM1  MZ390 final_options=COMMENT
+DEMONUM1  MZ390 final_options=CON
+DEMONUM1  MZ390 final_options=NODUMP
+DEMONUM1  MZ390 final_options=EPILOG
+DEMONUM1  MZ390 final_options=NOERRSUM
+DEMONUM1  MZ390 final_options=EXTEND
+DEMONUM1  MZ390 final_options=FLOAT(DECIMAL)
+DEMONUM1  MZ390 final_options=NOGUAM
+DEMONUM1  MZ390 final_options=INIT
+DEMONUM1  MZ390 final_options=LIST
+DEMONUM1  MZ390 final_options=LISTCALL
+DEMONUM1  MZ390 final_options=LISTUSE
+DEMONUM1  MZ390 final_options=LOADHIGH
+DEMONUM1  MZ390 final_options=NOMCALL
+DEMONUM1  MZ390 final_options=NOMOD
+DEMONUM1  MZ390 final_options=OBJ
+DEMONUM1  MZ390 final_options=NOOBJHEX
+DEMONUM1  MZ390 final_options=PC
+DEMONUM1  MZ390 final_options=PCOPT
+DEMONUM1  MZ390 final_options=NOPDSMEM8
+DEMONUM1  MZ390 final_options=NOPRINTALL
+DEMONUM1  MZ390 final_options=PROLOG
+DEMONUM1  MZ390 final_options=PROTECT
+DEMONUM1  MZ390 final_options=R64
+DEMONUM1  MZ390 final_options=NOREFORMAT
+DEMONUM1  MZ390 final_options=NOREGS
+DEMONUM1  MZ390 final_options=RMODE24
+DEMONUM1  MZ390 final_options=NORMODE31
+DEMONUM1  MZ390 final_options=STATS
+DEMONUM1  MZ390 final_options=NOTEST
+DEMONUM1  MZ390 final_options=THREAD
+DEMONUM1  MZ390 final_options=NOTIME
+DEMONUM1  MZ390 final_options=NOTIMING
+DEMONUM1  MZ390 final_options=NOTRACE
+DEMONUM1  MZ390 final_options=NOTRACEA
+DEMONUM1  MZ390 final_options=NOTRACEALL
+DEMONUM1  MZ390 final_options=NOTRACEC
+DEMONUM1  MZ390 final_options=NOTRACEG
+DEMONUM1  MZ390 final_options=NOTRACEI
+DEMONUM1  MZ390 final_options=NOTRACEL
+DEMONUM1  MZ390 final_options=NOTRACEM
+DEMONUM1  MZ390 final_options=NOTRACEP
+DEMONUM1  MZ390 final_options=NOTRACEQ
+DEMONUM1  MZ390 final_options=NOTRACES
+DEMONUM1  MZ390 final_options=NOTRACET
+DEMONUM1  MZ390 final_options=NOTRACEV
+DEMONUM1  MZ390 final_options=TRAP
+DEMONUM1  MZ390 final_options=NOTRUNC
+DEMONUM1  MZ390 final_options=NOTS
+DEMONUM1  MZ390 final_options=VCB
+DEMONUM1  MZ390 final_options=WARN
+DEMONUM1  MZ390 final_options=XREF
+DEMONUM1  MZ390 final_options=ZSTRMAC
+DEMONUM1  MZ390 final_options=CHKMAC=0
+DEMONUM1  MZ390 final_options=CHKSRC=0
+DEMONUM1  MZ390 final_options=ERR=100
+DEMONUM1  MZ390 final_options=MAXCALL=50
+DEMONUM1  MZ390 final_options=MAXDISPLAY=80
+DEMONUM1  MZ390 final_options=MAXESD=1000
+DEMONUM1  MZ390 final_options=MAXFILE=1000
+DEMONUM1  MZ390 final_options=MAXGBL=100000
+DEMONUM1  MZ390 final_options=MAXHEIGHT=600
+DEMONUM1  MZ390 final_options=MAXLCL=100000
+DEMONUM1  MZ390 final_options=MAXLEN=80
+DEMONUM1  MZ390 final_options=MAXLINE=200000
+DEMONUM1  MZ390 final_options=MAXLOG=1000000
+DEMONUM1  MZ390 final_options=MAXPARM=10000
+DEMONUM1  MZ390 final_options=MAXPASS=2
+DEMONUM1  MZ390 final_options=MAXPC=50000
+DEMONUM1  MZ390 final_options=MAXQUE=1000
+DEMONUM1  MZ390 final_options=MAXRLD=10000
+DEMONUM1  MZ390 final_options=MAXSIZE=52428800
+DEMONUM1  MZ390 final_options=MAXSYM=50000
+DEMONUM1  MZ390 final_options=MAXWARN=4
+DEMONUM1  MZ390 final_options=MAXWIDTH=800
+DEMONUM1  MZ390 final_options=MEM=1
+DEMONUM1  MZ390 final_options=MINHEIGHT=150
+DEMONUM1  MZ390 final_options=MINWIDTH=150
+DEMONUM1  MZ390 final_options=MNOTE=0
+DEMONUM1  MZ390 final_options=PARM=
+DEMONUM1  MZ390 final_options=PROFILE=
+DEMONUM1  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\demo\DEMONUM1.STA
+DEMONUM1  MZ390 final_options=SYSPARM=
+DEMONUM1  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\demo\DEMONUM1.ERR
+DEMONUM1  MZ390 final_options=TESTDD=
+DEMONUM1  MZ390 final_options=TIME=15
+DEMONUM1  MZ390 final_options=TRACE=
+DEMONUM1  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+DEMONUM1  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+DEMONUM1  MZ390 final_options=Z390COMMAND=cmd.exe
+DEMONUM1  MZ390 final_options=Z390EDITOR=notepad.exe
+DEMONUM1  MZ390 final_options=INSTALL=
+DEMONUM1  MZ390 final_options=IPL=
+DEMONUM1  MZ390 final_options=LOG=
+DEMONUM1  MZ390 final_options=SYS390=demo\+linklib
+DEMONUM1  MZ390 final_options=SYSBAL=demo\
+DEMONUM1  MZ390 final_options=SYSCPY=C:\Users\Achim\GitHub\z390\mac+.
+DEMONUM1  MZ390 final_options=SYSDAT=demo\
+DEMONUM1  MZ390 final_options=SYSERR=demo\
+DEMONUM1  MZ390 final_options=SYSLOG=demo\
+DEMONUM1  MZ390 final_options=SYSLST=demo\
+DEMONUM1  MZ390 final_options=SYSMAC=C:\Users\Achim\GitHub\z390\mac+.
+DEMONUM1  MZ390 final_options=SYSMLC=demo\
+DEMONUM1  MZ390 final_options=SYSPCH=demo\
+DEMONUM1  MZ390 final_options=SYSPRN=demo\
+DEMONUM1  MZ390 final_options=SYSOBJ=demo\
+DEMONUM1  MZ390 final_options=SYSOPT=demo\
+DEMONUM1  MZ390 final_options=SYSTRC=demo\
+DEMONUM1  MZ390 total MLC/MAC loaded  = 36
+DEMONUM1  MZ390 total BAL output lines= 572
+DEMONUM1  MZ390 total BAL instructions= 0
+DEMONUM1  MZ390 total macros          = 1
+DEMONUM1  MZ390 total macro loads     = 1
+DEMONUM1  MZ390 total macro calls     = 0
+DEMONUM1  MZ390 total AENTRY blocks   = 0
+DEMONUM1  MZ390 total ACALL  calls    = 0
+DEMONUM1  MZ390 total AIF    blocks   = 0
+DEMONUM1  MZ390 total ACASE  blocks   = 0
+DEMONUM1  MZ390 total AWHILE calls    = 0
+DEMONUM1  MZ390 total AUNTIL blocks   = 0
+DEMONUM1  MZ390 total global set names= 46
+DEMONUM1  MZ390 tot global seta cells = 0
+DEMONUM1  MZ390 tot global setb cells = 7
+DEMONUM1  MZ390 tot global setc cells = 39
+DEMONUM1  MZ390 max local pos parms   = 0
+DEMONUM1  MZ390 max local key parms   = 0
+DEMONUM1  MZ390 max local set names   = 9
+DEMONUM1  MZ390 max local seta cells  = 5
+DEMONUM1  MZ390 max local setb cells  = 0
+DEMONUM1  MZ390 max local setc cells  = 4
+DEMONUM1  MZ390 total array expansions= 0
+DEMONUM1  MZ390 total Keys            = 1391
+DEMONUM1  MZ390 Key searches          = 6455
+DEMONUM1  MZ390 Key avg comps         = 0
+DEMONUM1  MZ390 Key max comps         = 3
+DEMONUM1  MZ390 total macro line exec = 85063
+DEMONUM1  MZ390 total pcode line exec = 69542
+DEMONUM1  MZ390 total pcode line gen. = 9
+DEMONUM1  MZ390 total pcode line reuse= 0
+DEMONUM1  MZ390 total pcode op   gen. = 30
+DEMONUM1  MZ390 total pcode op   exec = 285809
+DEMONUM1  MZ390 total pcode gen  opt  = 5
+DEMONUM1  MZ390 total pcode exec opt  = 1
+DEMONUM1  MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\demo\DEMONUM1.MLC
+DEMONUM1  MZ390 total mnote warnings  = 0
+DEMONUM1  MZ390 total mnote errors    = 0
+DEMONUM1  MZ390 max   mnote level     = 0
+DEMONUM1  MZ390 total mz390 errors    = 0
+DEMONUM1  MZ390 ENDED RC= 0 IO=1335

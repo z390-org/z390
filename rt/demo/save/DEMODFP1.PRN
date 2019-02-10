@@ -1,0 +1,151 @@
+DEMODFP1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = demo\DEMODFP1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) notiming stats 
+  systerm(demo\RTDEMO)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000001C8 TYPE=CST NAME=DEMONUM2
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2006-12-13  DSH Initial version                                   *
+000000                                      (1/13)13 *********************************************************************
+000000                                      (1/14)14 *
+000000                                      (1/15)15 DEMONUM2 SUBENTRY 
+000000                                      (2/78)16+DEMONUM2 CSECT 
+000000 90ECD00C                            (2/168)17+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)18+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)19+         DC    18F'0'
+000050 C4C5D4D6D5E4D4F2                    (2/171)20+         DC    CL8'DEMONUM2'
+000058 F0F161F0F261F0F5                    (2/172)21+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)22+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)23+         ST    15,8(13)
+00006C 50DF0004                            (2/175)24+         ST    13,4(15)
+000070 18DF                                (2/176)25+         LR    13,15
+000072                                     (2/189)26+         USING DEMONUM2+8,13
+LISTUSE DEMONUM2 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/16)28          WTO   'DEMODFP1 DEMO DIFFERENCE BETWEEN FP DH AND DD CALC'
+000072 A715001D                0000AC       (3/49)30+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00360000C4C5D4D6                     (3/50)31+         DC    AL2(WTO#0002_EOT-*,0),C'DEMODFP1 DEMO DIFFERENCE BETWEEN FP DH AND DD CALC'
+0000AC                  000000AC            (3/51)33+WTO#0002_EOT     EQU *
+0000AC 0A23                                 (3/52)34+         SVC   35
+0000AE 6810D118                000120       (1/17)36          LD    F1,=DH'1.1'
+0000B2 6820D120                000128       (1/18)37          LD    F2,=DH'2.2'
+0000B6 2A12                                 (1/19)38          ADR   F1,F2
+0000B8 6010D178                000180       (1/20)39          STD   F1,W8
+0000BC                                      (1/21)40          CTD   CTD_DH,IN=W8,OUT=D45
+0000BC                  00000001            (4/53)41+CTD_INT128 EQU 1 CONVERT 128 BIT INT TO 45 BYTE EBCDIC DECIMAL
+0000BC                  00000002            (4/54)42+CTD_EH   EQU   2 CONVERT HFP SHORT EH TO 45 BYTE EBCDIC N.N( 6)+ENNNN
+0000BC                  00000003            (4/55)43+CTD_EB   EQU   3 CONVERT BFP SHORT EB TO 45 BYTE EBCDIC N.N( 7)+ENNNN
+0000BC                  00000004            (4/56)44+CTD_DH   EQU   4 CONVERT HFP LONG  DH TO 45 BYTE EBCDIC N.N(14)+ENNNN
+0000BC                  00000005            (4/57)45+CTD_DB   EQU   5 CONVERT BFP LONG  DB TO 45 BYTE EBCDIC N.N(15)+ENNNN
+0000BC                  00000006            (4/58)46+CTD_LH   EQU   6 CONVERT HFP EXT.  LH TO 45 BYTE EBCDIC N.N(34)+ENNNN
+0000BC                  00000007            (4/59)47+CTD_LB   EQU   7 CONVERT BFP EXT.  LB TO 45 BYTE EBCDIC N.N(34)+ENNNN
+0000BC                  00000008            (4/60)48+CTD_DD   EQU   8 CONVERT DFP LONG  DD TO 45 BYTE EBCDIC N.N(16)+ENNNN
+0000BC                  00000009            (4/61)49+CTD_ED   EQU   9 CONVERT DFP SHORT ED TO 45 BYTE EBCDIC N.N( 7)+ENNNN
+0000BC                  0000000A            (4/62)50+CTD_LD   EQU  10 CONVERT DFP EXT.  LD TO 45 BYTE EBCDIC N.N(34)+ENNNN
+0000BC 4110D138                000140       (4/65)51+         LA    1,=A(CTD_DH,W8,D45)
+0000C0 0AAA                                 (4/82)52+         SVC   170 CTD R1=A(TYPE,IN,OUT)
+0000C2 D20ED184D150     00018C 000158       (1/22)54          MVC   DTYPE,=CL20'DH 1.1+2.2 ='
+0000C8                                      (1/23)55          WTO   MF=(E,WTOMSG)
+0000C8 4110D180                000188       (3/61)56+         LA    1,WTOMSG
+0000CC 0A23                                 (3/66)57+         SVC   35
+0000CE 6810D128                000130       (1/24)59          LD    F1,=DD'1.1'
+0000D2 6820D130                000138       (1/25)60          LD    F2,=DD'2.2'
+0000D6 B3D22011                             (1/26)61          ADTR  F1,F1,F2
+0000DA 6010D178                000180       (1/27)62          STD   F1,W8
+0000DE                                      (1/28)63          CTD   CTD_DD,IN=W8,OUT=D45
+0000DE 4110D144                00014C       (4/65)64+         LA    1,=A(CTD_DD,W8,D45)
+0000E2 0AAA                                 (4/82)65+         SVC   170 CTD R1=A(TYPE,IN,OUT)
+0000E4 D20ED184D164     00018C 00016C       (1/29)67          MVC   DTYPE,=CL20'DD 1.1+2.2 ='
+0000EA                                      (1/30)68          WTO   MF=(E,WTOMSG)
+0000EA 4110D180                000188       (3/61)69+         LA    1,WTOMSG
+0000EE 0A23                                 (3/66)70+         SVC   35
+0000F0                                      (1/31)72          WTO   'TESTDFP1 ENDED OK'
+0000F0 A715000D                00010A       (3/49)73+         BRAS  1,*+(WTO#0007_EOT-*+1)/2*2
+0000F4 00150000E3C5E2E3                     (3/50)74+         DC    AL2(WTO#0007_EOT-*,0),C'TESTDFP1 ENDED OK'
+000109                  00000109            (3/51)75+WTO#0007_EOT     EQU *
+00010A 0A23                                 (3/52)76+         SVC   35
+00010C                                      (1/32)78          SUBEXIT 
+00010C 41F00000                             (5/33)79+         LA    15,0
+000110 58D0D004                             (5/50)80+         L     13,4(,13)
+000114 58E0D00C                             (5/51)81+         L     14,12(,13)
+000118 982CD01C                             (5/52)82+         LM    2,12,28(13)
+00011C 07FE                                 (5/53)83+         BR    14
+00011E                                      (1/33)85          LTORG 
+000120 411199999999999A =DH'1.1'
+000128 4123333333333333 =DH'2.2'
+000130 2234000000000011 =DD'1.1'
+000138 2234000000000022 =DD'2.2'
+000140 0000000400000180 =A(CTD_DH,W8,D45)
+00014C 0000000800000180 =A(CTD_DD,W8,D45)
+000158 C4C840F14BF14EF2 =CL20'DH 1.1+2.2 ='
+00016C C4C440F14BF14EF2 =CL20'DD 1.1+2.2 ='
+000180 0000000000000000                     (1/34)86 W8       DC    XL8'00'
+000188 00400000                             (1/35)87 WTOMSG   DC    AL2(WTOEND-*,0)
+00018C 4040404040404040                     (1/36)88 DTYPE    DC    CL15' '
+00019B 4040404040404040                     (1/37)89 D45      DC    CL45' '
+0001C8                  000001C8            (1/38)90 WTOEND   EQU   *
+0001C8                  00000001            (1/39)91 F1       EQU   1
+0001C8                  00000002            (1/40)92 F2       EQU   2
+0001C8                                      (1/41)93          END 
+Relocation Definitions
+ ESD=0001 LOC=00000144 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000148 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000150 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000154 LEN=4 SIGN=+ XESD=0001
+
+Symbol Table Listing
+
+ SYM=CTD_DB   LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=45 
+ SYM=CTD_DD   LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=48 64 85 
+ SYM=CTD_DH   LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=44 51 85 
+ SYM=CTD_EB   LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=43 
+ SYM=CTD_ED   LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=49 
+ SYM=CTD_EH   LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=42 
+ SYM=CTD_INT128 LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=41 
+ SYM=CTD_LB   LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=47 
+ SYM=CTD_LD   LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=50 
+ SYM=CTD_LH   LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=46 
+ SYM=D45      LOC=0000019B LEN=0000002D ESD=0001 TYPE=REL  XREF=89 51 64 85 
+ SYM=DEMONUM2 LOC=00000000 LEN=000001C8 ESD=0001 TYPE=CST  XREF=16 26 
+ SYM=DTYPE    LOC=0000018C LEN=0000000F ESD=0001 TYPE=REL  XREF=88 54 67 
+ SYM=F1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=91 36 38 39 59 61 
+  62 
+ SYM=F2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=92 37 38 60 61 
+ SYM=W8       LOC=00000180 LEN=00000008 ESD=0001 TYPE=REL  XREF=86 39 51 62 64 85 
+ SYM=WTO#0002_EOT LOC=000000AC LEN=00000001 ESD=0001 TYPE=REL  XREF=33 30 31 
+ SYM=WTO#0007_EOT LOC=00000109 LEN=00000001 ESD=0001 TYPE=REL  XREF=75 73 74 
+ SYM=WTOEND   LOC=000001C8 LEN=00000001 ESD=0001 TYPE=REL  XREF=90 87 
+ SYM=WTOMSG   LOC=00000188 LEN=00000002 ESD=0001 TYPE=REL  XREF=87 56 69 
+
+Literal Table Listing
+
+ LIT=A(CTD_DD,W8,D45) LOC=0000014C LEN=00000004 ESD=0001 POOL=0001 XREF=64 
+ LIT=A(CTD_DH,W8,D45) LOC=00000140 LEN=00000004 ESD=0001 POOL=0001 XREF=51 
+ LIT=CL20'DD 1.1+2.2 =' LOC=0000016C LEN=00000014 ESD=0001 POOL=0001 XREF=67 
+ LIT=CL20'DH 1.1+2.2 =' LOC=00000158 LEN=00000014 ESD=0001 POOL=0001 XREF=54 
+ LIT=DD'1.1'  LOC=00000130 LEN=00000008 ESD=0001 POOL=0001 XREF=59 
+ LIT=DD'2.2'  LOC=00000138 LEN=00000008 ESD=0001 POOL=0001 XREF=60 
+ LIT=DH'1.1'  LOC=00000120 LEN=00000008 ESD=0001 POOL=0001 XREF=36 
+ LIT=DH'2.2'  LOC=00000128 LEN=00000008 ESD=0001 POOL=0001 XREF=37 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+DEMODFP1  MZ390 ENDED RC= 0 IO=669

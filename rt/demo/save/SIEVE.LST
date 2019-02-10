@@ -1,0 +1,14 @@
+SIEVE     LZ390 START
+LZ390I Copyright 2011 Automated Software Tools Corporation
+LZ390I Copyright 2013 Cat Herder Software, LLC
+LZ390I Copyright 2018 Joachim Bartz, Germany
+LZ390I z390 is licensed under GNU General Public License
+LZ390I options = notiming stats systerm(demo\RTDEMO)
+LZ390I program = demo\SIEVE.OBJ
+LZ390I ESD=SIEVE    LOC=00000000 LEN=00000470
+LZ390I ESD=DAT      LOC=00000470 LEN=000001B0
+LZ390I INCLUDE = demo\SIEVE.OBJ
+LZ390I RLD LOC=00000430 FLD=00000000 EXT=00000470
+LZ390I INCLUDE = linklib\DAT.OBJ
+LZ390I total errors         = 0
+SIEVE     LZ390 ENDED RC= 0 IO=391
