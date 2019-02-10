@@ -1,0 +1,309 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_RESETBR
+.* XRBA IS AN EXTENSION
+         GBLB  &PARMS_0614
+         GBLB  &ZC_CICS
+         LCLB  &RBA,&XRBA,&RRN,&GTEQ,&EQUAL,&GENERIC,&NOEDF,&NOHAND
+         LCLC  &FILE,&DATASET,&RIDFLD,&REQID,&KLENGTH,&RESP,&RESP2
+.*
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+.*
+         AIF   ('&PARM'(1,5)  EQ 'FILE(').FILE
+         AIF   ('&PARM'(1,8)  EQ 'DATASET(').DATASET
+         AIF   ('&PARM'(1,7)  EQ 'RIDFLD(').RIDFLD
+         AIF   ('&PARM'(1,6)  EQ 'REQID(').REQID
+         AIF   ('&PARM'(1,10) EQ 'KEYLENGTH(').KLENGTH
+         AIF   ('&PARM'(1,3)  EQ 'RBA').RBA
+         AIF   ('&PARM'(1,4)  EQ 'XRBA').XRBA
+         AIF   ('&PARM'(1,3)  EQ 'RRN').RRN
+         AIF   ('&PARM'(1,4)  EQ 'GTEQ').GTEQ
+         AIF   ('&PARM'(1,5)  EQ 'EQUAL').EQUAL
+         AIF   ('&PARM'(1,7)  EQ 'GENERIC').GENERIC
+         AIF   ('&PARM'(1,5)  EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8)  EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5)  EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6)  EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.FILE    ANOP
+&FILE    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.DATASET ANOP
+&DATASET SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.RIDFLD  ANOP
+&RIDFLD  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.REQID   ANOP
+&REQID   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.KLENGTH ANOP
+&KLENGTH SETC  '&PARM'(11,K'&PARM-11)
+         AGO   .PLOOP
+.*
+.RBA     ANOP
+&RBA     SETB  1
+         AGO   .PLOOP
+.*
+.XRBA    ANOP
+&XRBA    SETB  1
+         AGO   .PLOOP
+.*
+.RRN     ANOP
+&RRN     SETB  1
+         AGO   .PLOOP
+.*
+.GTEQ    ANOP
+&GTEQ    SETB  1
+         AGO   .PLOOP
+.*
+.EQUAL   ANOP
+&EQUAL   SETB  1
+         AGO   .PLOOP
+.*
+.GENERIC ANOP
+&GENERIC SETB  1
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   ('&FILE' EQ '' AND '&DATASET' EQ '').NOFILE
+         AIF   ('&FILE' NE '' AND '&DATASET' NE '').BOTHF
+         AIF   ('&RIDFLD' EQ '').NEEDRID
+         AIF   (&RBA AND &XRBA).BADRBA
+         AIF   (&RRN AND &RBA).BOTHTYP
+         AIF   (&RRN AND &XRBA).BOTHTYP
+         AIF   (&GENERIC AND &RBA).BADGEN1
+         AIF   (&GENERIC AND &XRBA).BADGEN1
+         AIF   (&GENERIC AND &RRN).BADGEN1
+         AIF   ('&KLENGTH' EQ '' AND &GENERIC).BADGEN2
+         AIF   ('&KLENGTH' NE '' AND NOT(&GENERIC)).BADGEN3
+         AIF   (&GTEQ AND &EQUAL).BOTHBWS
+.*
+         GEN_XC P0614,P0614END-P0614,P0614
+         GEN_MVC P0614FN,,=X'0614' SET FUNCTION CODE
+         LA    R0,&RIDFLD         R0=ADDRESS OF RIDFLD
+         GEN_ST R0,P0614ARD       SAVE IT
+         LA    R0,L'&RIDFLD       SET NUMERIC RIDFLD LENGTH
+         GEN_STC R0,P0614LRD      SAVE IT
+.*
+         AIF   ('&FILE' EQ '').DODTAST
+.* GOT FILE
+         AIF   ('&FILE'(1,1) EQ '''').FLSTRING
+         LARL  R15,P0614FIL       ADDRESS TARGET
+         MVC   0(8,R15),&FILE     SET FILE NAME FROM LABEL
+         AGO   .DOKL
+.*
+.FLSTRING ANOP
+&FLLEN   SETA  K'&FILE
+         AIF   (&FLLEN GT 10).BADFILE
+         GEN_MVC P0614FIL,,=CL8&FILE SET FILE NAME AS STRING
+         AGO   .DOKL
+.*
+.* GOT DATASET
+.DODTAST ANOP
+         AIF   ('&DATASET'(1,1) EQ '''').DTSTRING
+         LARL  R15,P0614FIL       ADDRESS TARGET
+         MVC   0(8,R15),&DATASET  SET DATASET NAME FROM LABEL
+         AGO   .DOKL
+.*
+.DTSTRING ANOP
+&DTLEN   SETA  K'&DATASET
+         AIF   (&DTLEN GT 10).BADFILE
+         GEN_MVC P0614FIL,,=CL8&DATASET SET DATASET NAME AS STRING
+.DOKL    ANOP
+         AIF   ('&KLENGTH' EQ '').CHKOPT
+         AIF   ('&KLENGTH'(2,1) EQ '''').KLENNUM
+         AIF   (T'&KLENGTH NE 'N').KLENLAB
+.KLENNUM ANOP
+         LAY   R0,&KLENGTH        SET NUMERIC KEYLENGTH
+         GEN_STH R0,P0614KLN      SAVE IT
+         GEN_MVI P0614KIN,X'FF'   SET VALID KEYLENGTH
+         AGO   .CHKGEN
+.*
+.KLENLAB ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&KLENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&KLENGTH'(11,K'&KLENGTH-10)
+         LAY   R0,L'&LENLSL       SET NUMERIC KEYLENGTH
+         GEN_STH R0,P0614KLN      SAVE IT
+         GEN_MVI P0614KIN,X'FF'   SET VALID KEYLENGTH
+         AELSE
+.* COBOL KEYLENGTH AS LABEL
+         LH    R0,&KLENGTH        R0=KEYLENGTH FROM LABEL
+         GEN_STH R0,P0614KLN      SAVE IT
+         GEN_MVI P0614KIN,X'FF'   SET VALID KEYLENGTH
+         AEND
+         AELSE
+.* ASM KEYLENGTH AS LABEL
+         LH    R0,&KLENGTH        R0=KEYLENGTH FROM LABEL
+         GEN_STH R0,P0614KLN      SAVE IT
+         GEN_MVI P0614KIN,X'FF'   SET VALID KEYLENGTH
+         AEND
+.CHKGEN  ANOP
+         AIF   (NOT &GENERIC).GENKEY
+         GEN_MVI P0614GEN,X'FF'   SET GENERIC
+.GENKEY  ANOP
+         LTR   R0,R0              IS IT KEYLENGTH(0) OR -VE ?
+         JNP   CICS_RESETBR_&SYSNDX._NOKEY EXIT IF IT IS
+         CHI   R0,128             GT MAX ALLOWED ?
+         JH    CICS_RESETBR_&SYSNDX._NOKEY EXIT IF IT IS
+         BCTR  R0,0               -1 FOR DYNAMIC LENGTH
+         LARL  R1,CICS_RESETBR_&SYSNDX._MVCKEY ADDRESS TARGET
+         STC   R0,1(R1)           STORE LENGTH
+         LARL  R15,P0614RID       ADDRESS TARGET
+CICS_RESETBR_&SYSNDX._MVCKEY EQU *
+         MVC   0(0,R15),&RIDFLD   MOVE RIDFLD
+CICS_RESETBR_&SYSNDX._NOKEY EQU *
+         AGO   .DUNOPT
+.*
+.CHKOPT  ANOP
+         AIF   (NOT &RBA).NORBA
+         LARL  R15,P0614RID+4     ADDRESS TARGET
+         MVC   0(4,R15),&RIDFLD   MOVE RIDFLD
+         GEN_MVI P0614RBA,X'FF'   SET RBA
+         AGO   .DUNOPT
+.*
+.NORBA   ANOP
+         AIF   (NOT &XRBA).NOXRBA
+         LARL  R15,P0614RID       ADDRESS TARGET
+         MVC   0(8,R15),&RIDFLD   MOVE RIDFLD
+         GEN_MVI P0614XRB,X'FF'   SET XRBA
+         AGO   .DUNOPT
+.*
+.NOXRBA  ANOP
+         AIF   (NOT &RRN).NORRN
+         LARL  R15,P0614RID       ADDRESS TARGET
+         MVC   0(4,R15),&RIDFLD   MOVE RIDFLD
+         GEN_MVI P0614RRN,X'FF'   SET RRN
+         AGO   .DUNOPT
+.*
+.NORRN   ANOP
+.* DEFAULT IS FULL RIDFLD
+         LARL  R15,P0614RID       ADDRESS TARGET
+         MVC   0(128,R15),&RIDFLD MOVE FULL RIDFLD
+.DUNOPT  ANOP
+         AIF   ('&REQID' EQ '').DUNREQ
+         AIF   (T'&REQID NE 'N').REQLABL
+         GEN_MVC P0614REQ,,=AL2(&REQID) MOVE REQID
+         AGO   .DUNREQ
+.*
+.REQLABL ANOP
+         LARL  R15,P0614REQ       ADDRESS TARGET
+         MVC   0(2,R15),&REQID    MOVE REQID FROM LABEL
+.DUNREQ  ANOP
+         AIF   (NOT &GTEQ).DUNGTEQ
+         GEN_MVI P0614GTE,X'FF'   SET GTEQ
+.DUNGTEQ ANOP
+         GEN_ST DFHEIBR,P0614EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P0614TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P0614EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P0614EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P0614EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P0614NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P0614NOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P0614RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P0614RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P0614EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P0614EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P0614)       R1=LCL MODULE PARAMETER LIST
+P0614EDF_&SYSNDX DS 0H
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         GEN_CLI P0614NOH,X'FF'   NOHANDLE ?
+         JE    P0614BYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P0614BYP_&SYSNDX   EXIT IF NONE
+* INVREQ, FILENOTFOUND, NOTFND, NOTOPEN, DISABLED, ILLOGIC
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P0614BYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_0614).BYP0614
+&PARMS_0614 SETB 1
+         P0614
+*
+.BYP0614 ANOP
+P0614BYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.NOFILE  MNOTE 12,'FILE OR DATASET MUST BE SPECIFIED'
+         MEXIT
+.*
+.BOTHF   MNOTE 12,'BOTH FILE AND DATASET ARE SPECIFIED'
+         MEXIT
+.*
+.BADFILE MNOTE 12,'INVALID FILE OR DATASET'
+         MEXIT
+.*
+.NEEDRID MNOTE 12,'RIDFLD IS MANDATORY'
+         MEXIT
+.*
+.BADRBA  MNOTE 12,'BOTH RBA AND XRBA ARE SPECIFIED'
+         MEXIT
+.*
+.BOTHTYP MNOTE 12,'BOTH RRN AND (X)RBA ARE SPECIFIED'
+         MEXIT
+.*
+.BOTHBWS MNOTE 12,'BOTH GTEQ AND EQUAL ARE SPECIFIED'
+         MEXIT
+.*
+.BADGEN1 MNOTE 12,'GENERIC CANNOT BE SPECIFIED WITH RRN OR (X)RBA'
+         MEXIT
+.*
+.BADGEN2 MNOTE 12,'GENERIC REQUIRES KEYLENGTH'
+         MEXIT
+.*
+.BADGEN3 MNOTE 12,'KEYLENGTH REQUIRES GENERIC'
+         MEXIT
+         MEND
+

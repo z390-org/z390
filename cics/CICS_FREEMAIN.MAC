@@ -1,0 +1,134 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_FREEMAIN
+         GBLB  &PARMS_0C04
+         GBLB  &ZC_CICS
+         LCLB  &NOEDF,&NOHAND
+         LCLC  &DATA,&DATAPTR,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,5)  EQ 'DATA(').DATA
+         AIF   ('&PARM'(1,12) EQ 'DATAPOINTER(').DATAPTR
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.DATA    ANOP
+&DATA    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.DATAPTR ANOP
+&DATAPTR SETC  '&PARM'(13,K'&PARM-13)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   ('&DATA' NE '' AND '&DATAPTR' NE '').BADDATA
+         AIF   ('&DATA' EQ '' AND '&DATAPTR' EQ '').NEEDDTA
+         GEN_XC P0C04,P0C04END-P0C04,P0C04
+         GEN_MVC P0C04FN,,=X'0C04' SET FUNCTION CODE
+         GEN_ST DFHEIBR,P0C04EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P0C04TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P0C04EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P0C04EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P0C04EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P0C04NED,X'FF'   SET NOEDF
+         AEND
+         AIF   ('&DATAPTR' NE '').DOPTR
+.* PROCESS DATA()
+         AIF   (T'&DATA EQ 'A'                                         X
+               OR T'&DATA EQ 'R'                                       X
+               OR T'&DATA EQ 'U')
+         LRL   R0,&DATA           INDIRECT FREEMAIN ADDRESS
+         AELSE
+         LA    R0,&DATA           BASED ADDRESS
+         AEND
+         AGO   .SAVADDR
+.*
+.DOPTR   ANOP
+.* PROCESS DATAPOINTER()
+.* COBOL  USAGE POINTER
+.* ASM    REGISTER
+         AIF   (&ZC_CICS)
+         L     R0,&DATAPTR        POINTER TO FREEMAIN ADDRESS (COB)
+         AELSE
+         LR    R0,&DATAPTR        POINTER TO FREEMAIN ADDRESS (ASM)
+         AEND
+.SAVADDR ANOP
+         GEN_ST R0,P0C04FMA       SAVE IT
+         AIF   (NOT &NOHAND).TRYRESP
+         GEN_MVI P0C04NOH,X'FF'   SET NOHANDLE
+.TRYRESP ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P0C04RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P0C04RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P0C04EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P0C04EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P0C04)       R1=LCL MODULE PARAMETER LIST
+P0C04EDF_&SYSNDX DS 0H
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         GEN_CLI P0C04NOH,X'FF'   NOHANDLE ?
+         JE    P0C04BYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P0C04BYP_&SYSNDX   EXIT IF NONE
+* INVREQ
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P0C04BYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_0C04).BYP0C04
+&PARMS_0C04 SETB 1
+         P0C04
+*
+.BYP0C04 ANOP
+P0C04BYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.BADDATA MNOTE 12,'BOTH DATA AND DATAPOINTER ARE SPECIFIED'
+         MEXIT
+.*
+.NEEDDTA MNOTE 12,'DATA OR DATAPOINTER MUST BE SPECIFIED'
+         MEXIT
+         MEND
+

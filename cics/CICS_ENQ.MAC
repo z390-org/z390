@@ -1,0 +1,172 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+         MACRO
+         CICS_ENQ
+         GBLB  &PARMS_1204
+         GBLB  &ZC_CICS
+         LCLB  &NOSUS,&INT,&NOEDF,&NOHAND
+         LCLC  &RES,&LENGTH,&INT0202,&INT0402,&INT1004,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,9) EQ 'RESOURCE(').RES
+         AIF   ('&PARM'(1,7) EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,9) EQ 'NOSUSPEND').NOSUS
+         AIF   ('&PARM'(1,7) EQ 'INT0202').INT
+         AIF   ('&PARM'(1,7) EQ 'INT0402').INT
+         AIF   ('&PARM'(1,7) EQ 'INT1004').INT
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.RES     ANOP
+&RES     SETC  '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.NOSUS   ANOP
+&NOSUS   SETB  1
+         AGO   .PLOOP
+.*
+.* INT PARMS ARE INTERNAL USE ONLY
+.* THEY ARE USED BY LCL MODULES TO PASS A(DFHEIHCN) TO LCL1204
+.INT     ANOP
+&INT     SETB  1
+&INTPARM SETC  '&PARM'(4,4)
+&INTLABL SETC  'P&INTPARM.HCN'
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   ('&RES' EQ '').MISRES
+         GEN_XC P1204,P1204END-P1204,P1204
+         GEN_MVC P1204FN,,=X'1204' SET FUNCTION CODE
+         AIF   (NOT &INT)
+         LA    R0,DFHEIHCN        ADDRESS OF DFHEIHCN
+         GEN_ST R0,P1204HCN       SAVE IT
+         AELSE
+         LARL  R15,P1204HCN       ADDRESS TARGET
+         MVC   0(4,R15),&INTLABL  MOVE A(DFHEIHCN)
+         AEND
+         AIF   ('&LENGTH' NE '').GOTLEN
+.* NO LENGTH WARNING
+         MNOTE 0,'*** ENQ ON ADDRESS MAY NOT WORK IN zCICS'
+         MNOTE 0,'*** BUT THE COMMAND WILL BE PROCESSED'
+         MNOTE 0,'*** PLEASE CONTACT THE AUTHOR FOR ADVICE'
+         AGO   .DUNLEN
+.*
+.GOTLEN  ANOP
+.* LENGTH MAY BE L' OR CONSTANT LIKE X'..'
+         AIF   (K'&LENGTH LT 2).LENNUM1
+         AIF   ('&LENGTH'(2,1) EQ '''').LENNUM2
+.LENNUM1 ANOP
+         AIF   (T'&LENGTH NE 'N').LENLABL
+.LENNUM2 ANOP
+         LAY   R0,&LENGTH         SET NUMERIC LENGTH
+         GEN_STH R0,P1204LEN      SAVE IT
+         AGO   .DUNLEN
+.*
+.LENLABL ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&LENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&LENGTH'(11,K'&LENGTH-10)
+         LAY   R0,L'&LENLSL       SET NUMERIC LENGTH
+         GEN_STH R0,P1204LEN      SAVE IT
+         AELSE
+.* COBOL LENGTH AS LABEL
+         LH    R0,&LENGTH         SET LENGTH FROM LABEL
+         GEN_STH R0,P1204LEN      SAVE IT
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         LH    R0,&LENGTH         R0=LENGTH FROM LABEL
+         GEN_STH R0,P1204LEN      SAVE IT
+         AEND
+.DUNLEN  ANOP
+.* PROCESS RESOURCE
+.* ONLY THE RESOURCE ADDRESS IS PASSED, WE HAVE NOT VALIDATED LENGTH
+         LA    R0,&RES            R0=ADDRESS OF RESOURCE
+         GEN_ST R0,P1204RES       SAVE IT
+         AIF   (NOT &NOSUS).DOCALL
+         GEN_MVI P1204NOS,X'FF'   SET NOSUSPEND
+.DOCALL  ANOP
+         GEN_ST DFHEIBR,P1204EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P1204TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P1204EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P1204EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P1204EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P1204NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P1204NOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P1204RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P1204RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P1204EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P1204EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P1204)       R1=LCL MODULE PARAMETER LIST
+P1204EDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         GEN_CLI P1204NOH,X'FF'   NOHANDLE ?
+         JE    P1204BYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P1204BYP_&SYSNDX   EXIT IF NONE
+* ENQBUSY, LENGERR
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P1204BYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_1204).BYP1204
+&PARMS_1204 SETB 1
+         P1204
+*
+.BYP1204 ANOP
+P1204BYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.MISRES  MNOTE 12,'RESOURCE IS MANDATORY'
+         MEXIT
+         MEND
+

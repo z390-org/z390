@@ -1,0 +1,509 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_START
+.* FLENGTH IS AN EXTENSION
+         GBLB  &PARMS_1008
+         GBLB  &ZC_CICS
+         LCLB  &AFTER,&AT,&NOEDF,&NOHAND
+         LCLB  &ONLYH,&ONLYM,&ONLYS
+         LCLC  &INTVAL,&TIME,&HOURS,&MINS,&SECS,&REQID
+         LCLC  &TRANSID,&TERMID,&CHANNEL,&RTRANID,&RTERMID,&QUEUE
+         LCLC  &FROM,&LENGTH,&FLENGTH,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,9) EQ 'INTERVAL(').INTVAL
+         AIF   ('&PARM'(1,5) EQ 'TIME(').TIME
+         AIF   ('&PARM'(1,6) EQ 'HOURS(').HOURS
+         AIF   ('&PARM'(1,8) EQ 'MINUTES(').MINS
+         AIF   ('&PARM'(1,8) EQ 'SECONDS(').SECS
+         AIF   ('&PARM'(1,5) EQ 'AFTER').AFTER
+         AIF   ('&PARM'(1,2) EQ 'AT').AT
+         AIF   ('&PARM'(1,6) EQ 'REQID(').REQID
+         AIF   ('&PARM'(1,8) EQ 'TRANSID(').TRANSID
+         AIF   ('&PARM'(1,8) EQ 'CHANNEL(').CHAN
+         AIF   ('&PARM'(1,7) EQ 'TERMID(').TERMID
+         AIF   ('&PARM'(1,9) EQ 'RTRANSID(').RTRANID
+         AIF   ('&PARM'(1,8) EQ 'RTERMID(').RTERMID
+         AIF   ('&PARM'(1,6) EQ 'QUEUE(').QUEUE
+         AIF   ('&PARM'(1,5) EQ 'FROM(').FROM
+         AIF   ('&PARM'(1,7) EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,8) EQ 'FLENGTH(').FLENGTH
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.INTVAL  ANOP
+&INTVAL  SETC  '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.TIME    ANOP
+&TIME    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.HOURS   ANOP
+&HOURS   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.MINS    ANOP
+&MINS    SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.SECS    ANOP
+&SECS    SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.REQID   ANOP
+&REQID   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.TRANSID ANOP
+&TRANSID SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.CHAN    ANOP
+&CHANNEL SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.TERMID  ANOP
+&TERMID  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.RTRANID ANOP
+&RTRANID SETC  '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.RTERMID ANOP
+&RTERMID SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.QUEUE   ANOP
+&QUEUE   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.FROM    ANOP
+&FROM    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.FLENGTH ANOP
+&FLENGTH SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.AFTER   ANOP
+&AFTER   SETB  1
+         AGO   .PLOOP
+.*
+.AT      ANOP
+&AT      SETB  1
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   ('&TRANSID' EQ '').MISTRAN
+         AIF   ('&INTVAL' NE '' AND '&TIME' NE '').BOTHIT
+         AIF   (&AFTER AND &AT).BOTHAFA
+         AIF   ('&INTVAL' NE '' AND &AFTER).BADAFTAT
+         AIF   ('&INTVAL' NE '' AND &AT).BADAFTAT
+         AIF   ('&TIME'   NE '' AND &AFTER).BADAFTAT
+         AIF   ('&TIME'   NE '' AND &AT).BADAFTAT
+         AIF   ('&INTVAL' NE '' AND '&HOURS' NE '').BADHMS
+         AIF   ('&INTVAL' NE '' AND '&MINS'  NE '').BADHMS
+         AIF   ('&INTVAL' NE '' AND '&SECS'  NE '').BADHMS
+         AIF   ('&TIME'   NE '' AND '&HOURS' NE '').BADHMS
+         AIF   ('&TIME'   NE '' AND '&MINS'  NE '').BADHMS
+         AIF   ('&TIME'   NE '' AND '&SECS'  NE '').BADHMS
+         AIF   ('&HOURS'  NE '' AND NOT(&AFTER OR &AT)).BADHMS2
+         AIF   ('&MINS'   NE '' AND NOT(&AFTER OR &AT)).BADHMS2
+         AIF   ('&SECS'   NE '' AND NOT(&AFTER OR &AT)).BADHMS2
+         AIF   ((&AFTER OR &AT) AND '&HOURS' EQ '' AND '&MINS' EQ '' AN-
+               D '&SECS' EQ '').BADAFAT
+         AIF   ('&LENGTH' NE '' AND '&FLENGTH' NE '').BOTHLEN
+         AIF   ('&FROM' EQ '')
+         AIF   ('&LENGTH' NE '' OR '&FLENGTH' NE '').BADFRML
+         AELSE
+         AIF   ('&LENGTH' EQ '' AND '&FLENGTH' EQ '').BADFRML
+         AEND
+.* IF CHANNEL AND OTHER PARMS, RAISE MNOTE 0
+         AIF   ('&CHANNEL' NE '' AND (                                 -
+                '&INTVAL'  NE '' OR                                    -
+                '&TIME'    NE '' OR                                    -
+                '&HOURS'   NE '' OR                                    -
+                '&MINS'    NE '' OR                                    -
+                '&SECS'    NE '' OR                                    -
+                '&REQID'   NE '' OR                                    -
+                '&RTRANID' NE '' OR                                    -
+                '&RTERMID' NE '' OR                                    -
+                '&QUEUE'   NE '' OR                                    -
+                '&FROM'    NE '' OR                                    -
+                '&LENGTH'  NE '' OR                                    -
+                '&FLENGTH' NE '')).CHANPRM
+.GOON01  ANOP
+.* DEFAULT SETTING IS INTERVAL(0)
+         AIF   ('&INTVAL' EQ '' AND '&TIME' EQ '' AND '&HOURS' EQ '' AN-
+               D '&MINS' EQ '' AND '&SECS' EQ '').DEFINT
+         AGO   .PARMOK
+.*
+.DEFINT  ANOP
+&INTVAL  SETC  '0'
+.PARMOK  ANOP
+         GEN_XC P1008,P1008END-P1008,P1008 CLEAR PARMS
+         GEN_MVC P1008FN,,=X'1008' SET FUNCTION CODE
+.* PROCESS TRANSID
+         AIF   ('&TRANSID'(1,1) EQ '''').TRNSTRG
+.* TRANSID FROM LABEL
+         LARL  R15,P1008TRN       ADDRESS TARGET
+         MVC   0(4,R15),&TRANSID  SET TRANSID FROM LABEL
+         AGO   .DOCHAN
+.*
+.TRNSTRG ANOP
+.* TRANSID AS STRING
+&TRNLEN  SETA  K'&TRANSID
+         AIF   (&TRNLEN LT 3 OR &TRNLEN GT 6).BADTRAN
+         GEN_MVC P1008TRN,,=CL4&TRANSID SET TRANSID AS STRING
+.DOCHAN  ANOP
+.* PROCESS CHANNEL
+         AIF   ('&CHANNEL' EQ '').DOTERM
+         AIF   ('&CHANNEL'(1,1) EQ '''').CHSTRNG
+         LARL  R15,P1008CHN       ADDRESS TARGET
+         MVC   0(16,R15),&CHANNEL MOVE CHANNEL FROM LABEL
+         AGO   .DOTERM
+.*
+.CHSTRNG ANOP
+&CHANLEN SETA  K'&CHANNEL
+         AIF   (&CHANLEN LT 3 OR &CHANLEN GT 18).INVCHAN
+         GEN_MVC P1008CHN,,=CL16&CHANNEL SET CHANNEL AS STRING
+.DOTERM  ANOP
+.* PROCESS TERMID
+         AIF   ('&TERMID' NE '').GOTTERM
+         GEN_MVC P1008TRM,,=4C'!' SET NON-TERMINAL
+         AGO   .DORTRN
+.*
+.GOTTERM ANOP
+         AIF   ('&TERMID'(1,1) EQ '''').TRMSTRG
+.* TERMID FROM LABEL
+         LARL  R15,P1008TRM       ADDRESS TARGET
+         MVC   0(4,R15),&TERMID   MOVE TERMID FROM LABEL
+         AGO   .DORTRN
+.*
+.TRMSTRG ANOP
+.* TERMID AS STRING
+&TRMLEN  SETA  K'&TERMID
+         AIF   (&TRMLEN LT 3 OR &TRMLEN GT 6).BADTERM
+         GEN_MVC P1008TRM,,=CL4&TERMID SET TERMID AS STRING
+.DORTRN  ANOP
+.* PROCESS RTRANSID
+         AIF   ('&RTRANID' EQ '').DORTRM
+         AIF   ('&RTRANID'(1,1) EQ '''').RTNSTRG
+.* RTRANSID FROM LABEL
+         LARL  R15,P1008RTN       ADDRESS TARGET
+         MVC   0(4,R15),&RTRANID  MOVE RTRANSID FROM LABEL
+         AGO   .DORTRM
+.*
+.RTNSTRG ANOP
+.* RTRANSID AS STRING
+&RTNLEN  SETA  K'&RTRANID
+         AIF   (&RTNLEN LT 3 OR &RTNLEN GT 6).BADRTRN
+         GEN_MVC P1008RTN,,=CL4&RTRANID SET RTRANSID AS STRING
+.DORTRM  ANOP
+.* PROCESS RTERMID
+         AIF   ('&RTERMID' EQ '').DOQUEUE
+         AIF   ('&RTERMID'(1,1) EQ '''').RTMSTRG
+.* RTERMID FROM LABEL
+         LARL  R15,P1008RTM       ADDRESS TARGET
+         MVC   0(4,R15),&RTERMID  MOVE RTERMID FROM LABEL
+         AGO   .DOQUEUE
+.*
+.RTMSTRG ANOP
+.* RTERMID AS STRING
+&RTMLEN  SETA  K'&RTERMID
+         AIF   (&RTMLEN LT 3 OR &RTMLEN GT 6).BADRTRM
+         GEN_MVC P1008RTM,,=CL4&RTERMID SET RTERMID AS STRING
+.DOQUEUE ANOP
+.* PROCESS QUEUE
+         AIF   ('&QUEUE' EQ '').DOFROM
+         AIF   ('&QUEUE'(1,1) EQ '''').QUESTRG
+.* QUEUE FROM LABEL
+         LARL  R15,P1008QNM       ADDRESS TARGET
+         MVC   0(8,R15),&QUEUE    SET QUEUE FROM LABEL
+         AGO   .DOFROM
+.*
+.QUESTRG ANOP
+.* QUEUE AS STRING
+&QUELEN  SETA  K'&QUEUE
+         AIF   (&QUELEN LT 3 OR &QUELEN GT 10).BADQUE
+         GEN_MVC P1008QNM,,=CL8&QUEUE SET QUEUE AS STRING
+.DOFROM  ANOP
+         AIF   ('&FROM' EQ '').DOREQ
+&FROMTQ  SETC  T'&FROM
+         AIF   ('&FROM'(1,1) EQ '='                                    X
+               OR '&FROMTQ' EQ 'A'                                     X
+               OR '&FROMTQ' EQ 'R').FRMADLIT
+         LA    R0,&FROM           R0=FROM ADDRESS FROM LABEL
+         GEN_ST R0,P1008FRM       SAVE IT
+         AGO   .FROMLEN
+.*
+.FRMADLIT ANOP
+         L     R0,&FROM           R0=INDIRECT FROM ADDRESS FROM LABEL
+         GEN_ST R0,P1008FRM       SAVE IT
+.FROMLEN ANOP
+         AIF   ('&LENGTH' EQ '').NOLENG
+         AIF   (K'&LENGTH LT 2).LENNUM1
+         AIF   ('&LENGTH'(2,1) EQ '''').LENNUM
+.LENNUM1 ANOP
+         AIF   (T'&LENGTH NE 'N').LENLABL
+.LENNUM  ANOP
+         LAY   R0,&LENGTH         SET NUMERIC LENGTH
+         GEN_ST R0,P1008LEN       SAVE IT
+         AGO   .DOREQ
+.*
+.LENLABL ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&LENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&LENGTH'(11,K'&LENGTH-10)
+         LAY   R0,L'&LENLSL       SET NUMERIC LENGTH
+         AELSE
+.* COBOL LENGTH AS LABEL
+         LH    R0,&LENGTH         SET LENGTH FROM LABEL
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         LH    R0,&LENGTH         SET LENGTH FROM LABEL
+         AEND
+         GEN_ST R0,P1008LEN       SAVE IT
+         AGO   .DOREQ
+.*
+.NOLENG  ANOP
+         AIF   ('&FLENGTH' EQ '').NOLENS
+         AIF   (T'&FLENGTH NE 'N').FLENLBL
+         GEN_MVC P1008LEN,,=AL4(&FLENGTH) SET NUMERIC FLENGTH
+         AGO   .DOREQ
+.*
+.FLENLBL ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&FLENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&FLENGTH'(11,K'&FLENGTH-10)
+         GEN_MVC P1008LEN,,=AL4(L'&LENLSL) SET NUMERIC FLENGTH
+         AELSE
+.* COBOL LENGTH AS LABEL
+         L     R0,&FLENGTH        SET FLENGTH FROM LABEL
+         GEN_ST R0,P1008LEN       SAVE IT
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         L     R0,&FLENGTH        SET FLENGTH FROM LABEL
+         GEN_ST R0,P1008LEN       SAVE IT
+         AEND
+.DOREQ   ANOP
+.* PROCESS REQID
+         AIF   ('&REQID' EQ '').DOINT
+         AIF   ('&REQID'(1,1) EQ '''').REQSTRG
+.* REQID FROM LABEL
+         LARL  R15,P1008REQ       ADDRESS TARGET
+         MVC   0(8,R15),&REQID    MOVE REQID FROM LABEL
+         AGO   .DOINT
+.*
+.REQSTRG ANOP
+.* REQID AS STRING
+&REQLEN  SETA  K'&REQID
+         AIF   (&REQLEN LT 3 OR &REQLEN GT 10).BADREQ
+         GEN_MVC P1008REQ,,=CL8&REQID SET REQID AS STRING
+.DOINT   ANOP
+.* JOIN UP INTERVAL AND TIME
+         AIF   ('&INTVAL' EQ '').NOTINT
+&HHMMSS  SETC  '&INTVAL'
+         GEN_MVI P1008INT,X'FF'   SET INTERVAL/TIME INDICATOR
+         AGO   .DOHMS
+.*
+.NOTINT  ANOP
+         AIF   ('&TIME' EQ '').NOTIT
+&HHMMSS  SETC  '&TIME'
+         GEN_MVI P1008INT,X'FF'   SET INTERVAL/TIME INDICATOR
+         GEN_MVI P1008TME,X'FF'   SET TIME/AT
+.DOHMS   ANOP
+.* PROCESS INTERVAL/TIME
+         AIF   (T'&HHMMSS NE 'N').TIMELAB
+&KHMS    SETA  K'&HHMMSS
+         AIF   (&KHMS GT 6).BADTIME
+         GEN_ZAP P1008HMS,,=PL4'&HHMMSS',4 PACK HMS
+         AGO   .DOCALL
+.*
+.TIMELAB ANOP
+         LARL  R15,P1008HRS+2     ADDRESS TARGET
+         PACK  0(4,R15),&HHMMSS.(7) PACK FROM LABEL+BYTE
+         GEN_MVO P1008HMS,,P1008HRS+2,3 MOVE HMS FROM LABEL
+         LARL  R1,P1008HMS+2      ADDRESS TARGET-1
+         OI    1(R1),X'0C'        SET SIGN
+         AGO   .DOCALL
+.*
+.NOTIT   ANOP
+.* PROCESS HOURS MINUTES SECONDS
+.* TEST IF MORE THAN 1 PARM
+         AIF   ('&HOURS' NE '' AND '&MINS' EQ '' AND '&SECS' EQ '').DOS-
+               ING
+         AIF   ('&HOURS' EQ '' AND '&MINS' NE '' AND '&SECS' EQ '').DOS-
+               ING
+         AIF   ('&HOURS' EQ '' AND '&MINS' EQ '' AND '&SECS' NE '').DOS-
+               ING
+.* MORE THAN ONE PARM
+         GEN_MVI P1008IND,X'FF'   SET MORE THAN 1 PARM INDICATOR
+.DOSING  ANOP
+         AIF   ('&HOURS' NE '').TRYM
+&HOURS   SETC  '0'
+.TRYM    ANOP
+         AIF   ('&MINS' NE '').TRYS
+&MINS    SETC  '0'
+.TRYS    ANOP
+         AIF   ('&SECS' NE '').DOFUHMS
+&SECS    SETC  '0'
+.DOFUHMS ANOP
+         GEN_ZAP P1008HRS,,=PL8'&HOURS',8 SET HOURS
+         GEN_ZAP P1008MIN,,=PL8'&MINS',8 SET MINUTES
+         GEN_ZAP P1008SEC,,=PL8'&SECS',8 SET SECONDS
+         AIF   (NOT &AT).DOCALL
+         GEN_MVI P1008TME,X'FF'   SET TIME/AT
+.DOCALL  ANOP
+         GEN_ST DFHEIBR,P1008EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P1008TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P1008EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P1008EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P1008EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P1008NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P1008NOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P1008RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P1008RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P1008EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P1008EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P1008)       R1=LCL MODULE PARAMETER LIST
+P1008EDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         GEN_CLI P1008NOH,X'FF'   NOHANDLE ?
+         JE    P1008BYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P1008BYP_&SYSNDX   EXIT IF NONE
+* INVREQ, LENGERR, IOERR, TERMIDERR, TRANSIDERR
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P1008BYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_1008).BYP1008
+&PARMS_1008 SETB 1
+.* LCLCEDF  START USES ITS OWN PRIVATE PARMS
+.* Z390CEDF START CAN FOLLOW CONVENTION
+         AIF   ('&TRANSID' NE '''CEDZ''' OR                            X
+               ('&TRANSID' EQ '''CEDZ''' AND '&QUEUE' EQ '''DUMMY'''))
+         P1008
+         AEND
+*
+.BYP1008 ANOP
+P1008BYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.MISTRAN MNOTE 12,'TRANSID IS MANDATORY'
+         MEXIT
+.*
+.BADTRAN MNOTE 12,'INVALID TRANSID'
+         MEXIT
+.*
+.BADTERM MNOTE 12,'INVALID TERMID'
+         MEXIT
+.*
+.BADRTRN MNOTE 12,'INVALID RTRANSID'
+         MEXIT
+.*
+.BADRTRM MNOTE 12,'INVALID RTERMID'
+         MEXIT
+.*
+.BADQUE  MNOTE 12,'INVALID QUEUE'
+         MEXIT
+.*
+.BADREQ  MNOTE 12,'INVALID REQID'
+         MEXIT
+.*
+.BOTHIT  MNOTE 12,'BOTH INTERVAL AND TIME ARE SPECIFIED'
+         MEXIT
+.*
+.BOTHAFA MNOTE 12,'BOTH AFTER AND AT ARE SPECIFIED'
+         MEXIT
+.*
+.BADAFTAT MNOTE 12,'INTERVAL/TIME CANNOT BE SPECIFIED WITH AFTER/AT'
+         MEXIT
+.*
+.BADHMS  MNOTE 12,'HOURS/MINUTES/SECONDS ARE INVALID WITH INTERVAL OR T-
+               IME'
+         MEXIT
+.*
+.BADHMS2 MNOTE 12,'HOURS/MINUTES/SECONDS ARE SPECIFIED WITHOUT AFTER/AT-
+               '
+         MEXIT
+.*
+.BADTIME MNOTE 12,'INTERVAL/TIME MUST BE 1 TO 6 BYTES'
+         MEXIT
+.*
+.BADAFAT MNOTE 12,'AFTER/AT SPECIFIED, BUT NO TIME PARAMETERS'
+         MEXIT
+.*
+.BADFRML MNOTE 12,'FROM/(F)LENGTH MUST BOTH BE MISSING OR BOTH SPECIFIE-
+               D'
+         MEXIT
+.*
+.BOTHLEN MNOTE 12,'BOTH LENGTH AND FLENGTH ARE SPECIFIED'
+         MEXIT
+.*
+.CHANPRM MNOTE 0,'CHANNEL AND OTHER PARMS SPECIFIED BUT ALLOWED'
+         AGO   .GOON01
+.*
+.INVCHAN MNOTE 12,'INVALID CHANNEL'
+         MEXIT
+.*
+         MEND
+

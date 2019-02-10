@@ -1,0 +1,154 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 05/06/06 RPI 308 - ADD EXEC CICS SUPPORT FOR CICS PROLOG  
+.* 02/18/12 RPI 1181 REPLACE LAY WITH IILF FOR LARGE DSA WS
+.**********************************************************************
+         MACRO
+&N       DFHEIENT &CODEREG=(R12),&DATAREG=(R13)
+.*
+.* DEFINE EXEC CICS PROGRAM ENTRY
+.*
+.* THIS MACRO CALL REPLACES THE FIRST CSECT OF MLC SOURCE CODE IF
+.* CICS AND PROLOG OPTIONS ON
+.*
+         GBLB  &ZC_CICS
+         GBLC  &DFHEIENT_CSECT
+&DFHEIENT_CSECT SETC '&N'         SAVE CSECT FOR DFHEIEND RESET
+         AIF   (NOT &ZC_CICS)
+.* ASM USAGE
+         DFHEIBLK                 EXEC INTERFACE BLOCK
+         USING DFHEIBLK,DFHEIBR
+         AELSE
+.* COBOL USAGE
+DFHEIBR  EQU   11
+         USING DFHEIBLK_DSECT,DFHEIBR
+         AEND
+         DFHTCTTE                 TERMINAL TABLE ENTRY
+         USING DFHTCTTE,TCTTEAR
+         EQUREGS ,                DEFINE GENERAL REGISTERS RPI 905
+&N       CSECT
+*            R1 >>> A(EIB,COMMAREA)
+*            R2 >>> P0E02 (LINK) OR P0E04 (XCTL) PARMS
+* TCTTEAR (R10) >>> TCTTE
+* DFHEIBR (R11) >>> EIB
+*         (R14) >>> RETURN ADDRESS (LINK ONLY)
+*
+         AIF   (&SYSEDF)
+         L     R2,0(R2)           R2=P0E02/P0E04 PARM POINTER
+         STRL  R2,CICS_EIENT_&SYSNDX._PARMPNTR SAVE IT
+         AEND
+* ENTRY IS ONLY BY DIRECT BRANCH FROM MODULES LCL0E02 (LINK)
+* OR LCL0E04 (XCTL)
+         LR    R2,R1              R2=SAVE USER PARM POINTER
+* DON'T SAVE THE REGS IF XCTL, THIS ISN'T A NEW LINK LEVEL
+         CHHSI EIBFN,X'0E04'      XCTL ?
+         JE    CICS_EIENT_&SYSNDX._NOSAVE EXIT IF IT IS
+* FIND LAST LINKER AND ESTABLISH LINKAGE
+         LH    R15,TCTTELNK       R15=CURRENT LINK LEVEL
+         AHI   R15,-1             -1
+         SLL   R15,2              *4
+         L     R1,TCTTELKA        R0=LKA ADDRESS
+         AR    R1,R15             INDEX TO LAST LINK-LEVEL ENTRY
+         L     R13,0(R1)          SAVE AREA OF LAST LINK-LEVEL
+         SAVE  (R14,R12)          SAVE REGS IN PREV SAVE AREA
+CICS_EIENT_&SYSNDX._NOSAVE EQU *
+         AIF   (NOT &ZC_CICS)
+*
+* SET 1ST CODE BASE
+*
+         BALR  &CODEREG(1),0      CODE BASE 1
+         USING &N._BASE,&CODEREG(1)
+.*
+&N._BASE DS   0H
+         AEND
+*
+* GETMAIN THE DSA, AND SET UP THE CHAIN
+*
+         IILF  R1,(DFHEIEND-DFHEISTG) R1=DSA LENGTH RPI 1181
+         GETMAIN R,LV=(R1)
+* DON'T SAVE THE REGS IF XCTL, THIS ISN'T A NEW LINK LEVEL
+         CHHSI EIBFN,X'0E04'      XCTL ?
+         JE    CICS_EIENT_&SYSNDX._NOSAVE2 EXIT IF IT IS
+         ST    R1,8(R13)          SAVE NEW DSA SAVE AREA IN PRIOR SAVE
+         ST    R13,4(R1)          SAVE OLD SAVE AREA IN NEW DSA SAVE
+CICS_EIENT_&SYSNDX._NOSAVE2 EQU *
+         LR    R13,R1             DSA BASE 1
+         USING DFHEISTG,R13
+         XC    DFHEICAP(DFHEIUSR-DFHEICAP),DFHEICAP CLEAR PREFIX DSA
+*
+* SAVE DSA LENGTH
+*
+         ST    R0,DFHEILEN        SAVE DSA LENGTH FOR FREEMAIN
+*
+* SET EIB AND COMMAREA ADDRESSES
+*
+         MVC   DFHEIEIB,0(R2)     SET EIB ADDRESS IN DSA
+         MVC   DFHEICAP,4(R2)     SET COMMAREA ADDRESS IN DSA
+*
+* IF WE CAME FROM XCTL, WE MUST FREE THE PARM STORAGE AREA
+*
+         CHHSI EIBFN,X'0E04'      XCTL ?
+         JNE   CICS_EIENT_&SYSNDX._01 EXIT IF NOT
+         LA    R0,8               LENGTH OF 8
+         FREEMAIN A=(R2),LV=(R0)
+         LA    R2,DFHEIEIB        NEW PARM POSITION FOR ZCOBOL
+.*
+CICS_EIENT_&SYSNDX._01 DS 0H
+*
+* FIND OUR LKA ENTRY AND STORE OUR DSA ADDRESS
+*
+         LH    R15,TCTTELNK       R15=CURRENT LINK LEVEL
+         SLL   R15,2              *4
+         L     R1,TCTTELKA        R1=LKA ADDRESS
+         AR    R1,R15             INDEX TO OUR LINK LEVEL ENTRY
+         ST    R13,0(R1)          SAVE OUR DSA ADDRESS
+         MVC   DFHEIINV,TCTTEINV  SET INVOKING PROGRAM FOR ASSIGN
+         MVC   DFHEIRET,TCTTERET  SET RETURN PROGRAM FOR ASSIGN
+         MVC   DFHEICHN,TCTTECHN  SET CHANNEL FOR ASSIGN
+*
+&CBASE   SETA  N'&CODEREG
+         AIF   (&CBASE EQ 1).CEXIT
+&S       SETA  1
+.*
+.CLOOP   ANOP
+&S       SETA  &S+1
+         AIF   (&S GT &CBASE).CEXIT
+&COFFSET SETA  &COFFSET+4096
+         LAY   &CODEREG(&S),4096(&CODEREG(&S-1)) CODE BASE &S
+         USING &N._BASE+&COFFSET,&CODEREG(&S)
+         AGO   .CLOOP
+.*
+.CEXIT   ANOP
+&DBASE   SETA  N'&DATAREG
+         AIF   (&DBASE EQ 1).DEXIT
+&S       SETA  1
+.*
+.DLOOP   ANOP
+&S       SETA  &S+1
+         AIF   (&S GT &DBASE).DEXIT
+&DOFFSET SETA  &DOFFSET+4096
+         LAY   &DATAREG(&S),4096(&DATAREG(&S-1)) DSA BASE &S
+         USING DFHEISTG+&DOFFSET,&DATAREG(&S)
+         AGO   .DLOOP
+.*
+.DEXIT   ANOP
+         AIF   (&SYSEDF)
+         CLI   TCTTEEDF,X'FF'     EDF ON ?
+         JNE   CICS_EIENT_&SYSNDX._NOEDFA EXIT IF NOT
+* PROGRAM INITIATION
+         MVI   TCTTEEBA,X'FF'     SET 'AFTER' INTERCEPT
+         MVI   TCTTEEDL,X'FE'     SET SPECIAL LINKAGE
+         L     R15,TCTTEEDA       R15=EDF PROCESSOR ADDRESS
+         BAKR  0,R15              STACK REGS AND GO
+.* PARMPNTR IS ACCESSED VIA ESTA IN LCLCEDF
+         J     CICS_EIENT_&SYSNDX._NOEDFA EXIT
+CICS_EIENT_&SYSNDX._PARMPNTR DS AL4 SAVE P0E02/P0E04 PARM POINTER
+*
+CICS_EIENT_&SYSNDX._NOEDFA DS 0H
+         AEND
+         MEND
+

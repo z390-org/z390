@@ -1,0 +1,246 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_LINK
+         GBLB  &PARMS_0E02
+         GBLB  &ZC_CICS
+         LCLB  &NOHAND,&LEVEL0,&NOEDF
+         LCLC  &PROGRAM,&COMMAREA,&LENGTH,&CHANNEL,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,8) EQ 'PROGRAM(').PROGRAM
+         AIF   ('&PARM'(1,9) EQ 'COMMAREA(').COMMAREA
+         AIF   ('&PARM'(1,7) EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,8) EQ 'CHANNEL(').CHANNEL
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         AIF   ('&PARM'(1,6) EQ 'LEVEL0').LEVEL0
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.PROGRAM ANOP
+&PROGRAM SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.COMMAREA ANOP
+&COMMAREA SETC '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.CHANNEL ANOP
+&CHANNEL SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.LEVEL0  ANOP
+&LEVEL0  SETB  1
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         GEN_XC P0E02,P0E02END-P0E02,P0E02
+         GEN_MVC P0E02FN,,=X'0E02' SET FUNCTION CODE
+         AIF   (NOT &LEVEL0).NOTLV0
+         GEN_MVI P0E02LV0,X'FF'   SET LINK LEVEL 0
+.NOTLV0  ANOP
+         AIF   ('&CHANNEL' NE '' AND '&COMMAREA' NE '').CHANDCM
+.GOON01  ANOP
+         AIF   ('&PROGRAM' EQ '').MISPROG
+         AIF   ('&PROGRAM'(1,1) EQ '''').STRING
+         LARL  R15,P0E02PGM       ADDRESS TARGET
+         MVC   0(8,R15),&PROGRAM  MOVE PROGRAM FROM LABEL
+         AGO   .DOCOMM
+.*
+.STRING  ANOP
+&PROGLEN SETA  K'&PROGRAM
+         AIF   (&PROGLEN LT 3 OR &PROGLEN GT 10).BADPROG
+         GEN_MVC P0E02PGM,,=CL8&PROGRAM SET PROGRAM AS STRING
+.DOCOMM  ANOP
+         AIF   ('&COMMAREA' NE '').COMMCHK
+         AIF   ('&LENGTH' EQ '').COMMCHK
+         AGO   .COMMERR
+.*
+.COMMCHK ANOP
+         AIF   ('&COMMAREA' EQ '').CHAN
+.* PROCESS COMMAREA
+&COMMTQ  SETC  T'&COMMAREA
+         AIF   ('&COMMAREA'(1,1) EQ '=' OR                             X
+               '&COMMAREA'(1,7) EQ 'TCTTECA' OR                        X
+               '&COMMTQ' EQ 'A' OR                                     X
+               '&COMMTQ' EQ 'R' OR                                     X
+               &ZC_CICS).COMADLIT
+         LA    R0,&COMMAREA       R0=COMMAREA ADDRESS FROM LABEL
+         GEN_ST R0,P0E02COM       SAVE IT
+         AGO   .COMMLEN
+.*
+.COMADLIT ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&COMMAREA'(1,11) EQ 'ADDRESS,OF,')
+.* COBOL LINKAGE-SECTION LABEL, EXTRACT AND TRANSFORM
+&COMMLSL SETC  '&COMMAREA'(12,K'&COMMAREA-11)
+&COMMAREA SETC &COMMLSL
+         L     R0,ZC_&COMMLSL._PTR R0=INDIRECT COMMAREA L-S POINTER
+         GEN_ST R0,P0E02COM       SAVE IT
+         AELSE
+.* COBOL LABEL SAME AS ASM LABEL
+         LA    R0,&COMMAREA       R0=COMMAREA ADDRESS FROM LABEL
+         GEN_ST R0,P0E02COM       SAVE IT
+         AEND
+         AELSE
+.* ASM INDIRECT ADDRESS
+         L     R0,&COMMAREA       R0=INDIRECT COMMAREA ADDRESS
+         GEN_ST R0,P0E02COM       SAVE IT
+         AEND
+.* LENGTH IS COMPULSORY FOR ASM INDIRECT
+         AIF   (&ZC_CICS).COMMLEN
+         AIF   ('&LENGTH' EQ '').BADLEN
+         AGO   .LENVAL
+.*
+.COMMLEN ANOP
+.* PROCESS LENGTH
+         AIF   ('&LENGTH' NE '').LENVAL
+.* DEFAULT LENGTH
+         LAY   R0,L'&COMMAREA     R0=IMPLIED LENGTH OF COMMAREA
+         GEN_STH R0,P0E02CLN      SAVE IT
+         AGO   .CHAN
+.*
+.LENVAL  ANOP
+         AIF   (K'&LENGTH LT 2).LENNUM1
+         AIF   ('&LENGTH'(2,1) EQ '''').LENNUM
+.LENNUM1 ANOP
+         AIF   (T'&LENGTH NE 'N').LENLABL
+.LENNUM  ANOP
+         LAY   R0,&LENGTH         SET NUMERIC COMMAREA LENGTH
+         GEN_STH R0,P0E02CLN      SAVE IT
+         AGO   .CHAN
+.*
+.LENLABL ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&LENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&LENGTH'(11,K'&LENGTH-10)
+         LAY   R0,L'&LENLSL       SET NUMERIC COMMAREA LENGTH
+         GEN_STH R0,P0E02CLN      SAVE IT
+         AELSE
+.* COBOL LENGTH AS LABEL
+         LH    R0,&LENGTH         R0=COMMAREA LENGTH FROM LABEL
+         GEN_STH R0,P0E02CLN      SAVE IT
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         LH    R0,&LENGTH         R0=COMMAREA LENGTH FROM LABEL
+         GEN_STH R0,P0E02CLN      SAVE IT
+         AEND
+.CHAN    ANOP
+         AIF   ('&CHANNEL' EQ '').ALLDONE
+         AIF   ('&CHANNEL'(1,1) EQ '''').CSTRING
+         LARL  R15,P0E02CHN       ADDRESS TARGET
+         MVC   0(16,R15),&CHANNEL MOVE CHANNEL FROM LABEL
+         AGO   .ALLDONE
+.*
+.CSTRING ANOP
+&CHANLEN SETA  K'&CHANNEL
+         AIF   (&CHANLEN LT 3 OR &CHANLEN GT 18).BADCHAN
+         GEN_MVC P0E02CHN,,=CL16&CHANNEL SET CHANNEL AS STRING
+.ALLDONE ANOP
+         GEN_ST DFHEIBR,P0E02EIB  SET EIB ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P0E02EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P0E02EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P0E02EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P0E02NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).TRYRESP
+         GEN_MVI P0E02NOH,X'FF'   SET NOHANDLE
+.TRYRESP ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P0E02RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P0E02RS2       SAVE IT
+.NORESP2 ANOP
+* SPECIAL LINKAGE
+         LARL  R0,P0E02EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P0E02EDF       SAVE IT
+         LARL  R1,P0E02           R1=PARAMETER LIST
+         LRL   R15,=V(LCL0E02)    R15=EXTERNAL LINK MODULE ADDRESS
+P0E02EDF_&SYSNDX EQU *
+         BALR  R14,R15            GO TO IT
+         GEN_CLI P0E02NOH,X'FF'   NOHANDLE ?
+         JE    P0E02BYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P0E02BYP_&SYSNDX   EXIT IF NONE
+* PGMIDERR, CHANNELERR
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P0E02BYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_0E02).BYP0E02
+&PARMS_0E02 SETB 1
+         P0E02
+*
+.BYP0E02 ANOP
+P0E02BYP_&SYSNDX DS 0H
+         AIF   (&LEVEL0).NOEI2
+         MVC   EIBCALEN,DFHEICAL  RESTORE EIB COMMAREA LENGTH
+         MVC   EIBPROG,TCTTERET   RESTORE EIBPROG
+         MVC   TCTTEINV,DFHEIINV  RESTORE INVOKINGPROG FOR ASSIGN
+         MVC   TCTTERET,DFHEIRET  RESTORE RETURNPROG FOR ASSIGN
+.NOEI2   ANOP
+         MEXIT
+.*
+.COMMERR MNOTE 12,'LENGTH WITHOUT COMMAREA'
+         MEXIT
+.*
+.MISPROG MNOTE 12,'PROGRAM IS MISSING'
+         MEXIT
+.*
+.BADPROG MNOTE 12,'INVALID PROGRAM'
+         MEXIT
+.*
+.BADLEN  MNOTE 12,'LENGTH IS MANDATORY FOR INDIRECT COMMAREA'
+         MEXIT
+.*
+.BADCHAN MNOTE 12,'INVALID CHANNEL'
+         MEXIT
+.*
+.CHANDCM MNOTE 0,'CHANNEL AND COMMAREA SPECIFIED'
+         AGO   .GOON01
+.*
+         MEND
+

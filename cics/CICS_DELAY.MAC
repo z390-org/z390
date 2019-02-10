@@ -1,0 +1,255 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_DELAY
+         GBLB  &PARMS_1004
+         LCLB  &FOR,&UNTIL,&NOEDF,&NOHAND
+         LCLB  &ONLYH,&ONLYM,&ONLYS
+         LCLC  &INTVAL,&TIME,&HOURS,&MINS,&SECS,&REQID,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,9) EQ 'INTERVAL(').INTVAL
+         AIF   ('&PARM'(1,5) EQ 'TIME(').TIME
+         AIF   ('&PARM'(1,6) EQ 'HOURS(').HOURS
+         AIF   ('&PARM'(1,8) EQ 'MINUTES(').MINS
+         AIF   ('&PARM'(1,8) EQ 'SECONDS(').SECS
+         AIF   ('&PARM'(1,6) EQ 'REQID(').REQID
+         AIF   ('&PARM'(1,3) EQ 'FOR').FOR
+         AIF   ('&PARM'(1,5) EQ 'UNTIL').UNTIL
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.INTVAL  ANOP
+&INTVAL  SETC  '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.TIME    ANOP
+&TIME    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.HOURS   ANOP
+&HOURS   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.MINS    ANOP
+&MINS    SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.SECS    ANOP
+&SECS    SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.REQID   ANOP
+&REQID   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.FOR     ANOP
+&FOR     SETB  1
+         AGO   .PLOOP
+.*
+.UNTIL   ANOP
+&UNTIL   SETB  1
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   ('&INTVAL' NE '' AND '&TIME' NE '').BOTHIT
+         AIF   (&FOR AND &UNTIL).BOTHFU
+         AIF   ('&INTVAL' NE '' AND &FOR).BADFORUN
+         AIF   ('&INTVAL' NE '' AND &UNTIL).BADFORUN
+         AIF   ('&TIME'   NE '' AND &FOR).BADFORUN
+         AIF   ('&TIME'   NE '' AND &UNTIL).BADFORUN
+         AIF   ('&INTVAL' NE '' AND '&HOURS' NE '').BADHMS
+         AIF   ('&INTVAL' NE '' AND '&MINS'  NE '').BADHMS
+         AIF   ('&INTVAL' NE '' AND '&SECS'  NE '').BADHMS
+         AIF   ('&TIME'   NE '' AND '&HOURS' NE '').BADHMS
+         AIF   ('&TIME'   NE '' AND '&MINS'  NE '').BADHMS
+         AIF   ('&TIME'   NE '' AND '&SECS'  NE '').BADHMS
+         AIF   ('&HOURS'  NE '' AND NOT(&FOR OR &UNTIL)).BADHMS2
+         AIF   ('&MINS'   NE '' AND NOT(&FOR OR &UNTIL)).BADHMS2
+         AIF   ('&SECS'   NE '' AND NOT(&FOR OR &UNTIL)).BADHMS2
+         AIF   ((&FOR OR &UNTIL) AND '&HOURS' EQ '' AND '&MINS' EQ '' A-
+               ND '&SECS' EQ '').BADFUN
+.* DEFAULT SETTING IS INTERVAL(0)
+         AIF   ('&INTVAL' EQ '' AND '&TIME' EQ '' AND '&HOURS' EQ '' AN-
+               D '&MINS' EQ '' AND '&SECS' EQ '').DEFINT
+         AGO   .PARMOK
+.*
+.DEFINT  ANOP
+&INTVAL  SETC  '0'
+.PARMOK  ANOP
+         GEN_XC P1004,P1004END-P1004,P1004
+         GEN_MVC P1004FN,,=X'1004' SET FUNCTION CODE
+.* JOIN UP INTERVAL AND TIME
+         AIF   ('&INTVAL' EQ '').NOTINT
+&HHMMSS  SETC  '&INTVAL'
+         GEN_MVI P1004INT,X'FF'   SET INTERVAL/TIME INDICATOR
+         AGO   .DOHMS
+.*
+.NOTINT  ANOP
+         AIF   ('&TIME' EQ '').NOTIT
+&HHMMSS  SETC  '&TIME'
+         GEN_MVI P1004INT,X'FF'   SET INTERVAL/TIME INDICATOR
+         GEN_MVI P1004TME,X'FF'   SET TIME/UNTIL
+.DOHMS   ANOP
+.* PROCESS INTERVAL/TIME
+         AIF   (T'&HHMMSS NE 'N').TIMELAB
+&KHMS    SETA  K'&HHMMSS
+         AIF   (&KHMS GT 6).BADTIME
+         GEN_ZAP P1004HMS,,=PL4'&HHMMSS',4 PACK HMS
+         AGO   .DOREQ
+.*
+.TIMELAB ANOP
+         LARL  R15,P1004HRS+2     ADDRESS TARGET
+         PACK  0(4,R15),&HHMMSS.(7) PACK FROM LABEL+BYTE
+         GEN_MVO P1004HMS,,P1004HRS+2,3 MOVE HMS FROM LABEL
+         LARL  R1,P1004HMS+2      ADDRESS TARGET-1
+         OI    1(R1),X'0C'        SET SIGN
+         AGO   .DOREQ
+.*
+.NOTIT   ANOP
+.* PROCESS HOURS MINUTES SECONDS
+.* TEST IF MORE THAN 1 PARM
+         AIF   ('&HOURS' NE '' AND '&MINS' EQ '' AND '&SECS' EQ '').DOS-
+               ING
+         AIF   ('&HOURS' EQ '' AND '&MINS' NE '' AND '&SECS' EQ '').DOS-
+               ING
+         AIF   ('&HOURS' EQ '' AND '&MINS' EQ '' AND '&SECS' NE '').DOS-
+               ING
+.* MORE THAN ONE PARM
+         GEN_MVI P1004IND,X'FF'   SET MORE THAN 1 PARM INDICATOR
+.DOSING  ANOP
+         AIF   ('&HOURS' NE '').TRYM
+&HOURS   SETC  '0'
+.TRYM    ANOP
+         AIF   ('&MINS' NE '').TRYS
+&MINS    SETC  '0'
+.TRYS    ANOP
+         AIF   ('&SECS' NE '').DOFUHMS
+&SECS    SETC  '0'
+.DOFUHMS ANOP
+         GEN_ZAP P1004HRS,,=PL8'&HOURS',8 SET HOURS
+         GEN_ZAP P1004MIN,,=PL8'&MINS',8 SET MINUTES
+         GEN_ZAP P1004SEC,,=PL8'&SECS',8 SET SECONDS
+         AIF   (NOT &UNTIL).DOREQ
+         GEN_MVI P1004TME,X'FF'   SET TIME/UNTIL
+.DOREQ   ANOP
+.* PROCESS REQID
+         AIF   ('&REQID' EQ '').DOCALL
+         AIF   ('&REQID'(1,1) EQ '''').REQSTRG
+.* REQID FROM LABEL
+         LARL  R15,P1004REQ       ADDRESS TARGET
+         MVC   0(8,R15),&REQID    MOVE REQID FROM LABEL
+         AGO   .DOCALL
+.*
+.REQSTRG ANOP
+.* REQID AS STRING
+&REQLEN  SETA  K'&REQID
+         AIF   (&REQLEN LT 3 OR &REQLEN GT 10).BADREQ
+         GEN_MVC P1004REQ,,=CL8&REQID SET REQID AS STRING
+.DOCALL  ANOP
+         GEN_ST DFHEIBR,P1004EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P1004TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P1004EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P1004EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P1004EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P1004NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P1004NOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         LA    R0,DFHEIHCN        ADDRESS OF DFHEIHCN
+         GEN_ST R0,P1004HCN       SAVE IT
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P1004RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P1004RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P1004EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P1004EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P1004)       R1=LCL MODULE PARAMETER LIST
+P1004EDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         GEN_CLI P1004NOH,X'FF'   NOHANDLE ?
+         JE    P1004BYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P1004BYP_&SYSNDX   EXIT IF NONE
+* INVREQ, EXPIRED
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P1004BYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_1004).BYP1004
+&PARMS_1004 SETB 1
+         P1004
+*
+.BYP1004 ANOP
+P1004BYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.BADREQ  MNOTE 12,'INVALID REQID'
+         MEXIT
+.*
+.BOTHIT  MNOTE 12,'BOTH INTERVAL AND TIME ARE SPECIFIED'
+         MEXIT
+.*
+.BOTHFU  MNOTE 12,'BOTH FOR AND UNTIL ARE SPECIFIED'
+         MEXIT
+.*
+.BADFORUN MNOTE 12,'INTERVAL/TIME CANNOT BE SPECIFIED WITH FOR/UNTIL'
+         MEXIT
+.*
+.BADHMS  MNOTE 12,'HOURS/MINUTES/SECONDS ARE INVALID WITH INTERVAL OR T-
+               IME'
+         MEXIT
+.*
+.BADHMS2 MNOTE 12,'HOURS/MINUTES/SECONDS ARE SPECIFIED WITHOUT FOR/UNTI-
+               L'
+         MEXIT
+.*
+.BADTIME MNOTE 12,'INTERVAL/TIME MUST BE 1 TO 6 BYTES'
+         MEXIT
+.*
+.BADFUN  MNOTE 12,'FOR/UNTIL SPECIFIED, BUT NO TIME PARAMETERS'
+         MEXIT
+         MEND
+

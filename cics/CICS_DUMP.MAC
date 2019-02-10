@@ -1,0 +1,251 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_DUMP
+         GBLB  &PARMS_1C02
+         LCLB  &TRANS,&COMP,&NOEDF
+         LCLC  &DCODE,&FROM,&LENGTH,&FLENGTH,&RESP,&RESP2
+         LCLC  &SLIST,&LLIST,&NUMSEG
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,11) EQ 'TRANSACTION').TRANS
+         AIF   ('&PARM'(1,9)  EQ 'DUMPCODE(').DCODE
+         AIF   ('&PARM'(1,8)  EQ 'COMPLETE').COMP
+         AIF   ('&PARM'(1,5)  EQ 'FROM(').FROM
+         AIF   ('&PARM'(1,7)  EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,8)  EQ 'FLENGTH(').FLENGTH
+         AIF   ('&PARM'(1,12) EQ 'SEGMENTLIST(').SLIST
+         AIF   ('&PARM'(1,11) EQ 'LENGTHLIST(').LLIST
+         AIF   ('&PARM'(1,12) EQ 'NUMSEGMENTS(').NUMSEG
+         AIF   ('&PARM'(1,5)  EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8)  EQ 'NOHANDLE').PLOOP
+         AIF   ('&PARM'(1,5)  EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6)  EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.TRANS   ANOP
+&TRANS   SETB  1
+         AGO   .PLOOP
+.*
+.DCODE   ANOP
+&DCODE   SETC  '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.COMP    ANOP
+&COMP    SETB  1
+         AGO   .PLOOP
+.*
+.FROM    ANOP
+&FROM    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.FLENGTH ANOP
+&FLENGTH SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.SLIST   ANOP
+&SLIST   SETC  '&PARM'(13,K'&PARM-13)
+         AGO   .PLOOP
+.*
+.LLIST   ANOP
+&LLIST   SETC  '&PARM'(12,K'&PARM-12)
+         AGO   .PLOOP
+.*
+.NUMSEG  ANOP
+&NUMSEG  SETC  '&PARM'(13,K'&PARM-13)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         GEN_XC P1C02,P1C02END-P1C02,P1C02
+         GEN_MVC P1C02FN,,=X'1C02' SET FUNCTION CODE
+         AIF   (NOT &TRANS).NOTRANS
+         AIF   ('&DCODE' EQ '').NODCODE
+         AIF   ('&LENGTH' NE '' AND '&FLENGTH' NE '').BADLEN
+         AIF   ('&FROM' NE '' AND '&LENGTH' EQ '' AND '&FLENGTH' EQ '')-
+               .NEEDLEN
+         AIF   ('&FROM' EQ '' AND ('&LENGTH' NE '' OR '&FLENGTH' NE '')-
+               ).NOFROM
+         AIF   ('&SLIST' EQ '' AND '&LLIST' EQ '' AND '&NUMSEG' EQ '').-
+               SEGSOK
+         AIF   ('&SLIST' NE '' AND '&LLIST' NE '' AND '&NUMSEG' NE '').-
+               SEGSOK
+         AGO   .BADSEG
+.*
+.SEGSOK  ANOP
+.*
+         AIF   ('&DCODE'(1,1) EQ '''').STRING
+         GEN_MVC P1C02DCD,,&DCODE  MOVE DUMP CODE FROM LABEL
+         AGO   .NOSTRING
+.*
+.STRING  ANOP
+&DCODLEN SETA  K'&DCODE
+         AIF   (&DCODLEN GT 6).INVDCOD
+         GEN_MVC P1C02DCD,,=CL4&DCODE MOVE DUMP CODE
+.NOSTRING ANOP
+         AIF   ('&FROM' EQ '' AND '&SLIST' EQ '').DEFCOMP
+         AGO   .COMPOK
+.*
+.DEFCOMP ANOP
+.* NO FROM() OR SEGMENTLIST() FORCES COMPLETE
+&COMP    SETB  1
+         AGO   .TISCOMP
+.*
+.COMPOK  ANOP
+         AIF   (NOT &COMP).TRYFROM
+.TISCOMP ANOP
+.* COMPLETE
+         GEN_MVI P1C02CMP,X'FF'   SET COMPLETE ON
+.TRYFROM ANOP
+         AIF   ('&FROM' EQ '').TRYSEGS
+         LA    R14,&FROM          LOAD STORAGE START
+         GEN_ST R14,P1C02FRM      SAVE IT
+.* FROM LENGTH/FLENGTH
+.* LENGTH MAY BE L' OR CONSTANT LIKE C'.' X'..'
+         AIF   ('&FLENGTH' NE '').FLEN
+         AIF   ('&LENGTH'(2,1) EQ '''').LENNUM
+         AIF   (T'&LENGTH NE 'N').LENLABL
+.LENNUM  ANOP
+         GEN_MVC P1C02LEN+2,2,=AL2(&LENGTH) MOVE LENGTH
+         AGO   .TRYSEGS
+.*
+.LENLABL ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&LENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&LENGTH'(11,K'&LENGTH-10)
+         GEN_MVC P1C02LEN+2,2,=AL2(L'&LENLSL) MOVE LENGTH
+         AELSE
+.* COBOL LENGTH AS LABEL
+         GEN_MVC P1C02LEN+2,2,&LENGTH MOVE LENGTH FROM LABEL
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         GEN_MVC P1C02LEN+2,2,&LENGTH MOVE LENGTH FROM LABEL
+         AEND
+         AGO   .TRYSEGS
+.*
+.FLEN    ANOP
+         AIF   ('&FLENGTH'(2,1) EQ '''').FLENNUM
+         AIF   (T'&FLENGTH NE 'N').FLENLAB
+.FLENNUM ANOP
+         GEN_MVC P1C02LEN,,=AL4(&FLENGTH) MOVE FLENGTH
+         AGO   .TRYSEGS
+.*
+.FLENLAB ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&FLENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&FLENGTH'(11,K'&FLENGTH-10)
+         GEN_MVC P1C02LEN,,=AL4(L'&LENLSL) MOVE FLENGTH
+         AELSE
+.* COBOL FLENGTH AS LABEL
+         GEN_MVC P1C02LEN,,&FLENGTH MOVE FLENGTH FROM LABEL
+         AEND
+         AELSE
+.* ASM FLENGTH AS LABEL
+         GEN_MVC P1C02LEN,,&FLENGTH MOVE FLENGTH FROM LABEL
+         AEND
+.TRYSEGS ANOP
+         AIF   ('&SLIST' EQ '').ALLDONE
+.* SEGMENTLIST/LENGTHLIST/NUMSEGMENTS
+         GEN_MVC P1C02SEG,,=A(&SLIST) SAVE SEGMENTLIST ADDRESS
+         GEN_MVC P1C02LST,,=A(&LLIST) SAVE LENGTHLIST ADDRESS
+         AIF   (K'&NUMSEG LT 2).NSGNUM1
+         AIF   ('&NUMSEG'(2,1) EQ '''').NSGNUM
+.NSGNUM1 ANOP
+         AIF   (T'&NUMSEG NE 'N').NSGLABL
+.NSGNUM  ANOP
+         GEN_MVC P1C02NSG,,=A(&NUMSEG) SAVE NUMSEGMENTS
+         AGO   .ALLDONE
+.*
+.NSGLABL ANOP
+         LRL   R0,&NUMSEG         LOAD NUMSEGMENTS FROM LABEL
+         GEN_ST R0,P1C02NSG       SAVE IT
+.ALLDONE ANOP
+         GEN_ST DFHEIBR,P1C02EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P1C02TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P1C02EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P1C02EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P1C02EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P1C02NED,X'FF'   SET NOEDF
+         AEND
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P1C02RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P1C02RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P1C02EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P1C02EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P1C02)       R1=LCL MODULE PARAMETER LIST
+P1C02EDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         AIF   (&PARMS_1C02).BYP1C02
+         J     P1C02BYP_&SYSNDX   EXIT
+*
+&PARMS_1C02 SETB 1
+         P1C02
+*
+P1C02BYP_&SYSNDX DS 0H
+.BYP1C02 ANOP
+         MEXIT
+.*
+.NOTRANS MNOTE 12,'TRANSACTION MUST BE SPECIFIED'
+         MEXIT
+.*
+.NODCODE MNOTE 12,'DUMPCODE MUST BE SPECIFIED'
+         MEXIT
+.*
+.BADLEN  MNOTE 12,'BOTH LENGTH AND FLENGTH ARE SPECIFIED'
+         MEXIT
+.*
+.NEEDLEN MNOTE 12,'LENGTH OR FLENGTH MUST BE SPECIFIED'
+         MEXIT
+.*
+.NOFROM  MNOTE 12,'LENGTH OR FLENGTH REQUIRES FROM'
+         MEXIT
+.*
+.BADSEG  MNOTE 12,'SEGMENTLIST, LENGTHLIST AND NUMSEGMENTS MUST ALL BE -
+               SPECIFIED OR ALL ABSENT'
+         MEXIT
+.*
+.INVDCOD MNOTE 12,'DUMPCODE IS GREATER THAN 4 BYTES'
+         MEXIT
+         MEND
+

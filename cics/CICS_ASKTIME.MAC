@@ -1,0 +1,138 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_ASKTIME
+         GBLB  &PARMS_1002,&PARMS_4A02
+         LCLB  &NOEDF,&NOHAND
+         LCLC  &ABSTIME,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,8) EQ 'ABSTIME(').ABSTIME
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.ABSTIME ANOP
+&ABSTIME SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         GEN_XC P1002,P1002END-P1002,P1002
+         GEN_MVC P1002FN,,=X'1002' SET FUNCTION CODE
+         GEN_ST DFHEIBR,P1002EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P1002TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P1002EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P1002EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P1002EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P1002NED,X'FF'   SET NOEDF
+         AEND
+         AIF   ('&ABSTIME' NE '')
+         GEN_MVI P1002ABS,X'FF'   SET ABSTIME REQUESTED
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P1002NOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P1002RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P1002RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P1002EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P1002EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P1002)       R1=LCL MODULE PARAMETER LIST
+P1002EDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         AIF   (&PARMS_1002).BYP1002
+         J     P1002BYP_&SYSNDX   EXIT
+*
+&PARMS_1002 SETB 1
+         P1002
+*
+P1002BYP_&SYSNDX DS 0H
+.BYP1002 ANOP
+.*
+         AIF   ('&ABSTIME' EQ '').BYP4A02
+         GEN_XC P4A02,P4A02END-P4A02,P4A02
+         GEN_MVC P4A02FN,,=X'4A02' SET FUNCTION CODE
+         GEN_ST DFHEIBR,P4A02EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P4A02TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P4A02EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P4A02EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P4A02EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P4A02NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH2
+         GEN_MVI P4A02NOH,X'FF'   SET NOHANDLE
+.DUNNOH2 ANOP
+         AIF   ('&RESP' EQ '').NORESPA
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P4A02RSP       SAVE IT
+.NORESPA ANOP
+         AIF   ('&RESP2' EQ '').NORSP2A
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P4A02RS2       SAVE IT
+.NORSP2A ANOP
+         LA    R0,&ABSTIME        ABSTIME ADDRESS
+         GEN_ST R0,P4A02ABT       SAVE IT
+         LARL  R0,P4A02EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P4A02EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P4A02)       R1=LCL MODULE PARAMETER LIST
+P4A02EDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         AIF   (&PARMS_4A02).BYP4A02
+         J     P4A02BYP_&SYSNDX   EXIT
+*
+&PARMS_4A02 SETB 1
+         P4A02
+*
+P4A02BYP_&SYSNDX DS 0H
+.BYP4A02 ANOP
+         MEND
+

@@ -1,0 +1,53 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+         MACRO
+         DFHFCBLK
+*
+* FILE CONTROL PREFIX AREA
+*
+DFHFCBLK DSECT
+FCPTCPIO DS    A                  LENGTH SENT TO SERVER
+FCPFN    DS    CL4                FC FUNCTION
+FCPTERM  DS    CL4                TERMINAL ID
+FCPTRAN  DS    CL4                TRANSACTION ID
+         DS    C                  TRANSACTION TYPE (NOT USED)
+FCPTASKN DS    PL4                TASK NUMBER
+FCPFILNM DS    CL8                FILE
+FCPRETCD DS    XL4                RETURN CODE
+FCPRESP2 DS    XL4                RESP2 CODE
+*                                 1ST 2 BYTES MAY CONTAIN RPLFEEDB
+FCPRID   DS    XL128              MAXIMUM KEY LENGTH, CAN EXTEND
+         ORG   FCPRID
+FCPXRBA  DS    XL8                EXTENDED RBA
+         ORG   FCPRID
+         DS    XL4
+FCPRBA   DS    XL4                NORMAL RBA
+         ORG   FCPRID
+FCPRRN   DS    XL4                RRN
+         ORG
+FCPRDOPT DS    X                  RIDFLD IDENTIFIER (BYTE, NOT BITS)
+FCPRDKEY EQU   X'00'              -- BY DEFAULT A FULL KEY READ/BROWSE
+FCPRDRBA EQU   X'01'              -- RBA
+FCPRDXRB EQU   X'02'              -- XRBA
+FCPRDRRN EQU   X'03'              -- RRN
+FCPRDGEN EQU   X'04'              -- GENERIC
+FCPCTYPE DS    X                  COMMAND TYPE (BYTE, NOT BITS)
+FCPCREAD EQU   X'01'              -- READ
+FCPCBRWS EQU   X'02'              -- BROWSE
+FCPBROPT DS    X                  READ/BROWSE OPTIONS (BYTE, NOT BITS)
+*              X'00'              -- N/A
+FCPBRGTE EQU   X'01'              -- GTEQ
+FCPBREQU EQU   X'02'              -- EQUAL
+FCPREQID DS    XL2                REQID FOR BROWSE
+FCPKEYLN DS    XL2                KEYLENGTH FOR GENERIC READ/BROWSE
+*                                 X'7FFF' IF NO KEYLENGTH
+FCPACLEN DS    FL4                READ ACTUAL RECORD LENGTH
+FCPLEN   DS    FL4                LENGTH OF FOLLOWING DATA
+         DS    0D
+FCPREFIX EQU   *-DFHFCBLK
+         MEND
+

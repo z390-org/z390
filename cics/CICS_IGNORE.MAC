@@ -1,0 +1,160 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_IGNORE
+         GBLB  &PARMS_020A
+         LCLA  &CONDRNG,&PARMCNT
+         LCLB  &NOEDF
+         LCLC  &TYPE,&RESP,&RESP2
+         LCLC  &CONDS(200)
+&CONDRNG SETA  200
+&TYPE    SETC  '&SYSLIST(1)'
+         AIF   ('&TYPE' EQ 'CONDITION').COND
+         MNOTE 12,'IGNORE TYPE NOT RECOGNIZED'
+         MEXIT
+.*
+.COND    ANOP
+         GEN_XC P020A,P020AEND-P020A,P020A
+         GEN_MVC P020AFN,,=X'020A' SET FUNCTION CODE
+         GEN_ST DFHEIBR,P020AEIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P020ATCT  SET TCTTE ADDRESS
+         LARL  R14,P020ACND       R14=ADDRESS OF COND NUMBERS
+.* SET CONDITION LIST
+&CONDS(01) SETC 'ERROR'
+&CONDS(11) SETC 'TERMIDERR'
+&CONDS(12) SETC 'FILENOTFOUND'
+&CONDS(13) SETC 'NOTFND'
+&CONDS(14) SETC 'DUPREC'
+&CONDS(15) SETC 'DUPKEY'
+&CONDS(16) SETC 'INVREQ'
+&CONDS(17) SETC 'IOERR'
+&CONDS(18) SETC 'NOSPACE'
+&CONDS(19) SETC 'NOTOPEN'
+&CONDS(20) SETC 'ENDFILE'
+&CONDS(21) SETC 'ILLOGIC'
+&CONDS(22) SETC 'LENGERR'
+&CONDS(26) SETC 'ITEMERR'
+&CONDS(27) SETC 'PGMIDERR'
+&CONDS(28) SETC 'TRANSIDERR'
+&CONDS(29) SETC 'ENDDATA'
+&CONDS(31) SETC 'EXPIRED'
+&CONDS(36) SETC 'MAPFAIL'
+&CONDS(38) SETC 'INVMPSZ'
+&CONDS(40) SETC 'OVERFLOW'
+&CONDS(44) SETC 'QIDERR'
+&CONDS(55) SETC 'ENQBUSY'
+&CONDS(56) SETC 'ENVDEFERR'
+&CONDS(61) SETC 'NOTALLOC'
+&CONDS(83) SETC 'END'
+&CONDS(84) SETC 'DISABLED'
+&CONDS(109) SETC 'ACTIVITYERR'
+&CONDS(110) SETC 'CONTAINERERR'
+&CONDS(112) SETC 'TOKENERR'
+&CONDS(122) SETC 'CHANNELERR'
+.* SPECIALS
+&CONDS(199) SETC 'DSIDERR'         CONVERTED TO 12
+.*
+&NP      SETA  N'&SYSLIST
+         AIF   (&NP EQ 1).NOPARMS
+&IP      SETA  1
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+.* INNER LOOP
+&INNER   SETA  0
+.ILOOPC  ANOP
+&INNER   SETA  &INNER+1
+         AIF   (&INNER GT &CONDRNG).BADPARM
+         AIF   (K'&CONDS(&INNER) EQ 0).ILOOPC
+         AIF   ('&PARM' EQ '&CONDS(&INNER)').GOTCOND
+         AGO   .ILOOPC
+.*
+.GOTCOND ANOP
+.* PROCESS SPECIAL DSIDERR
+         AIF   (&INNER NE 199).NOTSPEC
+         MVI   0(R14),12          SET SPECIAL CONDITION NUMBER
+         AGO   .GOBUMP
+.*
+.NOTSPEC ANOP
+         MVI   0(R14),&INNER      SET CONDITION INDICATOR
+.GOBUMP  ANOP
+         AHI   R14,1              BUMP POINTER
+&PARMCNT SETA  &PARMCNT+1
+         AIF   (&PARMCNT GT 30).TOOMANY
+         AGO   .PLOOP
+.*
+.BADPARM ANOP
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').PLOOP
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         LA    R0,DFHEIHCN        ADDRESS OF DFHEIHCN
+         GEN_ST R0,P020AHCN       SAVE IT
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P020AEDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P020AEDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P020AEDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P020ANED,X'FF'   SET NOEDF
+         AEND
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P020ARSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P020ARS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P020AEDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P020AEDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P020A)       R1=LCL MODULE PARAMETER LIST
+P020AEDF_&SYSNDX DS 0H
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         AIF   (&PARMS_020A).BYP020A
+         J     P020ABYP_&SYSNDX   EXIT
+*
+&PARMS_020A SETB 1
+         P020A
+*
+P020ABYP_&SYSNDX DS 0H
+.BYP020A ANOP
+         MEXIT
+.*
+.NOPARMS ANOP
+         MNOTE 8,'NO PARAMETERS SPECIFIED'
+         MEXIT
+.*
+.TOOMANY ANOP
+         MNOTE *,'AN INTERNAL ERROR HAS OCCURRED'
+         MNOTE 12,'NUMBER OF CONDITIONS EXCEEDS 30'
+         MEXIT
+         MEND
+

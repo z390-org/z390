@@ -1,0 +1,157 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_ENDBR
+         GBLB  &PARMS_0612
+         LCLB  &NOEDF,&NOHAND
+         LCLC  &FILE,&DATASET,&REQID,&RESP,&RESP2
+.*
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+.*
+         AIF   ('&PARM'(1,5) EQ 'FILE(').FILE
+         AIF   ('&PARM'(1,8) EQ 'DATASET(').DATASET
+         AIF   ('&PARM'(1,6) EQ 'REQID(').REQID
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.FILE    ANOP
+&FILE    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.DATASET ANOP
+&DATASET SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.REQID   ANOP
+&REQID   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   ('&FILE' EQ '' AND '&DATASET' EQ '').NOFILE
+         AIF   ('&FILE' NE '' AND '&DATASET' NE '').BOTHF
+.*
+         GEN_XC P0612,P0612END-P0612,P0612
+         GEN_MVC P0612FN,,=X'0612' SET FUNCTION CODE
+         AIF   ('&FILE' EQ '').DODTAST
+.* GOT FILE
+         AIF   ('&FILE'(1,1) EQ '''').FLSTRING
+         LARL  R15,P0612FIL       ADDRESS TARGET
+         MVC   0(8,R15),&FILE     SET FILE NAME FROM LABEL
+         AGO   .DOREQ
+.*
+.FLSTRING ANOP
+&FLLEN   SETA  K'&FILE
+         AIF   (&FLLEN GT 10).BADFILE
+         GEN_MVC P0612FIL,,=CL8&FILE SET FILE NAME AS STRING
+         AGO   .DOREQ
+.*
+.* GOT DATASET
+.DODTAST ANOP
+         AIF   ('&DATASET'(1,1) EQ '''').DTSTRING
+         LARL  R15,P0612FIL       ADDRESS TARGET
+         MVC   0(8,R15),&DATASET  SET DATASET NAME FROM LABEL
+         AGO   .DOREQ
+.*
+.DTSTRING ANOP
+&DTLEN   SETA  K'&DATASET
+         AIF   (&DTLEN GT 10).BADFILE
+         GEN_MVC P0612FIL,,=CL8&DATASET SET DATASET NAME AS STRING
+.*
+.DOREQ   ANOP
+         AIF   ('&REQID' EQ '').DUNREQ
+         AIF   (T'&REQID NE 'N').REQLABL
+         GEN_MVC P0612REQ,,=AL2(&REQID) MOVE REQID
+         AGO   .DUNREQ
+.*
+.REQLABL ANOP
+         LARL  R15,P0612REQ       ADDRESS TARGET
+         MVC   0(2,R15),&REQID    MOVE REQID FROM LABEL
+.DUNREQ  ANOP
+         GEN_ST DFHEIBR,P0612EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P0612TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P0612EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P0612EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P0612EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P0612NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P0612NOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P0612RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P0612RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P0612EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P0612EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P0612)       R1=LCL MODULE PARAMETER LIST
+P0612EDF_&SYSNDX DS 0H
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         GEN_CLI P0612NOH,X'FF'   NOHANDLE ?
+         JE    P0612BYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P0612BYP_&SYSNDX   EXIT IF NONE
+* INVREQ, FILENOTFOUND, ILLOGIC
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P0612BYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_0612).BYP0612
+&PARMS_0612 SETB 1
+         P0612
+*
+.BYP0612 ANOP
+P0612BYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.NOFILE  MNOTE 12,'FILE OR DATASET MUST BE SPECIFIED'
+         MEXIT
+.*
+.BOTHF   MNOTE 12,'BOTH FILE AND DATASET ARE SPECIFIED'
+         MEXIT
+.*
+.BADFILE MNOTE 12,'INVALID FILE OR DATASET'
+         MEXIT
+         MEND
+

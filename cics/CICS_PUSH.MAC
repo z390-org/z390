@@ -1,0 +1,89 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_PUSH
+         GBLB  &PARMS_020C
+         LCLB  &NOEDF
+         LCLC  &TYPE,&RESP,&RESP2
+&TYPE    SETC  '&SYSLIST(1)'
+         AIF   ('&TYPE' EQ 'HANDLE').GOTHAND
+         MNOTE 12,'PUSH TYPE NOT RECOGNIZED'
+         MEXIT
+.*
+.GOTHAND ANOP
+&NP      SETA  N'&SYSLIST
+&IP      SETA  1
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').PLOOP
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         GEN_XC P020C,P020CEND-P020C,P020C
+         GEN_MVC P020CFN,,=X'020C' SET FUNCTION CODE
+         GEN_ST DFHEIBR,P020CEIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P020CTCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P020CEDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P020CEDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P020CEDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P020CNED,X'FF'   SET NOEDF
+         AEND
+         LARL  R15,P020CAID       ADDRESS TARGET
+         MVC   0(4,R15),DFHEIAID  SET AID BLOCK ADDRESS
+         LARL  R15,P020CHCN       ADDRESS TARGET
+         MVC   0(4,R15),DFHEIHCN  SET HANDLE CONDITION BLOCK ADDRESS
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P020CRSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P020CRS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P020CEDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P020CEDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P020C)       R1=LCL MODULE PARAMETER LIST
+P020CEDF_&SYSNDX DS 0H
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         AIF   (&PARMS_020C).BYP020C
+         J     P020CBYP_&SYSNDX   EXIT
+*
+&PARMS_020C SETB 1
+         P020C
+*
+P020CBYP_&SYSNDX DS 0H
+.BYP020C ANOP
+         MEXIT
+         MEND
+

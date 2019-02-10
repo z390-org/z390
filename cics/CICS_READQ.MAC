@@ -1,0 +1,323 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_READQ
+.* FLENGTH IS AN EXTENSION
+         GBLB  &PARMS_0A04
+         GBLB  &ZC_CICS
+         LCLB  &NEXT,&NOEDF,&NOHAND
+         LCLC  &TYPE,&QUEUE,&QNAME,&INTO,&SET,&LENGTH,&FLENGTH
+         LCLC  &NUMITEMS,&ITEM,&RESP,&RESP2
+&TYPE    SETC  '&SYSLIST(1)'
+         AIF   ('&TYPE' EQ 'TS').TS
+         MNOTE 12,'READQ TYPE NOT RECOGNIZED'
+         MEXIT
+.*
+.TS      ANOP
+&NP      SETA  N'&SYSLIST
+&IP      SETA  1
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+.* DISCARDED PARMS
+         AIF   ('&PARM'(1,4) EQ 'MAIN').PLOOP
+         AIF   ('&PARM'(1,9) EQ 'AUXILIARY').PLOOP
+.*
+         AIF   ('&PARM'(1,6) EQ 'QUEUE(').QUEUE
+         AIF   ('&PARM'(1,6) EQ 'QNAME(').QNAME
+         AIF   ('&PARM'(1,5) EQ 'INTO(').INTO
+         AIF   ('&PARM'(1,4) EQ 'SET(').SET
+         AIF   ('&PARM'(1,7) EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,8) EQ 'FLENGTH(').FLENGTH
+         AIF   ('&PARM'(1,9) EQ 'NUMITEMS(').NUMITEMS
+         AIF   ('&PARM'(1,5) EQ 'ITEM(').ITEM
+         AIF   ('&PARM'(1,4) EQ 'NEXT').NEXT
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.QUEUE   ANOP
+&QUEUE   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.QNAME   ANOP
+&QNAME   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.INTO    ANOP
+&INTO    SETC '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.SET     ANOP
+&SET     SETC '&PARM'(5,K'&PARM-5)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.FLENGTH ANOP
+&FLENGTH SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.NUMITEMS ANOP
+&NUMITEMS SETC  '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.ITEM    ANOP
+&ITEM    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.NEXT    ANOP
+&NEXT    SETB  1
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   ('&QUEUE' EQ '' AND '&QNAME' EQ '').NOQUEUE
+         AIF   ('&QUEUE' NE '' AND '&QNAME' NE '').BOTHQ
+         AIF   ('&INTO'  EQ '' AND '&SET'   EQ '').NOINTOST
+         AIF   ('&INTO'  NE '' AND '&SET'   NE '').BOTHINST
+         AIF   ('&ITEM'  EQ '' AND (NOT &NEXT)).NOITMNXT
+         AIF   ('&ITEM'  NE '' AND &NEXT).BOTHITNX
+         AIF   ('&SET'   NE '' AND                                     -
+               ('&LENGTH' EQ '' AND '&FLENGTH' EQ '')).NEEDLEN
+         AIF   ('&LENGTH' NE '' AND '&FLENGTH' NE '').BOTHLEN
+         GEN_XC P0A04,P0A04END-P0A04,P0A04 CLEAR PARMS
+         GEN_MVC P0A04FN,,=X'0A04' SET FUNCTION CODE
+         AIF   ('&QUEUE' EQ '').DOQNAME
+.* GOT QUEUE
+         AIF   ('&QUEUE'(1,1) EQ '''').QUSTRING
+         LARL  R15,P0A04QNM       ADDRESS TARGET
+         MVC   0(8,R15),&QUEUE    SET QUEUE NAME FROM LABEL
+         GEN_MVC P0A04QNM+8,8,=CL8' ' CLEAR REMAINDER
+         AGO   .CHKNAME
+.*
+.QUSTRING ANOP
+&QULEN   SETA  K'&QUEUE
+         AIF   (&QULEN GT 10).BADQ
+         GEN_MVC P0A04QNM,,=CL16&QUEUE SET QUEUE NAME AS STRING
+         AGO   .CHKNAME
+.*
+.* GOT QNAME
+.DOQNAME ANOP
+         AIF   ('&QNAME'(1,1) EQ '''').QNSTRING
+         LARL  R15,P0A04QNM       ADDRESS TARGET
+         MVC   0(16,R15),&QNAME   SET QUEUE NAME FROM LABEL
+         AGO   .CHKNAME
+.*
+.QNSTRING ANOP
+&QNLEN   SETA  K'&QNAME
+         AIF   (&QNLEN GT 18).BADQ
+         GEN_MVC P0A04QNM,,=CL16&QNAME SET QUEUE NAME AS STRING
+.CHKNAME ANOP
+.* PROCESS ITEM
+         AIF   ('&ITEM' NE '').DOITEM
+         GEN_MVC P0A04ITM,,=X'FFFF' SET ITEM NUMBER TO NEXT
+         AGO   .DUNITEM
+.*
+.DOITEM  ANOP
+         AIF   (T'&ITEM NE 'N').ITMLABL
+         GEN_MVC P0A04ITM,,=AL2(&ITEM) SET ITEM
+         AGO   .DUNITEM
+.*
+.ITMLABL ANOP
+         LARL  R15,P0A04ITM       ADDRESS TARGET
+         MVC   0(2,R15),&ITEM     MOVE ITEM FROM LABEL
+.DUNITEM ANOP
+         AIF   ('&SET' EQ '').NOSET
+         GEN_MVI P0A04SET,X'FF'   SET SET INDICATOR
+         AGO   .DOLEN
+.*
+.NOSET   ANOP
+         LA    R0,&INTO           R0=INTO ADDRESS
+         GEN_ST R0,P0A04INT       SAVE IT
+.DOLEN   ANOP
+         AIF   ('&LENGTH' EQ '').NOLENG
+         AIF   (K'&LENGTH LT 2).LENNUM1
+         AIF   ('&LENGTH'(2,1) EQ '''').LENNUM
+.LENNUM1 ANOP
+         AIF   (T'&LENGTH NE 'N').LENLABL
+.LENNUM  ANOP
+         LAY   R0,&LENGTH         SET NUMERIC LENGTH
+         GEN_ST R0,P0A04LEN       SAVE IT
+         AGO   .DUNLEN
+.*
+.LENLABL ANOP
+         AIF   ('&SET' EQ '').NOSET2
+         LHI   R0,32767           SET MAXIMUM LENGTH
+         AGO   .LENADD
+.*
+.NOSET2  ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&LENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&LENGTH'(11,K'&LENGTH-10)
+         LAY   R0,L'&LENLSL       SET NUMERIC LENGTH
+         AELSE
+.* COBOL LENGTH AS LABEL
+         LH    R0,&LENGTH         SET LENGTH FROM LABEL
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         LH    R0,&LENGTH         SET LENGTH FROM LABEL
+         AEND
+.LENADD  ANOP
+         GEN_ST R0,P0A04LEN       SAVE IT
+         LA    R0,&LENGTH         R0=ADDRESS OF LENGTH
+         GEN_ST R0,P0A04LAD       SAVE IT
+         AGO   .DUNLEN
+.*
+.NOLENG  ANOP
+         AIF   ('&FLENGTH' EQ '').NOLENS
+         AIF   (T'&FLENGTH NE 'N').FLENLBL
+         GEN_MVC P0A04LEN,,=AL4(&FLENGTH) SET NUMERIC FLENGTH
+         AGO   .DUNLEN
+.*
+.FLENLBL ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&FLENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&FLENGTH'(11,K'&FLENGTH-10)
+         GEN_MVC P0A04LEN,,=AL4(L'&LENLSL) SET NUMERIC FLENGTH
+         AELSE
+.* COBOL LENGTH AS LABEL
+         L     R0,&FLENGTH        SET FLENGTH FROM LABEL
+         GEN_ST R0,P0A04LEN       SAVE IT
+         LA    R0,&FLENGTH        R0=ADDRESS OF FLENGTH
+         GEN_ST R0,P0A04FAD       SAVE IT
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         L     R0,&FLENGTH        SET FLENGTH FROM LABEL
+         GEN_ST R0,P0A04LEN       SAVE IT
+         LA    R0,&FLENGTH        R0=ADDRESS OF FLENGTH
+         GEN_ST R0,P0A04FAD       SAVE IT
+         AEND
+         AGO   .DUNLEN
+.*
+.NOLENS  ANOP
+         LAY   R0,L'&INTO         R0=IMPLIED LENGTH OF INTO
+         GEN_ST R0,P0A04LEN       SAVE IT
+.DUNLEN  ANOP
+         AIF   ('&NUMITEMS' EQ '').NONUMIT
+         LA    R0,&NUMITEMS       R0=ADDRESS OF NUMITEMS
+         GEN_ST R0,P0A04NUM       SAVE IT
+.NONUMIT ANOP
+         GEN_ST DFHEIBR,P0A04EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P0A04TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P0A04EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P0A04EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P0A04EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P0A04NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P0A04NOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P0A04RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P0A04RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P0A04EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P0A04EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P0A04)       R1=LCL MODULE PARAMETER LIST
+P0A04EDF_&SYSNDX DS 0H
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         AIF   ('&SET' EQ '').NOSET3
+         AIF   (&ZC_CICS)
+         AIF   ('&SET'(1,11) EQ 'ADDRESS,OF,')
+.* COBOL LINKAGE-SECTION LABEL, EXTRACT AND TRANSFORM
+&SETLSL  SETC  '&SET'(12,K'&SET-11)
+         LARL  R1,P0A04STA        ADDRESS SOURCE
+         MVC   ZC_&SETLSL._PTR(4),0(R1) SET ADDRESS IN L-S POINTER
+         AELSE
+.* COBOL STANDARD POINTER
+         GEN_MVC &SET,4,P0A04STA  SET ADDRESS IN POINTER
+         AEND
+         AELSE
+.* ASM GENERAL REGISTER
+         LRL   &SET,P0A04STA      LOAD THE SET REGISTER
+         AEND
+.NOSET3  ANOP
+         GEN_CLI P0A04NOH,X'FF'   NOHANDLE ?
+         JLE   P0A04BYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JLZ   P0A04BYP_&SYSNDX   EXIT IF NONE
+* INVREQ, ITEMERR, LENGERR, QIDERR
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P0A04BYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_0A04).BYP0A04
+&PARMS_0A04 SETB 1
+         P0A04
+*
+.BYP0A04 ANOP
+P0A04BYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.NOQUEUE MNOTE 12,'QUEUE OR QNAME MUST BE SPECIFIED'
+         MEXIT
+.*
+.BOTHQ   MNOTE 12,'BOTH QUEUE AND QNAME ARE SPECIFIED'
+         MEXIT
+.*
+.BADQ    MNOTE 12,'INVALID QUEUE OR QNAME'
+         MEXIT
+.*
+.NOINTOST MNOTE 12,'INTO OR SET MUST BE SPECIFIED'
+         MEXIT
+.*
+.BOTHINST MNOTE 12,'BOTH INTO AND SET ARE SPECIFIED'
+         MEXIT
+.*
+.NOITMNXT MNOTE 12,'ITEM OR NEXT MUST BE SPECIFIED'
+         MEXIT
+.*
+.BOTHITNX MNOTE 12,'BOTH ITEM AND NEXT ARE SPECIFIED'
+         MEXIT
+.*
+.NEEDLEN MNOTE 12,'SET REQUIRES LENGTH OR FLENGTH'
+         MEXIT
+.*
+.BOTHLEN MNOTE 12,'BOTH LENGTH AND FLENGTH ARE SPECIFIED'
+         MEXIT
+.*
+         MEND
+

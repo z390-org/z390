@@ -1,0 +1,230 @@
+.*********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation               *
+.* This source code is part of z390 assembler/emulator package       *
+.* The z390 package is distributed under GNU general public license  *
+.* Author - Don Higgins                                              *
+.*********************************************************************
+         MACRO
+&MAPSET  DFHMSD                                                        X
+               &TYPE=DSECT,                                            X
+               &MODE=OUT,                                              X
+               &LANG=ASM,                                              X
+               &CTRL=,                                                 X
+               &CURSLOC=NO,                                            X
+               &DSATTS=,                                               X
+               &EXTATT=NO,                                             X
+               &MAPATTS=,                                              X
+               &STORAGE=,                                              X
+               &TIOAPFX=NO,                                            X
+               &TERM=
+.*
+         GBLA  &MTYPE             TYPE REQUEST
+         GBLA  &MLANG             PROGRAM LANGUAGE
+         GBLA  &NCTRL             NO. OF OPERANDS IN CTRL
+         GBLA  &MEXTATT           EXTATT: 1=NO 2=MAPONLY 3=YES
+.*
+         GBLB  &MSD               MSD SPECIFIED
+         GBLB  &DEFMODE(2)        1=OUT 2=IN BOTH=INOUT
+         GBLB  &MSTG              1= STORAGE=AUTO
+.*
+         GBLC  &MSN               MAPSET NAME
+         GBLC  &MDINAME           MAP NAME
+         GBLC  &MCTRL(3)          DEFAULT CTRL OPERANDS
+         GBLC  &MCURSLC           CURSLOC
+         GBLC  &MTIOAPX           TIOAPFX
+.*
+.* ENSURE NO BAD PARMS
+         AIF   (N'&SYSLIST NE 0).BADPOSI
+.GOON08  ANOP
+.*
+.* ANALYSE TYPE
+         AIF   ('&TYPE' EQ 'FINAL').FINAL
+&MTYPE   SETA  1                  SET DSECT
+         AIF   ('&TYPE' EQ 'DSECT').TYPDUN
+&MTYPE   SETA  2                  SET MAP
+         AIF   ('&TYPE' EQ 'MAP').TYPDUN
+         AGO   .BADTYPE
+.*
+.GOON03  ANOP
+.*
+.FINAL   ANOP
+&MDINAME DFHMDI TYPE=LAST
+         AIF   (&MLANG EQ 0).DUNMSD  LANG=COBOL
+         AIF   (&MTYPE NE 1).DUNMSD  TYPE=FINAL/MAP
+         AIF   (&MSTG).NOAUTO        STORAGE=AUTO
+         PUNCH '         ORG'
+.NOAUTO  ANOP
+         PUNCH '* * * END OF MAP SET DEFINITION * * *'
+.DUNMSD  ANOP
+         MEXIT
+.*
+.TYPDUN  ANOP
+         AIF   (&MSD).BADMSD
+&MSD     SETB  1                  SET MSD SPECIFIED
+.*
+&MSN     SETC  '&MAPSET'          SET MAPSET NAME
+         AIF   ('&MSN' EQ '').BADMSET
+.GOON02  ANOP
+.*
+.* ASSIGN DEFAULT CTRL OPERANDS TO MCTRL
+&NCTRL   SETA  N'&CTRL            SET NO. OF OPERANDS IN CTRL
+         AIF   (&NCTRL EQ 0).DUNCTRL
+         AIF   (&NCTRL GT 3).BIGCTRL
+&I       SETA  1
+.LCTRL   ANOP
+&MCTRL(&I) SETC '&CTRL(&I)'
+&I       SETA  &I+1
+         AIF   (&I GT &NCTRL).DUNCTRL
+         AGO   .LCTRL
+.*
+.DUNCTRL ANOP
+&MCURSLC SETC  '&CURSLOC'         SET CURSLOC
+         AIF   ('&CURSLOC' EQ 'NO').DUNCURS
+         AIF   ('&CURSLOC' EQ 'YES').DUNCURS
+         AGO   .BADCURS
+.*
+.GOON07  ANOP
+.DUNCURS ANOP
+&MTIOAPX SETC  '&TIOAPFX'         SET TIOAPFX
+         AIF   ('&TIOAPFX' EQ 'NO').DUNTIOA
+         AIF   ('&TIOAPFX' EQ 'YES').DUNTIOA
+         AGO   .BADTIOA
+.*
+.GOON01  ANOP
+.DUNTIOA ANOP
+         AIF   ('&LANG' EQ 'COBOL').LANGOK
+&MLANG   SETA  2                  SET ASM
+         AIF   ('&LANG' NE 'ASM').BADLANG
+.GOON04  ANOP
+.LANGOK  ANOP
+.*
+         AIF   ('&STORAGE' EQ '').STGDUN
+&MSTG    SETB  1                  STORAGE=AUTO
+         AIF   ('&STORAGE' NE 'AUTO').BADSTG
+.GOON05  ANOP
+.*
+.STGDUN  ANOP
+         AIF   ('&MODE' EQ 'IN').MODEIN
+         AIF   ('&MODE' EQ 'OUT').MODEOUT
+         AIF   ('&MODE' EQ 'INOUT').MODEIO
+         AGO   .BADMODE
+.*
+.MODEIN  ANOP
+&DEFMODE(1) SETB 0                MODE=OUT
+&DEFMODE(2) SETB 1                MODE=IN
+         AGO   .DUNMODE
+.*
+.MODEOUT ANOP
+&DEFMODE(1) SETB 1                MODE=OUT
+&DEFMODE(2) SETB 0                MODE=IN
+         AGO   .DUNMODE
+.*
+.MODEIO  ANOP
+&DEFMODE(1) SETB 1                MODE=OUT
+&DEFMODE(2) SETB 1                MODE=IN
+.*
+.GOON06  ANOP
+.DUNMODE ANOP
+.* PROCESS EXTATT, DSATTS, MAPATTS
+         AIF   ('&EXTATT' EQ 'NO').EXTNO
+         AIF   ('&EXTATT' EQ 'MAPONLY').EXTMAP
+         AIF   ('&EXTATT' EQ 'YES').EXTYES
+         AGO   .BADEXT
+.*
+.EXTNO   ANOP
+.* EXTATT=NO IS DEFAULT
+         AIF   ('&MAPATTS' EQ '' AND '&DSATTS' EQ '')
+&MEXTATT SETA  1
+         AGO   .DUNEXT
+         AEND
+         AIF   ('&MAPATTS' NE '' AND '&DSATTS' NE '')
+         AIF   ('&MAPATTS(1)' NE 'COLOR' AND                           X
+               '&DSATTS(1)' NE 'COLOR').BADATPM
+&MEXTATT SETA  3
+         AGO   .DUNEXT
+         AEND
+         AIF   ('&MAPATTS' NE '' AND '&DSATTS' EQ '')
+         AIF   ('&MAPATTS(1)' NE 'COLOR').BADATPM
+&MEXTATT SETA  2
+         AGO   .DUNEXT
+         AEND
+         AGO   .BADATTS
+.*
+.EXTYES  ANOP
+         AIF   ('&MAPATTS' NE '' OR '&DSATTS' NE '').BADEXAT
+&MEXTATT SETA  3
+         AGO   .DUNEXT
+.*
+.EXTMAP  ANOP
+         AIF   ('&MAPATTS' NE '' OR '&DSATTS' NE '').BADEXAT
+&MEXTATT SETA  2
+         AGO   .DUNEXT
+.*
+.GOON09  ANOP
+.DUNEXT  ANOP
+         AIF   (&MTYPE EQ 1).DUNALL
+&KMAP    SETA  K'&MAPSET
+&BLANKS  SETC  '        '(1,8-&KMAP)
+&MAPSET&BLANKS CSECT
+         DC    C'&MAPSET&BLANKS'        BMSNAME  -- MAPSET NAME
+.DUNALL  ANOP
+         MEXIT
+.*
+.BADMSD  ANOP
+         MNOTE 12,'CANNOT HAVE MORE THAN ONE DFHMSD MACRO'
+         MEXIT
+.*
+.BADMSET ANOP
+         MNOTE 12,'MAPSET NAME IS MISSING'
+         AGO   .GOON02
+.*
+.BADTYPE ANOP
+         MNOTE 12,'INVALID TYPE -- &TYPE'
+         AGO   .GOON03
+.*
+.BADLANG ANOP
+         MNOTE 12,'INVALID LANG -- &LANG'
+         AGO   .GOON04
+.*
+.BADSTG  ANOP
+         MNOTE 12,'INVALID STORAGE -- &STORAGE'
+         AGO   .GOON05
+.*
+.BADMODE ANOP
+         MNOTE 12,'INVALID MODE -- &MODE'
+         AGO   .GOON06
+.*
+.BIGCTRL ANOP
+         MNOTE 12,'A MAXIMUM OF 3 OPERANDS ALLOWED IN CTRL'
+         MEXIT
+.*
+.BADCURS ANOP
+         MNOTE 12,'INVALID CURSLOC -- &CURSLOC'
+         AGO   .GOON07
+.*
+.BADTIOA ANOP
+         MNOTE 12,'INVALID TIOAPFX -- &TIOAPFX'
+         AGO   .GOON01
+.*
+.BADPOSI ANOP
+         MNOTE 12,'POSITIONAL OPERAND &SYSLIST(1) INVALID'
+         AGO   .GOON08
+.*
+.BADEXT  ANOP
+         MNOTE 12,'EXTATT NOT NO, MAPONLY OR YES'
+         AGO   .GOON09
+.*
+.BADATTS ANOP
+         MNOTE 12,'DSATTS IS SPECIFIED WITHOUT MAPATTS'
+         AGO   .GOON09
+.*
+.BADEXAT ANOP
+         MNOTE 12,'EXTATT CONFLICTS WITH MAPATTS/DSATTS'
+         AGO   .GOON09
+.*
+.BADATPM ANOP
+         MNOTE 12,'INVALID MAPATTS OR DSATTS PARAMETER'
+         AGO   .GOON09
+.*
+         MEND
+

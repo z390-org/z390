@@ -1,0 +1,206 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_GETMAIN
+         GBLB  &PARMS_0C02
+         GBLB  &ZC_CICS
+         LCLB  &NOEDF,&NOHAND
+         LCLC  &SET,&LENGTH,&FLENGTH,&INITIMG,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,4) EQ 'SET(').SET
+         AIF   ('&PARM'(1,7) EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,8) EQ 'FLENGTH(').FLENGTH
+         AIF   ('&PARM'(1,8) EQ 'INITIMG(').INITIMG
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.SET     ANOP
+&SET     SETC  '&PARM'(5,K'&PARM-5)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.FLENGTH ANOP
+&FLENGTH SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.INITIMG ANOP
+&INITIMG SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         GEN_XC P0C02,P0C02END-P0C02,P0C02
+         GEN_MVC P0C02FN,,=X'0C02' SET FUNCTION CODE
+         AIF   ('&LENGTH' NE '' AND '&FLENGTH' NE '').BADLEN
+         AIF   ('&LENGTH' EQ '' AND '&FLENGTH' EQ '').NEEDLEN
+         AIF   ('&SET' EQ '').BADSET
+.* LENGTH MAY BE L' OR CONSTANT LIKE X'..'
+         AIF   ('&FLENGTH' NE '').FLEN
+         AIF   (K'&LENGTH LT 2).LENNUM1
+         AIF   ('&LENGTH'(2,1) EQ '''').LENNUM
+.LENNUM1 ANOP
+         AIF   (T'&LENGTH NE 'N').LENLABL
+.LENNUM  ANOP
+         LARL  R1,=AL2(&LENGTH)   ADDRESS LITERAL
+         LH    R0,0(R1)           SET LENGTH
+         AGO   .SAVLEN
+.*
+.LENLABL ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&LENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&LENGTH'(11,K'&LENGTH-10)
+         LAY   R0,L'&LENLSL       SET NUMERIC LENGTH
+         AELSE
+.* COBOL LENGTH AS LABEL
+         LH    R0,&LENGTH         SET LENGTH FROM LABEL
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         LH    R0,&LENGTH         SET LENGTH FROM LABEL
+         AEND
+         AGO   .SAVLEN
+.*
+.FLEN    ANOP
+         AIF   (K'&FLENGTH LT 2).FLENNU1
+         AIF   ('&FLENGTH'(2,1) EQ '''').FLENNUM
+.FLENNU1 ANOP
+         AIF   (T'&FLENGTH NE 'N').FLENLAB
+.FLENNUM ANOP
+         LARL  R1,=A(&FLENGTH)    ADDRESS LITERAL
+         L     R0,0(R1)           SET FLENGTH
+         AGO   .SAVLEN
+.*
+.FLENLAB ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&FLENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&FLENGTH'(11,K'&FLENGTH-10)
+         LARL  R1,=AL4(L'&LENLSL) ADDRESS LITERAL
+         L     R0,0(R1)           SET FLENGTH
+         AELSE
+.* COBOL FLENGTH AS LABEL
+         L     R0,&FLENGTH        SET FLENGTH FROM LABEL
+         AEND
+         AELSE
+.* ASM FLENGTH AS LABEL
+         L     R0,&FLENGTH        SET FLENGTH FROM LABEL
+         AEND
+.SAVLEN  ANOP
+         GEN_ST R0,P0C02LEN       SAVE IT
+.*
+         AIF   ('&INITIMG' EQ '').DOGETM
+         GEN_MVI P0C02INM,X'FF'   SET INITIMG SPECIFIED
+         AIF   (K'&INITIMG LT 2).INITNU1
+         AIF   ('&INITIMG'(2,1) EQ '''').INITNUM
+.INITNU1 ANOP
+         AIF   (T'&INITIMG NE 'N').INITLAB
+.INITNUM ANOP
+         LARL  R1,=AL2(&INITIMG)  ADDRESS LITERAL
+         LARL  R15,P0C02INT       ADDRESS TARGET
+         MVC   0(1,R15),1(R1)     SET PADDING BYTE
+         AGO   .DOGETM
+.*
+.INITLAB ANOP
+         LARL  R15,P0C02INT       ADDRESS TARGET
+         MVC   0(1,R15),&INITIMG  SET PADDING BYTE FROM LABEL
+.DOGETM  ANOP
+         GEN_ST DFHEIBR,P0C02EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P0C02TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P0C02EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P0C02EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P0C02EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P0C02NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P0C02NOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P0C02RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P0C02RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P0C02EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P0C02EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P0C02)       R1=LCL MODULE PARAMETER LIST
+P0C02EDF_&SYSNDX DS 0H
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         LRL   R1,P0C02GMA        R1=GETMAIN ADDRESS
+         AIF   (&ZC_CICS)
+         AHI   R1,8               +8
+         AIF   ('&SET'(1,11) EQ 'ADDRESS,OF,')
+.* COBOL LINKAGE-SECTION LABEL, EXTRACT AND TRANSFORM
+&SETLSL  SETC  '&SET'(12,K'&SET-11)
+         ST    R1,ZC_&SETLSL._PTR SET GETMAIN ADDRESS FOR REQUESTOR
+         AELSE
+.* COBOL STANDARD POINTER
+         ST    R1,&SET            SET GETMAIN ADDRESS FOR REQUESTOR
+         AEND
+         AELSE
+.* ASM GENERAL REGISTER
+         LA    &SET,8(R1)         SET GETMAIN ADDRESS FOR REQUESTOR
+         AEND
+         AIF   (&PARMS_0C02).BYP0C02
+         J     P0C02BYP_&SYSNDX   EXIT
+*
+&PARMS_0C02 SETB 1
+         P0C02
+*
+P0C02BYP_&SYSNDX DS 0H
+.BYP0C02 ANOP
+         MEXIT
+.*
+.BADLEN  MNOTE 12,'BOTH LENGTH AND FLENGTH ARE SPECIFIED'
+         MEXIT
+.*
+.BADSET  MNOTE 12,'SET IS MANDATORY'
+         MEXIT
+.*
+.NEEDLEN MNOTE 12,'LENGTH OR FLENGTH MUST BE SPECIFIED'
+         MEXIT
+         MEND
+

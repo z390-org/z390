@@ -1,0 +1,178 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 05/05/06 RPI 308 ADD EXEC CICS LOAD                                *
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_LOAD
+         GBLB  &PARMS_0E06
+         GBLB  &ZC_CICS
+         LCLB  &NOEDF,&NOHAND
+         LCLC  &PROGRAM,&ENTRY,&SET,&LENGTH,&FLENGTH,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,8) EQ 'PROGRAM(').PROGRAM
+         AIF   ('&PARM'(1,6) EQ 'ENTRY(').ENTRY
+         AIF   ('&PARM'(1,4) EQ 'SET(').SET
+         AIF   ('&PARM'(1,7) EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,8) EQ 'FLENGTH(').FLENGTH
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.PROGRAM ANOP
+&PROGRAM SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.ENTRY   ANOP
+&ENTRY   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.SET     ANOP
+&SET     SETC  '&PARM'(5,K'&PARM-5)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.FLENGTH ANOP
+&FLENGTH SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         GEN_XC P0E06,P0E06END-P0E06,P0E06
+         GEN_MVC P0E06FN,,=X'0E06' SET FUNCTION CODE
+         GEN_ST DFHEIBR,P0E06EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P0E06TCT  SET TCTTE ADDRESS
+         AIF   ('&LENGTH' NE '' AND '&FLENGTH' NE '').BADLEN
+         AIF   ('&PROGRAM' EQ '').MISPROG
+         AIF   ('&PROGRAM'(1,1) EQ '''').STRING
+         LARL  R15,P0E06PGM       ADDRESS TARGET
+         MVC   0(8,R15),&PROGRAM  MOVE PROGRAM FROM LABEL
+         AGO   .NOSTRING
+.*
+.STRING  ANOP
+&PROGLEN SETA  K'&PROGRAM
+         AIF   (&PROGLEN LT 3 OR &PROGLEN GT 10).BADPROG
+         GEN_MVC P0E06PGM,,=CL8&PROGRAM MOVE PROGRAM NAME AS STRING
+.NOSTRING ANOP
+         AIF   ('&LENGTH' EQ '').NOSVLEN
+.* MAPPING LOAD MUST USE LARL
+         AIF   ('&LENGTH' EQ 'P1804MLN' OR                             X
+                '&LENGTH'(1,8) EQ 'P1802LEN')
+         LARL  R0,&LENGTH         R0=ADDRESS OF LENGTH
+         AELSE
+         LA    R0,&LENGTH         R0=ADDRESS OF LENGTH
+         AEND
+         GEN_ST R0,P0E06LEN       SAVE IT
+         AGO   .NOSVFLN
+.*
+.NOSVLEN ANOP
+         AIF   ('&FLENGTH' EQ '').NOSVFLN
+         LA    R0,&FLENGTH        R0=ADDRESS OF FLENGTH
+         GEN_ST R0,P0E06LEN       SAVE IT
+.NOSVFLN ANOP
+         AIF   (NOT &NOHAND).DOEDF
+         GEN_MVI P0E06NOH,X'FF'   SET NOHANDLE
+.DOEDF   ANOP
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P0E06EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P0E06EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P0E06EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P0E06NED,X'FF'   SET NOEDF
+         AEND
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P0E06RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P0E06RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P0E06EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P0E06EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P0E06)       R1=LCL MODULE PARAMETER LIST
+P0E06EDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         GEN_CLI P0E06NOH,X'FF'   NOHANDLE ?
+         JE    P0E06IGN_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P0E06IGN_&SYSNDX   EXIT IF NONE
+* PGMIDERR
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P0E06IGN_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+P0E06IGN_&SYSNDX EQU *
+         AIF   ('&ENTRY' EQ '').NOSVENT
+         AIF   (&ZC_CICS)
+.* COBOL STANDARD POINTER
+         GEN_MVC &ENTRY,4,P0E06ENT SET ENTRY POINT IN POINTER
+         AELSE
+.* ASM GENERAL REGISTER
+         LRL   &ENTRY,P0E06ENT    SET ENTRY POINT
+         AEND
+.NOSVENT ANOP
+         AIF   ('&SET' EQ '').NOSVSET
+         AIF   (&ZC_CICS)
+.* COBOL STANDARD POINTER
+         GEN_MVC &SET,4,P0E06ENT  SET ENTRY POINT IN POINTER
+         AELSE
+.* ASM GENERAL REGISTER
+         LRL   &SET,P0E06ENT      SET ENTRY POINT
+         AEND
+.NOSVSET ANOP
+         AIF   (&PARMS_0E06).BYP0E06
+         J     P0E06BYP_&SYSNDX   EXIT
+*
+&PARMS_0E06 SETB 1
+         P0E06
+*
+P0E06BYP_&SYSNDX DS 0H
+.BYP0E06 ANOP
+         MEXIT
+.*
+.BADLEN  MNOTE 12,'LENGTH AND FLENGTH SPECIFIED'
+         MEXIT
+.*
+.MISPROG MNOTE 12,'PROGRAM IS MISSING'
+         MEXIT
+.*
+.BADPROG MNOTE 12,'INVALID PROGRAM'
+         MEXIT
+         MEND
+

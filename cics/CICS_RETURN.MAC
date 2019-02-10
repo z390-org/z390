@@ -1,0 +1,248 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 05/05/06 RPI 308 CICS RETURN CALLED FROM EXEC                      *
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_RETURN
+         GBLB  &PARMS_0E08
+         GBLB  &ZC_CICS
+         LCLB  &IMMED,&CLEANER,&NOEDF
+         LCLC  &TRANSID,&CHANNEL,&COMMAREA,&LENGTH,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,8) EQ 'TRANSID(').TRANSID
+         AIF   ('&PARM'(1,9) EQ 'COMMAREA(').COMMAREA
+         AIF   ('&PARM'(1,8) EQ 'CHANNEL(').CHANNEL
+         AIF   ('&PARM'(1,7) EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,9) EQ 'IMMEDIATE').IMMED
+         AIF   ('&PARM'(1,7) EQ 'CLEANER').CLEANER
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').PLOOP
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.TRANSID ANOP
+&TRANSID SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.COMMAREA ANOP
+&COMMAREA SETC '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.CHANNEL ANOP
+&CHANNEL SETC '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.IMMED   ANOP
+&IMMED   SETB  1
+         AGO   .PLOOP
+.*
+.CLEANER ANOP
+&CLEANER SETB  1
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   (&IMMED AND '&TRANSID' EQ '').BADIMM
+         GEN_XC P0E08,P0E08END-P0E08,P0E08
+         GEN_MVC P0E08FN,,=X'0E08' SET FUNCTION CODE
+.* PROCESS IMMEDIATE
+         AIF   (NOT &IMMED).DOCLNR
+         GEN_MVI P0E08IMM,X'FF'   SET IMMEDIATE FLAG
+.DOCLNR  ANOP
+         AIF   (NOT &CLEANER).DOTRAN
+         GEN_MVI P0E08CNR,X'FF'   SET CLEANER FLAG
+.DOTRAN  ANOP
+.* PROCESS TRANSID
+         AIF   ('&TRANSID' EQ '').DOCOMM
+         AIF   ('&TRANSID'(1,1) EQ '''').STRING
+         LARL  R15,P0E08TRN       ADDRESS TARGET
+         MVC   0(4,R15),&TRANSID  SET TRANSID FROM LABEL
+         AGO   .DOCOMM
+.*
+.STRING  ANOP
+&TRANLEN SETA  K'&TRANSID
+         AIF   (&TRANLEN LT 3 OR &TRANLEN GT 6).BADTRAN
+         GEN_MVC P0E08TRN,,=CL4&TRANSID SET TRANSID AS STRING
+.DOCOMM  ANOP
+         AIF   ('&CHANNEL' NE '' AND '&COMMAREA' NE '').CHANDCM
+.GOON01  ANOP
+.* PROCESS COMMAREA
+         AIF   ('&COMMAREA' NE '').COMMCHK
+         AIF   ('&LENGTH' EQ '').COMMCHK
+         AGO   .COMMERR
+.*
+.COMMCHK ANOP
+         AIF   ('&COMMAREA' EQ '').CHAN
+.* PROCESS COMMAREA
+         AIF   ('&TRANSID' EQ '').MISTRAN
+&COMMTQ  SETC  T'&COMMAREA
+         AIF   ('&COMMAREA'(1,1) EQ '=' OR                             X
+               '&COMMTQ' EQ 'A' OR                                     X
+               '&COMMTQ' EQ 'R' OR                                     X
+               &ZC_CICS).COMADLIT
+         LA    R0,&COMMAREA       R0=COMMAREA ADDRESS FROM LABEL
+         GEN_ST R0,P0E08COM       SAVE IT
+         AGO   .COMMLEN
+.*
+.COMADLIT ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&COMMAREA'(1,11) EQ 'ADDRESS,OF,')
+.* COBOL LINKAGE-SECTION LABEL, EXTRACT AND TRANSFORM
+&COMMLSL SETC  '&COMMAREA'(12,K'&COMMAREA-11)
+&COMMAREA SETC &COMMLSL
+         L     R0,ZC_&COMMLSL._PTR R0=INDIRECT COMMAREA L-S POINTER
+         GEN_ST R0,P0E08COM       SAVE IT
+         AELSE
+.* COBOL LABEL SAME AS ASM LABEL
+         LA    R0,&COMMAREA       R0=COMMAREA ADDRESS FROM LABEL
+         GEN_ST R0,P0E08COM       SAVE IT
+         AEND
+         AELSE
+.* ASM INDIRECT ADDRESS
+         L     R0,&COMMAREA       R0=INDIRECT COMMAREA ADDRESS
+         GEN_ST R0,P0E08COM       SAVE IT
+         AEND
+.* LENGTH IS COMPULSORY FOR ASM INDIRECT
+         AIF   (&ZC_CICS).COMMLEN
+         AIF   ('&LENGTH' EQ '').BADLEN
+         AGO   .LENVAL
+.*
+.COMMLEN ANOP
+.* PROCESS LENGTH
+         AIF   ('&LENGTH' NE '').LENVAL
+.* DEFAULT LENGTH
+         LAY   R0,L'&COMMAREA     R0=IMPLIED LENGTH OF COMMAREA
+         GEN_STH R0,P0E08CLN      SAVE IT
+         AGO   .CHAN
+.*
+.LENVAL  ANOP
+         AIF   (K'&LENGTH LT 2).LENNUM1
+         AIF   ('&LENGTH'(2,1) EQ '''').LENNUM
+.LENNUM1 ANOP
+         AIF   (T'&LENGTH NE 'N').LENLABL
+.LENNUM  ANOP
+         LAY   R0,&LENGTH         SET NUMERIC COMMAREA LENGTH
+         GEN_STH R0,P0E08CLN      SAVE IT
+         AGO   .CHAN
+.*
+.LENLABL ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&LENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&LENGTH'(11,K'&LENGTH-10)
+         LAY   R0,L'&LENLSL       SET NUMERIC COMMAREA LENGTH
+         GEN_STH R0,P0E08CLN      SAVE IT
+         AELSE
+.* COBOL LENGTH AS LABEL
+         LH    R0,&LENGTH         R0=COMMAREA LENGTH FROM LABEL
+         GEN_STH R0,P0E08CLN      SAVE IT
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         LH    R0,&LENGTH         R0=COMMAREA LENGTH FROM LABEL
+         GEN_STH R0,P0E08CLN      SAVE IT
+         AEND
+.CHAN    ANOP
+         AIF   ('&CHANNEL' EQ '').ALLDONE
+         AIF   ('&CHANNEL'(1,1) EQ '''').CSTRING
+         LARL  R15,P0E08CHN       ADDRESS TARGET
+         MVC   0(16,R15),&CHANNEL MOVE CHANNEL FROM LABEL
+         AGO   .ALLDONE
+.*
+.CSTRING ANOP
+&CHANLEN SETA  K'&CHANNEL
+         AIF   (&CHANLEN LT 3 OR &CHANLEN GT 18).BADCHAN
+         GEN_MVC P0E08CHN,,=CL16&CHANNEL SET CHANNEL AS STRING
+.ALLDONE ANOP
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P0E08EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P0E08EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P0E08EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P0E08NED,X'FF'   SET NOEDF
+         AEND
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P0E08RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P0E08RS2       SAVE IT
+.NORESP2 ANOP
+* SPECIAL LINKAGE
+         LARL  R0,P0E08EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P0E08EDF       SAVE IT
+         LARL  R1,P0E08           R1=PARAMETER LIST
+         LARL  R14,P0E08RTN_&SYSNDX RETURN ADDRESS
+         LRL   R15,=V(LCL0E08)    R15=EXTERNAL RETURN MODULE ADDRESS
+P0E08EDF_&SYSNDX EQU *
+         BR    R15                GO TO IT
+*
+P0E08RTN_&SYSNDX EQU *
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P0E08BYP_&SYSNDX   EXIT IF NONE
+* INVREQ
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(0)             IGNORE HERE IS NOT PERMITTED
+*
+         AIF   (&PARMS_0E08).BYP0E08
+&PARMS_0E08 SETB 1
+         P0E08
+*
+.BYP0E08 ANOP
+P0E08BYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.COMMERR MNOTE 12,'LENGTH WITHOUT COMMAREA'
+         MEXIT
+.*
+.BADTRAN MNOTE 12,'INVALID TRANSID'
+         MEXIT
+.*
+.MISTRAN MNOTE 12,'TRANSID IS MISSING'
+         MEXIT
+.*
+.BADIMM  MNOTE 12,'IMMEDIATE REQUIRES TRANSID'
+         MEXIT
+.*
+.BADLEN  MNOTE 12,'LENGTH IS MANDATORY FOR INDIRECT COMMAREA'
+         MEXIT
+.*
+.BADCHAN MNOTE 12,'INVALID CHANNEL'
+         MEXIT
+.*
+.CHANDCM MNOTE 0,'CHANNEL AND COMMAREA SPECIFIED'
+         AGO   .GOON01
+.*
+         MEND
+

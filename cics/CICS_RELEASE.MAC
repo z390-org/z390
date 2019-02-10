@@ -1,0 +1,117 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+.* 04/19/08 RPI 833 ADD STRING QUOTES FOR HLASM COMPATIBILITY         *
+.**********************************************************************
+         MACRO
+         CICS_RELEASE
+         GBLB  &PARMS_0E0A
+         LCLB  &NOEDF,&NOHAND
+         LCLC  &PROGRAM,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,8) EQ 'PROGRAM(').PROGRAM
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.PROGRAM ANOP
+&PROGRAM SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         GEN_XC P0E0A,P0E0AEND-P0E0A,P0E0A
+         GEN_MVC P0E0AFN,,=X'0E0A' SET FUNCTION CODE
+         GEN_ST DFHEIBR,P0E0AEIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P0E0ATCT  SET TCTTE ADDRESS
+         GEN_MVC P0E0ACST,,=CL8'&SYSECT' SET OUR PROGRAM NAME
+         AIF   ('&PROGRAM' EQ '').MISPROG
+         AIF   ('&PROGRAM'(1,1) EQ '''').STRING
+         LARL  R15,P0E0APGM       ADDRESS TARGET
+         MVC   0(8,R15),&PROGRAM  SET PROGRAM FROM LABEL
+         AGO   .NOSTRING
+.*
+.STRING  ANOP
+&PROGLEN SETA  K'&PROGRAM
+         AIF   (&PROGLEN LT 3 OR &PROGLEN GT 10).BADPROG
+         GEN_MVC P0E0APGM,,=CL8&PROGRAM SET PROGRAM AS STRING
+.NOSTRING ANOP
+         AIF   (NOT &NOHAND).TRYRESP
+         GEN_MVI P0E0ANOH,X'FF'   SET NOHANDLE
+.TRYRESP ANOP
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P0E0AEDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P0E0AEDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P0E0AEDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P0E0ANED,X'FF'   SET NOEDF
+         AEND
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P0E0ARSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P0E0ARS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P0E0AEDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P0E0AEDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P0E0A)       R1=LCL MODULE PARAMETER LIST
+P0E0AEDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         GEN_CLI P0E0ANOH,X'FF'   NOHANDLE ?
+         JE    P0E0ABYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P0E0ABYP_&SYSNDX   EXIT IF NONE
+* INVREQ
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P0E0ABYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+.*
+         AIF   (&PARMS_0E0A).BYP0E0A
+*
+&PARMS_0E0A SETB 1
+         P0E0A
+*
+.BYP0E0A ANOP
+P0E0ABYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.MISPROG MNOTE 12,'PROGRAM IS MISSING'
+         MEXIT
+.*
+.BADPROG MNOTE 12,'INVALID PROGRAM'
+         MEXIT
+         MEND
+

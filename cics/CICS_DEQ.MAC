@@ -1,0 +1,138 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+         MACRO
+         CICS_DEQ
+         GBLB  &PARMS_1206
+         LCLB  &NOEDF,&NOHAND
+         LCLC  &RES,&LENGTH,&RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,9) EQ 'RESOURCE(').RES
+         AIF   ('&PARM'(1,7) EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.RES     ANOP
+&RES     SETC  '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   ('&RES' EQ '').MISRES
+         GEN_XC P1206,P1206END-P1206,P1206
+         GEN_MVC P1206FN,,=X'1206' SET FUNCTION CODE
+         AIF   ('&LENGTH' EQ '').DUNLEN
+.* LENGTH MAY BE L' OR CONSTANT LIKE X'..'
+         AIF   (K'&LENGTH LT 2).LENNUM1
+         AIF   ('&LENGTH'(2,1) EQ '''').LENNUM2
+.LENNUM1 ANOP
+         AIF   (T'&LENGTH NE 'N').LENLABL
+.LENNUM2 ANOP
+         LAY   R0,&LENGTH         SET NUMERIC LENGTH
+         GEN_STH R0,P1206LEN      SAVE IT
+         AGO   .DUNLEN
+.*
+.LENLABL ANOP
+         AIF   (&ZC_CICS)
+         AIF   ('&LENGTH'(1,10) EQ 'LENGTH,OF,')
+.* COBOL LENGTH OF EXTRACT
+&LENLSL  SETC  '&LENGTH'(11,K'&LENGTH-10)
+         LAY   R0,L'&LENLSL       SET NUMERIC LENGTH
+         GEN_STH R0,P1206LEN      SAVE IT
+         AELSE
+.* COBOL LENGTH AS LABEL
+         LH    R0,&LENGTH         SET LENGTH FROM LABEL
+         GEN_STH R0,P1206LEN      SAVE IT
+         AEND
+         AELSE
+.* ASM LENGTH AS LABEL
+         LH    R0,&LENGTH         R0=LENGTH FROM LABEL
+         GEN_STH R0,P1206LEN      SAVE IT
+         AEND
+.DUNLEN  ANOP
+.* PROCESS RESOURCE
+.* ONLY THE RESOURCE ADDRESS IS PASSED, WE HAVE NOT VALIDATED LENGTH
+         LA    R0,&RES            R1=ADDRESS OF RESOURCE
+         GEN_ST R0,P1206RES       SAVE IT
+         GEN_ST DFHEIBR,P1206EIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P1206TCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P1206EDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P1206EDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P1206EDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P1206NED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P1206NOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P1206RSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P1206RS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P1206EDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P1206EDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P1206)       R1=LCL MODULE PARAMETER LIST
+P1206EDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         GEN_CLI P1206NOH,X'FF'   NOHANDLE ?
+         JE    P1206BYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P1206BYP_&SYSNDX   EXIT IF NONE
+* LENGERR
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P1206BYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_1206).BYP1206
+&PARMS_1206 SETB 1
+         P1206
+*
+.BYP1206 ANOP
+P1206BYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.MISRES  MNOTE 12,'RESOURCE IS MANDATORY'
+         MEXIT
+         MEND
+

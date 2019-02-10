@@ -1,0 +1,216 @@
+.**********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation                *
+.* This source code is part of z390 assembler/emulator package        *
+.* The z390 package is distributed under GNU general public license   *
+.* Author - Don Higgins                                               *
+.**********************************************************************
+         MACRO
+         CICS_RETRIEVE
+.* FLENGTH IS AN EXTENSION
+         GBLB  &PARMS_100A
+         GBLB  &ZC_CICS
+         LCLB  &NOEDF,&NOHAND
+         LCLC  &INTO,&SET,&LENGTH,&FLENGTH,&RTRANID,&RTERMID,&QUEUE
+         LCLC  &RESP,&RESP2
+&NP      SETA  N'&SYSLIST
+&IP      SETA  0
+.PLOOP   ANOP
+&IP      SETA  &IP+1
+         AIF   (&IP GT &NP).ELOOP
+&PARM    SETC  '&SYSLIST(&IP)'
+         AIF   ('&PARM'(1,5) EQ 'INTO(').INTO
+         AIF   ('&PARM'(1,4) EQ 'SET(').SET
+         AIF   ('&PARM'(1,7) EQ 'LENGTH(').LENGTH
+         AIF   ('&PARM'(1,8) EQ 'FLENGTH(').FLENGTH
+         AIF   ('&PARM'(1,9) EQ 'RTRANSID(').RTRANID
+         AIF   ('&PARM'(1,8) EQ 'RTERMID(').RTERMID
+         AIF   ('&PARM'(1,6) EQ 'QUEUE(').QUEUE
+         AIF   ('&PARM'(1,5) EQ 'NOEDF').NOEDF
+         AIF   ('&PARM'(1,8) EQ 'NOHANDLE').NOHAND
+         AIF   ('&PARM'(1,5) EQ 'RESP(').RESP
+         AIF   ('&PARM'(1,6) EQ 'RESP2(').RESP2
+         MNOTE 12,'BAD PARM &PARM'
+         AGO   .PLOOP
+.*
+.INTO    ANOP
+&INTO    SETC '&PARM'(6,K'&PARM-6)
+         AGO   .PLOOP
+.*
+.SET     ANOP
+&SET     SETC '&PARM'(5,K'&PARM-5)
+         AGO   .PLOOP
+.*
+.LENGTH  ANOP
+&LENGTH  SETC  '&PARM'(8,K'&PARM-8)
+         AGO   .PLOOP
+.*
+.FLENGTH ANOP
+&FLENGTH SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.RTRANID ANOP
+&RTRANID SETC  '&PARM'(10,K'&PARM-10)
+         AGO   .PLOOP
+.*
+.RTERMID ANOP
+&RTERMID SETC  '&PARM'(9,K'&PARM-9)
+         AGO   .PLOOP
+.*
+.QUEUE   ANOP
+&QUEUE   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.NOEDF   ANOP
+&NOEDF   SETB  1
+         AGO   .PLOOP
+.*
+.NOHAND  ANOP
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP    ANOP
+&RESP    SETC  '&PARM'(6,K'&PARM-6)
+&NOHAND  SETB  1
+         AGO   .PLOOP
+.*
+.RESP2   ANOP
+&RESP2   SETC  '&PARM'(7,K'&PARM-7)
+         AGO   .PLOOP
+.*
+.ELOOP   ANOP
+         AIF   ('&INTO' EQ '' AND '&SET'    EQ '').NOINTOST
+         AIF   ('&INTO' NE '' AND '&SET'    NE '').BOTHINST
+         AIF   ('&SET'   NE '' AND                                     -
+               ('&LENGTH' EQ '' AND '&FLENGTH' EQ '')).NEEDLEN
+         AIF   ('&LENGTH' NE '' AND '&FLENGTH' NE '').BOTHLEN
+         GEN_XC P100A,P100AEND-P100A,P100A CLEAR PARMS
+         GEN_MVC P100AFN,,=X'100A' SET FUNCTION CODE
+         AIF   ('&SET' EQ '').NOSET
+         GEN_MVI P100ASET,X'FF'   SET SET INDICATOR
+         AGO   .DOLENG
+.*
+.NOSET   ANOP
+         LA    R0,&INTO           R0=INTO ADDRESS
+         GEN_ST R0,P100AINT       SAVE IT
+.DOLENG  ANOP
+         GEN_MVC P100ALAD,,=F'-1' SET NO LENGTH SPECIFIED
+         GEN_MVC P100AFAD,,=F'-1' SET NO FLENGTH SPECIFIED
+         AIF   ('&LENGTH' EQ '').NOLENG
+         AIF   (T'&LENGTH EQ 'N').BADLEN
+         AIF   ('&LENGTH'(1,10) EQ 'LENGTH,OF,').BADLEN
+         LA    R15,&LENGTH        R15=ADDRESS OF LENGTH
+         GEN_ST R15,P100ALAD      SAVE IT
+         MVC   P100ADLN+2(2),0(R15) MOVE TO LENGTH REQUIRED
+         AGO   .DUNLEN
+.*
+.NOLENG  ANOP
+         AIF   ('&FLENGTH' EQ '').DUNLEN
+         AIF   (T'&FLENGTH EQ 'N').BADLEN
+         AIF   ('&FLENGTH'(1,10) EQ 'LENGTH,OF,').BADLEN
+         LA    R15,&FLENGTH       R15=ADDRESS OF FLENGTH
+         GEN_ST R15,P100AFAD      SAVE IT
+         MVC   P100ADLN,0(R15)    MOVE TO LENGTH REQUIRED
+.DUNLEN  ANOP
+.* PROCESS RTRANSID
+         AIF   ('&RTRANID' EQ '').DORTRM
+         LA    R0,&RTRANID        R0=ADDRESS OF RTRANSID
+         GEN_ST R0,P100ARTN       SAVE IT
+.DORTRM  ANOP
+.* PROCESS RTERMID
+         AIF   ('&RTERMID' EQ '').DOQUEUE
+         LA    R0,&RTERMID        R0=ADDRESS OF RTERMID
+         GEN_ST R0,P100ARTM       SAVE IT
+.DOQUEUE ANOP
+.* PROCESS QUEUE
+         AIF   ('&QUEUE' EQ '').DOCALL
+         LA    R0,&QUEUE          R0=ADDRESS OF QUEUE
+         GEN_ST R0,P100AQNM       SAVE IT
+.DOCALL  ANOP
+         GEN_ST DFHEIBR,P100AEIB  SET EIB ADDRESS
+         GEN_ST TCTTEAR,P100ATCT  SET TCTTE ADDRESS
+         AIF   (&SYSEDF AND NOT &NOEDF)
+         GEN_ST R13,P100AEDS      SET DSA ADDRESS FOR EDF
+         L     R0,DFHEILEN        DSA LENGTH
+         GEN_STH R0,P100AEDL      SET DSA LENGTH FOR EDF
+         LA    R0,DFHEIUSR        DSA USER AREA
+         SR    R0,R13             R0=CICS DSA LENGTH
+         GEN_STH R0,P100AEDC      SET CICS DSA LENGTH FOR EDF
+         AELSE
+         GEN_MVI P100ANED,X'FF'   SET NOEDF
+         AEND
+         AIF   (NOT &NOHAND).DUNNOH
+         GEN_MVI P100ANOH,X'FF'   SET NOHANDLE
+.DUNNOH  ANOP
+         AIF   ('&RESP' EQ '').NORESP
+         LA    R0,&RESP           ADDRESS OF RESP
+         GEN_ST R0,P100ARSP       SAVE IT
+.NORESP  ANOP
+         AIF   ('&RESP2' EQ '').NORESP2
+         LA    R0,&RESP2          ADDRESS OF RESP2
+         GEN_ST R0,P100ARS2       SAVE IT
+.NORESP2 ANOP
+         LARL  R0,P100AEDF_&SYSNDX ADDRESS ORIGIN FOR CEDF
+         GEN_ST R0,P100AEDF       SAVE IT
+         L     R15,TCTTELCL       R15=LCL MODULE INDEXER
+         LARL  R1,=A(P100A)       R1=LCL MODULE PARAMETER LIST
+P100AEDF_&SYSNDX EQU *
+         BAKR  0,R15              STACK REGS AND GO
+.*
+         AIF   ('&SET' EQ '').NOSET2
+         AIF   (&ZC_CICS)
+         AIF   ('&SET'(1,11) EQ 'ADDRESS,OF,')
+.* COBOL LINKAGE-SECTION LABEL, EXTRACT AND TRANSFORM
+&SETLSL  SETC  '&SET'(12,K'&SET-11)
+         LARL  R1,P100ASTA        ADDRESS SOURCE
+         MVC   ZC_&SETLSL._PTR(4),0(R1) SET ADDRESS IN L-S POINTER
+         AELSE
+.* COBOL STANDARD POINTER
+         GEN_MVC &SET,4,P100ASTA  SET ADDRESS IN POINTER
+         AEND
+         AELSE
+.* ASM GENERAL REGISTER
+         LRL   &SET,P100ASTA      LOAD THE SET REGISTER
+         AEND
+.NOSET2  ANOP
+         GEN_CLI P100ANOH,X'FF'   NOHANDLE ?
+         JE    P100ABYP_&SYSNDX   EXIT IF IT IS
+         OC    EIBRESP,EIBRESP    ANY BAD RESPONSE ?
+         JZ    P100ABYP_&SYSNDX   EXIT IF NONE
+* ENDDATA, ENVDEFERRM, LENGERR, NOTFND
+         DC    AL3(0),C'ABEND'    MARKER FOR Z390KCP ESTAE
+         DC    AL4(P100ABYP_&SYSNDX) ENTRYPOINT FOR IGNORE CONDITION
+*
+         AIF   (&PARMS_100A).BYP100A
+&PARMS_100A SETB 1
+         P100A
+*
+.BYP100A ANOP
+P100ABYP_&SYSNDX DS 0H
+         MEXIT
+.*
+.NOINTOST MNOTE 12,'INTO OR SET MUST BE SPECIFIED'
+         MEXIT
+.*
+.BOTHINST MNOTE 12,'BOTH INTO AND SET ARE SPECIFIED'
+         MEXIT
+.*
+.BADRTRN MNOTE 12,'INVALID RTRANSID'
+         MEXIT
+.*
+.BADRTRM MNOTE 12,'INVALID RTERMID'
+         MEXIT
+.*
+.BADQUE  MNOTE 12,'INVALID QUEUE'
+         MEXIT
+.*
+.NEEDLEN MNOTE 12,'SET REQUIRES LENGTH OR FLENGTH'
+         MEXIT
+.*
+.BADLEN  MNOTE 12,'LENGTH OR FLENGTH MUST BE A LABEL'
+         MEXIT
+.*
+.BOTHLEN MNOTE 12,'BOTH LENGTH AND FLENGTH ARE SPECIFIED'
+         MEXIT
+.*
+         MEND
+
