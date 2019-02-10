@@ -1,0 +1,12 @@
+DEMOAST1  LZ390 START
+LZ390I Copyright 2011 Automated Software Tools Corporation
+LZ390I Copyright 2013 Cat Herder Software, LLC
+LZ390I Copyright 2018 Joachim Bartz, Germany
+LZ390I z390 is licensed under GNU General Public License
+LZ390I options = assist notiming stats 
+  systerm(assist\RTASSIST)
+LZ390I program = assist\DEMOAST1.OBJ
+LZ390I ESD=DEMOAST1 LOC=00000000 LEN=000000C0
+LZ390I INCLUDE = assist\DEMOAST1.OBJ
+LZ390I total errors         = 0
+DEMOAST1  LZ390 ENDED RC= 0 IO=189

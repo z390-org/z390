@@ -1,0 +1,41 @@
+DEMOAST1  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = assist\DEMOAST1.390
+EZ390I options = assist notiming stats 
+  systerm(assist\RTASSIST)
+           1
+           2
+           3
+           5
+           7
+          11
+          13
+          17
+          19
+          23
+          25
+          29
+          31
+          37
+          41
+          43
+          47
+          53
+          55
+          59
+          61
+          65
+          67
+          71
+          73
+          79
+          83
+          85
+          89
+          95
+          97
+EZ390I total errors         = 0
+DEMOAST1  EZ390 ENDED RC= 0 IO=193 INS=1034

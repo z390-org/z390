@@ -1,0 +1,143 @@
+TESTAST1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = assist\TESTAST1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) assist notiming stats 
+  systerm(assist\RTASSIST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000001F0 TYPE=CST NAME=TESTAST1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2008 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2008-02-29  DSH Initial version                                   *
+000000                                      (1/13)13 * 2008-02-29  DSH Test option ASSIST 11 instructions (RPI-812)      *
+000000                                      (1/14)14 * 2011-09-23  DSH Test += for XDECI input (RPI-1179)                *
+000000                                      (1/15)15 *********************************************************************
+000000                                      (1/17)16          TITLE 'TESTAST1 - TEST ASSIST OPTION INSTRUCTIONS'
+000000                                      (1/19)17 TESTAST1 CSECT 
+000000                                      (1/20)18          USING *,R15
+LISTUSE TESTAST1 ESD=0001 LOC=00000000 LEN=01000 REG=F OFF=00000 LAB=
+000000                                      (1/21)19 *
+000000                                      (1/22)20 * CONVERT TABLE OF DECIMAL VALUES TO BINARY AND BACK AND PRINT LINE
+000000                                      (1/23)21 *
+000000 4120F0F8                0000F8       (1/24)22          LA    R2,DECTAB
+000004 4140F0A8                0000A8       (1/25)23          LA    R4,LINE
+000008                                      (1/26)24 DECLOOP  DS    0H
+000008 53320000                             (1/27)25          XDECI R3,0(R2)  GET NEXT DECIMAL NUMBER
+00000C 4710F01E                00001E       (1/28)26          BO    DECEND
+000010 52340000                             (1/29)27          XDECO R3,0(R4)  ADD DECIMAL VALUE TO LINE
+000014 A74A000C                             (1/30)28          AHI   R4,12
+000018 1821                                 (1/31)29          LR    R2,R1
+00001A 47F0F008                000008       (1/32)30          B     DECLOOP
+00001E                                      (1/33)31 DECEND   DS    0H
+00001E E020F0A80050            0000A8       (1/34)32          XPRNT LINE,80  PRINT LINE DECIMAL VALUES
+000024                                      (1/35)33 *
+000024                                      (1/36)34 * CONVERT TABLE OF HEX VALUES TO BINARY AND BACK AND PRINT LINE
+000024                                      (1/37)35 *
+000024 4120F149                000149       (1/38)36          LA    R2,HEXTAB
+000028 D24FF0A8F1A0     0000A8 0001A0       (1/39)37          MVC   LINE,=CL80' '
+00002E 4140F0A8                0000A8       (1/40)38          LA    R4,LINE
+000032                                      (1/41)39 HEXLOOP  DS    0H
+000032 61320000                             (1/42)40          XHEXI R3,0(R2)  GET NEXT HEX NUMBER
+000036 4710F048                000048       (1/43)41          BO    ENDHEX
+00003A 62340000                             (1/44)42          XHEXO R3,0(R4)  ADD HEX VALUE TO LINE
+00003E A74A0009                             (1/45)43          AHI   R4,9
+000042 1821                                 (1/46)44          LR    R2,R1
+000044 47F0F032                000032       (1/47)45          B     HEXLOOP
+000048                                      (1/48)46 ENDHEX   DS    0H
+000048 E020F0A80050            0000A8       (1/49)47          XPRNT LINE,80    PRINT LINE OF HEX VALUES
+00004E                                      (1/50)48 *
+00004E                                      (1/51)49 * READ RCDS AND PRINT AND PUNCH USING XREAD, XPRNT, AND XPNCH
+00004E                                      (1/52)50 *
+00004E                                      (1/53)51 READLOOP DS    0H
+00004E E000F0A80000            0000A8       (1/54)52          XREAD LINE
+000054 4770F068                000068       (1/55)53          BNZ   ENDREAD
+000058 E020F0A80050            0000A8       (1/56)54          XPRNT LINE,80
+00005E E040F0A80000            0000A8       (1/57)55          XPNCH LINE
+000064 47F0F04E                00004E       (1/58)56          B     READLOOP
+000068                                      (1/59)57 ENDREAD  DS    0H
+000068                                      (1/60)58 *
+000068                                      (1/61)59 * GET RCDS AND PRINT AND PUT USING XGET, XPRNT, AND XPUT
+000068                                      (1/62)60 *
+000068 41200050                             (1/63)61          LA    R2,80
+00006C                                      (1/64)62 GETLOOP  DS    0H
+00006C E0A0F0A82000            0000A8       (1/65)63          XGET  LINE,(R2)
+000072 4770F086                000086       (1/66)64          BNZ   ENDGET
+000076 E020F0A82000            0000A8       (1/67)65          XPRNT LINE,(R2)
+00007C E0C0F0A80050            0000A8       (1/68)66          XPUT  LINE,80
+000082 47F0F06C                00006C       (1/69)67          B     GETLOOP
+000086                                      (1/70)68 ENDGET   DS    0H
+000086                                      (1/71)69 *
+000086                                      (1/72)70 * PRINT FULL DUMP AND THEN SELECTED AREA DUMP
+000086 E06000000000                         (1/73)71          XDUMP , DUMP REGISTERS AND ALL OF STORAGE
+00008C E080F0A80050            0000A8       (1/74)72          XLIMD LINE,L'LINE SET DEFAULT STORAGE FOR XDUMP, THEN XDUMP
+000092 E06000000000                         (1/75)73          XDUMP 
+000098 E060F1490050            000149       (1/76)74          XDUMP HEXTAB,L'HEXTAB
+00009E E060F0F80050            0000F8       (1/77)75          XDUMP DECTAB,L'DECTAB
+0000A4 1BFF                                 (1/78)76          SR    R15,R15
+0000A6 07FE                                 (1/79)77          BR    R14
+0000A8                                      (1/80)78 *
+0000A8                                      (1/81)79 * DATA AREAS
+0000A8                                      (1/82)80 *
+0000A8                  00000000            (1/83)81 R0       EQU   0
+0000A8                  00000001            (1/84)82 R1       EQU   1
+0000A8                  00000002            (1/85)83 R2       EQU   2
+0000A8                  00000003            (1/86)84 R3       EQU   3
+0000A8                  00000004            (1/87)85 R4       EQU   4
+0000A8                  00000005            (1/88)86 R5       EQU   5
+0000A8                  0000000E            (1/89)87 R14      EQU   14
+0000A8                  0000000F            (1/90)88 R15      EQU   15
+0000A8 4040404040404040                     (1/91)89 LINE     DC    CL80' '
+0000F8 F14060F1F2404EF1                     (1/92)90 DECTAB   DC    CL80'1 -12 +123 1234',X'FF' RPI-1179 TEST -+
+000149 C140C1C240C1C2C3                     (1/93)91 HEXTAB   DC    CL80'A AB ABC ABCD',X'FF'
+00019A                                      (1/94)92          END 
+0001A0 4040404040404040 =CL80' '
+
+Symbol Table Listing
+
+ SYM=DECEND   LOC=0000001E LEN=00000002 ESD=0001 TYPE=REL  XREF=31 26 
+ SYM=DECLOOP  LOC=00000008 LEN=00000002 ESD=0001 TYPE=REL  XREF=24 30 
+ SYM=DECTAB   LOC=000000F8 LEN=00000050 ESD=0001 TYPE=REL  XREF=90 22 75 
+ SYM=ENDGET   LOC=00000086 LEN=00000002 ESD=0001 TYPE=REL  XREF=68 64 
+ SYM=ENDHEX   LOC=00000048 LEN=00000002 ESD=0001 TYPE=REL  XREF=46 41 
+ SYM=ENDREAD  LOC=00000068 LEN=00000002 ESD=0001 TYPE=REL  XREF=57 53 
+ SYM=GETLOOP  LOC=0000006C LEN=00000002 ESD=0001 TYPE=REL  XREF=62 67 
+ SYM=HEXLOOP  LOC=00000032 LEN=00000002 ESD=0001 TYPE=REL  XREF=39 45 
+ SYM=HEXTAB   LOC=00000149 LEN=00000050 ESD=0001 TYPE=REL  XREF=91 36 74 
+ SYM=LINE     LOC=000000A8 LEN=00000050 ESD=0001 TYPE=REL  XREF=89 23 32 37 38 47 
+  52 54 55 63 65 66 72 
+ SYM=R0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=81 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=82 29 44 
+ SYM=R14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=87 77 
+ SYM=R15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=88 18 76 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=83 22 25 29 36 40 
+  44 61 63 65 
+ SYM=R3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=84 25 27 40 42 
+ SYM=R4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=85 23 27 28 38 42 
+  43 
+ SYM=R5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=86 
+ SYM=READLOOP LOC=0000004E LEN=00000002 ESD=0001 TYPE=REL  XREF=51 56 
+ SYM=TESTAST1 LOC=00000000 LEN=000001F0 ESD=0001 TYPE=CST  XREF=17 
+
+Literal Table Listing
+
+ LIT=CL80' '  LOC=000001A0 LEN=00000050 ESD=0001 POOL=0001 XREF=37 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTAST1  MZ390 ENDED RC= 0 IO=287

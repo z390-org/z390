@@ -1,0 +1,473 @@
+SOLP06    MZ390 START
+SOLP06    MZ390 Copyright 2011 Automated Software Tools Corporation
+SOLP06    MZ390 Copyright 2013 Cat Herder Software, LLC
+SOLP06    MZ390 Copyright 2018 Joachim Bartz, Germany
+SOLP06    MZ390 z390 is licensed under GNU General Public License
+SOLP06    MZ390 program = assist\SOLP06.MLC
+SOLP06    MZ390 options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) assist notiming stats 
+  systerm(assist\RTASSIST)
+SOLP06    MZ390 final_options=ALIGN
+SOLP06    MZ390 final_options=NOALLOW
+SOLP06    MZ390 final_options=NOAMODE24
+SOLP06    MZ390 final_options=AMODE31
+SOLP06    MZ390 final_options=NOASCII
+SOLP06    MZ390 final_options=ASM
+SOLP06    MZ390 final_options=ASSIST
+SOLP06    MZ390 final_options=AUTOLINK
+SOLP06    MZ390 final_options=NOBAL
+SOLP06    MZ390 final_options=NOBS2000
+SOLP06    MZ390 final_options=EDF
+SOLP06    MZ390 final_options=NOCICS
+SOLP06    MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+SOLP06    MZ390 final_options=COMMENT
+SOLP06    MZ390 final_options=CON
+SOLP06    MZ390 final_options=NODUMP
+SOLP06    MZ390 final_options=EPILOG
+SOLP06    MZ390 final_options=NOERRSUM
+SOLP06    MZ390 final_options=EXTEND
+SOLP06    MZ390 final_options=FLOAT(DECIMAL)
+SOLP06    MZ390 final_options=NOGUAM
+SOLP06    MZ390 final_options=INIT
+SOLP06    MZ390 final_options=LIST
+SOLP06    MZ390 final_options=LISTCALL
+SOLP06    MZ390 final_options=LISTUSE
+SOLP06    MZ390 final_options=NOLOADHIGH
+SOLP06    MZ390 final_options=NOMCALL
+SOLP06    MZ390 final_options=NOMOD
+SOLP06    MZ390 final_options=OBJ
+SOLP06    MZ390 final_options=NOOBJHEX
+SOLP06    MZ390 final_options=PC
+SOLP06    MZ390 final_options=PCOPT
+SOLP06    MZ390 final_options=NOPDSMEM8
+SOLP06    MZ390 final_options=NOPRINTALL
+SOLP06    MZ390 final_options=PROLOG
+SOLP06    MZ390 final_options=PROTECT
+SOLP06    MZ390 final_options=R64
+SOLP06    MZ390 final_options=NOREFORMAT
+SOLP06    MZ390 final_options=NOREGS
+SOLP06    MZ390 final_options=RMODE24
+SOLP06    MZ390 final_options=NORMODE31
+SOLP06    MZ390 final_options=STATS
+SOLP06    MZ390 final_options=NOTEST
+SOLP06    MZ390 final_options=THREAD
+SOLP06    MZ390 final_options=NOTIME
+SOLP06    MZ390 final_options=NOTIMING
+SOLP06    MZ390 final_options=NOTRACE
+SOLP06    MZ390 final_options=NOTRACEA
+SOLP06    MZ390 final_options=NOTRACEALL
+SOLP06    MZ390 final_options=NOTRACEC
+SOLP06    MZ390 final_options=NOTRACEG
+SOLP06    MZ390 final_options=NOTRACEI
+SOLP06    MZ390 final_options=NOTRACEL
+SOLP06    MZ390 final_options=NOTRACEM
+SOLP06    MZ390 final_options=NOTRACEP
+SOLP06    MZ390 final_options=NOTRACEQ
+SOLP06    MZ390 final_options=NOTRACES
+SOLP06    MZ390 final_options=NOTRACET
+SOLP06    MZ390 final_options=NOTRACEV
+SOLP06    MZ390 final_options=TRAP
+SOLP06    MZ390 final_options=NOTRUNC
+SOLP06    MZ390 final_options=NOTS
+SOLP06    MZ390 final_options=VCB
+SOLP06    MZ390 final_options=WARN
+SOLP06    MZ390 final_options=XREF
+SOLP06    MZ390 final_options=ZSTRMAC
+SOLP06    MZ390 final_options=CHKMAC=0
+SOLP06    MZ390 final_options=CHKSRC=1
+SOLP06    MZ390 final_options=ERR=100
+SOLP06    MZ390 final_options=MAXCALL=50
+SOLP06    MZ390 final_options=MAXDISPLAY=80
+SOLP06    MZ390 final_options=MAXESD=1000
+SOLP06    MZ390 final_options=MAXFILE=1000
+SOLP06    MZ390 final_options=MAXGBL=100000
+SOLP06    MZ390 final_options=MAXHEIGHT=600
+SOLP06    MZ390 final_options=MAXLCL=100000
+SOLP06    MZ390 final_options=MAXLEN=80
+SOLP06    MZ390 final_options=MAXLINE=200000
+SOLP06    MZ390 final_options=MAXLOG=1000000
+SOLP06    MZ390 final_options=MAXPARM=10000
+SOLP06    MZ390 final_options=MAXPASS=2
+SOLP06    MZ390 final_options=MAXPC=50000
+SOLP06    MZ390 final_options=MAXQUE=1000
+SOLP06    MZ390 final_options=MAXRLD=10000
+SOLP06    MZ390 final_options=MAXSIZE=52428800
+SOLP06    MZ390 final_options=MAXSYM=50000
+SOLP06    MZ390 final_options=MAXWARN=4
+SOLP06    MZ390 final_options=MAXWIDTH=800
+SOLP06    MZ390 final_options=MEM=1
+SOLP06    MZ390 final_options=MINHEIGHT=150
+SOLP06    MZ390 final_options=MINWIDTH=150
+SOLP06    MZ390 final_options=MNOTE=0
+SOLP06    MZ390 final_options=PARM=
+SOLP06    MZ390 final_options=PROFILE=
+SOLP06    MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\assist\SOLP06.STA
+SOLP06    MZ390 final_options=SYSPARM=
+SOLP06    MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\assist\RTASSIST.ERR
+SOLP06    MZ390 final_options=TESTDD=
+SOLP06    MZ390 final_options=TIME=15
+SOLP06    MZ390 final_options=TRACE=
+SOLP06    MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+SOLP06    MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+SOLP06    MZ390 final_options=Z390COMMAND=cmd.exe
+SOLP06    MZ390 final_options=Z390EDITOR=notepad.exe
+SOLP06    MZ390 final_options=INSTALL=
+SOLP06    MZ390 final_options=IPL=
+SOLP06    MZ390 final_options=LOG=
+SOLP06    MZ390 final_options=SYS390=assist\+linklib
+SOLP06    MZ390 final_options=SYSBAL=assist\
+SOLP06    MZ390 final_options=SYSCPY=C:\Users\Achim\GitHub\z390\mac+.
+SOLP06    MZ390 final_options=SYSDAT=assist\
+SOLP06    MZ390 final_options=SYSERR=assist\
+SOLP06    MZ390 final_options=SYSLOG=assist\
+SOLP06    MZ390 final_options=SYSLST=assist\
+SOLP06    MZ390 final_options=SYSMAC=C:\Users\Achim\GitHub\z390\mac+.
+SOLP06    MZ390 final_options=SYSMLC=assist\
+SOLP06    MZ390 final_options=SYSPCH=assist\
+SOLP06    MZ390 final_options=SYSPRN=assist\
+SOLP06    MZ390 final_options=SYSOBJ=assist\
+SOLP06    MZ390 final_options=SYSOPT=assist\
+SOLP06    MZ390 final_options=SYSTRC=assist\
+SOLP06    MZ390 total MLC/MAC loaded  = 1005
+SOLP06    MZ390 total BAL output lines= 1004
+SOLP06    MZ390 total BAL instructions= 38
+SOLP06    MZ390 total macros          = 1
+SOLP06    MZ390 total macro loads     = 1
+SOLP06    MZ390 total macro calls     = 0
+SOLP06    MZ390 total AENTRY blocks   = 0
+SOLP06    MZ390 total ACALL  calls    = 0
+SOLP06    MZ390 total AIF    blocks   = 0
+SOLP06    MZ390 total ACASE  blocks   = 0
+SOLP06    MZ390 total AWHILE calls    = 0
+SOLP06    MZ390 total AUNTIL blocks   = 0
+SOLP06    MZ390 total global set names= 46
+SOLP06    MZ390 tot global seta cells = 0
+SOLP06    MZ390 tot global setb cells = 7
+SOLP06    MZ390 tot global setc cells = 39
+SOLP06    MZ390 max local pos parms   = 0
+SOLP06    MZ390 max local key parms   = 0
+SOLP06    MZ390 max local set names   = 5
+SOLP06    MZ390 max local seta cells  = 1
+SOLP06    MZ390 max local setb cells  = 0
+SOLP06    MZ390 max local setc cells  = 4
+SOLP06    MZ390 total array expansions= 0
+SOLP06    MZ390 total Keys            = 1420
+SOLP06    MZ390 Key searches          = 3110
+SOLP06    MZ390 Key avg comps         = 0
+SOLP06    MZ390 Key max comps         = 4
+SOLP06    MZ390 total macro line exec = 1006
+SOLP06    MZ390 total pcode line exec = 0
+SOLP06    MZ390 total pcode line gen. = 0
+SOLP06    MZ390 total pcode line reuse= 0
+SOLP06    MZ390 total pcode op   gen. = 0
+SOLP06    MZ390 total pcode op   exec = 0
+SOLP06    MZ390 total pcode gen  opt  = 0
+SOLP06    MZ390 total pcode exec opt  = 0
+SOLP06    MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\assist\SOLP06.MLC
+SOLP06    MZ390 total mnote warnings  = 0
+SOLP06    MZ390 total mnote errors    = 0
+SOLP06    MZ390 max   mnote level     = 0
+SOLP06    MZ390 total mz390 errors    = 0
+SOLP06    AZ390 BAL lines             = 1004
+SOLP06    AZ390 symbols               = 80
+SOLP06    AZ390 Literals              = 6
+SOLP06    AZ390 alloc passes          = 2
+SOLP06    AZ390 Keys                  = 1405
+SOLP06    AZ390 Key searches          = 4145
+SOLP06    AZ390 Key avg comps         = 0
+SOLP06    AZ390 Key max comps         = 3
+SOLP06    AZ390 ESD symbols           = 1
+SOLP06    AZ390 object bytes          = 2270
+SOLP06    AZ390 object rlds           = 16
+SOLP06    AZ390 total mnote warnings  = 0
+SOLP06    AZ390 total mnote errors    = 0
+SOLP06    AZ390 max   mnote level     = 0
+SOLP06    AZ390 total mz390 errors    = 0
+SOLP06    AZ390 total az390 errors    = 0
+SOLP06    MZ390 ENDED RC= 0 IO=3482
+SOLP06    LZ390 START
+SOLP06    LZ390 Copyright 2011 Automated Software Tools Corporation
+SOLP06    LZ390 Copyright 2013 Cat Herder Software, LLC
+SOLP06    LZ390 Copyright 2018 Joachim Bartz, Germany
+SOLP06    LZ390 z390 is licensed under GNU General Public License
+SOLP06    LZ390 options = assist notiming stats 
+  systerm(assist\RTASSIST)
+SOLP06    LZ390 program = assist\SOLP06.OBJ
+SOLP06    LZ390 final_options=ALIGN
+SOLP06    LZ390 final_options=NOALLOW
+SOLP06    LZ390 final_options=NOAMODE24
+SOLP06    LZ390 final_options=AMODE31
+SOLP06    LZ390 final_options=NOASCII
+SOLP06    LZ390 final_options=ASM
+SOLP06    LZ390 final_options=ASSIST
+SOLP06    LZ390 final_options=AUTOLINK
+SOLP06    LZ390 final_options=NOBAL
+SOLP06    LZ390 final_options=NOBS2000
+SOLP06    LZ390 final_options=EDF
+SOLP06    LZ390 final_options=NOCICS
+SOLP06    LZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+SOLP06    LZ390 final_options=COMMENT
+SOLP06    LZ390 final_options=CON
+SOLP06    LZ390 final_options=NODUMP
+SOLP06    LZ390 final_options=EPILOG
+SOLP06    LZ390 final_options=NOERRSUM
+SOLP06    LZ390 final_options=EXTEND
+SOLP06    LZ390 final_options=FLOAT(DECIMAL)
+SOLP06    LZ390 final_options=NOGUAM
+SOLP06    LZ390 final_options=INIT
+SOLP06    LZ390 final_options=LIST
+SOLP06    LZ390 final_options=LISTCALL
+SOLP06    LZ390 final_options=LISTUSE
+SOLP06    LZ390 final_options=NOLOADHIGH
+SOLP06    LZ390 final_options=NOMCALL
+SOLP06    LZ390 final_options=NOMOD
+SOLP06    LZ390 final_options=OBJ
+SOLP06    LZ390 final_options=NOOBJHEX
+SOLP06    LZ390 final_options=PC
+SOLP06    LZ390 final_options=PCOPT
+SOLP06    LZ390 final_options=NOPDSMEM8
+SOLP06    LZ390 final_options=NOPRINTALL
+SOLP06    LZ390 final_options=PROLOG
+SOLP06    LZ390 final_options=PROTECT
+SOLP06    LZ390 final_options=R64
+SOLP06    LZ390 final_options=NOREFORMAT
+SOLP06    LZ390 final_options=NOREGS
+SOLP06    LZ390 final_options=RMODE24
+SOLP06    LZ390 final_options=NORMODE31
+SOLP06    LZ390 final_options=STATS
+SOLP06    LZ390 final_options=NOTEST
+SOLP06    LZ390 final_options=THREAD
+SOLP06    LZ390 final_options=NOTIME
+SOLP06    LZ390 final_options=NOTIMING
+SOLP06    LZ390 final_options=NOTRACE
+SOLP06    LZ390 final_options=NOTRACEA
+SOLP06    LZ390 final_options=NOTRACEALL
+SOLP06    LZ390 final_options=NOTRACEC
+SOLP06    LZ390 final_options=NOTRACEG
+SOLP06    LZ390 final_options=NOTRACEI
+SOLP06    LZ390 final_options=NOTRACEL
+SOLP06    LZ390 final_options=NOTRACEM
+SOLP06    LZ390 final_options=NOTRACEP
+SOLP06    LZ390 final_options=NOTRACEQ
+SOLP06    LZ390 final_options=NOTRACES
+SOLP06    LZ390 final_options=NOTRACET
+SOLP06    LZ390 final_options=NOTRACEV
+SOLP06    LZ390 final_options=TRAP
+SOLP06    LZ390 final_options=NOTRUNC
+SOLP06    LZ390 final_options=NOTS
+SOLP06    LZ390 final_options=VCB
+SOLP06    LZ390 final_options=WARN
+SOLP06    LZ390 final_options=XREF
+SOLP06    LZ390 final_options=ZSTRMAC
+SOLP06    LZ390 final_options=CHKMAC=0
+SOLP06    LZ390 final_options=CHKSRC=1
+SOLP06    LZ390 final_options=ERR=100
+SOLP06    LZ390 final_options=MAXCALL=50
+SOLP06    LZ390 final_options=MAXDISPLAY=80
+SOLP06    LZ390 final_options=MAXESD=1000
+SOLP06    LZ390 final_options=MAXFILE=1000
+SOLP06    LZ390 final_options=MAXGBL=100000
+SOLP06    LZ390 final_options=MAXHEIGHT=600
+SOLP06    LZ390 final_options=MAXLCL=100000
+SOLP06    LZ390 final_options=MAXLEN=80
+SOLP06    LZ390 final_options=MAXLINE=200000
+SOLP06    LZ390 final_options=MAXLOG=1000000
+SOLP06    LZ390 final_options=MAXPARM=10000
+SOLP06    LZ390 final_options=MAXPASS=2
+SOLP06    LZ390 final_options=MAXPC=50000
+SOLP06    LZ390 final_options=MAXQUE=1000
+SOLP06    LZ390 final_options=MAXRLD=10000
+SOLP06    LZ390 final_options=MAXSIZE=52428800
+SOLP06    LZ390 final_options=MAXSYM=50000
+SOLP06    LZ390 final_options=MAXWARN=4
+SOLP06    LZ390 final_options=MAXWIDTH=800
+SOLP06    LZ390 final_options=MEM=1
+SOLP06    LZ390 final_options=MINHEIGHT=150
+SOLP06    LZ390 final_options=MINWIDTH=150
+SOLP06    LZ390 final_options=MNOTE=0
+SOLP06    LZ390 final_options=PARM=
+SOLP06    LZ390 final_options=PROFILE=
+SOLP06    LZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\assist\SOLP06.STA
+SOLP06    LZ390 final_options=SYSPARM=
+SOLP06    LZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\assist\RTASSIST.ERR
+SOLP06    LZ390 final_options=TESTDD=
+SOLP06    LZ390 final_options=TIME=15
+SOLP06    LZ390 final_options=TRACE=
+SOLP06    LZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+SOLP06    LZ390 final_options=Z390BROWSER=cmd.exe /c Start
+SOLP06    LZ390 final_options=Z390COMMAND=cmd.exe
+SOLP06    LZ390 final_options=Z390EDITOR=notepad.exe
+SOLP06    LZ390 final_options=INSTALL=
+SOLP06    LZ390 final_options=IPL=
+SOLP06    LZ390 final_options=LOG=
+SOLP06    LZ390 final_options=SYS390=assist\+linklib
+SOLP06    LZ390 final_options=SYSBAL=assist\
+SOLP06    LZ390 final_options=SYSCPY=assist\
+SOLP06    LZ390 final_options=SYSDAT=assist\
+SOLP06    LZ390 final_options=SYSERR=assist\
+SOLP06    LZ390 final_options=SYSLOG=assist\
+SOLP06    LZ390 final_options=SYSLST=assist\
+SOLP06    LZ390 final_options=SYSMAC=assist\
+SOLP06    LZ390 final_options=SYSMLC=assist\
+SOLP06    LZ390 final_options=SYSPCH=assist\
+SOLP06    LZ390 final_options=SYSPRN=assist\
+SOLP06    LZ390 final_options=SYSOBJ=assist\
+SOLP06    LZ390 final_options=SYSOPT=assist\
+SOLP06    LZ390 final_options=SYSTRC=assist\
+SOLP06    LZ390 Stats total obj files = 1
+SOLP06    LZ390 Stats total esds      = 1
+SOLP06    LZ390 Stats total csects    = 1
+SOLP06    LZ390 Stats total entries   = 0
+SOLP06    LZ390 Stats missing wxtrn's = 0
+SOLP06    LZ390 Stats Keys            = 1
+SOLP06    LZ390 Stats Key searches    = 2
+SOLP06    LZ390 Stats Key avg comps   = 0
+SOLP06    LZ390 Stats Key max comps   = 1
+SOLP06    LZ390 Stats total obj byte  = 2270
+SOLP06    LZ390 Stats total obj rlds  = 16
+SOLP06    LZ390 total errors          = 0
+SOLP06    LZ390 ENDED RC= 0 IO=545
+SOLP06    EZ390 START
+SOLP06    EZ390 Copyright 2011 Automated Software Tools Corporation
+SOLP06    EZ390 Copyright 2013 Cat Herder Software, LLC
+SOLP06    EZ390 Copyright 2018 Joachim Bartz, Germany
+SOLP06    EZ390 z390 is licensed under GNU General Public License
+SOLP06    EZ390 program = assist\SOLP06.390
+SOLP06    EZ390 options = assist notiming stats 
+  systerm(assist\RTASSIST)
+SOLP06    EZ390 final_options=ALIGN
+SOLP06    EZ390 final_options=NOALLOW
+SOLP06    EZ390 final_options=NOAMODE24
+SOLP06    EZ390 final_options=AMODE31
+SOLP06    EZ390 final_options=NOASCII
+SOLP06    EZ390 final_options=ASM
+SOLP06    EZ390 final_options=ASSIST
+SOLP06    EZ390 final_options=AUTOLINK
+SOLP06    EZ390 final_options=NOBAL
+SOLP06    EZ390 final_options=NOBS2000
+SOLP06    EZ390 final_options=EDF
+SOLP06    EZ390 final_options=NOCICS
+SOLP06    EZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+SOLP06    EZ390 final_options=COMMENT
+SOLP06    EZ390 final_options=CON
+SOLP06    EZ390 final_options=NODUMP
+SOLP06    EZ390 final_options=EPILOG
+SOLP06    EZ390 final_options=NOERRSUM
+SOLP06    EZ390 final_options=EXTEND
+SOLP06    EZ390 final_options=FLOAT(DECIMAL)
+SOLP06    EZ390 final_options=NOGUAM
+SOLP06    EZ390 final_options=INIT
+SOLP06    EZ390 final_options=LIST
+SOLP06    EZ390 final_options=LISTCALL
+SOLP06    EZ390 final_options=LISTUSE
+SOLP06    EZ390 final_options=NOLOADHIGH
+SOLP06    EZ390 final_options=NOMCALL
+SOLP06    EZ390 final_options=NOMOD
+SOLP06    EZ390 final_options=OBJ
+SOLP06    EZ390 final_options=NOOBJHEX
+SOLP06    EZ390 final_options=PC
+SOLP06    EZ390 final_options=PCOPT
+SOLP06    EZ390 final_options=NOPDSMEM8
+SOLP06    EZ390 final_options=NOPRINTALL
+SOLP06    EZ390 final_options=PROLOG
+SOLP06    EZ390 final_options=PROTECT
+SOLP06    EZ390 final_options=R64
+SOLP06    EZ390 final_options=NOREFORMAT
+SOLP06    EZ390 final_options=NOREGS
+SOLP06    EZ390 final_options=RMODE24
+SOLP06    EZ390 final_options=NORMODE31
+SOLP06    EZ390 final_options=STATS
+SOLP06    EZ390 final_options=NOTEST
+SOLP06    EZ390 final_options=THREAD
+SOLP06    EZ390 final_options=NOTIME
+SOLP06    EZ390 final_options=NOTIMING
+SOLP06    EZ390 final_options=NOTRACE
+SOLP06    EZ390 final_options=NOTRACEA
+SOLP06    EZ390 final_options=NOTRACEALL
+SOLP06    EZ390 final_options=NOTRACEC
+SOLP06    EZ390 final_options=NOTRACEG
+SOLP06    EZ390 final_options=NOTRACEI
+SOLP06    EZ390 final_options=NOTRACEL
+SOLP06    EZ390 final_options=NOTRACEM
+SOLP06    EZ390 final_options=NOTRACEP
+SOLP06    EZ390 final_options=NOTRACEQ
+SOLP06    EZ390 final_options=NOTRACES
+SOLP06    EZ390 final_options=NOTRACET
+SOLP06    EZ390 final_options=NOTRACEV
+SOLP06    EZ390 final_options=TRAP
+SOLP06    EZ390 final_options=NOTRUNC
+SOLP06    EZ390 final_options=NOTS
+SOLP06    EZ390 final_options=VCB
+SOLP06    EZ390 final_options=WARN
+SOLP06    EZ390 final_options=XREF
+SOLP06    EZ390 final_options=ZSTRMAC
+SOLP06    EZ390 final_options=CHKMAC=0
+SOLP06    EZ390 final_options=CHKSRC=1
+SOLP06    EZ390 final_options=ERR=100
+SOLP06    EZ390 final_options=MAXCALL=50
+SOLP06    EZ390 final_options=MAXDISPLAY=80
+SOLP06    EZ390 final_options=MAXESD=1000
+SOLP06    EZ390 final_options=MAXFILE=1000
+SOLP06    EZ390 final_options=MAXGBL=100000
+SOLP06    EZ390 final_options=MAXHEIGHT=600
+SOLP06    EZ390 final_options=MAXLCL=100000
+SOLP06    EZ390 final_options=MAXLEN=80
+SOLP06    EZ390 final_options=MAXLINE=200000
+SOLP06    EZ390 final_options=MAXLOG=1000000
+SOLP06    EZ390 final_options=MAXPARM=10000
+SOLP06    EZ390 final_options=MAXPASS=2
+SOLP06    EZ390 final_options=MAXPC=50000
+SOLP06    EZ390 final_options=MAXQUE=1000
+SOLP06    EZ390 final_options=MAXRLD=10000
+SOLP06    EZ390 final_options=MAXSIZE=52428800
+SOLP06    EZ390 final_options=MAXSYM=50000
+SOLP06    EZ390 final_options=MAXWARN=4
+SOLP06    EZ390 final_options=MAXWIDTH=800
+SOLP06    EZ390 final_options=MEM=1
+SOLP06    EZ390 final_options=MINHEIGHT=150
+SOLP06    EZ390 final_options=MINWIDTH=150
+SOLP06    EZ390 final_options=MNOTE=0
+SOLP06    EZ390 final_options=PARM=
+SOLP06    EZ390 final_options=PROFILE=
+SOLP06    EZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\assist\SOLP06.STA
+SOLP06    EZ390 final_options=SYSPARM=
+SOLP06    EZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\assist\RTASSIST.ERR
+SOLP06    EZ390 final_options=TESTDD=
+SOLP06    EZ390 final_options=TIME=15
+SOLP06    EZ390 final_options=TRACE=
+SOLP06    EZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+SOLP06    EZ390 final_options=Z390BROWSER=cmd.exe /c Start
+SOLP06    EZ390 final_options=Z390COMMAND=cmd.exe
+SOLP06    EZ390 final_options=Z390EDITOR=notepad.exe
+SOLP06    EZ390 final_options=INSTALL=
+SOLP06    EZ390 final_options=IPL=
+SOLP06    EZ390 final_options=LOG=C:\Users\Achim\GitHub\z390\assist\SOLP06.LOG
+SOLP06    EZ390 final_options=SYS390=assist\+linklib
+SOLP06    EZ390 final_options=SYSBAL=assist\
+SOLP06    EZ390 final_options=SYSCPY=assist\
+SOLP06    EZ390 final_options=SYSDAT=assist\
+SOLP06    EZ390 final_options=SYSERR=assist\
+SOLP06    EZ390 final_options=SYSLOG=assist\
+SOLP06    EZ390 final_options=SYSLST=assist\
+SOLP06    EZ390 final_options=SYSMAC=assist\
+SOLP06    EZ390 final_options=SYSMLC=assist\
+SOLP06    EZ390 final_options=SYSPCH=assist\
+SOLP06    EZ390 final_options=SYSPRN=assist\
+SOLP06    EZ390 final_options=SYSOBJ=assist\
+SOLP06    EZ390 final_options=SYSOPT=assist\
+SOLP06    EZ390 final_options=SYSTRC=assist\
+SOLP06    EZ390 TCPIO operations      = 0
+SOLP06    EZ390 DCB operations        = 3
+SOLP06    EZ390 DCB open              = 2
+SOLP06    EZ390 DCB close             = 1
+SOLP06    EZ390 DCB get               = 0
+SOLP06    EZ390 DCB put               = 0
+SOLP06    EZ390 DCB read              = 0
+SOLP06    EZ390 DCB write             = 0
+SOLP06    EZ390 VSAM operations       = 0
+SOLP06    EZ390 Keys                  = 2467
+SOLP06    EZ390 Key searches          = 2
+SOLP06    EZ390 Key avg comps         = 0
+SOLP06    EZ390 Key max comps         = 0
+SOLP06    EZ390 total errors          = 0
+SOLP06    EZ390 ENDED RC= 0 IO=335 INS=5315
