@@ -40,4 +40,5 @@
 @POPD
 @ENDLOCAL
 
+@ECHO.
 @ECHO RT Save Assist - Finished!
