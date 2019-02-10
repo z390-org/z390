@@ -33,11 +33,20 @@ import java.io.PrintWriter;
  * All actual/working files from directory A are compared to files saved in directory B.
  * The diff files can later be found in directory C. If there is no appropriate file in
  * directory B, a "missing" files is written to directory C.
+ * <p>
+ * For statistical reasons three values are counted:
+ * <li>number of missing files
+ * <li>number of files w/  diffs
+ * <li>number of files w/o diffs
  *
  * @author jba68/z390
  */
 public class DiffRegrTests {
 
+	private static int nMissing = 0;
+	private static int nHasDiff = 0;
+	private static int nNoDiff  = 0;
+	
 	/**
 	 * Create a "missing" file in diff directory with the given file name.
 	 *
@@ -49,6 +58,7 @@ public class DiffRegrTests {
 			final FileWriter fr = new FileWriter(fileC, false);
 			fr.write("MISSING MATCH FOR THIS FILE");
 			fr.close();
+			nMissing++;
 		} catch (final IOException e) {
 			System.err.println("Error writing missing diff file " + fileC.getName() + " - "+ e.toString());
 			return false;
@@ -61,7 +71,7 @@ public class DiffRegrTests {
 	 *
 	 * @param fileA actual regression test file to be compared to fileB
 	 * @param fileB saved regression test file to be compared to fileA
-	 * @param fileC diff of fileA and fileB in "normal" diff format; empty if no diffs found
+	 * @param fileC diff of fileA and fileB in "normal" diff format; none if no diffs found
 	 * @return true, if diff file written - false otherwise
 	 */
 	private static boolean doDiff(final File fileA, final File fileB, final File fileC) {
@@ -75,6 +85,7 @@ public class DiffRegrTests {
 
 			final Diff.change script = d.diff_2(false);
 			if (script != null) {
+				nHasDiff++;
 				final FileWriter     fr = new FileWriter(fileC, false);
 				final BufferedWriter br = new BufferedWriter(fr);
 				final PrintWriter    pr = new PrintWriter(br);
@@ -87,6 +98,8 @@ public class DiffRegrTests {
 				pr.close();
 				br.close();
 				fr.close();
+			} else {
+				nNoDiff++;
 			}
 		} catch (final IOException e) {
 			System.err.println("Error writing missing diff file " + fileC.getName() + " - "+ e.toString());
@@ -193,6 +206,28 @@ public class DiffRegrTests {
 			if (!bOK) {
 				break;
 			}
+		}
+
+		// Create statistical files in diff directory:
+		createStatisticFile(sDirDiffs, "RTDIF_TOTALS__%d.TXT", filesActualArray.length);
+		createStatisticFile(sDirDiffs, "RTDIF_MATCHES_%d.TXT", nNoDiff);
+		createStatisticFile(sDirDiffs, "RTDIF_DIFFS___%d.TXT", nHasDiff);
+		createStatisticFile(sDirDiffs, "RTDIF_MISSING_%d.TXT", nMissing);
+	}
+
+	/**
+	 * 
+	 * @param sDirDiffs
+	 * @param fileName
+	 * @param n
+	 */
+	private static void createStatisticFile(final String sDirDiffs, final String fileName, final int n) {
+		final String sFile = sDirDiffs + "/" + fileName.replace("%d", "" + n);
+		try {
+			final FileWriter fr = new FileWriter(sFile, false);
+			fr.close();
+		} catch (final IOException e) {
+			System.err.println("Error writing statistic file " + sFile + " - "+ e.toString());
 		}
 	}
 }
