@@ -6,7 +6,8 @@ SET dirRtWork=rt\%dirWork%
 SET dirRtSaved=%dirRtWork%\save
 SET dirRtDiffs=%dirRtWork%\diff
 SET sysTerm=systerm^(%dirRtWork%\RTTEST^)
-SET trace=TROFF
+REM SET trace=TRON
+REM SET trace=
 
 ECHO.
 ECHO RT Test - Run %dirWork% programs in %dirRtWork% and generate %dirRtDiffs%

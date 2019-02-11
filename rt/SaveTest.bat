@@ -15,9 +15,9 @@ PUSHD ..
 
 ECHO.
 ECHO RT Save Test - Creating rt-diff and rt-save directories (if necessary).
-IF NOT EXIST %dirRtWork%\nul   @MKDIR %dirRtWork%
-IF NOT EXIST %dirRtDiffs%\nul  @MKDIR %dirRtDiffs%
-IF NOT EXIST %dirRtSaved%\nul  @MKDIR %dirRtSaved%
+IF NOT EXIST %dirRtWork%\nul  MKDIR %dirRtWork%
+IF NOT EXIST %dirRtDiffs%\nul MKDIR %dirRtDiffs%
+IF NOT EXIST %dirRtSaved%\nul MKDIR %dirRtSaved%
 
 ECHO.
 ECHO RT Save Test - Erasing previous rt-diff files in %dirRtDiffs%
