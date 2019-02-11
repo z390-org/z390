@@ -1,0 +1,471 @@
+TESTMAC8  MZ390 START
+TESTMAC8  MZ390 Copyright 2011 Automated Software Tools Corporation
+TESTMAC8  MZ390 Copyright 2013 Cat Herder Software, LLC
+TESTMAC8  MZ390 Copyright 2018 Joachim Bartz, Germany
+TESTMAC8  MZ390 z390 is licensed under GNU General Public License
+TESTMAC8  MZ390 program = rt\test\TESTMAC8.MLC
+TESTMAC8  MZ390 options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  sysmac(rt\test+mac) systerm(rt\test\RTTEST)
+TESTMAC8  MZ390 final_options=ALIGN
+TESTMAC8  MZ390 final_options=NOALLOW
+TESTMAC8  MZ390 final_options=NOAMODE24
+TESTMAC8  MZ390 final_options=AMODE31
+TESTMAC8  MZ390 final_options=NOASCII
+TESTMAC8  MZ390 final_options=ASM
+TESTMAC8  MZ390 final_options=NOASSIST
+TESTMAC8  MZ390 final_options=AUTOLINK
+TESTMAC8  MZ390 final_options=BAL
+TESTMAC8  MZ390 final_options=NOBS2000
+TESTMAC8  MZ390 final_options=EDF
+TESTMAC8  MZ390 final_options=NOCICS
+TESTMAC8  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTMAC8  MZ390 final_options=COMMENT
+TESTMAC8  MZ390 final_options=CON
+TESTMAC8  MZ390 final_options=NODUMP
+TESTMAC8  MZ390 final_options=EPILOG
+TESTMAC8  MZ390 final_options=NOERRSUM
+TESTMAC8  MZ390 final_options=EXTEND
+TESTMAC8  MZ390 final_options=FLOAT(DECIMAL)
+TESTMAC8  MZ390 final_options=NOGUAM
+TESTMAC8  MZ390 final_options=INIT
+TESTMAC8  MZ390 final_options=LIST
+TESTMAC8  MZ390 final_options=LISTCALL
+TESTMAC8  MZ390 final_options=LISTUSE
+TESTMAC8  MZ390 final_options=LOADHIGH
+TESTMAC8  MZ390 final_options=NOMCALL
+TESTMAC8  MZ390 final_options=NOMOD
+TESTMAC8  MZ390 final_options=OBJ
+TESTMAC8  MZ390 final_options=NOOBJHEX
+TESTMAC8  MZ390 final_options=PC
+TESTMAC8  MZ390 final_options=PCOPT
+TESTMAC8  MZ390 final_options=NOPDSMEM8
+TESTMAC8  MZ390 final_options=NOPRINTALL
+TESTMAC8  MZ390 final_options=PROLOG
+TESTMAC8  MZ390 final_options=PROTECT
+TESTMAC8  MZ390 final_options=R64
+TESTMAC8  MZ390 final_options=NOREFORMAT
+TESTMAC8  MZ390 final_options=NOREGS
+TESTMAC8  MZ390 final_options=RMODE24
+TESTMAC8  MZ390 final_options=NORMODE31
+TESTMAC8  MZ390 final_options=STATS
+TESTMAC8  MZ390 final_options=NOTEST
+TESTMAC8  MZ390 final_options=THREAD
+TESTMAC8  MZ390 final_options=NOTIME
+TESTMAC8  MZ390 final_options=NOTIMING
+TESTMAC8  MZ390 final_options=NOTRACE
+TESTMAC8  MZ390 final_options=NOTRACEA
+TESTMAC8  MZ390 final_options=NOTRACEALL
+TESTMAC8  MZ390 final_options=NOTRACEC
+TESTMAC8  MZ390 final_options=NOTRACEG
+TESTMAC8  MZ390 final_options=NOTRACEI
+TESTMAC8  MZ390 final_options=NOTRACEL
+TESTMAC8  MZ390 final_options=NOTRACEM
+TESTMAC8  MZ390 final_options=NOTRACEP
+TESTMAC8  MZ390 final_options=NOTRACEQ
+TESTMAC8  MZ390 final_options=NOTRACES
+TESTMAC8  MZ390 final_options=NOTRACET
+TESTMAC8  MZ390 final_options=NOTRACEV
+TESTMAC8  MZ390 final_options=TRAP
+TESTMAC8  MZ390 final_options=NOTRUNC
+TESTMAC8  MZ390 final_options=NOTS
+TESTMAC8  MZ390 final_options=VCB
+TESTMAC8  MZ390 final_options=WARN
+TESTMAC8  MZ390 final_options=XREF
+TESTMAC8  MZ390 final_options=ZSTRMAC
+TESTMAC8  MZ390 final_options=CHKMAC=0
+TESTMAC8  MZ390 final_options=CHKSRC=1
+TESTMAC8  MZ390 final_options=ERR=100
+TESTMAC8  MZ390 final_options=MAXCALL=50
+TESTMAC8  MZ390 final_options=MAXDISPLAY=80
+TESTMAC8  MZ390 final_options=MAXESD=1000
+TESTMAC8  MZ390 final_options=MAXFILE=1000
+TESTMAC8  MZ390 final_options=MAXGBL=100000
+TESTMAC8  MZ390 final_options=MAXHEIGHT=600
+TESTMAC8  MZ390 final_options=MAXLCL=100000
+TESTMAC8  MZ390 final_options=MAXLEN=80
+TESTMAC8  MZ390 final_options=MAXLINE=200000
+TESTMAC8  MZ390 final_options=MAXLOG=1000000
+TESTMAC8  MZ390 final_options=MAXPARM=10000
+TESTMAC8  MZ390 final_options=MAXPASS=2
+TESTMAC8  MZ390 final_options=MAXPC=50000
+TESTMAC8  MZ390 final_options=MAXQUE=1000
+TESTMAC8  MZ390 final_options=MAXRLD=10000
+TESTMAC8  MZ390 final_options=MAXSIZE=52428800
+TESTMAC8  MZ390 final_options=MAXSYM=50000
+TESTMAC8  MZ390 final_options=MAXWARN=4
+TESTMAC8  MZ390 final_options=MAXWIDTH=800
+TESTMAC8  MZ390 final_options=MEM=1
+TESTMAC8  MZ390 final_options=MINHEIGHT=150
+TESTMAC8  MZ390 final_options=MINWIDTH=150
+TESTMAC8  MZ390 final_options=MNOTE=0
+TESTMAC8  MZ390 final_options=PARM=
+TESTMAC8  MZ390 final_options=PROFILE=
+TESTMAC8  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTMAC8.STA
+TESTMAC8  MZ390 final_options=SYSPARM=
+TESTMAC8  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTMAC8  MZ390 final_options=TESTDD=
+TESTMAC8  MZ390 final_options=TIME=15
+TESTMAC8  MZ390 final_options=TRACE=
+TESTMAC8  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTMAC8  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTMAC8  MZ390 final_options=Z390COMMAND=cmd.exe
+TESTMAC8  MZ390 final_options=Z390EDITOR=notepad.exe
+TESTMAC8  MZ390 final_options=INSTALL=
+TESTMAC8  MZ390 final_options=IPL=
+TESTMAC8  MZ390 final_options=LOG=
+TESTMAC8  MZ390 final_options=SYS390=rt\test\+linklib
+TESTMAC8  MZ390 final_options=SYSBAL=rt\test\
+TESTMAC8  MZ390 final_options=SYSCPY=C:\Users\Achim\GitHub\z390\mac+.
+TESTMAC8  MZ390 final_options=SYSDAT=rt\test\
+TESTMAC8  MZ390 final_options=SYSERR=rt\test\
+TESTMAC8  MZ390 final_options=SYSLOG=rt\test\
+TESTMAC8  MZ390 final_options=SYSLST=rt\test\
+TESTMAC8  MZ390 final_options=SYSMAC=rt\test+mac
+TESTMAC8  MZ390 final_options=SYSMLC=rt\test\
+TESTMAC8  MZ390 final_options=SYSPCH=rt\test\
+TESTMAC8  MZ390 final_options=SYSPRN=rt\test\
+TESTMAC8  MZ390 final_options=SYSOBJ=rt\test\
+TESTMAC8  MZ390 final_options=SYSOPT=rt\test\
+TESTMAC8  MZ390 final_options=SYSTRC=rt\test\
+TESTMAC8  MZ390 total MLC/MAC loaded  = 236
+TESTMAC8  MZ390 total BAL output lines= 126
+TESTMAC8  MZ390 total BAL instructions= 15
+TESTMAC8  MZ390 total macros          = 9
+TESTMAC8  MZ390 total macro loads     = 9
+TESTMAC8  MZ390 total macro calls     = 9
+TESTMAC8  MZ390 total AENTRY blocks   = 0
+TESTMAC8  MZ390 total ACALL  calls    = 0
+TESTMAC8  MZ390 total AIF    blocks   = 0
+TESTMAC8  MZ390 total ACASE  blocks   = 0
+TESTMAC8  MZ390 total AWHILE calls    = 0
+TESTMAC8  MZ390 total AUNTIL blocks   = 0
+TESTMAC8  MZ390 total global set names= 57
+TESTMAC8  MZ390 tot global seta cells = 2
+TESTMAC8  MZ390 tot global setb cells = 13
+TESTMAC8  MZ390 tot global setc cells = 42
+TESTMAC8  MZ390 max local pos parms   = 6
+TESTMAC8  MZ390 max local key parms   = 11
+TESTMAC8  MZ390 max local set names   = 23
+TESTMAC8  MZ390 max local seta cells  = 7
+TESTMAC8  MZ390 max local setb cells  = 0
+TESTMAC8  MZ390 max local setc cells  = 16
+TESTMAC8  MZ390 total array expansions= 0
+TESTMAC8  MZ390 total Keys            = 1567
+TESTMAC8  MZ390 Key searches          = 2451
+TESTMAC8  MZ390 Key avg comps         = 0
+TESTMAC8  MZ390 Key max comps         = 3
+TESTMAC8  MZ390 total macro line exec = 166
+TESTMAC8  MZ390 total pcode line exec = 27
+TESTMAC8  MZ390 total pcode line gen. = 34
+TESTMAC8  MZ390 total pcode line reuse= 0
+TESTMAC8  MZ390 total pcode op   gen. = 113
+TESTMAC8  MZ390 total pcode op   exec = 64
+TESTMAC8  MZ390 total pcode gen  opt  = 40
+TESTMAC8  MZ390 total pcode exec opt  = 5
+TESTMAC8  MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\rt\test\TESTMAC8.MLC
+TESTMAC8  MZ390 FID=  2 ERR= 0 C:\Users\Achim\GitHub\z390\mac\SUBENTRY.MAC
+TESTMAC8  MZ390 FID=  3 ERR= 0 C:\Users\Achim\GitHub\z390\mac\WTO.MAC
+TESTMAC8  MZ390 FID=  4 ERR= 0 C:\Users\Achim\GitHub\z390\rt\test\TESTMAC8.MAC
+TESTMAC8  MZ390 FID=  5 ERR= 0 C:\Users\Achim\GitHub\z390\mac\SUBEXIT.MAC
+TESTMAC8  MZ390 total mnote warnings  = 0
+TESTMAC8  MZ390 total mnote errors    = 0
+TESTMAC8  MZ390 max   mnote level     = 0
+TESTMAC8  MZ390 total mz390 errors    = 0
+TESTMAC8  AZ390 BAL lines             = 126
+TESTMAC8  AZ390 symbols               = 8
+TESTMAC8  AZ390 Literals              = 0
+TESTMAC8  AZ390 alloc passes          = 2
+TESTMAC8  AZ390 Keys                  = 1327
+TESTMAC8  AZ390 Key searches          = 1899
+TESTMAC8  AZ390 Key avg comps         = 0
+TESTMAC8  AZ390 Key max comps         = 2
+TESTMAC8  AZ390 ESD symbols           = 1
+TESTMAC8  AZ390 object bytes          = 212
+TESTMAC8  AZ390 object rlds           = 0
+TESTMAC8  AZ390 total mnote warnings  = 0
+TESTMAC8  AZ390 total mnote errors    = 0
+TESTMAC8  AZ390 max   mnote level     = 0
+TESTMAC8  AZ390 total mz390 errors    = 0
+TESTMAC8  AZ390 total az390 errors    = 0
+TESTMAC8  MZ390 ENDED RC= 0 IO=1453
+TESTMAC8  LZ390 START
+TESTMAC8  LZ390 Copyright 2011 Automated Software Tools Corporation
+TESTMAC8  LZ390 Copyright 2013 Cat Herder Software, LLC
+TESTMAC8  LZ390 Copyright 2018 Joachim Bartz, Germany
+TESTMAC8  LZ390 z390 is licensed under GNU General Public License
+TESTMAC8  LZ390 options = @rt\Options.opt=(bal notiming stats) 
+  sysmac(rt\test+mac) systerm(rt\test\RTTEST)
+TESTMAC8  LZ390 program = rt\test\TESTMAC8.OBJ
+TESTMAC8  LZ390 final_options=ALIGN
+TESTMAC8  LZ390 final_options=NOALLOW
+TESTMAC8  LZ390 final_options=NOAMODE24
+TESTMAC8  LZ390 final_options=AMODE31
+TESTMAC8  LZ390 final_options=NOASCII
+TESTMAC8  LZ390 final_options=ASM
+TESTMAC8  LZ390 final_options=NOASSIST
+TESTMAC8  LZ390 final_options=AUTOLINK
+TESTMAC8  LZ390 final_options=BAL
+TESTMAC8  LZ390 final_options=NOBS2000
+TESTMAC8  LZ390 final_options=EDF
+TESTMAC8  LZ390 final_options=NOCICS
+TESTMAC8  LZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTMAC8  LZ390 final_options=COMMENT
+TESTMAC8  LZ390 final_options=CON
+TESTMAC8  LZ390 final_options=NODUMP
+TESTMAC8  LZ390 final_options=EPILOG
+TESTMAC8  LZ390 final_options=NOERRSUM
+TESTMAC8  LZ390 final_options=EXTEND
+TESTMAC8  LZ390 final_options=FLOAT(DECIMAL)
+TESTMAC8  LZ390 final_options=NOGUAM
+TESTMAC8  LZ390 final_options=INIT
+TESTMAC8  LZ390 final_options=LIST
+TESTMAC8  LZ390 final_options=LISTCALL
+TESTMAC8  LZ390 final_options=LISTUSE
+TESTMAC8  LZ390 final_options=LOADHIGH
+TESTMAC8  LZ390 final_options=NOMCALL
+TESTMAC8  LZ390 final_options=NOMOD
+TESTMAC8  LZ390 final_options=OBJ
+TESTMAC8  LZ390 final_options=NOOBJHEX
+TESTMAC8  LZ390 final_options=PC
+TESTMAC8  LZ390 final_options=PCOPT
+TESTMAC8  LZ390 final_options=NOPDSMEM8
+TESTMAC8  LZ390 final_options=NOPRINTALL
+TESTMAC8  LZ390 final_options=PROLOG
+TESTMAC8  LZ390 final_options=PROTECT
+TESTMAC8  LZ390 final_options=R64
+TESTMAC8  LZ390 final_options=NOREFORMAT
+TESTMAC8  LZ390 final_options=NOREGS
+TESTMAC8  LZ390 final_options=RMODE24
+TESTMAC8  LZ390 final_options=NORMODE31
+TESTMAC8  LZ390 final_options=STATS
+TESTMAC8  LZ390 final_options=NOTEST
+TESTMAC8  LZ390 final_options=THREAD
+TESTMAC8  LZ390 final_options=NOTIME
+TESTMAC8  LZ390 final_options=NOTIMING
+TESTMAC8  LZ390 final_options=NOTRACE
+TESTMAC8  LZ390 final_options=NOTRACEA
+TESTMAC8  LZ390 final_options=NOTRACEALL
+TESTMAC8  LZ390 final_options=NOTRACEC
+TESTMAC8  LZ390 final_options=NOTRACEG
+TESTMAC8  LZ390 final_options=NOTRACEI
+TESTMAC8  LZ390 final_options=NOTRACEL
+TESTMAC8  LZ390 final_options=NOTRACEM
+TESTMAC8  LZ390 final_options=NOTRACEP
+TESTMAC8  LZ390 final_options=NOTRACEQ
+TESTMAC8  LZ390 final_options=NOTRACES
+TESTMAC8  LZ390 final_options=NOTRACET
+TESTMAC8  LZ390 final_options=NOTRACEV
+TESTMAC8  LZ390 final_options=TRAP
+TESTMAC8  LZ390 final_options=NOTRUNC
+TESTMAC8  LZ390 final_options=NOTS
+TESTMAC8  LZ390 final_options=VCB
+TESTMAC8  LZ390 final_options=WARN
+TESTMAC8  LZ390 final_options=XREF
+TESTMAC8  LZ390 final_options=ZSTRMAC
+TESTMAC8  LZ390 final_options=CHKMAC=0
+TESTMAC8  LZ390 final_options=CHKSRC=1
+TESTMAC8  LZ390 final_options=ERR=100
+TESTMAC8  LZ390 final_options=MAXCALL=50
+TESTMAC8  LZ390 final_options=MAXDISPLAY=80
+TESTMAC8  LZ390 final_options=MAXESD=1000
+TESTMAC8  LZ390 final_options=MAXFILE=1000
+TESTMAC8  LZ390 final_options=MAXGBL=100000
+TESTMAC8  LZ390 final_options=MAXHEIGHT=600
+TESTMAC8  LZ390 final_options=MAXLCL=100000
+TESTMAC8  LZ390 final_options=MAXLEN=80
+TESTMAC8  LZ390 final_options=MAXLINE=200000
+TESTMAC8  LZ390 final_options=MAXLOG=1000000
+TESTMAC8  LZ390 final_options=MAXPARM=10000
+TESTMAC8  LZ390 final_options=MAXPASS=2
+TESTMAC8  LZ390 final_options=MAXPC=50000
+TESTMAC8  LZ390 final_options=MAXQUE=1000
+TESTMAC8  LZ390 final_options=MAXRLD=10000
+TESTMAC8  LZ390 final_options=MAXSIZE=52428800
+TESTMAC8  LZ390 final_options=MAXSYM=50000
+TESTMAC8  LZ390 final_options=MAXWARN=4
+TESTMAC8  LZ390 final_options=MAXWIDTH=800
+TESTMAC8  LZ390 final_options=MEM=1
+TESTMAC8  LZ390 final_options=MINHEIGHT=150
+TESTMAC8  LZ390 final_options=MINWIDTH=150
+TESTMAC8  LZ390 final_options=MNOTE=0
+TESTMAC8  LZ390 final_options=PARM=
+TESTMAC8  LZ390 final_options=PROFILE=
+TESTMAC8  LZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTMAC8.STA
+TESTMAC8  LZ390 final_options=SYSPARM=
+TESTMAC8  LZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTMAC8  LZ390 final_options=TESTDD=
+TESTMAC8  LZ390 final_options=TIME=15
+TESTMAC8  LZ390 final_options=TRACE=
+TESTMAC8  LZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTMAC8  LZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTMAC8  LZ390 final_options=Z390COMMAND=cmd.exe
+TESTMAC8  LZ390 final_options=Z390EDITOR=notepad.exe
+TESTMAC8  LZ390 final_options=INSTALL=
+TESTMAC8  LZ390 final_options=IPL=
+TESTMAC8  LZ390 final_options=LOG=
+TESTMAC8  LZ390 final_options=SYS390=rt\test\+linklib
+TESTMAC8  LZ390 final_options=SYSBAL=rt\test\
+TESTMAC8  LZ390 final_options=SYSCPY=rt\test\
+TESTMAC8  LZ390 final_options=SYSDAT=rt\test\
+TESTMAC8  LZ390 final_options=SYSERR=rt\test\
+TESTMAC8  LZ390 final_options=SYSLOG=rt\test\
+TESTMAC8  LZ390 final_options=SYSLST=rt\test\
+TESTMAC8  LZ390 final_options=SYSMAC=rt\test+mac
+TESTMAC8  LZ390 final_options=SYSMLC=rt\test\
+TESTMAC8  LZ390 final_options=SYSPCH=rt\test\
+TESTMAC8  LZ390 final_options=SYSPRN=rt\test\
+TESTMAC8  LZ390 final_options=SYSOBJ=rt\test\
+TESTMAC8  LZ390 final_options=SYSOPT=rt\test\
+TESTMAC8  LZ390 final_options=SYSTRC=rt\test\
+TESTMAC8  LZ390 Stats total obj files = 1
+TESTMAC8  LZ390 Stats total esds      = 1
+TESTMAC8  LZ390 Stats total csects    = 1
+TESTMAC8  LZ390 Stats total entries   = 0
+TESTMAC8  LZ390 Stats missing wxtrn's = 0
+TESTMAC8  LZ390 Stats Keys            = 1
+TESTMAC8  LZ390 Stats Key searches    = 2
+TESTMAC8  LZ390 Stats Key avg comps   = 0
+TESTMAC8  LZ390 Stats Key max comps   = 1
+TESTMAC8  LZ390 Stats total obj byte  = 212
+TESTMAC8  LZ390 Stats total obj rlds  = 0
+TESTMAC8  LZ390 total errors          = 0
+TESTMAC8  LZ390 ENDED RC= 0 IO=195
+TESTMAC8  EZ390 START
+TESTMAC8  EZ390 Copyright 2011 Automated Software Tools Corporation
+TESTMAC8  EZ390 Copyright 2013 Cat Herder Software, LLC
+TESTMAC8  EZ390 Copyright 2018 Joachim Bartz, Germany
+TESTMAC8  EZ390 z390 is licensed under GNU General Public License
+TESTMAC8  EZ390 program = rt\test\TESTMAC8.390
+TESTMAC8  EZ390 options = @rt\Options.opt=(bal notiming stats) 
+  sysmac(rt\test+mac) systerm(rt\test\RTTEST)
+TESTMAC8  EZ390 final_options=ALIGN
+TESTMAC8  EZ390 final_options=NOALLOW
+TESTMAC8  EZ390 final_options=NOAMODE24
+TESTMAC8  EZ390 final_options=AMODE31
+TESTMAC8  EZ390 final_options=NOASCII
+TESTMAC8  EZ390 final_options=ASM
+TESTMAC8  EZ390 final_options=NOASSIST
+TESTMAC8  EZ390 final_options=AUTOLINK
+TESTMAC8  EZ390 final_options=BAL
+TESTMAC8  EZ390 final_options=NOBS2000
+TESTMAC8  EZ390 final_options=EDF
+TESTMAC8  EZ390 final_options=NOCICS
+TESTMAC8  EZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTMAC8  EZ390 final_options=COMMENT
+TESTMAC8  EZ390 final_options=CON
+TESTMAC8  EZ390 final_options=NODUMP
+TESTMAC8  EZ390 final_options=EPILOG
+TESTMAC8  EZ390 final_options=NOERRSUM
+TESTMAC8  EZ390 final_options=EXTEND
+TESTMAC8  EZ390 final_options=FLOAT(DECIMAL)
+TESTMAC8  EZ390 final_options=NOGUAM
+TESTMAC8  EZ390 final_options=INIT
+TESTMAC8  EZ390 final_options=LIST
+TESTMAC8  EZ390 final_options=LISTCALL
+TESTMAC8  EZ390 final_options=LISTUSE
+TESTMAC8  EZ390 final_options=LOADHIGH
+TESTMAC8  EZ390 final_options=NOMCALL
+TESTMAC8  EZ390 final_options=NOMOD
+TESTMAC8  EZ390 final_options=OBJ
+TESTMAC8  EZ390 final_options=NOOBJHEX
+TESTMAC8  EZ390 final_options=PC
+TESTMAC8  EZ390 final_options=PCOPT
+TESTMAC8  EZ390 final_options=NOPDSMEM8
+TESTMAC8  EZ390 final_options=NOPRINTALL
+TESTMAC8  EZ390 final_options=PROLOG
+TESTMAC8  EZ390 final_options=PROTECT
+TESTMAC8  EZ390 final_options=R64
+TESTMAC8  EZ390 final_options=NOREFORMAT
+TESTMAC8  EZ390 final_options=NOREGS
+TESTMAC8  EZ390 final_options=RMODE24
+TESTMAC8  EZ390 final_options=NORMODE31
+TESTMAC8  EZ390 final_options=STATS
+TESTMAC8  EZ390 final_options=NOTEST
+TESTMAC8  EZ390 final_options=THREAD
+TESTMAC8  EZ390 final_options=NOTIME
+TESTMAC8  EZ390 final_options=NOTIMING
+TESTMAC8  EZ390 final_options=NOTRACE
+TESTMAC8  EZ390 final_options=NOTRACEA
+TESTMAC8  EZ390 final_options=NOTRACEALL
+TESTMAC8  EZ390 final_options=NOTRACEC
+TESTMAC8  EZ390 final_options=NOTRACEG
+TESTMAC8  EZ390 final_options=NOTRACEI
+TESTMAC8  EZ390 final_options=NOTRACEL
+TESTMAC8  EZ390 final_options=NOTRACEM
+TESTMAC8  EZ390 final_options=NOTRACEP
+TESTMAC8  EZ390 final_options=NOTRACEQ
+TESTMAC8  EZ390 final_options=NOTRACES
+TESTMAC8  EZ390 final_options=NOTRACET
+TESTMAC8  EZ390 final_options=NOTRACEV
+TESTMAC8  EZ390 final_options=TRAP
+TESTMAC8  EZ390 final_options=NOTRUNC
+TESTMAC8  EZ390 final_options=NOTS
+TESTMAC8  EZ390 final_options=VCB
+TESTMAC8  EZ390 final_options=WARN
+TESTMAC8  EZ390 final_options=XREF
+TESTMAC8  EZ390 final_options=ZSTRMAC
+TESTMAC8  EZ390 final_options=CHKMAC=0
+TESTMAC8  EZ390 final_options=CHKSRC=1
+TESTMAC8  EZ390 final_options=ERR=100
+TESTMAC8  EZ390 final_options=MAXCALL=50
+TESTMAC8  EZ390 final_options=MAXDISPLAY=80
+TESTMAC8  EZ390 final_options=MAXESD=1000
+TESTMAC8  EZ390 final_options=MAXFILE=1000
+TESTMAC8  EZ390 final_options=MAXGBL=100000
+TESTMAC8  EZ390 final_options=MAXHEIGHT=600
+TESTMAC8  EZ390 final_options=MAXLCL=100000
+TESTMAC8  EZ390 final_options=MAXLEN=80
+TESTMAC8  EZ390 final_options=MAXLINE=200000
+TESTMAC8  EZ390 final_options=MAXLOG=1000000
+TESTMAC8  EZ390 final_options=MAXPARM=10000
+TESTMAC8  EZ390 final_options=MAXPASS=2
+TESTMAC8  EZ390 final_options=MAXPC=50000
+TESTMAC8  EZ390 final_options=MAXQUE=1000
+TESTMAC8  EZ390 final_options=MAXRLD=10000
+TESTMAC8  EZ390 final_options=MAXSIZE=52428800
+TESTMAC8  EZ390 final_options=MAXSYM=50000
+TESTMAC8  EZ390 final_options=MAXWARN=4
+TESTMAC8  EZ390 final_options=MAXWIDTH=800
+TESTMAC8  EZ390 final_options=MEM=1
+TESTMAC8  EZ390 final_options=MINHEIGHT=150
+TESTMAC8  EZ390 final_options=MINWIDTH=150
+TESTMAC8  EZ390 final_options=MNOTE=0
+TESTMAC8  EZ390 final_options=PARM=
+TESTMAC8  EZ390 final_options=PROFILE=
+TESTMAC8  EZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTMAC8.STA
+TESTMAC8  EZ390 final_options=SYSPARM=
+TESTMAC8  EZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTMAC8  EZ390 final_options=TESTDD=
+TESTMAC8  EZ390 final_options=TIME=15
+TESTMAC8  EZ390 final_options=TRACE=
+TESTMAC8  EZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTMAC8  EZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTMAC8  EZ390 final_options=Z390COMMAND=cmd.exe
+TESTMAC8  EZ390 final_options=Z390EDITOR=notepad.exe
+TESTMAC8  EZ390 final_options=INSTALL=
+TESTMAC8  EZ390 final_options=IPL=
+TESTMAC8  EZ390 final_options=LOG=C:\Users\Achim\GitHub\z390\rt\test\TESTMAC8.LOG
+TESTMAC8  EZ390 final_options=SYS390=rt\test\+linklib
+TESTMAC8  EZ390 final_options=SYSBAL=rt\test\
+TESTMAC8  EZ390 final_options=SYSCPY=rt\test\
+TESTMAC8  EZ390 final_options=SYSDAT=rt\test\
+TESTMAC8  EZ390 final_options=SYSERR=rt\test\
+TESTMAC8  EZ390 final_options=SYSLOG=rt\test\
+TESTMAC8  EZ390 final_options=SYSLST=rt\test\
+TESTMAC8  EZ390 final_options=SYSMAC=rt\test+mac
+TESTMAC8  EZ390 final_options=SYSMLC=rt\test\
+TESTMAC8  EZ390 final_options=SYSPCH=rt\test\
+TESTMAC8  EZ390 final_options=SYSPRN=rt\test\
+TESTMAC8  EZ390 final_options=SYSOBJ=rt\test\
+TESTMAC8  EZ390 final_options=SYSOPT=rt\test\
+TESTMAC8  EZ390 final_options=SYSTRC=rt\test\
+TESTMAC8  EZ390 TCPIO operations      = 0
+TESTMAC8  EZ390 DCB operations        = 0
+TESTMAC8  EZ390 VSAM operations       = 0
+TESTMAC8  EZ390 Keys                  = 2467
+TESTMAC8  EZ390 Key searches          = 2
+TESTMAC8  EZ390 Key avg comps         = 0
+TESTMAC8  EZ390 Key max comps         = 0
+TESTMAC8  EZ390 total errors          = 0
+TESTMAC8  EZ390 ENDED RC= 0 IO=158 INS=15

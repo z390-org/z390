@@ -1,0 +1,95 @@
+TESTPRO1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTPRO1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  @rt\test\TESTPRO1.OPT=(profile(TESTPRO1) sysmac(rt\test+mac) syscpy(rt\test)) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000140 TYPE=CST NAME=TESTPRO1
+Assembler Listing
+000000                                        1  COPY TESTPRO1
+000000                                       (2/21)2=         TESTPROS 
+000000                                       (3/18)3+         MNOTE 'MZ390 TESTPROS MACRO STARTED 01/02/05 22.33 TESTPRO1'
+000000                                       (2/22)5=         MACRO
+000000                                       (2/23)6=         END
+000000                                       (2/24)7=         TESTPROT
+000000                                       (2/25)8=         MEND
+000000                                        (1/1)9 *********************************************************************
+000000                                       (1/2)10 * Copyright 2006 Automated Software Tools Corporation               *
+000000                                       (1/3)11 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                       (1/4)12 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                       (1/5)13 *                                                                   *
+000000                                       (1/6)14 * This source code is part of z390 assembler/emulator package.      *
+000000                                       (1/7)15 *                                                                   *
+000000                                       (1/8)16 * The z390 package is distributed under GNU general public license  *
+000000                                       (1/9)17 *                                                                   *
+000000                                      (1/10)18 * Author - Don Higgins                                              *
+000000                                      (1/11)19 *********************************************************************
+000000                                      (1/12)20 * 2006-04-10  DSH         Initial version                           *
+000000                                      (1/13)21 * 2006-04-10  DSH RPI-276 Test option profile to insert COPY        *
+000000                                      (1/14)22 *                         statement                                 *
+000000                                      (1/15)23 *********************************************************************
+000000                                      (1/17)24          TITLE 'TESTPRO1 - TEST PROFILE(TESTPRO1.CPY) INIT/TERM MACS'
+000000                                      (1/19)25 TESTPRO1 SUBENTRY 
+000000                                      (4/78)26+TESTPRO1 CSECT 
+000000 90ECD00C                            (4/168)27+         STM   14,12,12(13)
+000004 45FF0068                            (4/169)28+         BAL   15,104(15)
+000008 0000000000000000                    (4/170)29+         DC    18F'0'
+000050 E3C5E2E3D7D9D6F1                    (4/171)30+         DC    CL8'TESTPRO1'
+000058 F0F161F0F261F0F5                    (4/172)31+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (4/173)32+         DC    CL8'22.33'
+000068 50FD0008                            (4/174)33+         ST    15,8(13)
+00006C 50DF0004                            (4/175)34+         ST    13,4(15)
+000070 18DF                                (4/176)35+         LR    13,15
+000072                                     (4/189)36+         USING TESTPRO1+8,13
+LISTUSE TESTPRO1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/20)38          WTO   'TESTPRO1 TEST PROFILE(TESTPRO1.CPY)'
+000072 A7150016                00009E       (5/49)40+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+000076 00270000E3C5E2E3                     (5/50)41+         DC    AL2(WTO#0003_EOT-*,0),C'TESTPRO1 TEST PROFILE(TESTPRO1.CPY)'
+00009D                  0000009D            (5/51)43+WTO#0003_EOT     EQU *
+00009E 0A23                                 (5/52)44+         SVC   35
+0000A0                                      (1/21)46          WTO   '  1.  EXECUTE MACRO TESTPROS.MAC AT START'
+0000A0 A7150019                0000D2       (5/49)48+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+0000A4 002D00004040F14B                     (5/50)49+         DC    AL2(WTO#0004_EOT-*,0),C'  1.  EXECUTE MACRO TESTPROS.MAC AT START'
+0000D1                  000000D1            (5/51)51+WTO#0004_EOT     EQU *
+0000D2 0A23                                 (5/52)52+         SVC   35
+0000D4                                      (1/22)54          WTO   '  2.  EXECUTE MACRO TESTPOST.MAC AT TERMINATION'
+0000D4 A715001C                00010C       (5/49)56+         BRAS  1,*+(WTO#0005_EOT-*+1)/2*2
+0000D8 003300004040F24B                     (5/50)57+         DC    AL2(WTO#0005_EOT-*,0),C'  2.  EXECUTE MACRO TESTPOST.MAC AT TERMINATION'
+00010B                  0000010B            (5/51)59+WTO#0005_EOT     EQU *
+00010C 0A23                                 (5/52)60+         SVC   35
+00010E                                      (1/23)62          WTO   'TESTPRO1 ENDED OK'
+00010E A715000D                000128       (5/49)63+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+000112 00150000E3C5E2E3                     (5/50)64+         DC    AL2(WTO#0006_EOT-*,0),C'TESTPRO1 ENDED OK'
+000127                  00000127            (5/51)65+WTO#0006_EOT     EQU *
+000128 0A23                                 (5/52)66+         SVC   35
+00012A                                      (1/24)68          SUBEXIT 
+00012A 41F00000                             (6/33)69+         LA    15,0
+00012E 58D0D004                             (6/50)70+         L     13,4(,13)
+000132 58E0D00C                             (6/51)71+         L     14,12(,13)
+000136 982CD01C                             (6/52)72+         LM    2,12,28(13)
+00013A 07FE                                 (6/53)73+         BR    14
+00013C                                      (1/25)75          END 
+00013C                                      (7/18)77+         MNOTE 'MZ390 TESTPROT MACRO ENDED  01/02/05 22.33 TESTPRO1'
+
+Symbol Table Listing
+
+ SYM=TESTPRO1 LOC=00000000 LEN=00000140 ESD=0001 TYPE=CST  XREF=26 36 
+ SYM=WTO#0003_EOT LOC=0000009D LEN=00000001 ESD=0001 TYPE=REL  XREF=43 40 41 
+ SYM=WTO#0004_EOT LOC=000000D1 LEN=00000001 ESD=0001 TYPE=REL  XREF=51 48 49 
+ SYM=WTO#0005_EOT LOC=0000010B LEN=00000001 ESD=0001 TYPE=REL  XREF=59 56 57 
+ SYM=WTO#0006_EOT LOC=00000127 LEN=00000001 ESD=0001 TYPE=REL  XREF=65 63 64 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTPRO1  MZ390 ENDED RC= 0 IO=642

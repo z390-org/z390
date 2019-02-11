@@ -1,0 +1,262 @@
+TESTERR2  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTERR2
+AZ390I options = bal notiming sysmac(mac) syscpy(mac) stats 
+  err(0) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000098 TYPE=CST NAME=TESTERR2
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH         Initial version                           *
+000000                                      (1/13)13 * 2005-11-08 DSH RPI-74  Test relative offset errors                *
+000000                                      (1/14)14 * 2005-11-08 DSH RPI-85  Test MIN/MAX DC F and H limit errors11     *
+000000                                      (1/15)15 * 2006-01-06 DSH RPI-157 And 159 operand error checking             *
+000000                                      (1/16)16 * 2006-03-16 DSH RPI-238 MNOTE error if level > 4                   *
+000000                                      (1/17)17 * 2006-03-21 DSH RPI-253 Issue error for invalid labels such as _^A *
+000000                                      (1/18)18 * 2006-03-22 DSH RPI-260 Test expression parsing errors             *
+000000                                      (1/19)19 * 2006-07-06 DSH RPI-356 Test error for instruction CVD with no     *
+000000                                      (1/20)20 *                        arguments                                  *
+000000                                      (1/21)21 * 2006-07-19 DSH RPI-375 Test error when labeled using prefix on    *
+000000                                      (1/22)22 *                        sdt etc.                                   *
+000000                                      (1/23)23 * 2006-11-09 DSH RPI-488 Test error on branch label defined only    *
+000000                                      (1/24)24 *                        as macro                                   *
+000000                                      (1/25)25 * 2006-11-10 DSH RPI-473 Test error messages from CALL macro        *
+000000                                      (1/26)26 * 2007-02-22 DSH RPI-553 Add tests for duplicate symbols            *
+000000                                      (1/27)27 * 2007-05-07 DSH RPI-609 DC without data, comment                   *
+000000                                      (1/28)28 * 2007-06-10 DSH RPI-637 Test missing close ) on explicit           *
+000000                                      (1/29)29 *                        off(len,base) arg                          *
+000000                                      (1/30)30 * 2007-11-29 DSH RPI-745 Allow comments without comma on PR         *
+000000                                      (1/31)31 * 2007-12-07 DSH RPI-749 Test X EQU X and =CL(FWDLEN)' ' errors     *
+000000                                      (1/32)32 *********************************************************************
+000000                                      (1/34)33          TITLE 'TESTERR2 - TEST AZ390 ERRORS'
+000000                                      (1/36)34 TESTERR2 CSECT 
+000000                                      (1/37)35          USING *,15
+LISTUSE TESTERR2 ESD=0001 LOC=00000000 LEN=01000 REG=F OFF=00000 LAB=
+000000                                      (1/38)36 * BLANK, LABEL ONLY, INVALID CHAR FOR LABEL, OPER
+000000                                      (1/40)37 LABEL          
+AZ390E error  71       (1/40)37   LABEL          
+AZ390I Missing opcode - LABEL          
+000000                                      (1/41)38 ;              
+AZ390E error  71       (1/41)38   ;              
+AZ390I Missing opcode - ;              
+000000                                      (1/42)39 ;       ; 
+AZ390E error 196       (1/42)39   ;       ; 
+AZ390I Invalid character in opcode - ;
+000000                                      (1/43)40 * UNDEFINED OPCODE FOR AZ390
+000000                                      (1/44)41         JUNK 
+AZ390E error  29       (1/44)41           JUNK 
+AZ390I ERRSUM missing macro = JUNK
+000000                                      (1/45)42 * INVALID PARMS
+000000                                      (1/46)43         WTO  'HELLO
+000000 A7150004                000008       (2/49)44+         BRAS  1,*+(WTO#0001_EOT-*+1)/2*2
+000004 00040000                             (2/50)45+         DC    AL2(WTO#0001_EOT-*,0),C'HELLO
+AZ390E error  52       (2/50)45            DC    AL2(WTO#0001_EOT-*,0),C'HELLO
+AZ390I Invalid dc character literal - 'HELLO
+000008                  00000008            (2/51)46+WTO#0001_EOT     EQU *
+000008 0A23                                 (2/52)47+         SVC   35
+00000A                                      (1/47)49         WTO  HELLO'
+00000A                                      (2/74)50+         MNOTE 8,'WTO TEXT OPTION NOT SUPPORTED'
+00000A                                      (1/48)52         WTO  MF=(E,X
+00000A                                      (2/61)53+         LA    1,X
+AZ390E error 198       (2/61)53            LA    1,X
+AZ390I Symbol not defined X
+00000E 0A23                                 (2/66)54+         SVC   35
+000010                                      (1/49)56 * TEST ERROR ON INVALID RELATIVE ADDRESSES
+000010                                      (1/50)57         BRL  TESTERR2+1
+AZ390E error 111       (1/50)57           BRL  TESTERR2+1
+AZ390I Relative target address is odd - 00000001
+000014                         000001       (1/51)58         BRCL 15,TESTERR2+1
+AZ390E error 112       (1/51)58           BRCL 15,TESTERR2+1
+AZ390I Relate target address odd - 00000001
+00001A                         000001       (1/52)59         LARL 15,TESTERR2+1
+AZ390E error 112       (1/52)59           LARL 15,TESTERR2+1
+AZ390I Relate target address odd - 00000001
+000020                  00100000            (1/53)60 TOOFAR  EQU  TESTERR2+X'100000'
+000020                                      (1/54)61         BRL  TOOFAR
+AZ390E error  74       (1/54)61           BRL  TOOFAR
+AZ390I Relative offset too large - 0007FFF0
+000024                                      (1/55)62 * TEST MIN MAX FOR DC F AND H
+000024 7FFF                                 (1/56)63          DC    H'32767'         OK
+000026 8000                                 (1/57)64          DC    H'32768'         BAD
+000028 8000                                 (1/58)65          DC    H'-32768'        OK
+00002A 7FFF                                 (1/59)66          DC    H'-32769'        BAD
+00002C 7F                                   (1/60)67          DC    FL1'127'         OK
+00002D 80                                   (1/61)68          DC    FL1'128'         BAD
+00002E 80                                   (1/62)69          DC    FL1'-128'        OK
+00002F 7F                                   (1/63)70          DC    FL1'-129'        BAD
+000030 7FFF                                 (1/64)71          DC    FL2'32767'     OK
+000032 8000                                 (1/65)72          DC    FL2'32768'     BAD
+000034 8000                                 (1/66)73          DC    FL2'-32768'    OK
+000036 7FFF                                 (1/67)74          DC    FL2'-32769'    BAD
+000038 7FFFFF                               (1/68)75          DC    FL3'8388607'   OK
+00003B 800000                               (1/69)76          DC    FL3'8388608'   BAD
+00003E 800000                               (1/70)77          DC    FL3'-8388608'  OK
+000041 7FFFFF                               (1/71)78          DC    FL3'-8388609'  BAD
+000044                                      (1/72)79 * CHECK TOO MANY PARMS
+000044                         00005E       (1/73)80          OI    Y,3(1)
+AZ390E error 122       (1/73)80            OI    Y,3(1)
+AZ390I extra parameter found - (1)
+000048                                      (1/74)81          LR    1,2,3
+AZ390E error 122       (1/74)81            LR    1,2,3
+AZ390I extra parameter found - ,3
+00004A                                      (1/75)82          L     1,2,3
+AZ390E error 122       (1/75)82            L     1,2,3
+AZ390I extra parameter found - ,3
+00004E                  00005E              (1/76)83          MVC   Y,2,3
+AZ390E error 122       (1/76)83            MVC   Y,2,3
+AZ390I extra parameter found - ,3
+000054                  00005E 000090       (1/77)84          AP    Y,=P'1',3
+AZ390E error 122       (1/77)84            AP    Y,=P'1',3
+AZ390I extra parameter found - ,3
+00005A                                      (1/78)85 * CHECK LITERAL IN EXPRESSION
+00005A                         00005E       (1/79)86          OI    Y,=X'FF'
+AZ390E error  32       (1/79)86            OI    Y,=X'FF'
+AZ390I Invalid absolute value.
+00005E 00                                   (1/80)87 Y        DC    X'00'
+00005F                                      (1/81)88 * TEST MNOTE ERROR LEVELS
+00005F                                      (1/82)89          MNOTE 4,'TEST MNOTE 1'
+00005F                                      (1/83)90          MNOTE 8,'TEST MNOTE 2'
+00005F                                      (1/84)91 * TEST INVALID LABEL
+000060                                      (1/85)92 _A       DS    0H OK
+000060                                      (1/86)93 _^A      DS    0H NOT OK
+AZ390E error 141       (1/86)93   _^A      DS    0H NOT OK
+AZ390I Invalid symbol - _^A
+000060                                      (1/87)94 * TEST EXPRESSION PARSING ERRORS
+000060                                      (1/88)95 EXP1     EQU   1+
+AZ390E error  17       (1/88)95   EXP1     EQU   1+
+AZ390I Expression parsing error.
+000060                                      (1/89)96 EXP2     EQU   1//
+AZ390E error  17       (1/89)96   EXP2     EQU   1//
+AZ390I Expression parsing error.
+000060                                      (1/90)97 * TEST INSTRUCTION WITH NO ARGS CAUSING TRAP
+000060                                      (1/91)98          CVD 
+AZ390E error  32       (1/91)98            CVD 
+AZ390I Invalid absolute value.
+000064                                      (1/92)99 * TEST LABELLED USING PREFIX ON SDT CAUSED BY TYPEING . VS ,
+000064                  00000001           (1/93)100 R1       EQU   1
+000064                  00000002           (1/94)101 R2       EQU   2
+000064                                     (1/95)102          LR    R1.R2
+AZ390E error  50      (1/95)102            LR    R1.R2
+AZ390I Missing operand comma - R1.R2
+000066                                     (1/96)103 * TEST LABEL ONLY DEFINED AS MACRO LABEL
+000066                                     (1/97)104          B     MYMAC
+AZ390E error  98      (1/97)104            B     MYMAC
+AZ390I symbol not found - MYMAC
+00006A                                     (1/98)105          MACRO
+00006A                                     (1/99)106          TEST
+00006A                                    (1/100)107          MEND
+00006A                                    (1/101)108 MYMAC    TEST 
+00006A                                    (1/102)110 * TEST CALL MACRO MNOTE ERRORS
+00006A                                    (1/103)111 EXEC2    CALL  SUBR,,VL,MF=(E,LIST)
+00006A 0700                                (4/29)114+         CNOP  0,4
+00006C                                     (4/31)115+EXEC2    DS    0F
+00006C                                     (4/39)116+         MNOTE 12,'CALL VL INVALID WHEN NO PARMS'
+00006C                                    (1/104)119 EXEC3    CALL  SUBR,,,MF=E
+00006C                                     (4/29)121+         CNOP  0,4
+00006C                                     (4/31)122+EXEC3    DS    0F
+00006C                                    (4/106)123+         MNOTE 12,'CALL EXEC FORM MISSING LIST ADDR'
+00006C                                    (1/105)126 STD      CALL  SUBR,,VL,MF=S
+00006C                                     (4/29)128+         CNOP  0,4
+00006C                                     (4/31)129+STD      DS    0F
+00006C                                     (4/39)130+         MNOTE 12,'CALL VL INVALID WHEN NO PARMS'
+00006C                                    (1/106)133 LIST     CALL  ,(0,0),MF=L
+00006C                                     (4/29)135+         CNOP  0,4
+00006C                                     (4/31)136+LIST     DS    0F
+00006C 0000000000000000                    (4/91)137+         DC    A(0,0)
+000074                                    (1/107)140 * TEST DUPLICATE LABELS
+000074                                    (1/108)141 TESTERR2 DSECT     BAD
+AZ390E error 182     (1/108)141   TESTERR2 DSECT     BAD
+AZ390I Duplicate section name of different type.
+000074                                    (1/109)142 TESTERR2 DS    0H  BAD
+AZ390E error  72     (1/109)142   TESTERR2 DS    0H  BAD
+AZ390I Duplicate symbol TESTERR2 on line 142 and 34
+000074                  00000001          (1/110)143 EQU1     EQU   1
+000074                                    (1/111)144 EQU1     EQU   2   BAD
+AZ390E error  72     (1/111)144   EQU1     EQU   2   BAD
+AZ390I Duplicate symbol EQU1 on line 144 and 143
+000074                                    (1/112)145 * TEST DC NO DATA, COMMENT * AFTER 1, E type comma before comments
+000074                                    (1/113)146          DC    CL3
+AZ390E error 189     (1/113)146            DC    CL3
+AZ390I DC field with no data.
+000077                                    (1/114)147  * BAD COMMENT
+AZ390E error 190     (1/114)147    * BAD COMMENT
+AZ390I Comment must start with * in position 1.
+000078 0101                               (1/115)148          PR    GOOD COMMENT
+00007A                                    (1/116)149 * TEST EQU CIRCULAR ERROR AND LITERAL MOD FORWARD REF ERRORS RPI-739
+00007A                                    (1/117)150 X749     EQU   X749              CIRCULAR EQU ERROR
+AZ390E error 200     (1/117)150   X749     EQU   X749              CIRCULAR EQU ERROR
+AZ390I Circular EQU expression error for X749
+00007A                                    (1/118)151          LA    0,=CL(FWDLEN)' '  LIT MOD FORWARD REF ERROR
+AZ390E error 201     (1/118)151            LA    0,=CL(FWDLEN)' '  LIT MOD FORWARD REF ERROR
+AZ390I Literal modifier forward reference for FWDLEN
+00007E                  00000001          (1/119)152 FWDLEN   EQU   1
+00007E                                    (1/120)153 * TEST MISSING CLOSE ) ON EXPLICIT ARGS
+00007E                                    (1/121)154          CLI   1(2,3      BAD
+AZ390E error 193     (1/121)154            CLI   1(2,3      BAD
+AZ390I Unexpected character before close )
+000082                                    (1/122)155          L     1,2(3,4    BAD
+AZ390E error 194     (1/122)155            L     1,2(3,4    BAD
+AZ390I Missing close ) 
+000086                                    (1/123)156          CLC   1(2,3,4(5) BAD
+AZ390E error 192     (1/123)156            CLC   1(2,3,4(5) BAD
+AZ390I Missing close )
+00008C                                    (1/124)157          END 
+000090 1C               =P'1'
+000091 FF               =X'FF'
+
+Symbol Table Listing
+
+ SYM=EQU1     LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=143 144 
+ SYM=EXEC2    LOC=0000006C LEN=00000004 ESD=0001 TYPE=REL  XREF=115 
+ SYM=EXEC3    LOC=0000006C LEN=00000004 ESD=0001 TYPE=REL  XREF=122 
+ SYM=EXP1     LOC=00000000 LEN=00000000 ESD=0000 TYPE=ABS  XREF=95 
+ SYM=EXP2     LOC=00000000 LEN=00000000 ESD=0000 TYPE=ABS  XREF=96 
+ SYM=FWDLEN   LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=152 151 
+ SYM=LIST     LOC=0000006C LEN=00000004 ESD=0001 TYPE=REL  XREF=136 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=100 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=101 102 
+ SYM=STD      LOC=0000006C LEN=00000004 ESD=0001 TYPE=REL  XREF=129 
+ SYM=TESTERR2 LOC=00000000 LEN=00000098 ESD=0001 TYPE=CST  XREF=34 57 58 59 60 141 
+  142 
+ SYM=TOOFAR   LOC=00100000 LEN=00000001 ESD=0001 TYPE=REL  XREF=60 61 
+ SYM=WTO#0001_EOT LOC=00000008 LEN=00000001 ESD=0001 TYPE=REL  XREF=46 44 45 
+ SYM=X        LOC=FFFFFFFF LEN=FFFFFFFF ESD=0000 TYPE=UND  XREF=53 
+ SYM=X749     LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=150 
+ SYM=Y        LOC=0000005E LEN=00000001 ESD=0001 TYPE=REL  XREF=87 80 83 84 86 
+ SYM=_A       LOC=00000060 LEN=00000002 ESD=0001 TYPE=REL  XREF=92 
+
+Literal Table Listing
+
+ LIT=P'1'     LOC=00000090 LEN=00000001 ESD=0001 POOL=0001 XREF=84 
+ LIT=X'FF'    LOC=00000091 LEN=00000001 ESD=0001 POOL=0001 XREF=86 
+ 
+AZ390E ERRSUM Critical Error Summary Option
+AZ390E ERRSUM Fix and repeat until all nested errors resolved
+AZ390E ERRSUM missing macro =JUNK
+AZ390E ERRSUM total missing   copy   files =0
+AZ390E ERRSUM total missing   macro  files =1
+AZ390E ERRSUM total undefined symbols      =1
+AZ390E ERRSUM total mz390 errors    = 0
+AZ390E ERRSUM total az390 errors    = 32
+AZ390I FID=  1 ERR=  31 C:\Users\Achim\GitHub\z390\rt\test\TESTERR2.MLC
+AZ390I FID=  2 ERR=   3 C:\Users\Achim\GitHub\z390\mac\WTO.MAC
+AZ390I FID=  4 ERR=   3 C:\Users\Achim\GitHub\z390\mac\ZCALL.MAC
+AZ390I total mnote warnings = 1
+AZ390I total mnote errors   = 5
+AZ390I max   mnote level    = 12
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 32
+TESTERR2  MZ390 ENDED RC=12 IO=886

@@ -1,0 +1,135 @@
+TESTAIN1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTAIN1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000000B8 TYPE=CST NAME=TESTAIN1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2008 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2008-12-10  DSH         Initial version                           *
+000000                                      (1/13)13 * 2008-12-10  DSH RPI-956 Initial test for AINSERT for AREAD/SOURCE *
+000000                                      (1/14)14 *********************************************************************
+000000                                      (1/16)15          MACRO
+000000                                      (1/17)16          TEST1
+000000                                      (1/18)17          AINSERT 'RECORD 2 &SYSTIME',FRONT
+000000                                      (1/19)18          AINSERT 'RECORD 3 &SYSTIME',BACK
+000000                                      (1/20)19          AINSERT 'RECORD 1 &SYSTIME',FRONT
+000000                                      (1/21)20 &REC     AREAD
+000000                                      (1/22)21          MNOTE 'AREAD AINSERT 1 = &REC'
+000000                                      (1/23)22 &REC     AREAD
+000000                                      (1/24)23          MNOTE 'AREAD AINSERT 2 = &REC'
+000000                                      (1/25)24 &REC     AREAD
+000000                                      (1/26)25          MNOTE 'AREAD AINSERT 3 = &REC'
+000000                                      (1/27)26          MEND
+000000                                      (1/28)27          MACRO
+000000                                      (1/29)28          TEST2
+000000                                      (1/30)29          AINSERT ' MNOTE ''SOURCE AINSERT 1''',BACK
+000000                                      (1/31)30          AINSERT ' MNOTE ''SOURCE AINSERT 2''',BACK
+000000                                      (1/32)31          AINSERT ' MNOTE ''SOURCE AINSERT 3''',BACK
+000000                                      (1/33)32          AINSERT ' MACRO',BACK
+000000                                      (1/34)33          AINSERT ' TEST3',BACK
+000000                                      (1/35)34          AINSERT ' MNOTE ''HELLO FROM TEST3 INSERTED MACRO''',BACK
+000000                                      (1/36)35          AINSERT ' MEND',BACK
+000000                                      (1/37)36          AINSERT ' MACRO',BACK
+000000                                      (1/39)37          AINSERT ' TEST4 &&P1, 34567890123456789012345678901234567890123456789012345678901X',BACK  NOTE ADD 1 MORE FOR &&
+000000                                      (1/41)39          AINSERT '               &&K1=''K1V'', 789012345678901234567890123456789012345678901X',BACK NOTE ADD 3 FOR &&,'',''
+000000                                      (1/42)41          AINSERT '               &&K2=''K2V''',BACK
+000000                                      (1/43)42          AINSERT ' MNOTE ''TEST4 K1=&&K1 K2=&&K2''',BACK
+000000                                      (1/44)43          AINSERT '&&I SETA 5',BACK
+000000                                      (1/45)44          AINSERT '.LOOP ANOP',BACK
+000000                                      (1/46)45          AINSERT ' MNOTE ''TEST4 I=&&I''',BACK
+000000                                      (1/47)46          AINSERT '&&I SETA &&I-1',BACK
+000000                                      (1/48)47          AINSERT ' AIF (&&I GT 0).LOOP',BACK
+000000                                      (1/49)48          AINSERT ' MEND',BACK
+000000                                      (1/50)49          MEND
+000000                                      (1/51)50 TESTAIN1 SUBENTRY 
+000000                                      (2/78)51+TESTAIN1 CSECT 
+000000 90ECD00C                            (2/168)52+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)53+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)54+         DC    18F'0'
+000050 E3C5E2E3C1C9D5F1                    (2/171)55+         DC    CL8'TESTAIN1'
+000058 F0F161F0F261F0F5                    (2/172)56+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)57+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)58+         ST    15,8(13)
+00006C 50DF0004                            (2/175)59+         ST    13,4(15)
+000070 18DF                                (2/176)60+         LR    13,15
+000072                                     (2/189)61+         USING TESTAIN1+8,13
+LISTUSE TESTAIN1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/52)63          WTO   'TEST1 STARTED'
+000072 A715000B                000088       (3/49)64+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00110000E3C5E2E3                     (3/50)65+         DC    AL2(WTO#0002_EOT-*,0),C'TEST1 STARTED'
+000087                  00000087            (3/51)66+WTO#0002_EOT     EQU *
+000088 0A23                                 (3/52)67+         SVC   35
+00008A                                      (1/53)69          TEST1 
+00008A                                      (1/22)70+         MNOTE 'AREAD AINSERT 1 = RECORD 1 22.33                                                                  '
+00008A                                      (1/24)72+         MNOTE 'AREAD AINSERT 2 = RECORD 2 22.33                                                                  '
+00008A                                      (1/26)74+         MNOTE 'AREAD AINSERT 3 = RECORD 3 22.33                                                                  '
+00008A                                      (1/54)77          TEST2 
+00008A                                       79          MNOTE 'SOURCE AINSERT 1'
+00008A                                       80          MNOTE 'SOURCE AINSERT 2'
+00008A                                       81          MNOTE 'SOURCE AINSERT 3'
+00008A                                       82  MACRO
+00008A                                       83  TEST3
+00008A                                       84  MNOTE 'HELLO FROM TEST3 INSERTED MACRO'
+00008A                                       85  MEND
+00008A                                       86  MACRO
+00008A                                       87  TEST4 &P1,&K1='K1V',&K2='K2V'
+00008A                                       88  MNOTE 'TEST4 K1=&K1 K2=&K2'
+00008A                                       89 &I SETA 5
+00008A                                       90 .LOOP ANOP
+00008A                                       91  MNOTE 'TEST4 I=&I'
+00008A                                       92 &I SETA &I-1
+00008A                                       93  AIF (&I GT 0).LOOP
+00008A                                       94  MEND
+00008A                                      (1/55)95          TEST3 
+00008A                                       96          MNOTE 'HELLO FROM TEST3 INSERTED MACRO'
+00008A                                      (1/56)98          TEST4 
+00008A                                       99          MNOTE 'TEST4 K1='K1V' K2='K2V''
+00008A                                      100          MNOTE 'TEST4 I=5'
+00008A                                      101          MNOTE 'TEST4 I=4'
+00008A                                      102          MNOTE 'TEST4 I=3'
+00008A                                      103          MNOTE 'TEST4 I=2'
+00008A                                      104          MNOTE 'TEST4 I=1'
+00008A                                     (1/57)106          WTO   'TEST1 ENDED'
+00008A A715000A                00009E      (3/49)107+         BRAS  1,*+(WTO#0007_EOT-*+1)/2*2
+00008E 000F0000E3C5E2E3                    (3/50)108+         DC    AL2(WTO#0007_EOT-*,0),C'TEST1 ENDED'
+00009D                  0000009D           (3/51)109+WTO#0007_EOT     EQU *
+00009E 0A23                                (3/52)110+         SVC   35
+0000A0                                     (1/58)112          SUBEXIT 
+0000A0 41F00000                            (4/33)113+         LA    15,0
+0000A4 58D0D004                            (4/50)114+         L     13,4(,13)
+0000A8 58E0D00C                            (4/51)115+         L     14,12(,13)
+0000AC 982CD01C                            (4/52)116+         LM    2,12,28(13)
+0000B0 07FE                                (4/53)117+         BR    14
+0000B2                                     (1/59)119          END 
+
+Symbol Table Listing
+
+ SYM=TESTAIN1 LOC=00000000 LEN=000000B8 ESD=0001 TYPE=CST  XREF=51 61 
+ SYM=WTO#0002_EOT LOC=00000087 LEN=00000001 ESD=0001 TYPE=REL  XREF=66 64 65 
+ SYM=WTO#0007_EOT LOC=0000009D LEN=00000001 ESD=0001 TYPE=REL  XREF=109 107 108 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTAIN1  MZ390 ENDED RC= 0 IO=695

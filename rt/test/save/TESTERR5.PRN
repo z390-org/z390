@@ -1,0 +1,401 @@
+TESTERR5  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTERR5
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000390 TYPE=CST NAME=TESTERR5
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30 DSH Initial version                                    *
+000000                                      (1/13)13 * 2005-11-03 DSH Test invalid DCBDSNAM causing error and S013 abend *
+000000                                      (1/14)14 *********************************************************************
+000000                                      (1/16)15 TESTERR5 SUBENTRY 
+000000                                      (2/78)16+TESTERR5 CSECT 
+000000 90ECD00C                            (2/168)17+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)18+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)19+         DC    18F'0'
+000050 E3C5E2E3C5D9D9F5                    (2/171)20+         DC    CL8'TESTERR5'
+000058 F0F161F0F261F0F5                    (2/172)21+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)22+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)23+         ST    15,8(13)
+00006C 50DF0004                            (2/175)24+         ST    13,4(15)
+000070 18DF                                (2/176)25+         LR    13,15
+000072                                     (2/189)26+         USING TESTERR5+8,13
+LISTUSE TESTERR5 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/17)28          WTO   'TESTERR5 TEST INVALID DCBDSNAM USING SYNAD EXIT'
+000072 A715001C                0000AA       (3/49)30+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00330000E3C5E2E3                     (3/50)31+         DC    AL2(WTO#0002_EOT-*,0),C'TESTERR5 TEST INVALID DCBDSNAM USING SYNAD EXIT'
+0000A9                  000000A9            (3/51)33+WTO#0002_EOT     EQU *
+0000AA 0A23                                 (3/52)34+         SVC   35
+0000AC                                      (1/18)36          OPEN  (SYSUT1,(INPUT),SYSUT2,(OUTPUT),SYSOUT,(OUTPUT))
+0000AC 4110D1A0                0001A8      (5/108)40+                       LA     1,SYSUT1
+0000B0 41000040                            (5/111)41+                       LA  0,DCBOFLGS_GM   READ ONLY
+0000B4 0A13                                (5/120)42+                   SVC   19 OPEN R0=TYPE,R1=DCB/ACB
+0000B6 12FF                                (5/122)43+                         LTR   15,15
+0000B8 4770D0D4                0000DC      (5/123)44+                         BNZ   Z390_OPEN_EXIT0004 RPI 668
+0000BC 4110D208                000210      (5/108)45+                       LA     1,SYSUT2
+0000C0 41000020                            (5/113)46+                       LA  0,DCBOFLGS_PM   WRITE ONLY
+0000C4 0A13                                (5/120)47+                   SVC   19 OPEN R0=TYPE,R1=DCB/ACB
+0000C6 12FF                                (5/122)48+                         LTR   15,15
+0000C8 4770D0D4                0000DC      (5/123)49+                         BNZ   Z390_OPEN_EXIT0004 RPI 668
+0000CC 4110D270                000278      (5/108)50+                       LA     1,SYSOUT
+0000D0 41000020                            (5/113)51+                       LA  0,DCBOFLGS_PM   WRITE ONLY
+0000D4 0A13                                (5/120)52+                   SVC   19 OPEN R0=TYPE,R1=DCB/ACB
+0000D6 12FF                                (5/122)53+                         LTR   15,15
+0000D8 4770D0D4                0000DC      (5/123)54+                         BNZ   Z390_OPEN_EXIT0004 RPI 668
+0000DC                  000000DC           (5/128)55+Z390_OPEN_EXIT0004    EQU *
+000000                                      (6/40)57+IHADCB   DSECT 
+000000                  000000              (6/41)58+         ORG   IHADCB+X'00'
+000000                                      (6/42)59+DCBID    DS    CL4            DCB ID RPI88
+000004                  00001A              (6/43)60+         ORG   IHADCB+X'1A'
+00001A                                      (6/44)61+DCBDSORG DS    X              DATA SET ORGANIZATION
+00001B                  00000040            (6/45)62+DCBDSORG_PS EQU X'40'           PHYSICAL SEQUENTIAL
+00001B                  00000020            (6/46)63+DCBDSORG_DA EQU X'20'           DIRECT ACCESS
+00001B                  00001C              (6/47)64+         ORG   IHADCB+X'1C'
+00001C                                      (6/48)65+DCBIOBAD DS    A              INPUT/OUTPUT BLOCK (TIOT TABLE INDEX)
+000020                  000020              (6/49)66+         ORG   IHADCB+X'20'
+000020                                      (6/50)67+DCBEODA  DS    0A ADDRESS OF END OF FILE EXIT 31 BIT VS 24 RPI 989
+000020                                      (6/51)68+DCBEODAD DS    A ADDRESS OF END OF FILE EXIT  31 BIT VS 24
+000024                  000024              (6/52)69+         ORG   IHADCB+X'24'
+000024                                      (6/53)70+DCBRECFM DS    X              RECORD FORMAT
+000025                  00000080            (6/54)71+DCBRECF      EQU X'80'           FIXED  RPI 989
+000025                  00000080            (6/55)72+DCBRECFM_F   EQU X'80'           FIXED
+000025                  00000080            (6/56)73+DCBRECFM_FA  EQU X'80'           FIXED
+000025                  00000080            (6/57)74+DCBRECFM_FM  EQU X'80'           FIXED
+000025                  00000040            (6/58)75+DCBRECFM_V   EQU X'40'           VARIABLE
+000025                  00000040            (6/59)76+DCBRECFM_VA  EQU X'40'           VARIABLE
+000025                  00000040            (6/60)77+DCBRECFM_VM  EQU X'40'           VARIABLE
+000025                  00000090            (6/61)78+DCBRECFM_FB  EQU X'90'           FIXED BLOCKED
+000025                  00000010            (6/62)79+DCBRECBR     EQU X'10'           BLOCKED RECORDS RPI 989
+000025                  00000090            (6/63)80+DCBRECFM_FBA EQU X'90'           FIXED BLOCKED
+000025                  00000090            (6/64)81+DCBRECFM_FBM EQU X'90'           FIXED BLOCKED
+000025                  00000050            (6/65)82+DCBRECFM_VB  EQU X'50'           VARIABLE BLOCKED
+000025                  00000050            (6/66)83+DCBRECFM_VBA EQU X'50'           VARIABLE BLOCKED
+000025                  00000050            (6/67)84+DCBRECFM_VBM EQU X'50'           VARIABLE BLOCKED
+000025                  000000A0            (6/68)85+DCBRECFM_FT  EQU X'A0'           FIXED ASCII TEXT
+000025                  00000060            (6/69)86+DCBRECFM_VT  EQU X'60'           VARIABLE ASCII TEXT
+000025                  000000C0            (6/70)87+DCBRECU      EQU X'C0'           UNDEFINED RCDS NOT SUPPORTED RPI 989
+000025                  000028              (6/71)88+         ORG   IHADCB+X'28'
+000028                                      (6/72)89+DCBDDNAM DS    CL8            DDNAME > ENV VAR > FILE NAME
+000030                  000030              (6/73)90+         ORG   IHADCB+X'30'
+000030                                      (6/74)91+DCBOFLGS DS    X              OPEN FLAGS
+000031                  00000010            (6/75)92+DCBOFLGS_OPEN EQU X'10'          FILE OPEN (X'80' > X'10' RPI 906)_
+000031                  00000010            (6/76)93+DCBOFOPN      EQU X'10'          FILE OPEN RPI 906
+000031                  00000040            (6/77)94+DCBOFLGS_GM   EQU X'40'          READ  ALLOWED
+000031                  00000020            (6/78)95+DCBOFLGS_PM   EQU X'20'          WRITE ALLOWED
+000031                  00000040            (6/79)96+DCBOFLGS_GL   EQU X'40'          READ  ALLOWED
+000031                  00000020            (6/80)97+DCBOFLGS_PL   EQU X'20'          WRITE ALLOWED
+000031                  00000040            (6/81)98+DCBOFLGS_R    EQU X'40'          READ  ALLOWED
+000031                  00000020            (6/82)99+DCBOFLGS_W    EQU X'20'          WRITE ALLOWED
+000031                  00000060           (6/83)100+DCBOFLGS_RW   EQU X'60'          READ AND WRITE ALLOWED
+000031                  000032             (6/84)101+         ORG   IHADCB+X'32'
+000032                                     (6/85)102+DCBMACRF DS    H              MACRO REFERENCE ACCESS TYPE
+000034                  00005000           (6/86)103+DCBMACRF_GM EQU X'5000'         GET MOVE   QSAM
+000034                  00000050           (6/87)104+DCBMACRF_PM EQU X'0050'         PUT MOVE   QSAM
+000034                  00004800           (6/88)105+DCBMACRF_GL EQU X'4800'         GET LOCATE QSAM    RPI 764
+000034                  00000048           (6/89)106+DCBMACRF_PL EQU X'0048'         PUT LOCATE QSAM    RPI 764
+000034                  00002000           (6/90)107+DCBMACRF_R  EQU X'2000'         READ  RANDOM BDAM
+000034                  00000020           (6/91)108+DCBMACRF_W  EQU X'0020'         WRITE RANDOM BDAM
+000034                  00002020           (6/92)109+DCBMACRF_RW EQU X'2020'         READ/WRITE RANDOM BDAM
+000034                  000038             (6/93)110+         ORG   IHADCB+X'38'
+000038                                     (6/94)111+DCBSYNAD DS    A              ERROR EXIT
+00003C                  00003C             (6/95)112+         ORG   IHADCB+X'3C'
+00003C                                     (6/96)113+DCBBLKSIF DS   F              BLOCK SIZE    RPI 587 32 BIT BLOCK SIZE
+000040                  00003E             (6/97)114+         ORG   IHADCB+X'3E'
+00003E                                     (6/98)115+DCBBLKSI DS    H              BLOCK SIZE    (ALSO UNBLOCKED MAX RECORD)
+000040                  000050             (6/99)116+         ORG   IHADCB+X'50'
+000050                                    (6/100)117+DCBLRECLF DS   F              RECORD LENGTH RPI 587 32 BIT RECORD LEN
+000054                  000052            (6/101)118+         ORG   IHADCB+X'52'
+000052                                    (6/102)119+DCBLRECL DS    H              RECORD LENGTH (MAY BE ZERO FOR UNBLOCKED)
+000054                  000058            (6/103)120+         ORG   IHADCB+X'58'
+000058                                    (6/104)121+DCBREC   DS    A      X'58'   ADDRESS OF USER SUPPLIED RECORD AREA
+00005C                                    (6/105)122+DCBDSNAM DS    A      X'5C'   ADDRESS OF USER SUPPLIED DSN FILE SPEC
+000060                                    (6/106)123+DCBDCBE  DS    A      X'60'   ADDRESS OF DCBE EODAD/SYNAD  RPI 281
+000064                                    (6/107)124+DCBIO    DS    F      X'64'   TOTAL DCB IO OPERATIONS SINCE OPEN
+000068                  00000068          (6/108)125+DCBLEN   EQU   *-IHADCB
+0000DC                                    (6/111)126+TESTERR5        CSECT                              RPI 591
+0000DC                  000000DC           (1/19)130 LOOP     EQU   *
+0000DC                                     (1/20)131          GET   SYSUT1
+0000DC 4110D1A0                0001A8      (7/37)132+         LA    1,SYSUT1
+0000E0 58010058                            (7/51)133+         L     0,DCBREC-IHADCB(1)
+0000E4 0A97                                (7/53)134+         SVC  151
+0000E6 FA10D2FFD384     000307 00038C      (1/21)136          AP    PTOT,=P'1'
+0000EC D203D306D380     00030E 000388      (1/22)137          MVC   DTOT,=X'40202020'
+0000F2 DE03D306D2FF     00030E 000307      (1/23)138          ED    DTOT,PTOT
+0000F8                                     (1/24)139          PUT   SYSOUT,MSG
+0000F8 4110D270                000278      (8/32)140+         LA    1,SYSOUT
+0000FC 4100D301                000309      (8/39)141+         LA    0,MSG
+000100 0A98                                (8/48)142+         SVC  152 QSAM PUT R0=REC, R1=DCB
+000102                                     (1/25)144          PUT   SYSUT2
+000102 4110D208                000210      (8/32)145+         LA    1,SYSUT2
+000106 58010058                            (8/46)146+         L     0,DCBREC-IHADCB(1)
+00010A 0A98                                (8/48)147+         SVC  152 QSAM PUT R0=REC, R1=DCB
+00010C 47F0D0D4                0000DC      (1/26)149          B     LOOP
+000110                                     (1/27)150 EOF      CLOSE (SYSUT1,,SYSUT2,,SYSOUT)
+000110                                    (10/91)153+EOF DS   0H
+000110 4110D1A0                0001A8    (10/100)154+                       LA     1,SYSUT1
+000114 0A14                              (10/106)155+                   SVC   20 CLOSE R1=DCB/ACB
+000116 12FF                              (10/109)156+                          LTR   15,15
+000118 4770D126                00012E    (10/110)157+                          BNZ   Z390_CLOSE_EXIT0010 RPI 668
+00011C 4110D208                000210    (10/100)158+                       LA     1,SYSUT2
+000120 0A14                              (10/106)159+                   SVC   20 CLOSE R1=DCB/ACB
+000122 12FF                              (10/109)160+                          LTR   15,15
+000124 4770D126                00012E    (10/110)161+                          BNZ   Z390_CLOSE_EXIT0010 RPI 668
+000128 4110D270                000278    (10/100)162+                       LA     1,SYSOUT
+00012C 0A14                              (10/106)163+                   SVC   20 CLOSE R1=DCB/ACB
+00012E                  0000012E         (10/114)164+Z390_CLOSE_EXIT0010    EQU *
+00012E                                     (1/28)167          WTO   'TESTERR5 ENDED OK'
+00012E A715000D                000148      (3/49)168+         BRAS  1,*+(WTO#0011_EOT-*+1)/2*2
+000132 00150000E3C5E2E3                    (3/50)169+         DC    AL2(WTO#0011_EOT-*,0),C'TESTERR5 ENDED OK'
+000147                  00000147           (3/51)170+WTO#0011_EOT     EQU *
+000148 0A23                                (3/52)171+         SVC   35
+00014A                                     (1/29)173          SUBEXIT 
+00014A 41F00000                           (11/33)174+         LA    15,0
+00014E 58D0D004                           (11/50)175+         L     13,4(,13)
+000152 58E0D00C                           (11/51)176+         L     14,12(,13)
+000156 982CD01C                           (11/52)177+         LM    2,12,28(13)
+00015A 07FE                               (11/53)178+         BR    14
+00015C                  0000015C           (1/30)180 MYSYNAD  EQU   *
+00015C                                     (1/31)181          WTO   'TESTERR5 ABORTING DUE TO SYSUT SYNAD EXIT'
+00015C A7150019                00018E      (3/49)183+         BRAS  1,*+(WTO#0013_EOT-*+1)/2*2
+000160 002D0000E3C5E2E3                    (3/50)184+         DC    AL2(WTO#0013_EOT-*,0),C'TESTERR5 ABORTING DUE TO SYSUT SYNAD EXIT'
+00018D                  0000018D           (3/51)186+WTO#0013_EOT     EQU *
+00018E 0A23                                (3/52)187+         SVC   35
+000190                                     (1/32)189          SUBEXIT 
+000190 41F00000                           (11/33)190+         LA    15,0
+000194 58D0D004                           (11/50)191+         L     13,4(,13)
+000198 58E0D00C                           (11/51)192+         L     14,12(,13)
+00019C 982CD01C                           (11/52)193+         LM    2,12,28(13)
+0001A0 07FE                               (11/53)194+         BR    14
+0001A2                                     (1/34)196 SYSUT1   DCB   RECFM=FT,LRECL=80,EODAD=EOF,MACRF=GM,RECORD=RECORD,DSNAME=DSN1,SYNAD=MYSYNAD
+0001A8                                    (12/49)198+SYSUT1   DS    0D             RPI 915
+0001A8 0000000000000000                   (12/50)199+         DC    XL(DCBLEN)'00' RPI 946
+000210                  0001A8           (12/108)200+         ORG   SYSUT1+DCBID-IHADCB        RPI88
+0001A8 C4C3C2E5F1F0F0F1                  (12/109)201+         DC    C'DCBV1001'            RPI88
+0001B0                  0001C2           (12/110)202+         ORG   SYSUT1+DCBDSORG-IHADCB
+0001C2 40                                (12/111)203+         DC    AL1(DCBDSORG_PS) DCBDSORG
+0001C3                  0001C8           (12/112)204+         ORG   SYSUT1+DCBEODAD-IHADCB
+0001C8 00000110                          (12/113)205+         DC    A(EOF) DCBEODAD
+0001CC                  0001CC           (12/114)206+         ORG   SYSUT1+DCBRECFM-IHADCB
+0001CC A0                                (12/115)207+         DC    AL1(DCBRECFM_FT) DCBRECFM
+0001CD                  0001D0           (12/116)208+         ORG   SYSUT1+DCBDDNAM-IHADCB
+0001D0 E2E8E2E4E3F14040                  (12/121)209+         DC    CL8'SYSUT1' DCBDDNAME
+0001D8                  0001D8           (12/123)210+         ORG   SYSUT1+DCBOFLGS-IHADCB
+0001D8 00                                (12/124)211+         DC    AL1(0) DCBOFLGS RPI 668 ZERO (SET AT OPEN)
+0001D9                  0001DA           (12/125)212+         ORG   SYSUT1+DCBMACRF-IHADCB
+0001DA 5000                              (12/127)213+         DC    AL2(DCBMACRF_GM) DCBMACRF
+0001DC                  0001E0           (12/132)214+         ORG   SYSUT1+DCBSYNAD-IHADCB
+0001E0 0000015C                          (12/133)215+         DC    A(MYSYNAD) DCBSYNAD DCBSYNAD
+0001E4                  0001E4           (12/134)216+         ORG   SYSUT1+DCBBLKSIF-IHADCB    RPI 587
+0001E4 00000000                          (12/135)217+         DC    F'0' DCBBLKSIF  RPI 587
+0001E8                  0001F8           (12/136)218+         ORG   SYSUT1+DCBLRECLF-IHADCB    RPI 587
+0001F8 00000050                          (12/137)219+         DC    F'80' DCBLRECLF    RPI 587
+0001FC                  000200           (12/138)220+         ORG   SYSUT1+DCBREC-IHADCB
+000200 00000318                          (12/139)221+         DC    A(RECORD) DCBREC
+000204                  000204           (12/140)222+         ORG   SYSUT1+DCBDSNAM-IHADCB
+000204 000002E0                          (12/141)223+         DC    A(DSN1) DCBDSNAM
+000208                  000208           (12/142)224+         ORG   SYSUT1+DCBDCBE-IHADCB   RPI 281
+000208 00000000                          (12/143)225+         DC    A(0) DCBDCBE
+00020C                  00020C           (12/144)226+         ORG   SYSUT1+DCBIO-IHADCB     RPI 907
+00020C 00000000                          (12/145)227+         DC    A(0)     DCBIO      RPI 907 TOTAL IO COUNT SINCE OPEN
+000210                  000210           (12/146)228+         ORG   SYSUT1+DCBLEN
+000210                                     (1/36)232 SYSUT2   DCB   RECFM=FT,LRECL=80,MACRF=PM,RECORD=RECORD,DSNAME=DSN2
+000210                                    (12/49)234+SYSUT2   DS    0D             RPI 915
+000210 0000000000000000                   (12/50)235+         DC    XL(DCBLEN)'00' RPI 946
+000278                  000210           (12/108)236+         ORG   SYSUT2+DCBID-IHADCB        RPI88
+000210 C4C3C2E5F1F0F0F1                  (12/109)237+         DC    C'DCBV1001'            RPI88
+000218                  00022A           (12/110)238+         ORG   SYSUT2+DCBDSORG-IHADCB
+00022A 40                                (12/111)239+         DC    AL1(DCBDSORG_PS) DCBDSORG
+00022B                  000230           (12/112)240+         ORG   SYSUT2+DCBEODAD-IHADCB
+000230 00000000                          (12/113)241+         DC    A(0) DCBEODAD
+000234                  000234           (12/114)242+         ORG   SYSUT2+DCBRECFM-IHADCB
+000234 A0                                (12/115)243+         DC    AL1(DCBRECFM_FT) DCBRECFM
+000235                  000238           (12/116)244+         ORG   SYSUT2+DCBDDNAM-IHADCB
+000238 E2E8E2E4E3F24040                  (12/121)245+         DC    CL8'SYSUT2' DCBDDNAME
+000240                  000240           (12/123)246+         ORG   SYSUT2+DCBOFLGS-IHADCB
+000240 00                                (12/124)247+         DC    AL1(0) DCBOFLGS RPI 668 ZERO (SET AT OPEN)
+000241                  000242           (12/125)248+         ORG   SYSUT2+DCBMACRF-IHADCB
+000242 0050                              (12/127)249+         DC    AL2(DCBMACRF_PM) DCBMACRF
+000244                  000248           (12/132)250+         ORG   SYSUT2+DCBSYNAD-IHADCB
+000248 00000000                          (12/133)251+         DC    A(0) DCBSYNAD DCBSYNAD
+00024C                  00024C           (12/134)252+         ORG   SYSUT2+DCBBLKSIF-IHADCB    RPI 587
+00024C 00000000                          (12/135)253+         DC    F'0' DCBBLKSIF  RPI 587
+000250                  000260           (12/136)254+         ORG   SYSUT2+DCBLRECLF-IHADCB    RPI 587
+000260 00000050                          (12/137)255+         DC    F'80' DCBLRECLF    RPI 587
+000264                  000268           (12/138)256+         ORG   SYSUT2+DCBREC-IHADCB
+000268 00000318                          (12/139)257+         DC    A(RECORD) DCBREC
+00026C                  00026C           (12/140)258+         ORG   SYSUT2+DCBDSNAM-IHADCB
+00026C 000002ED                          (12/141)259+         DC    A(DSN2) DCBDSNAM
+000270                  000270           (12/142)260+         ORG   SYSUT2+DCBDCBE-IHADCB   RPI 281
+000270 00000000                          (12/143)261+         DC    A(0) DCBDCBE
+000274                  000274           (12/144)262+         ORG   SYSUT2+DCBIO-IHADCB     RPI 907
+000274 00000000                          (12/145)263+         DC    A(0)     DCBIO      RPI 907 TOTAL IO COUNT SINCE OPEN
+000278                  000278           (12/146)264+         ORG   SYSUT2+DCBLEN
+000278                                     (1/38)268 SYSOUT   DCB   RECFM=FT,BLKSIZE=120,MACRF=PM,RECORD=RECORD,DSNAME=DSN3
+000278                                    (12/49)270+SYSOUT   DS    0D             RPI 915
+000278 0000000000000000                   (12/50)271+         DC    XL(DCBLEN)'00' RPI 946
+0002E0                  000278           (12/108)272+         ORG   SYSOUT+DCBID-IHADCB        RPI88
+000278 C4C3C2E5F1F0F0F1                  (12/109)273+         DC    C'DCBV1001'            RPI88
+000280                  000292           (12/110)274+         ORG   SYSOUT+DCBDSORG-IHADCB
+000292 40                                (12/111)275+         DC    AL1(DCBDSORG_PS) DCBDSORG
+000293                  000298           (12/112)276+         ORG   SYSOUT+DCBEODAD-IHADCB
+000298 00000000                          (12/113)277+         DC    A(0) DCBEODAD
+00029C                  00029C           (12/114)278+         ORG   SYSOUT+DCBRECFM-IHADCB
+00029C A0                                (12/115)279+         DC    AL1(DCBRECFM_FT) DCBRECFM
+00029D                  0002A0           (12/116)280+         ORG   SYSOUT+DCBDDNAM-IHADCB
+0002A0 E2E8E2D6E4E34040                  (12/121)281+         DC    CL8'SYSOUT' DCBDDNAME
+0002A8                  0002A8           (12/123)282+         ORG   SYSOUT+DCBOFLGS-IHADCB
+0002A8 00                                (12/124)283+         DC    AL1(0) DCBOFLGS RPI 668 ZERO (SET AT OPEN)
+0002A9                  0002AA           (12/125)284+         ORG   SYSOUT+DCBMACRF-IHADCB
+0002AA 0050                              (12/127)285+         DC    AL2(DCBMACRF_PM) DCBMACRF
+0002AC                  0002B0           (12/132)286+         ORG   SYSOUT+DCBSYNAD-IHADCB
+0002B0 00000000                          (12/133)287+         DC    A(0) DCBSYNAD DCBSYNAD
+0002B4                  0002B4           (12/134)288+         ORG   SYSOUT+DCBBLKSIF-IHADCB    RPI 587
+0002B4 00000078                          (12/135)289+         DC    F'120' DCBBLKSIF  RPI 587
+0002B8                  0002C8           (12/136)290+         ORG   SYSOUT+DCBLRECLF-IHADCB    RPI 587
+0002C8 00000000                          (12/137)291+         DC    F'0' DCBLRECLF    RPI 587
+0002CC                  0002D0           (12/138)292+         ORG   SYSOUT+DCBREC-IHADCB
+0002D0 00000318                          (12/139)293+         DC    A(RECORD) DCBREC
+0002D4                  0002D4           (12/140)294+         ORG   SYSOUT+DCBDSNAM-IHADCB
+0002D4 000002FA                          (12/141)295+         DC    A(DSN3) DCBDSNAM
+0002D8                  0002D8           (12/142)296+         ORG   SYSOUT+DCBDCBE-IHADCB   RPI 281
+0002D8 00000000                          (12/143)297+         DC    A(0) DCBDCBE
+0002DC                  0002DC           (12/144)298+         ORG   SYSOUT+DCBIO-IHADCB     RPI 907
+0002DC 00000000                          (12/145)299+         DC    A(0)     DCBIO      RPI 907 TOTAL IO COUNT SINCE OPEN
+0002E0                  0002E0           (12/146)300+         ORG   SYSOUT+DCBLEN
+0002E0 E3C5E2E3C5D9D9F5                    (1/39)304 DSN1     DC    C'TESTERR5.XXX',X'00'
+0002ED E3C5E2E3C5D9D9F5                    (1/40)305 DSN2     DC    C'TESTERR5.TF2',X'00'
+0002FA E3C5E2E3C5D9D9F5                    (1/41)306 DSN3     DC    C'TESTERR5.TF3',X'00'
+000307 000C                                (1/42)307 PTOT     DC    PL2'0'
+000309                                     (1/43)308 MSG      DS    0CL120
+000309 D9C5C37B7E                          (1/44)309          DC    C'REC#='
+00030E 4040404040E3C5E7                    (1/45)310 DTOT     DC    CL4' ',C' TEXT='
+000318 4040404040404040                    (1/46)311 RECORD   DC    CL80' '
+000368 4040404040404040                    (1/47)312          DC    (MSG+120-*)C' '
+000381                                     (1/48)313          DCBD 
+000381                                     (1/49)315          END 
+000388 40202020         =X'40202020'
+00038C 1C               =P'1'
+Relocation Definitions
+ ESD=0001 LOC=000001C8 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000001E0 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000200 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000204 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000268 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=0000026C LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000002D0 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000002D4 LEN=4 SIGN=+ XESD=0001
+
+Symbol Table Listing
+
+ SYM=DCBBLKSI LOC=0000003E LEN=00000002 ESD=0002 TYPE=REL  XREF=115 
+ SYM=DCBBLKSIF LOC=0000003C LEN=00000004 ESD=0002 TYPE=REL  XREF=113 216 252 288 
+ SYM=DCBDCBE  LOC=00000060 LEN=00000004 ESD=0002 TYPE=REL  XREF=123 224 260 296 
+ SYM=DCBDDNAM LOC=00000028 LEN=00000008 ESD=0002 TYPE=REL  XREF=89 208 244 280 
+ SYM=DCBDSNAM LOC=0000005C LEN=00000004 ESD=0002 TYPE=REL  XREF=122 222 258 294 
+ SYM=DCBDSORG LOC=0000001A LEN=00000001 ESD=0002 TYPE=REL  XREF=61 202 238 274 
+ SYM=DCBDSORG_DA LOC=00000020 LEN=00000001 ESD=0000 TYPE=ABS  XREF=63 
+ SYM=DCBDSORG_PS LOC=00000040 LEN=00000001 ESD=0000 TYPE=ABS  XREF=62 203 239 275 
+ SYM=DCBEODA  LOC=00000020 LEN=00000004 ESD=0002 TYPE=REL  XREF=67 
+ SYM=DCBEODAD LOC=00000020 LEN=00000004 ESD=0002 TYPE=REL  XREF=68 204 240 276 
+ SYM=DCBID    LOC=00000000 LEN=00000004 ESD=0002 TYPE=REL  XREF=59 200 236 272 
+ SYM=DCBIO    LOC=00000064 LEN=00000004 ESD=0002 TYPE=REL  XREF=124 226 262 298 
+ SYM=DCBIOBAD LOC=0000001C LEN=00000004 ESD=0002 TYPE=REL  XREF=65 
+ SYM=DCBLEN   LOC=00000068 LEN=00000001 ESD=0000 TYPE=ABS  XREF=125 199 228 235 264 
+  271 300 
+ SYM=DCBLRECL LOC=00000052 LEN=00000002 ESD=0002 TYPE=REL  XREF=119 
+ SYM=DCBLRECLF LOC=00000050 LEN=00000004 ESD=0002 TYPE=REL  XREF=117 218 254 290 
+ SYM=DCBMACRF LOC=00000032 LEN=00000002 ESD=0002 TYPE=REL  XREF=102 212 248 284 
+ SYM=DCBMACRF_GL LOC=00004800 LEN=00000001 ESD=0000 TYPE=ABS  XREF=105 
+ SYM=DCBMACRF_GM LOC=00005000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=103 213 
+ SYM=DCBMACRF_PL LOC=00000048 LEN=00000001 ESD=0000 TYPE=ABS  XREF=106 
+ SYM=DCBMACRF_PM LOC=00000050 LEN=00000001 ESD=0000 TYPE=ABS  XREF=104 249 285 
+ SYM=DCBMACRF_R LOC=00002000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=107 
+ SYM=DCBMACRF_RW LOC=00002020 LEN=00000001 ESD=0000 TYPE=ABS  XREF=109 
+ SYM=DCBMACRF_W LOC=00000020 LEN=00000001 ESD=0000 TYPE=ABS  XREF=108 
+ SYM=DCBOFLGS LOC=00000030 LEN=00000001 ESD=0002 TYPE=REL  XREF=91 210 246 282 
+ SYM=DCBOFLGS_GL LOC=00000040 LEN=00000001 ESD=0000 TYPE=ABS  XREF=96 
+ SYM=DCBOFLGS_GM LOC=00000040 LEN=00000001 ESD=0000 TYPE=ABS  XREF=94 41 
+ SYM=DCBOFLGS_OPEN LOC=00000010 LEN=00000001 ESD=0000 TYPE=ABS  XREF=92 
+ SYM=DCBOFLGS_PL LOC=00000020 LEN=00000001 ESD=0000 TYPE=ABS  XREF=97 
+ SYM=DCBOFLGS_PM LOC=00000020 LEN=00000001 ESD=0000 TYPE=ABS  XREF=95 46 51 
+ SYM=DCBOFLGS_R LOC=00000040 LEN=00000001 ESD=0000 TYPE=ABS  XREF=98 
+ SYM=DCBOFLGS_RW LOC=00000060 LEN=00000001 ESD=0000 TYPE=ABS  XREF=100 
+ SYM=DCBOFLGS_W LOC=00000020 LEN=00000001 ESD=0000 TYPE=ABS  XREF=99 
+ SYM=DCBOFOPN LOC=00000010 LEN=00000001 ESD=0000 TYPE=ABS  XREF=93 
+ SYM=DCBREC   LOC=00000058 LEN=00000004 ESD=0002 TYPE=REL  XREF=121 133 146 220 256 
+  292 
+ SYM=DCBRECBR LOC=00000010 LEN=00000001 ESD=0000 TYPE=ABS  XREF=79 
+ SYM=DCBRECF  LOC=00000080 LEN=00000001 ESD=0000 TYPE=ABS  XREF=71 
+ SYM=DCBRECFM LOC=00000024 LEN=00000001 ESD=0002 TYPE=REL  XREF=70 206 242 278 
+ SYM=DCBRECFM_F LOC=00000080 LEN=00000001 ESD=0000 TYPE=ABS  XREF=72 
+ SYM=DCBRECFM_FA LOC=00000080 LEN=00000001 ESD=0000 TYPE=ABS  XREF=73 
+ SYM=DCBRECFM_FB LOC=00000090 LEN=00000001 ESD=0000 TYPE=ABS  XREF=78 
+ SYM=DCBRECFM_FBA LOC=00000090 LEN=00000001 ESD=0000 TYPE=ABS  XREF=80 
+ SYM=DCBRECFM_FBM LOC=00000090 LEN=00000001 ESD=0000 TYPE=ABS  XREF=81 
+ SYM=DCBRECFM_FM LOC=00000080 LEN=00000001 ESD=0000 TYPE=ABS  XREF=74 
+ SYM=DCBRECFM_FT LOC=000000A0 LEN=00000001 ESD=0000 TYPE=ABS  XREF=85 207 243 279 
+ SYM=DCBRECFM_V LOC=00000040 LEN=00000001 ESD=0000 TYPE=ABS  XREF=75 
+ SYM=DCBRECFM_VA LOC=00000040 LEN=00000001 ESD=0000 TYPE=ABS  XREF=76 
+ SYM=DCBRECFM_VB LOC=00000050 LEN=00000001 ESD=0000 TYPE=ABS  XREF=82 
+ SYM=DCBRECFM_VBA LOC=00000050 LEN=00000001 ESD=0000 TYPE=ABS  XREF=83 
+ SYM=DCBRECFM_VBM LOC=00000050 LEN=00000001 ESD=0000 TYPE=ABS  XREF=84 
+ SYM=DCBRECFM_VM LOC=00000040 LEN=00000001 ESD=0000 TYPE=ABS  XREF=77 
+ SYM=DCBRECFM_VT LOC=00000060 LEN=00000001 ESD=0000 TYPE=ABS  XREF=86 
+ SYM=DCBRECU  LOC=000000C0 LEN=00000001 ESD=0000 TYPE=ABS  XREF=87 
+ SYM=DCBSYNAD LOC=00000038 LEN=00000004 ESD=0002 TYPE=REL  XREF=111 214 250 286 
+ SYM=DSN1     LOC=000002E0 LEN=0000000C ESD=0001 TYPE=REL  XREF=304 223 
+ SYM=DSN2     LOC=000002ED LEN=0000000C ESD=0001 TYPE=REL  XREF=305 259 
+ SYM=DSN3     LOC=000002FA LEN=0000000C ESD=0001 TYPE=REL  XREF=306 295 
+ SYM=DTOT     LOC=0000030E LEN=00000004 ESD=0001 TYPE=REL  XREF=310 137 138 
+ SYM=EOF      LOC=00000110 LEN=00000002 ESD=0001 TYPE=REL  XREF=153 205 
+ SYM=IHADCB   LOC=00000000 LEN=00000068 ESD=0002 TYPE=DST  XREF=57 58 60 64 66 69 
+  88 90 101 110 112 114 116 118 120 125 133 146 200 202 204 206 208 210 212 214 216 
+  218 220 222 224 226 236 238 240 242 244 246 248 250 252 254 256 258 260 262 272 
+  274 276 278 280 282 284 286 288 290 292 294 296 298 
+ SYM=LOOP     LOC=000000DC LEN=00000001 ESD=0001 TYPE=REL  XREF=130 149 
+ SYM=MSG      LOC=00000309 LEN=00000078 ESD=0001 TYPE=REL  XREF=308 141 312 
+ SYM=MYSYNAD  LOC=0000015C LEN=00000001 ESD=0001 TYPE=REL  XREF=180 215 
+ SYM=PTOT     LOC=00000307 LEN=00000002 ESD=0001 TYPE=REL  XREF=307 136 138 
+ SYM=RECORD   LOC=00000318 LEN=00000050 ESD=0001 TYPE=REL  XREF=311 221 257 293 
+ SYM=SYSOUT   LOC=00000278 LEN=00000008 ESD=0001 TYPE=REL  XREF=270 50 140 162 272 
+  274 276 278 280 282 284 286 288 290 292 294 296 298 300 
+ SYM=SYSUT1   LOC=000001A8 LEN=00000008 ESD=0001 TYPE=REL  XREF=198 40 132 154 200 
+  202 204 206 208 210 212 214 216 218 220 222 224 226 228 
+ SYM=SYSUT2   LOC=00000210 LEN=00000008 ESD=0001 TYPE=REL  XREF=234 45 145 158 236 
+  238 240 242 244 246 248 250 252 254 256 258 260 262 264 
+ SYM=TESTERR5 LOC=00000000 LEN=00000390 ESD=0001 TYPE=CST  XREF=16 26 126 
+ SYM=WTO#0002_EOT LOC=000000A9 LEN=00000001 ESD=0001 TYPE=REL  XREF=33 30 31 
+ SYM=WTO#0011_EOT LOC=00000147 LEN=00000001 ESD=0001 TYPE=REL  XREF=170 168 169 
+ SYM=WTO#0013_EOT LOC=0000018D LEN=00000001 ESD=0001 TYPE=REL  XREF=186 183 184 
+ SYM=Z390_CLOSE_EXIT0010 LOC=0000012E LEN=00000001 ESD=0001 TYPE=REL  XREF=164 157 
+  161 
+ SYM=Z390_OPEN_EXIT0004 LOC=000000DC LEN=00000001 ESD=0001 TYPE=REL  XREF=55 44 49 
+  54 
+
+Literal Table Listing
+
+ LIT=P'1'     LOC=0000038C LEN=00000001 ESD=0001 POOL=0001 XREF=136 
+ LIT=X'40202020' LOC=00000388 LEN=00000004 ESD=0001 POOL=0001 XREF=137 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTERR5  MZ390 ENDED RC= 0 IO=1906

@@ -1,0 +1,37 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH         Initial version                           *
+* 2006-02-24  DSH RPI-213 Test macro labels on MEND and END         *
+*********************************************************************
+
+TESTMAC4 SUBENTRY
+         WTO   'TESTMAC4 START TEST UPPER/LOWER LABEL ON MEND/END'
+         SUBEXIT
+         macro
+         test
+tm1      ds   x
+         ago  .TM1
+tm1      ds   x       gen dup error if ago fails
+.tm1     anop
+TM2      ds   x
+         ago  .tm2
+TM2      ds   x       gen dup error if ago fails
+.TM2     MEND
+         test
+         mnote 'test start'
+         ago  .M1
+m1       ds   x
+.m1      anop
+         ago  .m2
+         mnote 'skip this one'
+M2       ds   x
+.M2      END

@@ -1,0 +1,137 @@
+TESTDMP1  EZ390 START
+TESTDMP1  EZ390 Copyright 2011 Automated Software Tools Corporation
+TESTDMP1  EZ390 Copyright 2013 Cat Herder Software, LLC
+TESTDMP1  EZ390 Copyright 2018 Joachim Bartz, Germany
+TESTDMP1  EZ390 z390 is licensed under GNU General Public License
+TESTDMP1  EZ390 program = rt\test\TESTDMP1.390
+TESTDMP1  EZ390 options = notiming stats systerm(rt\test\RTTEST)
+TESTDMP1  EZ390 final_options=ALIGN
+TESTDMP1  EZ390 final_options=NOALLOW
+TESTDMP1  EZ390 final_options=NOAMODE24
+TESTDMP1  EZ390 final_options=AMODE31
+TESTDMP1  EZ390 final_options=NOASCII
+TESTDMP1  EZ390 final_options=ASM
+TESTDMP1  EZ390 final_options=NOASSIST
+TESTDMP1  EZ390 final_options=AUTOLINK
+TESTDMP1  EZ390 final_options=NOBAL
+TESTDMP1  EZ390 final_options=NOBS2000
+TESTDMP1  EZ390 final_options=EDF
+TESTDMP1  EZ390 final_options=NOCICS
+TESTDMP1  EZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTDMP1  EZ390 final_options=COMMENT
+TESTDMP1  EZ390 final_options=CON
+TESTDMP1  EZ390 final_options=NODUMP
+TESTDMP1  EZ390 final_options=EPILOG
+TESTDMP1  EZ390 final_options=NOERRSUM
+TESTDMP1  EZ390 final_options=EXTEND
+TESTDMP1  EZ390 final_options=FLOAT(DECIMAL)
+TESTDMP1  EZ390 final_options=NOGUAM
+TESTDMP1  EZ390 final_options=INIT
+TESTDMP1  EZ390 final_options=LIST
+TESTDMP1  EZ390 final_options=LISTCALL
+TESTDMP1  EZ390 final_options=LISTUSE
+TESTDMP1  EZ390 final_options=LOADHIGH
+TESTDMP1  EZ390 final_options=NOMCALL
+TESTDMP1  EZ390 final_options=NOMOD
+TESTDMP1  EZ390 final_options=OBJ
+TESTDMP1  EZ390 final_options=NOOBJHEX
+TESTDMP1  EZ390 final_options=PC
+TESTDMP1  EZ390 final_options=PCOPT
+TESTDMP1  EZ390 final_options=NOPDSMEM8
+TESTDMP1  EZ390 final_options=NOPRINTALL
+TESTDMP1  EZ390 final_options=PROLOG
+TESTDMP1  EZ390 final_options=PROTECT
+TESTDMP1  EZ390 final_options=R64
+TESTDMP1  EZ390 final_options=NOREFORMAT
+TESTDMP1  EZ390 final_options=NOREGS
+TESTDMP1  EZ390 final_options=RMODE24
+TESTDMP1  EZ390 final_options=NORMODE31
+TESTDMP1  EZ390 final_options=STATS
+TESTDMP1  EZ390 final_options=NOTEST
+TESTDMP1  EZ390 final_options=THREAD
+TESTDMP1  EZ390 final_options=NOTIME
+TESTDMP1  EZ390 final_options=NOTIMING
+TESTDMP1  EZ390 final_options=NOTRACE
+TESTDMP1  EZ390 final_options=NOTRACEA
+TESTDMP1  EZ390 final_options=NOTRACEALL
+TESTDMP1  EZ390 final_options=NOTRACEC
+TESTDMP1  EZ390 final_options=NOTRACEG
+TESTDMP1  EZ390 final_options=NOTRACEI
+TESTDMP1  EZ390 final_options=NOTRACEL
+TESTDMP1  EZ390 final_options=NOTRACEM
+TESTDMP1  EZ390 final_options=NOTRACEP
+TESTDMP1  EZ390 final_options=NOTRACEQ
+TESTDMP1  EZ390 final_options=NOTRACES
+TESTDMP1  EZ390 final_options=NOTRACET
+TESTDMP1  EZ390 final_options=NOTRACEV
+TESTDMP1  EZ390 final_options=TRAP
+TESTDMP1  EZ390 final_options=NOTRUNC
+TESTDMP1  EZ390 final_options=NOTS
+TESTDMP1  EZ390 final_options=VCB
+TESTDMP1  EZ390 final_options=WARN
+TESTDMP1  EZ390 final_options=XREF
+TESTDMP1  EZ390 final_options=ZSTRMAC
+TESTDMP1  EZ390 final_options=CHKMAC=0
+TESTDMP1  EZ390 final_options=CHKSRC=1
+TESTDMP1  EZ390 final_options=ERR=100
+TESTDMP1  EZ390 final_options=MAXCALL=50
+TESTDMP1  EZ390 final_options=MAXDISPLAY=80
+TESTDMP1  EZ390 final_options=MAXESD=1000
+TESTDMP1  EZ390 final_options=MAXFILE=1000
+TESTDMP1  EZ390 final_options=MAXGBL=100000
+TESTDMP1  EZ390 final_options=MAXHEIGHT=600
+TESTDMP1  EZ390 final_options=MAXLCL=100000
+TESTDMP1  EZ390 final_options=MAXLEN=80
+TESTDMP1  EZ390 final_options=MAXLINE=200000
+TESTDMP1  EZ390 final_options=MAXLOG=1000000
+TESTDMP1  EZ390 final_options=MAXPARM=10000
+TESTDMP1  EZ390 final_options=MAXPASS=2
+TESTDMP1  EZ390 final_options=MAXPC=50000
+TESTDMP1  EZ390 final_options=MAXQUE=1000
+TESTDMP1  EZ390 final_options=MAXRLD=10000
+TESTDMP1  EZ390 final_options=MAXSIZE=52428800
+TESTDMP1  EZ390 final_options=MAXSYM=50000
+TESTDMP1  EZ390 final_options=MAXWARN=4
+TESTDMP1  EZ390 final_options=MAXWIDTH=800
+TESTDMP1  EZ390 final_options=MEM=1
+TESTDMP1  EZ390 final_options=MINHEIGHT=150
+TESTDMP1  EZ390 final_options=MINWIDTH=150
+TESTDMP1  EZ390 final_options=MNOTE=0
+TESTDMP1  EZ390 final_options=PARM=
+TESTDMP1  EZ390 final_options=PROFILE=
+TESTDMP1  EZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTDMP1.STA
+TESTDMP1  EZ390 final_options=SYSPARM=
+TESTDMP1  EZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTDMP1  EZ390 final_options=TESTDD=
+TESTDMP1  EZ390 final_options=TIME=15
+TESTDMP1  EZ390 final_options=TRACE=
+TESTDMP1  EZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTDMP1  EZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTDMP1  EZ390 final_options=Z390COMMAND=cmd.exe
+TESTDMP1  EZ390 final_options=Z390EDITOR=notepad.exe
+TESTDMP1  EZ390 final_options=INSTALL=
+TESTDMP1  EZ390 final_options=IPL=
+TESTDMP1  EZ390 final_options=LOG=C:\Users\Achim\GitHub\z390\rt\test\TESTDMP1.LOG
+TESTDMP1  EZ390 final_options=SYS390=rt\test\+linklib
+TESTDMP1  EZ390 final_options=SYSBAL=rt\test\
+TESTDMP1  EZ390 final_options=SYSCPY=rt\test\
+TESTDMP1  EZ390 final_options=SYSDAT=rt\test\
+TESTDMP1  EZ390 final_options=SYSERR=rt\test\
+TESTDMP1  EZ390 final_options=SYSLOG=rt\test\
+TESTDMP1  EZ390 final_options=SYSLST=rt\test\
+TESTDMP1  EZ390 final_options=SYSMAC=rt\test\
+TESTDMP1  EZ390 final_options=SYSMLC=rt\test\
+TESTDMP1  EZ390 final_options=SYSPCH=rt\test\
+TESTDMP1  EZ390 final_options=SYSPRN=rt\test\
+TESTDMP1  EZ390 final_options=SYSOBJ=rt\test\
+TESTDMP1  EZ390 final_options=SYSOPT=rt\test\
+TESTDMP1  EZ390 final_options=SYSTRC=rt\test\
+TESTDMP1  EZ390 TCPIO operations      = 0
+TESTDMP1  EZ390 DCB operations        = 0
+TESTDMP1  EZ390 VSAM operations       = 0
+TESTDMP1  EZ390 Keys                  = 2467
+TESTDMP1  EZ390 Key searches          = 11
+TESTDMP1  EZ390 Key avg comps         = 1
+TESTDMP1  EZ390 Key max comps         = 2
+TESTDMP1  EZ390 total errors          = 1
+TESTDMP1  EZ390 ENDED RC=16 IO=173 INS=9

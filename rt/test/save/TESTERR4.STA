@@ -1,0 +1,143 @@
+TESTERR4  EZ390 START
+TESTERR4  EZ390 Copyright 2011 Automated Software Tools Corporation
+TESTERR4  EZ390 Copyright 2013 Cat Herder Software, LLC
+TESTERR4  EZ390 Copyright 2018 Joachim Bartz, Germany
+TESTERR4  EZ390 z390 is licensed under GNU General Public License
+TESTERR4  EZ390 program = rt\test\TESTERR4.390
+TESTERR4  EZ390 options = notiming stats systerm(rt\test\RTTEST)
+TESTERR4  EZ390 final_options=ALIGN
+TESTERR4  EZ390 final_options=NOALLOW
+TESTERR4  EZ390 final_options=NOAMODE24
+TESTERR4  EZ390 final_options=AMODE31
+TESTERR4  EZ390 final_options=NOASCII
+TESTERR4  EZ390 final_options=ASM
+TESTERR4  EZ390 final_options=NOASSIST
+TESTERR4  EZ390 final_options=AUTOLINK
+TESTERR4  EZ390 final_options=NOBAL
+TESTERR4  EZ390 final_options=NOBS2000
+TESTERR4  EZ390 final_options=EDF
+TESTERR4  EZ390 final_options=NOCICS
+TESTERR4  EZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTERR4  EZ390 final_options=COMMENT
+TESTERR4  EZ390 final_options=CON
+TESTERR4  EZ390 final_options=NODUMP
+TESTERR4  EZ390 final_options=EPILOG
+TESTERR4  EZ390 final_options=NOERRSUM
+TESTERR4  EZ390 final_options=EXTEND
+TESTERR4  EZ390 final_options=FLOAT(DECIMAL)
+TESTERR4  EZ390 final_options=NOGUAM
+TESTERR4  EZ390 final_options=INIT
+TESTERR4  EZ390 final_options=LIST
+TESTERR4  EZ390 final_options=LISTCALL
+TESTERR4  EZ390 final_options=LISTUSE
+TESTERR4  EZ390 final_options=LOADHIGH
+TESTERR4  EZ390 final_options=NOMCALL
+TESTERR4  EZ390 final_options=NOMOD
+TESTERR4  EZ390 final_options=OBJ
+TESTERR4  EZ390 final_options=NOOBJHEX
+TESTERR4  EZ390 final_options=PC
+TESTERR4  EZ390 final_options=PCOPT
+TESTERR4  EZ390 final_options=NOPDSMEM8
+TESTERR4  EZ390 final_options=NOPRINTALL
+TESTERR4  EZ390 final_options=PROLOG
+TESTERR4  EZ390 final_options=PROTECT
+TESTERR4  EZ390 final_options=R64
+TESTERR4  EZ390 final_options=NOREFORMAT
+TESTERR4  EZ390 final_options=NOREGS
+TESTERR4  EZ390 final_options=RMODE24
+TESTERR4  EZ390 final_options=NORMODE31
+TESTERR4  EZ390 final_options=STATS
+TESTERR4  EZ390 final_options=NOTEST
+TESTERR4  EZ390 final_options=THREAD
+TESTERR4  EZ390 final_options=NOTIME
+TESTERR4  EZ390 final_options=NOTIMING
+TESTERR4  EZ390 final_options=NOTRACE
+TESTERR4  EZ390 final_options=NOTRACEA
+TESTERR4  EZ390 final_options=NOTRACEALL
+TESTERR4  EZ390 final_options=NOTRACEC
+TESTERR4  EZ390 final_options=NOTRACEG
+TESTERR4  EZ390 final_options=NOTRACEI
+TESTERR4  EZ390 final_options=NOTRACEL
+TESTERR4  EZ390 final_options=NOTRACEM
+TESTERR4  EZ390 final_options=NOTRACEP
+TESTERR4  EZ390 final_options=NOTRACEQ
+TESTERR4  EZ390 final_options=NOTRACES
+TESTERR4  EZ390 final_options=NOTRACET
+TESTERR4  EZ390 final_options=NOTRACEV
+TESTERR4  EZ390 final_options=TRAP
+TESTERR4  EZ390 final_options=NOTRUNC
+TESTERR4  EZ390 final_options=NOTS
+TESTERR4  EZ390 final_options=VCB
+TESTERR4  EZ390 final_options=WARN
+TESTERR4  EZ390 final_options=XREF
+TESTERR4  EZ390 final_options=ZSTRMAC
+TESTERR4  EZ390 final_options=CHKMAC=0
+TESTERR4  EZ390 final_options=CHKSRC=1
+TESTERR4  EZ390 final_options=ERR=100
+TESTERR4  EZ390 final_options=MAXCALL=50
+TESTERR4  EZ390 final_options=MAXDISPLAY=80
+TESTERR4  EZ390 final_options=MAXESD=1000
+TESTERR4  EZ390 final_options=MAXFILE=1000
+TESTERR4  EZ390 final_options=MAXGBL=100000
+TESTERR4  EZ390 final_options=MAXHEIGHT=600
+TESTERR4  EZ390 final_options=MAXLCL=100000
+TESTERR4  EZ390 final_options=MAXLEN=80
+TESTERR4  EZ390 final_options=MAXLINE=200000
+TESTERR4  EZ390 final_options=MAXLOG=1000000
+TESTERR4  EZ390 final_options=MAXPARM=10000
+TESTERR4  EZ390 final_options=MAXPASS=2
+TESTERR4  EZ390 final_options=MAXPC=50000
+TESTERR4  EZ390 final_options=MAXQUE=1000
+TESTERR4  EZ390 final_options=MAXRLD=10000
+TESTERR4  EZ390 final_options=MAXSIZE=52428800
+TESTERR4  EZ390 final_options=MAXSYM=50000
+TESTERR4  EZ390 final_options=MAXWARN=4
+TESTERR4  EZ390 final_options=MAXWIDTH=800
+TESTERR4  EZ390 final_options=MEM=1
+TESTERR4  EZ390 final_options=MINHEIGHT=150
+TESTERR4  EZ390 final_options=MINWIDTH=150
+TESTERR4  EZ390 final_options=MNOTE=0
+TESTERR4  EZ390 final_options=PARM=
+TESTERR4  EZ390 final_options=PROFILE=
+TESTERR4  EZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTERR4.STA
+TESTERR4  EZ390 final_options=SYSPARM=
+TESTERR4  EZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTERR4  EZ390 final_options=TESTDD=
+TESTERR4  EZ390 final_options=TIME=15
+TESTERR4  EZ390 final_options=TRACE=
+TESTERR4  EZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTERR4  EZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTERR4  EZ390 final_options=Z390COMMAND=cmd.exe
+TESTERR4  EZ390 final_options=Z390EDITOR=notepad.exe
+TESTERR4  EZ390 final_options=INSTALL=
+TESTERR4  EZ390 final_options=IPL=
+TESTERR4  EZ390 final_options=LOG=C:\Users\Achim\GitHub\z390\rt\test\TESTERR4.LOG
+TESTERR4  EZ390 final_options=SYS390=rt\test\+linklib
+TESTERR4  EZ390 final_options=SYSBAL=rt\test\
+TESTERR4  EZ390 final_options=SYSCPY=rt\test\
+TESTERR4  EZ390 final_options=SYSDAT=rt\test\
+TESTERR4  EZ390 final_options=SYSERR=rt\test\
+TESTERR4  EZ390 final_options=SYSLOG=rt\test\
+TESTERR4  EZ390 final_options=SYSLST=rt\test\
+TESTERR4  EZ390 final_options=SYSMAC=rt\test\
+TESTERR4  EZ390 final_options=SYSMLC=rt\test\
+TESTERR4  EZ390 final_options=SYSPCH=rt\test\
+TESTERR4  EZ390 final_options=SYSPRN=rt\test\
+TESTERR4  EZ390 final_options=SYSOBJ=rt\test\
+TESTERR4  EZ390 final_options=SYSOPT=rt\test\
+TESTERR4  EZ390 final_options=SYSTRC=rt\test\
+TESTERR4  EZ390 TCPIO operations      = 0
+TESTERR4  EZ390 DCB operations        = 1
+TESTERR4  EZ390 DCB open              = 1
+TESTERR4  EZ390 DCB close             = 0
+TESTERR4  EZ390 DCB get               = 0
+TESTERR4  EZ390 DCB put               = 0
+TESTERR4  EZ390 DCB read              = 0
+TESTERR4  EZ390 DCB write             = 0
+TESTERR4  EZ390 VSAM operations       = 0
+TESTERR4  EZ390 Keys                  = 2467
+TESTERR4  EZ390 Key searches          = 12
+TESTERR4  EZ390 Key avg comps         = 1
+TESTERR4  EZ390 Key max comps         = 2
+TESTERR4  EZ390 total errors          = 3
+TESTERR4  EZ390 ENDED RC=16 IO=198 INS=10

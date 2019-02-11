@@ -1,0 +1,18 @@
+TESTPCH1  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTPCH1.390
+EZ390I options = bal notiming stats systerm(rt\test\RTTEST)
+START TESTPCH1 AREAD AND PUNCH USING DEFAULT PCH
+TEST1 RECORD 1
+TEST1 RECORD 2
+TEST2 RECORD 1
+TEST2 RECORD 2
+TEST2 RECORD 3
+END   AREAD TEXT
+START PUNCH TEST
+END TESTPCH1 OK
+EZ390I total errors         = 0
+TESTPCH1  EZ390 ENDED RC= 0 IO=165 INS=29

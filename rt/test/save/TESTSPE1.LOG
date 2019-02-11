@@ -1,0 +1,10 @@
+TESTSPE1  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTSPE1.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) stats 
+  systerm(rt\test\RTTEST)
+EZ390I total errors         = 0
+TESTSPE1  EZ390 ENDED RC= 0 IO=156 INS=3

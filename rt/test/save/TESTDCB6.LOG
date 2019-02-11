@@ -1,0 +1,11 @@
+TESTDCB6  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTDCB6.390
+EZ390I options = bal notiming stats systerm(rt\test\RTTEST)
+TESTDCB6 COPY SYSUT1 ASCII V FILE TO SYSUT2 VB
+TESTDCB6 ENDED OK
+EZ390I total errors         = 0
+TESTDCB6  EZ390 ENDED RC= 0 IO=182 INS=94

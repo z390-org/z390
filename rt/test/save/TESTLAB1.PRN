@@ -1,0 +1,106 @@
+TESTLAB1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTLAB1
+AZ390I options = bal notiming sysmac(mac) syscpy(mac) stats 
+  err(0) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000008 TYPE=CST NAME=$PRIVATE
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2007 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2007-07-20 DSH          Initial version                           *
+000000                                      (1/13)13 *********************************************************************
+000000                                      (1/15)14 EMPTY    AMODE ANY
+000000                                      (1/16)15 EMPTY    RMODE ANY
+000000                                      (1/17)16          YREGS ,
+000000                  00000000             (2/3)17+R0       EQU   0
+000000                  00000001             (2/4)18+R1       EQU   1
+000000                  00000002             (2/5)19+R2       EQU   2
+000000                  00000003             (2/6)20+R3       EQU   3
+000000                  00000004             (2/7)21+R4       EQU   4
+000000                  00000005             (2/8)22+R5       EQU   5
+000000                  00000006             (2/9)23+R6       EQU   6
+000000                  00000007            (2/10)24+R7       EQU   7
+000000                  00000008            (2/11)25+R8       EQU   8
+000000                  00000009            (2/12)26+R9       EQU   9
+000000                  0000000A            (2/13)27+R10      EQU   10
+000000                  0000000B            (2/14)28+R11      EQU   11
+000000                  0000000C            (2/15)29+R12      EQU   12
+000000                  0000000D            (2/16)30+R13      EQU   13
+000000                  0000000E            (2/17)31+R14      EQU   14
+000000                  0000000F            (2/18)32+R15      EQU   15
+000000                                      (1/19)34 *
+000000                                      (1/20)35 * Try a normal label
+000000                                      (1/21)36 *
+000000                                      (1/22)37 A1       LR    R2,R3
+000002                                      (1/24)38 A2       LR    R2,R3
+AZ390E error 196       (1/25)39   A3       2     R2,R3
+AZ390I Invalid character in opcode - 2
+AZ390E error 196       (1/27)40   A4       2     R2,R3
+AZ390I Invalid character in opcode - 2
+AZ390E error 196       (1/28)41   A4       2     R2,R3
+AZ390I Invalid character in opcode - 2
+000004                                      (1/29)42 *
+000004                                      (1/30)43 * Try a comment line
+000004                                      (1/31)44 *
+000004                                      (1/32)45 *        LR    R2,R3
+000004                                      (1/34)46 *        LR    R2,R3
+000004                                      (1/35)47 *        2     R2,R3
+000004                                      (1/36)48 *        2     R2,R3
+000004                                      (1/37)49 *
+000004                                      (1/38)50 * Try a macro comment line
+000004                                      (1/39)51 *
+000004                                      (1/42)52 * MZ390E error 218       (1/42)42 Invalid character in variable label - .*
+000004                                      (1/42)54          LR    R2,R3
+000006                                      (1/43)55 * MZ390E error 218       (1/43)43 Invalid character in variable label - .*
+AZ390E error 196       (1/43)57            2     R2,R3
+AZ390I Invalid character in opcode - 2
+000006                                      (1/44)58 * MZ390E error 218       (1/44)44 Invalid character in variable label - .*
+000006                                      (1/44)60 * MZ390E abort 84 file=1 line=44 Internal system exception - java.lang.StringIndexOutOfBoundsException: begin 0, end 8, length 5
+AZ390E error 165       (1/44)60   * MZ390E abort 84 file=1 line=44 Internal system exception - java.lang.StringIndexOutOfBoundsException: begin 0, end 8, length 5
+AZ390I Input truncated due to mz390 abort.
+
+Symbol Table Listing
+
+ SYM=$PRIVATE LOC=00000000 LEN=00000008 ESD=0001 TYPE=CST  XREF=17 
+ SYM=A1       LOC=00000000 LEN=00000002 ESD=0001 TYPE=REL  XREF=37 
+ SYM=A2       LOC=00000002 LEN=00000002 ESD=0001 TYPE=REL  XREF=38 
+ SYM=R0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=17 
+ SYM=R10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=27 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=18 
+ SYM=R11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=28 
+ SYM=R12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=29 
+ SYM=R13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=30 
+ SYM=R14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=31 
+ SYM=R15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=32 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=19 37 38 54 
+ SYM=R3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=20 37 38 54 
+ SYM=R4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=21 
+ SYM=R5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=22 
+ SYM=R6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=23 
+ SYM=R7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=24 
+ SYM=R8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=25 
+ SYM=R9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=26 
+
+Literal Table Listing
+
+ 
+AZ390I FID=  1 ERR=   9 C:\Users\Achim\GitHub\z390\rt\test\TESTLAB1.MLC
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 4
+AZ390I total az390 errors   = 5
+TESTLAB1  MZ390 ENDED RC=12 IO=128

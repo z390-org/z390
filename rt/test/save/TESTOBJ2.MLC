@@ -1,0 +1,36 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH          Initial version                          *
+*********************************************************************
+* Note: This program has 32MB CSECT requiring OBJHEX and MEM(49)    *
+*       options the default binary OBJ format is limited to 24 bit  *
+*       16MB CSECTS.                                                *
+*       The default MEM(1) only allows loading 1MB 390 load modules *
+*********************************************************************
+
+TESTOBJ2 SUBENTRY                   CST/SD TYPE ESD
+         WTO 'TESTOBJ2 TEST OBJHEX SUPPORT FOR 32MB SINGLE CSECT'
+         CALL TESTSUB1              EXT/ER TYPE ESD
+         WXTRN TESTSUB2             WXT/WX TYPE ESD
+         L    15,=A(TESTSUB2)
+         BALR 14,15
+         ENTRY MYSUB                ENT/LD TYPE ESD
+         L    15,=A(MYSUB)
+         BALR 14,15
+         WTO  'TESTOBJ2 ENDED OK'
+         SUBEXIT
+         LTORG
+         ORG  TESTOBJ2+X'2000000' FORCE MYSUB TO ENTRY + 32MB
+MYSUB    EQU  *
+         WTO  'HELLO FROM MYSUB AT 32MB FROM ENTRY'
+         BR   14
+         END

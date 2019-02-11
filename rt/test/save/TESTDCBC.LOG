@@ -1,0 +1,12 @@
+TESTDCBC  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTDCBC.390
+EZ390I options = bal notiming stats ascii 
+  systerm(rt\test\RTTEST)
+TESTDCBC ASCII MODE, DCBREC, DCBDSNAM, NEW OUTPUT
+TESTDCBCBC ENDED OK
+EZ390I total errors         = 0
+TESTDCBC  EZ390 ENDED RC= 0 IO=187 INS=82

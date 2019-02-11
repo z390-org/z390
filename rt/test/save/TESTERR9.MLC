@@ -1,0 +1,24 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH         Initial version                           *
+* 2008-08-18  DSH RPI-901 Move test of OPEN code UNDEF AGO tests to *
+*                         TESTERR8.MLC/TESTERR9.MLC                 *
+*********************************************************************
+
+* Add compound AIF and computed AGO missing labels
+
+&I       SETA  2
+         AGO   (&I).T11,.X12,.T13 ABORT ON X12
+.T11     MNOTE '.T11'
+.T12     MNOTE '.T12'
+.T13     MNOTE '.T13'
+         END

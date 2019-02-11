@@ -1,0 +1,179 @@
+TESTSET1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSET1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000108 TYPE=CST NAME=TESTSET1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH          Initial version                          *
+000000                                      (1/13)13 * 2005-12-08  DSH RPI-119  Add tests for multiple value sets        *
+000000                                      (1/14)14 * 2006-03-20  DSH RPI-242  Add test for LCLC and GBLC init error    *
+000000                                      (1/15)15 * 2006-08-07  DSH RPI-401  Test expansion via multiple store values *
+000000                                      (1/16)16 * 2006-09-08  DSH RPI-435  Test dynamic alloc of local arrays       *
+000000                                      (1/17)17 * 2006-09-21  DSH RPI-445  Test dynamic array expansion copy and    *
+000000                                      (1/18)18 *                          extend                                   *
+000000                                      (1/19)19 * 2006-09-21  DSH RPI-446  Test NOT D'SYMBOL                        *
+000000                                      (1/20)20 * 2006-09-21  DSH RPI-456  Test duplication operator within         *
+000000                                      (1/21)21 *                          expression                               *
+000000                                      (1/22)22 * 2007-02-15  DSH RPI-559  Test &VAR(N'&VAR)                        *
+000000                                      (1/23)23 * 2008-04-22  DSH RPI-833  Add string quotes for HLASM compatibility*
+000000                                      (1/24)24 * 2008-04-24  DSH RPI-839  Test skipping elements in mult SET STORE *
+000000                                      (1/25)25 * 2008-11-08  DSH RPI-938  Remove single quote from MNOTE text      *
+000000                                      (1/26)26 * 2010-01-14  DSH RPI-1105 SETB returns 0 or 1 vs 0-255             *
+000000                                      (1/27)27 * 2011-04-08  DSH RPI-1139 Fix dup GBL/LCL                          *
+000000                                      (1/28)28 *********************************************************************
+000000                                      (1/30)29 TESTSET1 SUBENTRY 
+000000                                      (2/78)30+TESTSET1 CSECT 
+000000 90ECD00C                            (2/168)31+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)32+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)33+         DC    18F'0'
+000050 E3C5E2E3E2C5E3F1                    (2/171)34+         DC    CL8'TESTSET1'
+000058 F0F161F0F261F0F5                    (2/172)35+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)36+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)37+         ST    15,8(13)
+00006C 50DF0004                            (2/175)38+         ST    13,4(15)
+000070 18DF                                (2/176)39+         LR    13,15
+000072                                     (2/189)40+         USING TESTSET1+8,13
+LISTUSE TESTSET1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/31)42          WTO   'TESTSET1 - TEST SUBSCRIPTED VARIABLES'
+000072 A7150017                0000A0       (3/49)44+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00290000E3C5E2E3                     (3/50)45+         DC    AL2(WTO#0002_EOT-*,0),C'TESTSET1 - TEST SUBSCRIPTED VARIABLES'
+00009F                  0000009F            (3/51)47+WTO#0002_EOT     EQU *
+0000A0 0A23                                 (3/52)48+         SVC   35
+0000A2                                      (1/32)50 *
+0000A2                                      (1/33)51 * TEST SETA
+0000A2                                      (1/34)52 *
+0000A2                                      (1/40)53          MNOTE 'A(1)=1 A(2)=2'
+0000A2                                      (1/41)54          MNOTE 'B(1)=1 B(2)=2'
+0000A2                                      (1/44)55 *
+0000A2                                      (1/45)56 * TEST SETB
+0000A2                                      (1/46)57 *
+0000A2                                      (1/52)58          MNOTE 'C(1)=0 C(2)=1'
+0000A2                                      (1/53)59          MNOTE 'D(1)=0 D(2)=1'
+0000A2                                      (1/56)60 *
+0000A2                                      (1/57)61 * TEST SETC
+0000A2                                      (1/58)62 *
+0000A2                                      (1/64)63          MNOTE 'T1(1)=A T2(2)=AB'
+0000A2                                      (1/65)64          MNOTE 'TEXT=ZXABCZ'
+0000A2                                      (1/80)65 *
+0000A2                                      (1/81)66 * test upper and lower case ordinary symbols
+0000A2                                      (1/82)67 *
+0000A2 47F0D0B6                0000BE       (1/83)68          B     ok2
+0000A6                                      (1/84)69          WTO   'LC label error'
+0000A6 A715000B                0000BC       (3/49)70+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+0000AA 00120000D3C34093                     (3/50)71+         DC    AL2(WTO#0003_EOT-*,0),C'LC label error'
+0000BC                  000000BC            (3/51)72+WTO#0003_EOT     EQU *
+0000BC 0A23                                 (3/52)73+         SVC   35
+0000BE                  000000BE            (1/85)75 OK2      EQU   *
+0000BE 47F0D0D2                0000DA       (1/86)76          B     OK3
+0000C2                                      (1/87)77          WTO   'LC label error'
+0000C2 A715000B                0000D8       (3/49)78+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+0000C6 00120000D3C34093                     (3/50)79+         DC    AL2(WTO#0004_EOT-*,0),C'LC label error'
+0000D8                  000000D8            (3/51)80+WTO#0004_EOT     EQU *
+0000D8 0A23                                 (3/52)81+         SVC   35
+0000DA                  000000DA            (1/88)83 ok3      EQU   *
+0000DA                                      (1/89)84 *
+0000DA                                      (1/90)85 * TEST MULT VALUE SETS
+0000DA                                      (1/91)86 *
+0000DA                                     (1/110)87 * TEST UNARY +- IN PARENS
+0000DA                                     (1/125)88 * TEST LCLC AND GBLC INIT ERROR
+0000DA                                     (1/130)89 * TEST EXPANSION VIA MULT. STORE
+0000DA                                     (1/149)90 * TEST ALLOC OF SUBSCRIPTED ARRAY WITHOUT DECLARATION
+0000DA                                     (1/155)91          MNOTE 'DX(3)=1 DX(8)=0 OK'
+0000DA                                     (1/156)92 * TEST EXPANSION COPY AND EXTEND RPI 445
+0000DA                                     (1/165)93          MNOTE 'DY(3)=3 DY(800)=800 OK'
+0000DA                                     (1/166)94 * TEST SUBSTRING * AND NOT D' OPERATION RPI 446
+0000DA                                     (1/169)95          MNOTE 'YL6=234567'
+0000DA                                     (1/172)96          MNOTE 'TESTSET1 DEFINED OK'
+0000DA                                     (1/177)97 * TEST DUPLICATION OPERATOR WITHIN EXPRESSION RPI 456
+0000DA                                     (1/179)98          MNOTE '2X2Y=XXYY'
+0000DA                                     (1/180)99 * TEXT &VAR(N'&VAR)
+0000DA                                    (1/183)100          MNOTE 'VAR(3)=3=3'
+0000DA                                    (1/185)101 * TEST SKIPPING ELEMENTS AND PC CODE RPI 839
+0000DA                                    (1/192)102          MNOTE 'MA(1)=1'
+0000DA                                    (1/193)103          MNOTE 'MA(2)=0'
+0000DA                                    (1/194)104          MNOTE 'MA(3)=3'
+0000DA                                    (1/196)105          MNOTE 'MA(4)=4'
+0000DA                                    (1/197)106          MNOTE 'MA(5)=5'
+0000DA                                    (1/198)107          MNOTE 'MA(6)=6'
+0000DA                                    (1/201)108          MNOTE 'MB(1)=1'
+0000DA                                    (1/202)109          MNOTE 'MB(2)=0'
+0000DA                                    (1/203)110          MNOTE 'MB(3)=1'
+0000DA                                    (1/205)111          MNOTE 'MB(4)=1'
+0000DA                                    (1/206)112          MNOTE 'MB(5)=1'
+0000DA                                    (1/207)113          MNOTE 'MB(6)=1'
+0000DA                                    (1/210)114          MNOTE 'MC(1)=1'
+0000DA                                    (1/211)115          MNOTE 'MC(2)='
+0000DA                                    (1/212)116          MNOTE 'MC(3)=3'
+0000DA                                    (1/214)117          MNOTE 'MC(4)=4'
+0000DA                                    (1/215)118          MNOTE 'MC(5)=5'
+0000DA                                    (1/216)119          MNOTE 'MC(6)=6'
+0000DA                                    (1/192)120          MNOTE 'MA(1)=1'
+0000DA                                    (1/193)121          MNOTE 'MA(2)=0'
+0000DA                                    (1/194)122          MNOTE 'MA(3)=3'
+0000DA                                    (1/196)123          MNOTE 'MA(4)=4'
+0000DA                                    (1/197)124          MNOTE 'MA(5)=5'
+0000DA                                    (1/198)125          MNOTE 'MA(6)=6'
+0000DA                                    (1/201)126          MNOTE 'MB(1)=1'
+0000DA                                    (1/202)127          MNOTE 'MB(2)=0'
+0000DA                                    (1/203)128          MNOTE 'MB(3)=1'
+0000DA                                    (1/205)129          MNOTE 'MB(4)=1'
+0000DA                                    (1/206)130          MNOTE 'MB(5)=1'
+0000DA                                    (1/207)131          MNOTE 'MB(6)=1'
+0000DA                                    (1/210)132          MNOTE 'MC(1)=1'
+0000DA                                    (1/211)133          MNOTE 'MC(2)='
+0000DA                                    (1/212)134          MNOTE 'MC(3)=3'
+0000DA                                    (1/214)135          MNOTE 'MC(4)=4'
+0000DA                                    (1/215)136          MNOTE 'MC(5)=5'
+0000DA                                    (1/216)137          MNOTE 'MC(6)=6'
+0000DA                                    (1/218)138 *
+0000DA                                    (1/219)139 * END OF TESTS
+0000DA                                    (1/220)140 *
+0000DA                                    (1/221)141          WTO   'TESTSET1 ENDED OK'
+0000DA A715000D                0000F4      (3/49)142+         BRAS  1,*+(WTO#0005_EOT-*+1)/2*2
+0000DE 00150000E3C5E2E3                    (3/50)143+         DC    AL2(WTO#0005_EOT-*,0),C'TESTSET1 ENDED OK'
+0000F3                  000000F3           (3/51)144+WTO#0005_EOT     EQU *
+0000F4 0A23                                (3/52)145+         SVC   35
+0000F6                                    (1/222)147          SUBEXIT 
+0000F6 41F00000                            (4/33)148+         LA    15,0
+0000FA 58D0D004                            (4/50)149+         L     13,4(,13)
+0000FE 58E0D00C                            (4/51)150+         L     14,12(,13)
+000102 982CD01C                            (4/52)151+         LM    2,12,28(13)
+000106 07FE                                (4/53)152+         BR    14
+000108                                    (1/226)154          END 
+
+Symbol Table Listing
+
+ SYM=OK2      LOC=000000BE LEN=00000001 ESD=0001 TYPE=REL  XREF=75 68 
+ SYM=TESTSET1 LOC=00000000 LEN=00000108 ESD=0001 TYPE=CST  XREF=30 40 
+ SYM=WTO#0002_EOT LOC=0000009F LEN=00000001 ESD=0001 TYPE=REL  XREF=47 44 45 
+ SYM=WTO#0003_EOT LOC=000000BC LEN=00000001 ESD=0001 TYPE=REL  XREF=72 70 71 
+ SYM=WTO#0004_EOT LOC=000000D8 LEN=00000001 ESD=0001 TYPE=REL  XREF=80 78 79 
+ SYM=WTO#0005_EOT LOC=000000F3 LEN=00000001 ESD=0001 TYPE=REL  XREF=144 142 143 
+ SYM=ok3      LOC=000000DA LEN=00000001 ESD=0001 TYPE=REL  XREF=83 76 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSET1  MZ390 ENDED RC= 0 IO=981

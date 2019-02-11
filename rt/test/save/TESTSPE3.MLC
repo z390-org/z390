@@ -1,0 +1,106 @@
+*********************************************************************
+* Copyright 2008 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2008-08-13 DSH         Initial version                            *
+* 2008-09-17 DSH RPI-911 Change ASELECT to ACASE and APM to ACALL   *
+* 2008-09-23 DSH RPI-911 New regression test for SPM's              *
+*********************************************************************
+
+         TITLE 'TESTSPE3 - TEST STRUCTURED PROGRAMMING EXTENSIONS'
+
+* TEST ZSTRMAC2 ACASE EXTENSIONS FOR V1,V2,(V3,V4) V=N,C'?',X'??'
+&I       SETA 0
+.*       AWHILE (&I LE 255)
+.AWH_1_T   ANOP
+           AIF    (NOT(&I LE 255)).AWH_1_E
+.*               ACASE (&I)
+                   AGO   .ACS_1_G
+.*               AWHEN 0
+.ACS_1_1           ANOP
+                        MNOTE 'AWHEN I=0'
+.*               AWHEN 1
+                   AGO   .ACS_1_E
+.ACS_1_2           ANOP
+                        MNOTE 'AWHEN I=1'
+.*               AWHEN 3,(5,7),9
+                   AGO   .ACS_1_E
+.ACS_1_3           ANOP
+                        MNOTE 'AWHEN I=&I (3,(5,7),9'
+.*               AWHEN C'A'
+                   AGO   .ACS_1_E
+.ACS_1_4           ANOP
+                        MNOTE 'AWHEN I=&I EBCIDC CHAR A'
+.*               AWHEN C'1',(C'2',C'4'),C'5'
+                   AGO   .ACS_1_E
+.ACS_1_5           ANOP
+                        MNOTE 'AWHEN I=&I EBCIDC CHAR 1,(2,4),5'
+.*               AWHEN X'FA',(X'FB',X'FD'),X'FE'
+                   AGO   .ACS_1_E
+.ACS_1_6           ANOP
+                        MNOTE 'AWHEN I=&I EBCIDC HEX FA,(FB,FD),FE'
+.*               AWHEN X'FF'
+                   AGO   .ACS_1_E
+.ACS_1_7           ANOP
+                        MNOTE 'AWHEN I=&I EBCIDC HEX FF'
+.*               AEND
+                   AGO   .ACS_1_E
+.ACS_1_G           ANOP
+                   AGO   (&I+1-0).ACS_1_1,.ACS_1_2,.ACS_1_E,.ACS_1_3,.AX
+               CS_1_E,.ACS_1_3,.ACS_1_3,.ACS_1_3,.ACS_1_E,.ACS_1_3,.ACSX
+               _1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1X
+               _E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_EX
+               ,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.X
+               ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACX
+               S_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_X
+               1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_X
+               E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,X
+               .ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.AX
+               CS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACSX
+               _1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1X
+               _E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_EX
+               ,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.X
+               ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACX
+               S_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_X
+               1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_X
+               E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,X
+               .ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.AX
+               CS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACSX
+               _1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1X
+               _E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_EX
+               ,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.X
+               ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACX
+               S_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_X
+               1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_X
+               E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,X
+               .ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.AX
+               CS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACSX
+               _1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1X
+               _E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_EX
+               ,.ACS_1_E,.ACS_1_E,.ACS_1_4,.ACS_1_E,.ACS_1_E,.ACS_1_E,.X
+               ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACX
+               S_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_X
+               1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_X
+               E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,X
+               .ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.AX
+               CS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACSX
+               _1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1X
+               _E,.ACS_1_5,.ACS_1_5,.ACS_1_5,.ACS_1_5,.ACS_1_5,.ACS_1_EX
+               ,.ACS_1_E,.ACS_1_E,.ACS_1_E,.ACS_1_6,.ACS_1_6,.ACS_1_6,.X
+               ACS_1_6,.ACS_1_6,.ACS_1_7
+.ACS_1_E           ANOP
+&I               SETA &I+1
+.*       AEND
+           AGO   .AWH_1_T
+.AWH_1_E   ANOP
+TESTSPE3 CSECT
+         SR    15,15
+         BR    14
+         END

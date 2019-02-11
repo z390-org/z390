@@ -1,0 +1,194 @@
+TESTSYS1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSYS1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  sysparm(12345) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000000C0 TYPE=CST NAME=TESTSYS1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH         Initial version                           *
+000000                                      (1/13)13 * 2006-01-27  DSH RPI-192 Test correctly handling of && in strings  *
+000000                                      (1/14)14 * 2006-04-06  DSH RPI-259 Add remaining HLASM system variables for  *
+000000                                      (1/15)15 *                         compatibility                             *
+000000                                      (1/16)16 *********************************************************************
+000000                                      (1/18)17 TESTSYS1 SUBENTRY 
+000000                                      (2/78)18+TESTSYS1 CSECT 
+000000 90ECD00C                            (2/168)19+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)20+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)21+         DC    18F'0'
+000050 E3C5E2E3E2E8E2F1                    (2/171)22+         DC    CL8'TESTSYS1'
+000058 F0F161F0F261F0F5                    (2/172)23+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)24+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)25+         ST    15,8(13)
+00006C 50DF0004                            (2/175)26+         ST    13,4(15)
+000070 18DF                                (2/176)27+         LR    13,15
+000072                                     (2/189)28+         USING TESTSYS1+8,13
+LISTUSE TESTSYS1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/19)30          WTO   'TESTSYS1 STARTED'
+000072 A715000C                00008A       (3/49)31+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00140000E3C5E2E3                     (3/50)32+         DC    AL2(WTO#0002_EOT-*,0),C'TESTSYS1 STARTED'
+00008A                  0000008A            (3/51)33+WTO#0002_EOT     EQU *
+00008A 0A23                                 (3/52)34+         SVC   35
+00008C                                      (1/20)36          MNOTE '&SYSASM=z390'
+00008C                                      (1/21)37          MNOTE '&SYSCLOCK=2005-01-02 22:33:44.567000'
+00008C                                      (1/22)38          MNOTE '&SYSDATC=20050102'
+00008C                                      (1/23)39          MNOTE '&SYSDATE=01/02/05'
+00008C                                      (1/24)40          MNOTE '&SYSPARM=12345'
+00008C                                      (1/25)41          MNOTE '&SYSTEM_ID=Windows 10 10.0'
+00008C                                      (1/26)42          MNOTE '&SYSTEM_JAVA=Oracle Corporation 11'
+00008C                                      (1/27)43          MNOTE '&SYSTIME=22.33'
+00008C                                      (1/28)44          MNOTE '&SYSVER=V1.5.07'
+00008C                                      (1/29)45          MACRO
+00008C                                      (1/30)46          TEST
+00008C                                      (1/31)47          MNOTE '&&SYSECT=&SYSECT'
+00008C                                      (1/32)48          MNOTE '&&SYSLOC=&SYSLOC'
+00008C                                      (1/33)49          MNOTE '&&SYSSTYP=&SYSSTYP'
+00008C                                      (1/34)50          MNOTE '&&SYSNDX=&SYSNDX'
+00008C                                      (1/35)51          MNOTE '&&SYSNEST=&SYSNEST'
+00008C                                      (1/36)52          MEND
+00008C                                      (1/37)53          TEST 
+00008C                                      (1/31)54+         MNOTE '&SYSECT=TESTSYS1'
+00008C                                      (1/32)55+         MNOTE '&SYSLOC=TESTSYS1'
+00008C                                      (1/33)56+         MNOTE '&SYSSTYP=CSECT'
+00008C                                      (1/34)57+         MNOTE '&SYSNDX=0003'
+00008C                                      (1/35)58+         MNOTE '&SYSNEST=1'
+000000                                      (1/38)60 TESTD    DSECT 
+000000                                      (1/39)61          TEST 
+000000                                      (1/31)62+         MNOTE '&SYSECT=TESTD'
+000000                                      (1/32)63+         MNOTE '&SYSLOC=TESTD'
+000000                                      (1/33)64+         MNOTE '&SYSSTYP=DSECT'
+000000                                      (1/34)65+         MNOTE '&SYSNDX=0004'
+000000                                      (1/35)66+         MNOTE '&SYSNEST=1'
+000000                                      (1/40)68 TESTDLOC LOCTR 
+000000                                      (1/41)69          TEST 
+000000                                      (1/31)70+         MNOTE '&SYSECT=TESTD'
+000000                                      (1/32)71+         MNOTE '&SYSLOC=TESTDLOC'
+000000                                      (1/33)72+         MNOTE '&SYSSTYP=DSECT'
+000000                                      (1/34)73+         MNOTE '&SYSNDX=0005'
+000000                                      (1/35)74+         MNOTE '&SYSNEST=1'
+00008C                                      (1/42)76 TESTSYS1 CSECT 
+00008C                                      (1/43)77          TEST 
+00008C                                      (1/31)78+         MNOTE '&SYSECT=TESTSYS1'
+00008C                                      (1/32)79+         MNOTE '&SYSLOC=TESTSYS1'
+00008C                                      (1/33)80+         MNOTE '&SYSSTYP=CSECT'
+00008C                                      (1/34)81+         MNOTE '&SYSNDX=0006'
+00008C                                      (1/35)82+         MNOTE '&SYSNEST=1'
+00008C                                      (1/44)84          MNOTE '&SYSCLOCK=2005-01-02 22:33:44.567000'
+00008C                                      (1/46)85          MNOTE 'COUNT TO 10000'
+00008C                                      (1/51)86          MNOTE '&SYSCLOCK=2005-01-02 22:33:44.567000'
+00008C                                      (1/52)87 * TEST SYSMAC
+00008C                                      (1/53)88          MNOTE '&SYSMAC=OPEN CODE'
+00008C                                      (1/54)89          MNOTE '&SYSMAC(0)=OPEN CODE'
+00008C                                      (1/55)90          MNOTE '&SYSMAC(1)='
+00008C                                      (1/56)91          MNOTE '&SYSMAC(2)='
+00008C                                      (1/57)92          MNOTE '&SYSMAC(3)='
+00008C                                      (1/58)93          MNOTE '&SYSNEST=0 SYSMAC(SYSNEST)=OPEN CODE'
+00008C                                      (1/59)94          MACRO
+00008C                                      (1/60)95          TESTA
+00008C                                      (1/61)96          MNOTE 'EXECUTING TESTA'
+00008C                                      (1/62)97          MNOTE '&&SYSMAC=&SYSMAC'
+00008C                                      (1/63)98          MNOTE '&&SYSMAC(0)=&SYSMAC(0)'
+00008C                                      (1/64)99          MNOTE '&&SYSMAC(1)=&SYSMAC(1)'
+00008C                                     (1/65)100          MNOTE '&&SYSMAC(2)=&SYSMAC(2)'
+00008C                                     (1/66)101          MNOTE '&&SYSMAC(3)=&SYSMAC(3)'
+00008C                                     (1/67)102          MNOTE '&&SYSNEST=&SYSNEST &&SYSMAC(SYSNEST)=&SYSMAC(&SYSNEST)'
+00008C                                     (1/68)103          MEND
+00008C                                     (1/69)104          MACRO
+00008C                                     (1/70)105          TESTB
+00008C                                     (1/71)106          MNOTE 'EXECUTING TESTB'
+00008C                                     (1/72)107          TESTA
+00008C                                     (1/73)108          MEND
+00008C                                     (1/74)109          TESTA 
+00008C                                     (1/61)110+         MNOTE 'EXECUTING TESTA'
+00008C                                     (1/62)111+         MNOTE '&SYSMAC=TESTA'
+00008C                                     (1/63)112+         MNOTE '&SYSMAC(0)=TESTA'
+00008C                                     (1/64)113+         MNOTE '&SYSMAC(1)=OPEN CODE'
+00008C                                     (1/65)114+         MNOTE '&SYSMAC(2)='
+00008C                                     (1/66)115+         MNOTE '&SYSMAC(3)='
+00008C                                     (1/67)116+         MNOTE '&SYSNEST=1 &SYSMAC(SYSNEST)=OPEN CODE'
+00008C                                     (1/75)118          TESTB 
+00008C                                     (1/71)119+         MNOTE 'EXECUTING TESTB'
+00008C                                     (1/61)121+         MNOTE 'EXECUTING TESTA'
+00008C                                     (1/62)122+         MNOTE '&SYSMAC=TESTA'
+00008C                                     (1/63)123+         MNOTE '&SYSMAC(0)=TESTA'
+00008C                                     (1/64)124+         MNOTE '&SYSMAC(1)=TESTB'
+00008C                                     (1/65)125+         MNOTE '&SYSMAC(2)=OPEN CODE'
+00008C                                     (1/66)126+         MNOTE '&SYSMAC(3)='
+00008C                                     (1/67)127+         MNOTE '&SYSNEST=2 &SYSMAC(SYSNEST)=OPEN CODE'
+00008C                                     (1/76)130 * TEST REMAINING SYSTEM VARIABLES ADDED FOR COMPATIBLITY
+00008C                                     (1/77)131          MNOTE '&SYSADATA_DSN=C:\Users\Achim\GitHub\z390\rt\test\TESTSYS1.ADA'
+00008C                                     (1/78)133          MNOTE '&SYSADATA_MEMBER=TESTSYS1'
+00008C                                     (1/79)134          MNOTE '&SYSADATA_VOLUME=C'
+00008C                                     (1/80)135          MNOTE '&SYSIN_DSN=C:\Users\Achim\GitHub\z390\rt\test\TESTSYS1.MLC'
+00008C                                     (1/81)137          MNOTE '&SYSIN_MEMBER=TESTSYS1'
+00008C                                     (1/82)138          MNOTE '&SYSIN_VOLUME=C'
+00008C                                     (1/83)139          MNOTE '&SYSJOB=TESTSYS1'
+00008C                                     (1/84)140          MNOTE '&SYSLIB_DSN=C:\Users\Achim\GitHub\z390\rt\test\TESTSYS1.MLC'
+00008C                                     (1/85)142          MNOTE '&SYSLIB_MEMBER=TESTSYS1'
+00008C                                     (1/86)143          MNOTE '&SYSLIB_VOLUME=C'
+00008C                                     (1/87)144          MNOTE '&SYSLIN_DSN=C:\Users\Achim\GitHub\z390\rt\test\TESTSYS1.OBJ'
+00008C                                     (1/88)146          MNOTE '&SYSLIN_MEMBER=TESTSYS1'
+00008C                                     (1/89)147          MNOTE '&SYSLIN_VOLUME=C'
+00008C                                     (1/90)148          MNOTE '&SYSM_HSEV=000'
+00008C                                     (1/91)149          MNOTE '&SYSM_SEV=000'
+00008C                                     (1/92)150          MNOTE '&SYSOPT_DBCS=0'
+00008C                                     (1/93)151          MNOTE '&SYSOPT_OPTABLE=z390'
+00008C                                     (1/94)152          MNOTE '&SYSOPT_RENT=0'
+00008C                                     (1/95)153          MNOTE '&SYSOPT_XOBJECT=0'
+00008C                                     (1/96)154          MNOTE '&SYSPRINT_DSN=C:\Users\Achim\GitHub\z390\rt\test\TESTSYS1.PRN'
+00008C                                     (1/97)156          MNOTE '&SYSPRINT_MEMBER=TESTSYS1'
+00008C                                     (1/98)157          MNOTE '&SYSPRINT_VOLUME=C'
+00008C                                     (1/99)158          MNOTE '&SYSPUNCH_DSN=C:\Users\Achim\GitHub\z390\rt\test\TESTSYS1.PCH'
+00008C                                    (1/100)160          MNOTE '&SYSPUNCH_MEMBER=TESTSYS1'
+00008C                                    (1/101)161          MNOTE '&SYSPUNCH_VOLUME=C'
+00008C                                    (1/102)162          MNOTE '&SYSSEQF='
+00008C                                    (1/103)163          MNOTE '&SYSSTEP=TESTSYS1'
+00008C                                    (1/104)164          MNOTE '&SYSSTMT=00000158'
+00008C                                    (1/105)165          MNOTE '&SYSTERM_DSN=C:\Users\Achim\GitHub\z390\rt\test\TESTSYS1.ERR'
+00008C                                    (1/106)167          MNOTE '&SYSTERM_MEMBER=TESTSYS1'
+00008C                                    (1/107)168          MNOTE '&SYSTERM_VOLUME=C'
+00008C                                    (1/108)169          WTO   'TESTSYS1 ENDED OK'
+00008C A715000D                0000A6      (3/49)170+         BRAS  1,*+(WTO#0010_EOT-*+1)/2*2
+000090 00150000E3C5E2E3                    (3/50)171+         DC    AL2(WTO#0010_EOT-*,0),C'TESTSYS1 ENDED OK'
+0000A5                  000000A5           (3/51)172+WTO#0010_EOT     EQU *
+0000A6 0A23                                (3/52)173+         SVC   35
+0000A8                                    (1/109)175          SUBEXIT 
+0000A8 41F00000                            (4/33)176+         LA    15,0
+0000AC 58D0D004                            (4/50)177+         L     13,4(,13)
+0000B0 58E0D00C                            (4/51)178+         L     14,12(,13)
+0000B4 982CD01C                            (4/52)179+         LM    2,12,28(13)
+0000B8 07FE                                (4/53)180+         BR    14
+0000BA                                    (1/110)182          END 
+
+Symbol Table Listing
+
+ SYM=TESTD    LOC=00000000 LEN=00000000 ESD=0002 TYPE=DST  XREF=60 
+ SYM=TESTDLOC LOC=00000000 LEN=00000000 ESD=0002 TYPE=DST  XREF=68 
+ SYM=TESTSYS1 LOC=00000000 LEN=000000C0 ESD=0001 TYPE=CST  XREF=18 28 76 
+ SYM=WTO#0002_EOT LOC=0000008A LEN=00000001 ESD=0001 TYPE=REL  XREF=33 31 32 
+ SYM=WTO#0010_EOT LOC=000000A5 LEN=00000001 ESD=0001 TYPE=REL  XREF=172 170 171 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSYS1  MZ390 ENDED RC= 0 IO=939

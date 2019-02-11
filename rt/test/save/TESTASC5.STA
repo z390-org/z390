@@ -1,0 +1,17 @@
+TESTASC5  AZ390 START
+TESTASC5  AZ390 BAL lines             = 20448
+TESTASC5  AZ390 symbols               = 7435
+TESTASC5  AZ390 Literals              = 31
+TESTASC5  AZ390 alloc passes          = 2
+TESTASC5  AZ390 Keys                  = 8785
+TESTASC5  AZ390 Key searches          = 153572
+TESTASC5  AZ390 Key avg comps         = 1
+TESTASC5  AZ390 Key max comps         = 6
+TESTASC5  AZ390 ESD symbols           = 1
+TESTASC5  AZ390 object bytes          = 37336
+TESTASC5  AZ390 object rlds           = 30
+TESTASC5  AZ390 total mnote warnings  = 0
+TESTASC5  AZ390 total mnote errors    = 0
+TESTASC5  AZ390 max   mnote level     = 0
+TESTASC5  AZ390 total az390 errors    = 0
+TESTASC5  AZ390 ENDED RC= 0 IO=55729

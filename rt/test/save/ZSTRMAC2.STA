@@ -1,0 +1,686 @@
+ZSTRMAC2  MZ390 START
+ZSTRMAC2  MZ390 Copyright 2011 Automated Software Tools Corporation
+ZSTRMAC2  MZ390 Copyright 2013 Cat Herder Software, LLC
+ZSTRMAC2  MZ390 Copyright 2018 Joachim Bartz, Germany
+ZSTRMAC2  MZ390 z390 is licensed under GNU General Public License
+ZSTRMAC2  MZ390 program = rt\test\ZSTRMAC2.MLC
+ZSTRMAC2  MZ390 options = noasm stats notiming 
+  systerm(rt\test\RTTEST)
+ZSTRMAC2  MZ390 final_options=ALIGN
+ZSTRMAC2  MZ390 final_options=NOALLOW
+ZSTRMAC2  MZ390 final_options=NOAMODE24
+ZSTRMAC2  MZ390 final_options=AMODE31
+ZSTRMAC2  MZ390 final_options=NOASCII
+ZSTRMAC2  MZ390 final_options=NOASM
+ZSTRMAC2  MZ390 final_options=NOASSIST
+ZSTRMAC2  MZ390 final_options=AUTOLINK
+ZSTRMAC2  MZ390 final_options=NOBAL
+ZSTRMAC2  MZ390 final_options=NOBS2000
+ZSTRMAC2  MZ390 final_options=EDF
+ZSTRMAC2  MZ390 final_options=NOCICS
+ZSTRMAC2  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+ZSTRMAC2  MZ390 final_options=COMMENT
+ZSTRMAC2  MZ390 final_options=CON
+ZSTRMAC2  MZ390 final_options=NODUMP
+ZSTRMAC2  MZ390 final_options=EPILOG
+ZSTRMAC2  MZ390 final_options=NOERRSUM
+ZSTRMAC2  MZ390 final_options=EXTEND
+ZSTRMAC2  MZ390 final_options=FLOAT(DECIMAL)
+ZSTRMAC2  MZ390 final_options=NOGUAM
+ZSTRMAC2  MZ390 final_options=INIT
+ZSTRMAC2  MZ390 final_options=LIST
+ZSTRMAC2  MZ390 final_options=LISTCALL
+ZSTRMAC2  MZ390 final_options=LISTUSE
+ZSTRMAC2  MZ390 final_options=LOADHIGH
+ZSTRMAC2  MZ390 final_options=NOMCALL
+ZSTRMAC2  MZ390 final_options=NOMOD
+ZSTRMAC2  MZ390 final_options=OBJ
+ZSTRMAC2  MZ390 final_options=NOOBJHEX
+ZSTRMAC2  MZ390 final_options=PC
+ZSTRMAC2  MZ390 final_options=PCOPT
+ZSTRMAC2  MZ390 final_options=NOPDSMEM8
+ZSTRMAC2  MZ390 final_options=NOPRINTALL
+ZSTRMAC2  MZ390 final_options=PROLOG
+ZSTRMAC2  MZ390 final_options=PROTECT
+ZSTRMAC2  MZ390 final_options=R64
+ZSTRMAC2  MZ390 final_options=NOREFORMAT
+ZSTRMAC2  MZ390 final_options=NOREGS
+ZSTRMAC2  MZ390 final_options=RMODE24
+ZSTRMAC2  MZ390 final_options=NORMODE31
+ZSTRMAC2  MZ390 final_options=STATS
+ZSTRMAC2  MZ390 final_options=NOTEST
+ZSTRMAC2  MZ390 final_options=THREAD
+ZSTRMAC2  MZ390 final_options=NOTIME
+ZSTRMAC2  MZ390 final_options=NOTIMING
+ZSTRMAC2  MZ390 final_options=NOTRACE
+ZSTRMAC2  MZ390 final_options=NOTRACEA
+ZSTRMAC2  MZ390 final_options=NOTRACEALL
+ZSTRMAC2  MZ390 final_options=NOTRACEC
+ZSTRMAC2  MZ390 final_options=NOTRACEG
+ZSTRMAC2  MZ390 final_options=NOTRACEI
+ZSTRMAC2  MZ390 final_options=NOTRACEL
+ZSTRMAC2  MZ390 final_options=NOTRACEM
+ZSTRMAC2  MZ390 final_options=NOTRACEP
+ZSTRMAC2  MZ390 final_options=NOTRACEQ
+ZSTRMAC2  MZ390 final_options=NOTRACES
+ZSTRMAC2  MZ390 final_options=NOTRACET
+ZSTRMAC2  MZ390 final_options=NOTRACEV
+ZSTRMAC2  MZ390 final_options=TRAP
+ZSTRMAC2  MZ390 final_options=NOTRUNC
+ZSTRMAC2  MZ390 final_options=NOTS
+ZSTRMAC2  MZ390 final_options=VCB
+ZSTRMAC2  MZ390 final_options=WARN
+ZSTRMAC2  MZ390 final_options=XREF
+ZSTRMAC2  MZ390 final_options=ZSTRMAC
+ZSTRMAC2  MZ390 final_options=CHKMAC=0
+ZSTRMAC2  MZ390 final_options=CHKSRC=1
+ZSTRMAC2  MZ390 final_options=ERR=100
+ZSTRMAC2  MZ390 final_options=MAXCALL=50
+ZSTRMAC2  MZ390 final_options=MAXDISPLAY=80
+ZSTRMAC2  MZ390 final_options=MAXESD=1000
+ZSTRMAC2  MZ390 final_options=MAXFILE=1000
+ZSTRMAC2  MZ390 final_options=MAXGBL=100000
+ZSTRMAC2  MZ390 final_options=MAXHEIGHT=600
+ZSTRMAC2  MZ390 final_options=MAXLCL=100000
+ZSTRMAC2  MZ390 final_options=MAXLEN=80
+ZSTRMAC2  MZ390 final_options=MAXLINE=200000
+ZSTRMAC2  MZ390 final_options=MAXLOG=1000000
+ZSTRMAC2  MZ390 final_options=MAXPARM=10000
+ZSTRMAC2  MZ390 final_options=MAXPASS=2
+ZSTRMAC2  MZ390 final_options=MAXPC=50000
+ZSTRMAC2  MZ390 final_options=MAXQUE=1000
+ZSTRMAC2  MZ390 final_options=MAXRLD=10000
+ZSTRMAC2  MZ390 final_options=MAXSIZE=52428800
+ZSTRMAC2  MZ390 final_options=MAXSYM=50000
+ZSTRMAC2  MZ390 final_options=MAXWARN=4
+ZSTRMAC2  MZ390 final_options=MAXWIDTH=800
+ZSTRMAC2  MZ390 final_options=MEM=1
+ZSTRMAC2  MZ390 final_options=MINHEIGHT=150
+ZSTRMAC2  MZ390 final_options=MINWIDTH=150
+ZSTRMAC2  MZ390 final_options=MNOTE=0
+ZSTRMAC2  MZ390 final_options=PARM=
+ZSTRMAC2  MZ390 final_options=PROFILE=
+ZSTRMAC2  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\ZSTRMAC2.STA
+ZSTRMAC2  MZ390 final_options=SYSPARM=
+ZSTRMAC2  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+ZSTRMAC2  MZ390 final_options=TESTDD=
+ZSTRMAC2  MZ390 final_options=TIME=15
+ZSTRMAC2  MZ390 final_options=TRACE=
+ZSTRMAC2  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+ZSTRMAC2  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+ZSTRMAC2  MZ390 final_options=Z390COMMAND=cmd.exe
+ZSTRMAC2  MZ390 final_options=Z390EDITOR=notepad.exe
+ZSTRMAC2  MZ390 final_options=INSTALL=
+ZSTRMAC2  MZ390 final_options=IPL=
+ZSTRMAC2  MZ390 final_options=LOG=
+ZSTRMAC2  MZ390 final_options=SYS390=rt\test\+linklib
+ZSTRMAC2  MZ390 final_options=SYSBAL=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSCPY=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSDAT=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSERR=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSLOG=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSLST=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSMAC=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSMLC=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSPCH=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSPRN=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSOBJ=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSOPT=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSTRC=rt\test\
+ZSTRMAC2  MZ390 total MLC/MAC loaded  = 1312
+ZSTRMAC2  MZ390 total BAL output lines= 1486
+ZSTRMAC2  MZ390 total AREAD input     = 91
+ZSTRMAC2  MZ390 total PUNCH output    = 164
+ZSTRMAC2  MZ390 total BAL instructions= 0
+ZSTRMAC2  MZ390 total macros          = 2
+ZSTRMAC2  MZ390 total macro loads     = 2
+ZSTRMAC2  MZ390 total macro calls     = 1
+ZSTRMAC2  MZ390 total AENTRY blocks   = 0
+ZSTRMAC2  MZ390 total ACALL  calls    = 0
+ZSTRMAC2  MZ390 total AIF    blocks   = 0
+ZSTRMAC2  MZ390 total ACASE  blocks   = 0
+ZSTRMAC2  MZ390 total AWHILE calls    = 0
+ZSTRMAC2  MZ390 total AUNTIL blocks   = 0
+ZSTRMAC2  MZ390 total global set names= 46
+ZSTRMAC2  MZ390 tot global seta cells = 206
+ZSTRMAC2  MZ390 tot global setb cells = 7
+ZSTRMAC2  MZ390 tot global setc cells = 39
+ZSTRMAC2  MZ390 max local pos parms   = 1
+ZSTRMAC2  MZ390 max local key parms   = 0
+ZSTRMAC2  MZ390 max local set names   = 107
+ZSTRMAC2  MZ390 max local seta cells  = 876
+ZSTRMAC2  MZ390 max local setb cells  = 209
+ZSTRMAC2  MZ390 max local setc cells  = 221
+ZSTRMAC2  MZ390 total array expansions= 0
+ZSTRMAC2  MZ390 total Keys            = 1820
+ZSTRMAC2  MZ390 Key searches          = 23370
+ZSTRMAC2  MZ390 Key avg comps         = 1
+ZSTRMAC2  MZ390 Key max comps         = 7
+ZSTRMAC2  MZ390 total macro line exec = 13397
+ZSTRMAC2  MZ390 total pcode line exec = 6352
+ZSTRMAC2  MZ390 total pcode line gen. = 407
+ZSTRMAC2  MZ390 total pcode line reuse= 0
+ZSTRMAC2  MZ390 total pcode op   gen. = 1683
+ZSTRMAC2  MZ390 total pcode op   exec = 23916
+ZSTRMAC2  MZ390 total pcode gen  opt  = 466
+ZSTRMAC2  MZ390 total pcode exec opt  = 20
+ZSTRMAC2  MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\rt\test\ZSTRMAC2.MLC
+ZSTRMAC2  MZ390 total mnote warnings  = 0
+ZSTRMAC2  MZ390 total mnote errors    = 0
+ZSTRMAC2  MZ390 max   mnote level     = 0
+ZSTRMAC2  MZ390 total mz390 errors    = 0
+ZSTRMAC2  MZ390 ENDED RC= 0 IO=2384
+ZSTRMAC2  MZ390 START
+ZSTRMAC2  MZ390 Copyright 2011 Automated Software Tools Corporation
+ZSTRMAC2  MZ390 Copyright 2013 Cat Herder Software, LLC
+ZSTRMAC2  MZ390 Copyright 2018 Joachim Bartz, Germany
+ZSTRMAC2  MZ390 z390 is licensed under GNU General Public License
+ZSTRMAC2  MZ390 program = rt\test\ZSTRMAC2.ZSM
+ZSTRMAC2  MZ390 options = noasm stats notiming 
+  systerm(rt\test\RTTEST)
+ZSTRMAC2  MZ390 final_options=ALIGN
+ZSTRMAC2  MZ390 final_options=NOALLOW
+ZSTRMAC2  MZ390 final_options=NOAMODE24
+ZSTRMAC2  MZ390 final_options=AMODE31
+ZSTRMAC2  MZ390 final_options=NOASCII
+ZSTRMAC2  MZ390 final_options=NOASM
+ZSTRMAC2  MZ390 final_options=NOASSIST
+ZSTRMAC2  MZ390 final_options=AUTOLINK
+ZSTRMAC2  MZ390 final_options=NOBAL
+ZSTRMAC2  MZ390 final_options=NOBS2000
+ZSTRMAC2  MZ390 final_options=EDF
+ZSTRMAC2  MZ390 final_options=NOCICS
+ZSTRMAC2  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+ZSTRMAC2  MZ390 final_options=COMMENT
+ZSTRMAC2  MZ390 final_options=CON
+ZSTRMAC2  MZ390 final_options=NODUMP
+ZSTRMAC2  MZ390 final_options=EPILOG
+ZSTRMAC2  MZ390 final_options=NOERRSUM
+ZSTRMAC2  MZ390 final_options=EXTEND
+ZSTRMAC2  MZ390 final_options=FLOAT(DECIMAL)
+ZSTRMAC2  MZ390 final_options=NOGUAM
+ZSTRMAC2  MZ390 final_options=INIT
+ZSTRMAC2  MZ390 final_options=LIST
+ZSTRMAC2  MZ390 final_options=LISTCALL
+ZSTRMAC2  MZ390 final_options=LISTUSE
+ZSTRMAC2  MZ390 final_options=LOADHIGH
+ZSTRMAC2  MZ390 final_options=NOMCALL
+ZSTRMAC2  MZ390 final_options=NOMOD
+ZSTRMAC2  MZ390 final_options=OBJ
+ZSTRMAC2  MZ390 final_options=NOOBJHEX
+ZSTRMAC2  MZ390 final_options=PC
+ZSTRMAC2  MZ390 final_options=PCOPT
+ZSTRMAC2  MZ390 final_options=NOPDSMEM8
+ZSTRMAC2  MZ390 final_options=NOPRINTALL
+ZSTRMAC2  MZ390 final_options=PROLOG
+ZSTRMAC2  MZ390 final_options=PROTECT
+ZSTRMAC2  MZ390 final_options=R64
+ZSTRMAC2  MZ390 final_options=NOREFORMAT
+ZSTRMAC2  MZ390 final_options=NOREGS
+ZSTRMAC2  MZ390 final_options=RMODE24
+ZSTRMAC2  MZ390 final_options=NORMODE31
+ZSTRMAC2  MZ390 final_options=STATS
+ZSTRMAC2  MZ390 final_options=NOTEST
+ZSTRMAC2  MZ390 final_options=THREAD
+ZSTRMAC2  MZ390 final_options=NOTIME
+ZSTRMAC2  MZ390 final_options=NOTIMING
+ZSTRMAC2  MZ390 final_options=NOTRACE
+ZSTRMAC2  MZ390 final_options=NOTRACEA
+ZSTRMAC2  MZ390 final_options=NOTRACEALL
+ZSTRMAC2  MZ390 final_options=NOTRACEC
+ZSTRMAC2  MZ390 final_options=NOTRACEG
+ZSTRMAC2  MZ390 final_options=NOTRACEI
+ZSTRMAC2  MZ390 final_options=NOTRACEL
+ZSTRMAC2  MZ390 final_options=NOTRACEM
+ZSTRMAC2  MZ390 final_options=NOTRACEP
+ZSTRMAC2  MZ390 final_options=NOTRACEQ
+ZSTRMAC2  MZ390 final_options=NOTRACES
+ZSTRMAC2  MZ390 final_options=NOTRACET
+ZSTRMAC2  MZ390 final_options=NOTRACEV
+ZSTRMAC2  MZ390 final_options=TRAP
+ZSTRMAC2  MZ390 final_options=NOTRUNC
+ZSTRMAC2  MZ390 final_options=NOTS
+ZSTRMAC2  MZ390 final_options=VCB
+ZSTRMAC2  MZ390 final_options=WARN
+ZSTRMAC2  MZ390 final_options=XREF
+ZSTRMAC2  MZ390 final_options=ZSTRMAC
+ZSTRMAC2  MZ390 final_options=CHKMAC=0
+ZSTRMAC2  MZ390 final_options=CHKSRC=1
+ZSTRMAC2  MZ390 final_options=ERR=100
+ZSTRMAC2  MZ390 final_options=MAXCALL=50
+ZSTRMAC2  MZ390 final_options=MAXDISPLAY=80
+ZSTRMAC2  MZ390 final_options=MAXESD=1000
+ZSTRMAC2  MZ390 final_options=MAXFILE=1000
+ZSTRMAC2  MZ390 final_options=MAXGBL=100000
+ZSTRMAC2  MZ390 final_options=MAXHEIGHT=600
+ZSTRMAC2  MZ390 final_options=MAXLCL=100000
+ZSTRMAC2  MZ390 final_options=MAXLEN=80
+ZSTRMAC2  MZ390 final_options=MAXLINE=200000
+ZSTRMAC2  MZ390 final_options=MAXLOG=1000000
+ZSTRMAC2  MZ390 final_options=MAXPARM=10000
+ZSTRMAC2  MZ390 final_options=MAXPASS=2
+ZSTRMAC2  MZ390 final_options=MAXPC=50000
+ZSTRMAC2  MZ390 final_options=MAXQUE=1000
+ZSTRMAC2  MZ390 final_options=MAXRLD=10000
+ZSTRMAC2  MZ390 final_options=MAXSIZE=52428800
+ZSTRMAC2  MZ390 final_options=MAXSYM=50000
+ZSTRMAC2  MZ390 final_options=MAXWARN=4
+ZSTRMAC2  MZ390 final_options=MAXWIDTH=800
+ZSTRMAC2  MZ390 final_options=MEM=1
+ZSTRMAC2  MZ390 final_options=MINHEIGHT=150
+ZSTRMAC2  MZ390 final_options=MINWIDTH=150
+ZSTRMAC2  MZ390 final_options=MNOTE=0
+ZSTRMAC2  MZ390 final_options=PARM=
+ZSTRMAC2  MZ390 final_options=PROFILE=
+ZSTRMAC2  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\ZSTRMAC2.STA
+ZSTRMAC2  MZ390 final_options=SYSPARM=
+ZSTRMAC2  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+ZSTRMAC2  MZ390 final_options=TESTDD=
+ZSTRMAC2  MZ390 final_options=TIME=15
+ZSTRMAC2  MZ390 final_options=TRACE=
+ZSTRMAC2  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+ZSTRMAC2  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+ZSTRMAC2  MZ390 final_options=Z390COMMAND=cmd.exe
+ZSTRMAC2  MZ390 final_options=Z390EDITOR=notepad.exe
+ZSTRMAC2  MZ390 final_options=INSTALL=
+ZSTRMAC2  MZ390 final_options=IPL=
+ZSTRMAC2  MZ390 final_options=LOG=
+ZSTRMAC2  MZ390 final_options=SYS390=rt\test\+linklib
+ZSTRMAC2  MZ390 final_options=SYSBAL=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSCPY=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSDAT=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSERR=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSLOG=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSLST=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSMAC=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSMLC=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSPCH=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSPRN=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSOBJ=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSOPT=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSTRC=rt\test\
+ZSTRMAC2  MZ390 total MLC/MAC loaded  = 1335
+ZSTRMAC2  MZ390 total BAL output lines= 3291
+ZSTRMAC2  MZ390 total AREAD input     = 1005
+ZSTRMAC2  MZ390 total PUNCH output    = 1946
+ZSTRMAC2  MZ390 total BAL instructions= 0
+ZSTRMAC2  MZ390 total macros          = 2
+ZSTRMAC2  MZ390 total macro loads     = 2
+ZSTRMAC2  MZ390 total macro calls     = 1
+ZSTRMAC2  MZ390 total AENTRY blocks   = 33
+ZSTRMAC2  MZ390 total ACALL  calls    = 127
+ZSTRMAC2  MZ390 total AIF    blocks   = 80
+ZSTRMAC2  MZ390 total ACASE  blocks   = 1
+ZSTRMAC2  MZ390 total AWHILE calls    = 14
+ZSTRMAC2  MZ390 total AUNTIL blocks   = 0
+ZSTRMAC2  MZ390 total global set names= 46
+ZSTRMAC2  MZ390 tot global seta cells = 200
+ZSTRMAC2  MZ390 tot global setb cells = 7
+ZSTRMAC2  MZ390 tot global setc cells = 39
+ZSTRMAC2  MZ390 max local pos parms   = 1
+ZSTRMAC2  MZ390 max local key parms   = 0
+ZSTRMAC2  MZ390 max local set names   = 104
+ZSTRMAC2  MZ390 max local seta cells  = 617
+ZSTRMAC2  MZ390 max local setb cells  = 209
+ZSTRMAC2  MZ390 max local setc cells  = 222
+ZSTRMAC2  MZ390 total array expansions= 0
+ZSTRMAC2  MZ390 total Keys            = 1859
+ZSTRMAC2  MZ390 Key searches          = 189161
+ZSTRMAC2  MZ390 Key avg comps         = 1
+ZSTRMAC2  MZ390 Key max comps         = 7
+ZSTRMAC2  MZ390 total macro line exec = 143324
+ZSTRMAC2  MZ390 total pcode line exec = 69502
+ZSTRMAC2  MZ390 total pcode line gen. = 407
+ZSTRMAC2  MZ390 total pcode line reuse= 0
+ZSTRMAC2  MZ390 total pcode op   gen. = 1749
+ZSTRMAC2  MZ390 total pcode op   exec = 289506
+ZSTRMAC2  MZ390 total pcode gen  opt  = 479
+ZSTRMAC2  MZ390 total pcode exec opt  = 24
+ZSTRMAC2  MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\rt\test\ZSTRMAC2.ZSM
+ZSTRMAC2  MZ390 total mnote warnings  = 0
+ZSTRMAC2  MZ390 total mnote errors    = 0
+ZSTRMAC2  MZ390 max   mnote level     = 0
+ZSTRMAC2  MZ390 total mz390 errors    = 0
+ZSTRMAC2  MZ390 ENDED RC= 0 IO=4139
+ZSTRMAC2  MZ390 START
+ZSTRMAC2  MZ390 Copyright 2011 Automated Software Tools Corporation
+ZSTRMAC2  MZ390 Copyright 2013 Cat Herder Software, LLC
+ZSTRMAC2  MZ390 Copyright 2018 Joachim Bartz, Germany
+ZSTRMAC2  MZ390 z390 is licensed under GNU General Public License
+ZSTRMAC2  MZ390 program = rt\test\ZSTRMAC2.ZSM
+ZSTRMAC2  MZ390 options = noasm stats notiming 
+  systerm(rt\test\RTTEST)
+ZSTRMAC2  MZ390 final_options=ALIGN
+ZSTRMAC2  MZ390 final_options=NOALLOW
+ZSTRMAC2  MZ390 final_options=NOAMODE24
+ZSTRMAC2  MZ390 final_options=AMODE31
+ZSTRMAC2  MZ390 final_options=NOASCII
+ZSTRMAC2  MZ390 final_options=NOASM
+ZSTRMAC2  MZ390 final_options=NOASSIST
+ZSTRMAC2  MZ390 final_options=AUTOLINK
+ZSTRMAC2  MZ390 final_options=NOBAL
+ZSTRMAC2  MZ390 final_options=NOBS2000
+ZSTRMAC2  MZ390 final_options=EDF
+ZSTRMAC2  MZ390 final_options=NOCICS
+ZSTRMAC2  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+ZSTRMAC2  MZ390 final_options=COMMENT
+ZSTRMAC2  MZ390 final_options=CON
+ZSTRMAC2  MZ390 final_options=NODUMP
+ZSTRMAC2  MZ390 final_options=EPILOG
+ZSTRMAC2  MZ390 final_options=NOERRSUM
+ZSTRMAC2  MZ390 final_options=EXTEND
+ZSTRMAC2  MZ390 final_options=FLOAT(DECIMAL)
+ZSTRMAC2  MZ390 final_options=NOGUAM
+ZSTRMAC2  MZ390 final_options=INIT
+ZSTRMAC2  MZ390 final_options=LIST
+ZSTRMAC2  MZ390 final_options=LISTCALL
+ZSTRMAC2  MZ390 final_options=LISTUSE
+ZSTRMAC2  MZ390 final_options=LOADHIGH
+ZSTRMAC2  MZ390 final_options=NOMCALL
+ZSTRMAC2  MZ390 final_options=NOMOD
+ZSTRMAC2  MZ390 final_options=OBJ
+ZSTRMAC2  MZ390 final_options=NOOBJHEX
+ZSTRMAC2  MZ390 final_options=PC
+ZSTRMAC2  MZ390 final_options=PCOPT
+ZSTRMAC2  MZ390 final_options=NOPDSMEM8
+ZSTRMAC2  MZ390 final_options=NOPRINTALL
+ZSTRMAC2  MZ390 final_options=PROLOG
+ZSTRMAC2  MZ390 final_options=PROTECT
+ZSTRMAC2  MZ390 final_options=R64
+ZSTRMAC2  MZ390 final_options=NOREFORMAT
+ZSTRMAC2  MZ390 final_options=NOREGS
+ZSTRMAC2  MZ390 final_options=RMODE24
+ZSTRMAC2  MZ390 final_options=NORMODE31
+ZSTRMAC2  MZ390 final_options=STATS
+ZSTRMAC2  MZ390 final_options=NOTEST
+ZSTRMAC2  MZ390 final_options=THREAD
+ZSTRMAC2  MZ390 final_options=NOTIME
+ZSTRMAC2  MZ390 final_options=NOTIMING
+ZSTRMAC2  MZ390 final_options=NOTRACE
+ZSTRMAC2  MZ390 final_options=NOTRACEA
+ZSTRMAC2  MZ390 final_options=NOTRACEALL
+ZSTRMAC2  MZ390 final_options=NOTRACEC
+ZSTRMAC2  MZ390 final_options=NOTRACEG
+ZSTRMAC2  MZ390 final_options=NOTRACEI
+ZSTRMAC2  MZ390 final_options=NOTRACEL
+ZSTRMAC2  MZ390 final_options=NOTRACEM
+ZSTRMAC2  MZ390 final_options=NOTRACEP
+ZSTRMAC2  MZ390 final_options=NOTRACEQ
+ZSTRMAC2  MZ390 final_options=NOTRACES
+ZSTRMAC2  MZ390 final_options=NOTRACET
+ZSTRMAC2  MZ390 final_options=NOTRACEV
+ZSTRMAC2  MZ390 final_options=TRAP
+ZSTRMAC2  MZ390 final_options=NOTRUNC
+ZSTRMAC2  MZ390 final_options=NOTS
+ZSTRMAC2  MZ390 final_options=VCB
+ZSTRMAC2  MZ390 final_options=WARN
+ZSTRMAC2  MZ390 final_options=XREF
+ZSTRMAC2  MZ390 final_options=ZSTRMAC
+ZSTRMAC2  MZ390 final_options=CHKMAC=0
+ZSTRMAC2  MZ390 final_options=CHKSRC=1
+ZSTRMAC2  MZ390 final_options=ERR=100
+ZSTRMAC2  MZ390 final_options=MAXCALL=50
+ZSTRMAC2  MZ390 final_options=MAXDISPLAY=80
+ZSTRMAC2  MZ390 final_options=MAXESD=1000
+ZSTRMAC2  MZ390 final_options=MAXFILE=1000
+ZSTRMAC2  MZ390 final_options=MAXGBL=100000
+ZSTRMAC2  MZ390 final_options=MAXHEIGHT=600
+ZSTRMAC2  MZ390 final_options=MAXLCL=100000
+ZSTRMAC2  MZ390 final_options=MAXLEN=80
+ZSTRMAC2  MZ390 final_options=MAXLINE=200000
+ZSTRMAC2  MZ390 final_options=MAXLOG=1000000
+ZSTRMAC2  MZ390 final_options=MAXPARM=10000
+ZSTRMAC2  MZ390 final_options=MAXPASS=2
+ZSTRMAC2  MZ390 final_options=MAXPC=50000
+ZSTRMAC2  MZ390 final_options=MAXQUE=1000
+ZSTRMAC2  MZ390 final_options=MAXRLD=10000
+ZSTRMAC2  MZ390 final_options=MAXSIZE=52428800
+ZSTRMAC2  MZ390 final_options=MAXSYM=50000
+ZSTRMAC2  MZ390 final_options=MAXWARN=4
+ZSTRMAC2  MZ390 final_options=MAXWIDTH=800
+ZSTRMAC2  MZ390 final_options=MEM=1
+ZSTRMAC2  MZ390 final_options=MINHEIGHT=150
+ZSTRMAC2  MZ390 final_options=MINWIDTH=150
+ZSTRMAC2  MZ390 final_options=MNOTE=0
+ZSTRMAC2  MZ390 final_options=PARM=
+ZSTRMAC2  MZ390 final_options=PROFILE=
+ZSTRMAC2  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\ZSTRMAC2.STA
+ZSTRMAC2  MZ390 final_options=SYSPARM=
+ZSTRMAC2  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+ZSTRMAC2  MZ390 final_options=TESTDD=
+ZSTRMAC2  MZ390 final_options=TIME=15
+ZSTRMAC2  MZ390 final_options=TRACE=
+ZSTRMAC2  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+ZSTRMAC2  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+ZSTRMAC2  MZ390 final_options=Z390COMMAND=cmd.exe
+ZSTRMAC2  MZ390 final_options=Z390EDITOR=notepad.exe
+ZSTRMAC2  MZ390 final_options=INSTALL=
+ZSTRMAC2  MZ390 final_options=IPL=
+ZSTRMAC2  MZ390 final_options=LOG=
+ZSTRMAC2  MZ390 final_options=SYS390=rt\test\+linklib
+ZSTRMAC2  MZ390 final_options=SYSBAL=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSCPY=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSDAT=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSERR=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSLOG=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSLST=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSMAC=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSMLC=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSPCH=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSPRN=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSOBJ=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSOPT=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSTRC=rt\test\
+ZSTRMAC2  MZ390 total MLC/MAC loaded  = 1335
+ZSTRMAC2  MZ390 total BAL output lines= 1451
+ZSTRMAC2  MZ390 total AREAD input     = 43
+ZSTRMAC2  MZ390 total PUNCH output    = 106
+ZSTRMAC2  MZ390 total BAL instructions= 0
+ZSTRMAC2  MZ390 total macros          = 2
+ZSTRMAC2  MZ390 total macro loads     = 2
+ZSTRMAC2  MZ390 total macro calls     = 1
+ZSTRMAC2  MZ390 total AENTRY blocks   = 33
+ZSTRMAC2  MZ390 total ACALL  calls    = 127
+ZSTRMAC2  MZ390 total AIF    blocks   = 80
+ZSTRMAC2  MZ390 total ACASE  blocks   = 1
+ZSTRMAC2  MZ390 total AWHILE calls    = 14
+ZSTRMAC2  MZ390 total AUNTIL blocks   = 0
+ZSTRMAC2  MZ390 total global set names= 46
+ZSTRMAC2  MZ390 tot global seta cells = 166
+ZSTRMAC2  MZ390 tot global setb cells = 7
+ZSTRMAC2  MZ390 tot global setc cells = 39
+ZSTRMAC2  MZ390 max local pos parms   = 1
+ZSTRMAC2  MZ390 max local key parms   = 0
+ZSTRMAC2  MZ390 max local set names   = 91
+ZSTRMAC2  MZ390 max local seta cells  = 605
+ZSTRMAC2  MZ390 max local setb cells  = 209
+ZSTRMAC2  MZ390 max local setc cells  = 221
+ZSTRMAC2  MZ390 total array expansions= 0
+ZSTRMAC2  MZ390 total Keys            = 1774
+ZSTRMAC2  MZ390 Key searches          = 16674
+ZSTRMAC2  MZ390 Key avg comps         = 1
+ZSTRMAC2  MZ390 Key max comps         = 6
+ZSTRMAC2  MZ390 total macro line exec = 9440
+ZSTRMAC2  MZ390 total pcode line exec = 4448
+ZSTRMAC2  MZ390 total pcode line gen. = 265
+ZSTRMAC2  MZ390 total pcode line reuse= 0
+ZSTRMAC2  MZ390 total pcode op   gen. = 1162
+ZSTRMAC2  MZ390 total pcode op   exec = 17703
+ZSTRMAC2  MZ390 total pcode gen  opt  = 317
+ZSTRMAC2  MZ390 total pcode exec opt  = 13
+ZSTRMAC2  MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\rt\test\ZSTRMAC2.ZSM
+ZSTRMAC2  MZ390 total mnote warnings  = 0
+ZSTRMAC2  MZ390 total mnote errors    = 0
+ZSTRMAC2  MZ390 max   mnote level     = 0
+ZSTRMAC2  MZ390 total mz390 errors    = 0
+ZSTRMAC2  MZ390 ENDED RC= 0 IO=1337
+ZSTRMAC2  MZ390 START
+ZSTRMAC2  MZ390 Copyright 2011 Automated Software Tools Corporation
+ZSTRMAC2  MZ390 Copyright 2013 Cat Herder Software, LLC
+ZSTRMAC2  MZ390 Copyright 2018 Joachim Bartz, Germany
+ZSTRMAC2  MZ390 z390 is licensed under GNU General Public License
+ZSTRMAC2  MZ390 program = rt\test\ZSTRMAC2.ZSM
+ZSTRMAC2  MZ390 options = noasm stats notiming 
+  systerm(rt\test\RTTEST)
+ZSTRMAC2  MZ390 final_options=ALIGN
+ZSTRMAC2  MZ390 final_options=NOALLOW
+ZSTRMAC2  MZ390 final_options=NOAMODE24
+ZSTRMAC2  MZ390 final_options=AMODE31
+ZSTRMAC2  MZ390 final_options=NOASCII
+ZSTRMAC2  MZ390 final_options=NOASM
+ZSTRMAC2  MZ390 final_options=NOASSIST
+ZSTRMAC2  MZ390 final_options=AUTOLINK
+ZSTRMAC2  MZ390 final_options=NOBAL
+ZSTRMAC2  MZ390 final_options=NOBS2000
+ZSTRMAC2  MZ390 final_options=EDF
+ZSTRMAC2  MZ390 final_options=NOCICS
+ZSTRMAC2  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+ZSTRMAC2  MZ390 final_options=COMMENT
+ZSTRMAC2  MZ390 final_options=CON
+ZSTRMAC2  MZ390 final_options=NODUMP
+ZSTRMAC2  MZ390 final_options=EPILOG
+ZSTRMAC2  MZ390 final_options=NOERRSUM
+ZSTRMAC2  MZ390 final_options=EXTEND
+ZSTRMAC2  MZ390 final_options=FLOAT(DECIMAL)
+ZSTRMAC2  MZ390 final_options=NOGUAM
+ZSTRMAC2  MZ390 final_options=INIT
+ZSTRMAC2  MZ390 final_options=LIST
+ZSTRMAC2  MZ390 final_options=LISTCALL
+ZSTRMAC2  MZ390 final_options=LISTUSE
+ZSTRMAC2  MZ390 final_options=LOADHIGH
+ZSTRMAC2  MZ390 final_options=NOMCALL
+ZSTRMAC2  MZ390 final_options=NOMOD
+ZSTRMAC2  MZ390 final_options=OBJ
+ZSTRMAC2  MZ390 final_options=NOOBJHEX
+ZSTRMAC2  MZ390 final_options=PC
+ZSTRMAC2  MZ390 final_options=PCOPT
+ZSTRMAC2  MZ390 final_options=NOPDSMEM8
+ZSTRMAC2  MZ390 final_options=NOPRINTALL
+ZSTRMAC2  MZ390 final_options=PROLOG
+ZSTRMAC2  MZ390 final_options=PROTECT
+ZSTRMAC2  MZ390 final_options=R64
+ZSTRMAC2  MZ390 final_options=NOREFORMAT
+ZSTRMAC2  MZ390 final_options=NOREGS
+ZSTRMAC2  MZ390 final_options=RMODE24
+ZSTRMAC2  MZ390 final_options=NORMODE31
+ZSTRMAC2  MZ390 final_options=STATS
+ZSTRMAC2  MZ390 final_options=NOTEST
+ZSTRMAC2  MZ390 final_options=THREAD
+ZSTRMAC2  MZ390 final_options=NOTIME
+ZSTRMAC2  MZ390 final_options=NOTIMING
+ZSTRMAC2  MZ390 final_options=NOTRACE
+ZSTRMAC2  MZ390 final_options=NOTRACEA
+ZSTRMAC2  MZ390 final_options=NOTRACEALL
+ZSTRMAC2  MZ390 final_options=NOTRACEC
+ZSTRMAC2  MZ390 final_options=NOTRACEG
+ZSTRMAC2  MZ390 final_options=NOTRACEI
+ZSTRMAC2  MZ390 final_options=NOTRACEL
+ZSTRMAC2  MZ390 final_options=NOTRACEM
+ZSTRMAC2  MZ390 final_options=NOTRACEP
+ZSTRMAC2  MZ390 final_options=NOTRACEQ
+ZSTRMAC2  MZ390 final_options=NOTRACES
+ZSTRMAC2  MZ390 final_options=NOTRACET
+ZSTRMAC2  MZ390 final_options=NOTRACEV
+ZSTRMAC2  MZ390 final_options=TRAP
+ZSTRMAC2  MZ390 final_options=NOTRUNC
+ZSTRMAC2  MZ390 final_options=NOTS
+ZSTRMAC2  MZ390 final_options=VCB
+ZSTRMAC2  MZ390 final_options=WARN
+ZSTRMAC2  MZ390 final_options=XREF
+ZSTRMAC2  MZ390 final_options=ZSTRMAC
+ZSTRMAC2  MZ390 final_options=CHKMAC=0
+ZSTRMAC2  MZ390 final_options=CHKSRC=1
+ZSTRMAC2  MZ390 final_options=ERR=100
+ZSTRMAC2  MZ390 final_options=MAXCALL=50
+ZSTRMAC2  MZ390 final_options=MAXDISPLAY=80
+ZSTRMAC2  MZ390 final_options=MAXESD=1000
+ZSTRMAC2  MZ390 final_options=MAXFILE=1000
+ZSTRMAC2  MZ390 final_options=MAXGBL=100000
+ZSTRMAC2  MZ390 final_options=MAXHEIGHT=600
+ZSTRMAC2  MZ390 final_options=MAXLCL=100000
+ZSTRMAC2  MZ390 final_options=MAXLEN=80
+ZSTRMAC2  MZ390 final_options=MAXLINE=200000
+ZSTRMAC2  MZ390 final_options=MAXLOG=1000000
+ZSTRMAC2  MZ390 final_options=MAXPARM=10000
+ZSTRMAC2  MZ390 final_options=MAXPASS=2
+ZSTRMAC2  MZ390 final_options=MAXPC=50000
+ZSTRMAC2  MZ390 final_options=MAXQUE=1000
+ZSTRMAC2  MZ390 final_options=MAXRLD=10000
+ZSTRMAC2  MZ390 final_options=MAXSIZE=52428800
+ZSTRMAC2  MZ390 final_options=MAXSYM=50000
+ZSTRMAC2  MZ390 final_options=MAXWARN=4
+ZSTRMAC2  MZ390 final_options=MAXWIDTH=800
+ZSTRMAC2  MZ390 final_options=MEM=1
+ZSTRMAC2  MZ390 final_options=MINHEIGHT=150
+ZSTRMAC2  MZ390 final_options=MINWIDTH=150
+ZSTRMAC2  MZ390 final_options=MNOTE=0
+ZSTRMAC2  MZ390 final_options=PARM=
+ZSTRMAC2  MZ390 final_options=PROFILE=
+ZSTRMAC2  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\ZSTRMAC2.STA
+ZSTRMAC2  MZ390 final_options=SYSPARM=
+ZSTRMAC2  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+ZSTRMAC2  MZ390 final_options=TESTDD=
+ZSTRMAC2  MZ390 final_options=TIME=15
+ZSTRMAC2  MZ390 final_options=TRACE=
+ZSTRMAC2  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+ZSTRMAC2  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+ZSTRMAC2  MZ390 final_options=Z390COMMAND=cmd.exe
+ZSTRMAC2  MZ390 final_options=Z390EDITOR=notepad.exe
+ZSTRMAC2  MZ390 final_options=INSTALL=
+ZSTRMAC2  MZ390 final_options=IPL=
+ZSTRMAC2  MZ390 final_options=LOG=
+ZSTRMAC2  MZ390 final_options=SYS390=rt\test\+linklib
+ZSTRMAC2  MZ390 final_options=SYSBAL=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSCPY=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSDAT=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSERR=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSLOG=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSLST=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSMAC=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSMLC=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSPCH=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSPRN=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSOBJ=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSOPT=rt\test\
+ZSTRMAC2  MZ390 final_options=SYSTRC=rt\test\
+ZSTRMAC2  MZ390 total MLC/MAC loaded  = 1335
+ZSTRMAC2  MZ390 total BAL output lines= 1345
+ZSTRMAC2  MZ390 total BAL instructions= 0
+ZSTRMAC2  MZ390 total macros          = 2
+ZSTRMAC2  MZ390 total macro loads     = 2
+ZSTRMAC2  MZ390 total macro calls     = 1
+ZSTRMAC2  MZ390 total AENTRY blocks   = 33
+ZSTRMAC2  MZ390 total ACALL  calls    = 127
+ZSTRMAC2  MZ390 total AIF    blocks   = 80
+ZSTRMAC2  MZ390 total ACASE  blocks   = 1
+ZSTRMAC2  MZ390 total AWHILE calls    = 14
+ZSTRMAC2  MZ390 total AUNTIL blocks   = 0
+ZSTRMAC2  MZ390 total global set names= 46
+ZSTRMAC2  MZ390 tot global seta cells = 9
+ZSTRMAC2  MZ390 tot global setb cells = 7
+ZSTRMAC2  MZ390 tot global setc cells = 39
+ZSTRMAC2  MZ390 max local pos parms   = 1
+ZSTRMAC2  MZ390 max local key parms   = 0
+ZSTRMAC2  MZ390 max local set names   = 47
+ZSTRMAC2  MZ390 max local seta cells  = 321
+ZSTRMAC2  MZ390 max local setb cells  = 206
+ZSTRMAC2  MZ390 max local setc cells  = 209
+ZSTRMAC2  MZ390 total array expansions= 0
+ZSTRMAC2  MZ390 total Keys            = 1506
+ZSTRMAC2  MZ390 Key searches          = 2813
+ZSTRMAC2  MZ390 Key avg comps         = 0
+ZSTRMAC2  MZ390 Key max comps         = 4
+ZSTRMAC2  MZ390 total macro line exec = 211
+ZSTRMAC2  MZ390 total pcode line exec = 0
+ZSTRMAC2  MZ390 total pcode line gen. = 10
+ZSTRMAC2  MZ390 total pcode line reuse= 0
+ZSTRMAC2  MZ390 total pcode op   gen. = 29
+ZSTRMAC2  MZ390 total pcode op   exec = 0
+ZSTRMAC2  MZ390 total pcode gen  opt  = 4
+ZSTRMAC2  MZ390 total pcode exec opt  = 0
+ZSTRMAC2  MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\rt\test\ZSTRMAC2.ZSM
+ZSTRMAC2  MZ390 total mnote warnings  = 0
+ZSTRMAC2  MZ390 total mnote errors    = 0
+ZSTRMAC2  MZ390 max   mnote level     = 0
+ZSTRMAC2  MZ390 total mz390 errors    = 0
+ZSTRMAC2  MZ390 ENDED RC= 0 IO=1186

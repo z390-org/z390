@@ -1,0 +1,90 @@
+TESTACT1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTACT1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000118 TYPE=CST NAME=TESTACT1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH Initial version                                   *
+000000                                      (1/13)13 *********************************************************************
+000000                                      (1/15)14 TESTACT1 SUBENTRY 
+000000                                      (2/78)15+TESTACT1 CSECT 
+000000 90ECD00C                            (2/168)16+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)17+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)18+         DC    18F'0'
+000050 E3C5E2E3C1C3E3F1                    (2/171)19+         DC    CL8'TESTACT1'
+000058 F0F161F0F261F0F5                    (2/172)20+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)21+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)22+         ST    15,8(13)
+00006C 50DF0004                            (2/175)23+         ST    13,4(15)
+000070 18DF                                (2/176)24+         LR    13,15
+000072                                     (2/189)25+         USING TESTACT1+8,13
+LISTUSE TESTACT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/16)27          WTO   'TESTACT1 TEST ACTR LIMIT IN OPEN CODE AND MACRO'
+000072 A715001C                0000AA       (3/49)29+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00330000E3C5E2E3                     (3/50)30+         DC    AL2(WTO#0002_EOT-*,0),C'TESTACT1 TEST ACTR LIMIT IN OPEN CODE AND MACRO'
+0000A9                  000000A9            (3/51)32+WTO#0002_EOT     EQU *
+0000AA 0A23                                 (3/52)33+         SVC   35
+0000AC                                      (1/20)35          WTO   'OPEN CODE A=4000'
+0000AC A715000C                0000C4       (3/49)36+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+0000B0 00140000D6D7C5D5                     (3/50)37+         DC    AL2(WTO#0003_EOT-*,0),C'OPEN CODE A=4000'
+0000C4                  000000C4            (3/51)38+WTO#0003_EOT     EQU *
+0000C4 0A23                                 (3/52)39+         SVC   35
+0000C6                                      (1/21)41          MACRO
+0000C6                                      (1/22)42          TEST
+0000C6                                      (1/23)43 .LOOP    ANOP
+0000C6                                      (1/24)44 &A       SETA  &A+1
+0000C6                                      (1/25)45          AIF   (&A LT 4000).LOOP
+0000C6                                      (1/26)46          WTO   'MACRO CODE A=&A'
+0000C6                                      (1/27)47          MEND
+0000C6                                      (1/28)48          TEST 
+0000C6 A715000D                0000E0       (3/49)50+         BRAS  1,*+(WTO#0005_EOT-*+1)/2*2
+0000CA 00150000D4C1C3D9                     (3/50)51+         DC    AL2(WTO#0005_EOT-*,0),C'MACRO CODE A=4000'
+0000DF                  000000DF            (3/51)52+WTO#0005_EOT     EQU *
+0000E0 0A23                                 (3/52)53+         SVC   35
+0000E2                                      (1/29)56          WTO  'TESTACT1 TEST ENDED OK'
+0000E2 A715000F                000100       (3/49)57+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000E6 001A0000E3C5E2E3                     (3/50)58+         DC    AL2(WTO#0006_EOT-*,0),C'TESTACT1 TEST ENDED OK'
+000100                  00000100            (3/51)59+WTO#0006_EOT     EQU *
+000100 0A23                                 (3/52)60+         SVC   35
+000102                                      (1/30)62          SUBEXIT 
+000102 41F00000                             (4/33)63+         LA    15,0
+000106 58D0D004                             (4/50)64+         L     13,4(,13)
+00010A 58E0D00C                             (4/51)65+         L     14,12(,13)
+00010E 982CD01C                             (4/52)66+         LM    2,12,28(13)
+000112 07FE                                 (4/53)67+         BR    14
+000114                                      (1/31)69          END 
+
+Symbol Table Listing
+
+ SYM=TESTACT1 LOC=00000000 LEN=00000118 ESD=0001 TYPE=CST  XREF=15 25 
+ SYM=WTO#0002_EOT LOC=000000A9 LEN=00000001 ESD=0001 TYPE=REL  XREF=32 29 30 
+ SYM=WTO#0003_EOT LOC=000000C4 LEN=00000001 ESD=0001 TYPE=REL  XREF=38 36 37 
+ SYM=WTO#0005_EOT LOC=000000DF LEN=00000001 ESD=0001 TYPE=REL  XREF=52 50 51 
+ SYM=WTO#0006_EOT LOC=00000100 LEN=00000001 ESD=0001 TYPE=REL  XREF=59 57 58 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTACT1  MZ390 ENDED RC= 0 IO=565

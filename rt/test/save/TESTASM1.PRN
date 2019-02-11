@@ -1,0 +1,839 @@
+TESTASM1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTASM1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  mcall sysmac(rt\test+.\mac) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000010 TYPE=CST NAME=$PRIVATE
+ ESD=0002 LOC=00000010 LEN=00000448 TYPE=CST NAME=TESTASM1
+ ESD=0004 LOC=00000458 LEN=00000008 TYPE=CST NAME=MYCOM
+ ESD=0005 LOC=00000460 LEN=00000030 TYPE=CST NAME=MYRSECT
+ ESD=0003 LOC=00000000 LEN=00000000 TYPE=EXT NAME=MYRSECT
+ ESD=0002 LOC=000003A4 LEN=00000002 TYPE=ENT NAME=TESTENT
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30 DSH         Initial version                            *
+000000                                      (1/13)13 * 2005-10-03 DSH RPI-9   Test length operator in INS and DC         *
+000000                                      (1/14)14 * 2005-11-13 DSH RPI-87  Test ORG preceded by ABS value CALC        *
+000000                                      (1/15)15 * 2005-11-13 DSH RPI-90  Test single character B,C,X symbols        *
+000000                                      (1/16)16 * 2006-01-13 DSH RPI-171 Test unary operators                       *
+000000                                      (1/17)17 * 2006-03-16 DSH RPI-230 Test COM, RSECT, START limited support     *
+000000                                      (1/18)18 * 2006-03-17 DSH RPI-228 Test CVTDCB macro OS flag indicating       *
+000000                                      (1/19)19 *                        31 bit and MVS+                            *
+000000                                      (1/20)20 * 2006-03-21 DSH RPI-258 Test ORG , delimiter                       *
+000000                                      (1/21)21 * 2006-04-12 DSH RPI-278 Test PUSH, POP NOPRINT                     *
+000000                                      (1/22)22 * 2006-04-24 DSH RPI-291 Test ENQ/DEQ macros                        *
+000000                                      (1/23)23 * 2006-04-28 DSH RPI-304 Test PRINT DATA,NOPRINT                    *
+000000                                      (1/24)24 * 2006-05-12 DSH RPI-313 Add unary op test and L'OP in continued    *
+000000                                      (1/25)25 *                        statement test                             *
+000000                                      (1/26)26 * 2006-07-03 DSH RPI-342 Test operands with L' operators            *
+000000                                      (1/27)27 * 2006-07-19 DSH RPI-365 Test literal as target of L'               *
+000000                                      (1/28)28 * 2006-07-19 DSH RPI-369 Test ignoring 4th and 5th EQU parameters   *
+000000                                      (1/29)29 * 2006-08-27 DSH RPI-415 Correct value of EQU 5th parameter         *
+000000                                      (1/30)30 * 2006-09-26 DSH RPI-465 Test using R0 for PSA type DSECT           *
+000000                                      (1/31)31 * 2006-11-09 DSH RPI-489 Test B macro LAB, entry FWD reference      *
+000000                                      (1/32)32 * 2006-11-12 DSH RPI-492 Test blank continuation lines              *
+000000                                      (1/33)33 * 2006-11-12 DSH RPI-493 Test OPSYN with no operands and IPK with   *
+000000                                      (1/34)34 *                        no comma                                   *
+000000                                      (1/35)35 * 2006-11-12 DSH RPI-494 Test DS BIT LENGTH SUPPORT FOR LAST FIELD  *
+000000                                      (1/36)36 * 2006-11-28 DSH RPI-501 Test literal-ABS expression                *
+000000                                      (1/37)37 * 2007-08-22 DSH RPI-673 Test drop with expression 1+1 etc.         *
+000000                                      (1/38)38 * 2007-11-30 DSH RPI-743 Test comment on prototype , CNOP ATTR I,   *
+000000                                      (1/39)39 *                        PUNCH CMTS                                 *
+000000                                      (1/40)40 * 2007-11-30 DSH RPI-745 Test AREAD skip NOPRINT, NOSTMT, SUPPORT   *
+000000                                      (1/41)41 *                        CLOCKB/D                                   *
+000000                                      (1/42)42 * 2008-04-23 DSH RPI-835 Test * in SETC LABEL VAR created comment   *
+000000                                      (1/43)43 * 2008-10-27 DSH RPI-929 Test * in SETC LABEL VAR created comment   *
+000000                                      (1/44)44 *********************************************************************
+000000                                      (1/46)45          TITLE 'TESTASM1 - MISC ASSEMBLER TESTS'
+000000                                      (1/48)46          START , RPI-230 TEST START CSECT
+000000                                      (1/49)47          USING *,R15
+LISTUSE $PRIVATE ESD=0001 LOC=00000000 LEN=01000 REG=F OFF=00000 LAB=
+000000 58F0F008                000008       (1/53)51          L     R15,=A(TESTASM1)
+000004 07FF                                 (1/54)52          BR    R15
+000006                                      (1/55)53          DROP  R15
+LISTUSE NONE
+000006                                      (1/56)54          LTORG 
+000008 00000010         =A(TESTASM1)
+00000C                                      (1/57)55 *MCALL #=     1 LV= 1 TESTASM1 RT1   MAIN
+00000C                                      (2/64)56+*MCALL #=     2 LV= 2 TESTASM1 SUBENTRY 
+000010                                      (3/78)57+TESTASM1 CSECT 
+000010 90ECD00C                            (3/168)58+         STM   14,12,12(13)
+000014 45FF0068                            (3/169)59+         BAL   15,104(15)
+000018 0000000000000000                    (3/170)60+         DC    18F'0'
+000020 0000000000000000
+000028 0000000000000000
+000030 0000000000000000
+000038 0000000000000000
+000040 0000000000000000
+000048 0000000000000000
+000050 0000000000000000
+000058 0000000000000000
+000060 E3C5E2E3C1E2D4F1                    (3/171)61+         DC    CL8'TESTASM1'
+000068 F0F161F0F261F0F5                    (3/172)62+         DC    CL8'01/02/05'
+000070 F2F24BF3F3404040                    (3/173)63+         DC    CL8'22.33'
+000078 50FD0008                            (3/174)64+         ST    15,8(13)
+00007C 50DF0004                            (3/175)65+         ST    13,4(15)
+000080 18DF                                (3/176)66+         LR    13,15
+000082                                     (3/189)67+         USING TESTASM1+8,13
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+000082                                     (3/201)68+*MEXIT #=     2 LV= 2 SUBENTRY
+000082                                      (2/65)69+*MCALL #=     3 LV= 2          WTO   'TESTASM1 RT1 STARTED'
+000082 A715000E                00009E       (4/49)70+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+000086 00180000E3C5E2E3                     (4/50)71+         DC    AL2(WTO#0003_EOT-*,0),C'TESTASM1 RT1 STARTED'
+00008E C1E2D4F140D9E3F1
+000096 40E2E3C1D9E3C5C4
+00009E                  0000009E            (4/51)72+WTO#0003_EOT     EQU *
+00009E 0A23                                 (4/52)73+         SVC   35
+0000A0                                      (4/53)74+*MEXIT #=     3 LV= 2 WTO
+0000A0 C0F400000097            0001CE       (2/66)75+         BRCL    15,RT1_START
+0000A6                                      (2/67)76+RT1_ABORT DS 0H
+0000A6 92E3D137                00014F       (2/68)77+         MVI   RT1_ABORTED,C'T'
+0000AA                                      (2/69)78+*MCALL #=     4 LV= 2          WTO   'TESTASM1 RT1 TESTING ABORTED'
+0000AA A7150012                0000CE       (4/49)79+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+0000AE 00200000E3C5E2E3                     (4/50)80+         DC    AL2(WTO#0004_EOT-*,0),C'TESTASM1 RT1 TESTING ABORTED'
+0000B6 C1E2D4F140D9E3F1
+0000BE 40E3C5E2E3C9D5C7
+0000C6 40C1C2D6D9E3C5C4
+0000CE                  000000CE            (4/51)81+WTO#0004_EOT     EQU *
+0000CE 0A23                                 (4/52)82+         SVC   35
+0000D0                                      (4/53)83+*MEXIT #=     4 LV= 2 WTO
+0000D0                                      (2/70)84+RT1_END  DS    0H
+0000D0 D205D131D138     000149 000150       (2/71)85+         MVC   RT1_DTOT,=X'402020202020'
+0000D6 DE05D131D10A     000149 000122       (2/72)86+         ED    RT1_DTOT,RT1_TOT
+0000DC                                      (2/73)87+*MCALL #=     5 LV= 2          WTO   MF=(E,RT1_WTO1)
+0000DC 4110D10E                000126       (4/61)88+         LA    1,RT1_WTO1
+0000E0 0A23                                 (4/66)89+         SVC   35
+0000E2                                      (4/67)90+*MEXIT #=     5 LV= 2 WTO
+0000E2 95E3D137                00014F       (2/74)91+         CLI   RT1_ABORTED,C'T'
+0000E6 4780D104                00011C       (2/75)92+         BE    RT1_DUMP
+0000EA                                      (2/76)93+*MCALL #=     6 LV= 2          WTO   'TESTASM1 RT1 ENDED OK'
+0000EA A715000F                000108       (4/49)94+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000EE 00190000E3C5E2E3                     (4/50)95+         DC    AL2(WTO#0006_EOT-*,0),C'TESTASM1 RT1 ENDED OK'
+0000F6 C1E2D4F140D9E3F1
+0000FE 40C5D5C4C5C440D6
+000106 D2
+000107                  00000107            (4/51)96+WTO#0006_EOT     EQU *
+000108 0A23                                 (4/52)97+         SVC   35
+00010A                                      (4/53)98+*MEXIT #=     6 LV= 2 WTO
+00010A                                      (2/77)99+*MCALL #=     7 LV= 2          SUBEXIT 
+00010A 41F00000                            (5/33)100+         LA    15,0
+00010E 58D0D004                            (5/50)101+         L     13,4(,13)
+000112 58E0D00C                            (5/51)102+         L     14,12(,13)
+000116 982CD01C                            (5/52)103+         LM    2,12,28(13)
+00011A 07FE                                (5/53)104+         BR    14
+00011C                                     (5/53)105+*MEXIT #=     7 LV= 2 SUBEXIT
+00011C                                     (2/78)106+RT1_DUMP DS    0H
+00011C                                     (2/79)107+*MCALL #=     8 LV= 2          ABEND 101
+00011C 41100065                            (6/39)108+         LA   1,101
+000120 0A0D                                (6/47)109+         SVC  13 ABEND R1=COMP CODE AND HIGH BIT = DUMP PGM STORAGE
+000122                                     (6/48)110+*MEXIT #=     8 LV= 2 ABEND
+000122                  0000000B           (2/80)111+RT1_LINK EQU   11
+000122                  00000122           (2/81)112+RT1_DATA EQU   *
+000122 00000C                              (2/82)113+RT1_TOT  DC    PL3'0' TOTAL RT1 TESTS COMPLETED
+000125 1C                                  (2/83)114+RT1_ONE  DC    P'1'
+000126 00290000E3C5E2E3                    (2/84)115+RT1_WTO1 DC    AL2(RT1_WTO_END-*,0),C'TESTASM1 RT1 TESTS COMPLETED = '
+00012E C1E2D4F140D9E3F1
+000136 40E3C5E2E3E240C3
+00013E D6D4D7D3C5E3C5C4
+000146 407E40
+000149 40E9E9E9E9E9                        (2/85)116+RT1_DTOT DC    CL6' ZZZZZ'
+00014F                  0000014F           (2/86)117+RT1_WTO_END EQU *
+00014F C6                                  (2/87)118+RT1_ABORTED DC C'F'
+000150                                     (2/88)119+         LTORG 
+000150 402020202020     =X'402020202020'
+000156                                     (2/89)120+RT1_TEST_CC0  DS    0H
+000156 4770D08E                0000A6      (2/90)121+         BNE   RT1_ABORT
+00015A                                     (2/91)122+RT1_OK   DS    0H
+00015A FA20D10AD10D     000122 000125      (2/92)123+         AP    RT1_TOT,RT1_ONE
+000160 07FB                                (2/93)124+         BR    RT1_LINK
+000162                                     (2/94)125+RT1_TEST_CC1  DS    0H
+000162 47B0D08E                0000A6      (2/95)126+         BNL   RT1_ABORT
+000166 FA20D10AD10D     000122 000125      (2/96)127+         AP    RT1_TOT,RT1_ONE
+00016C 07FB                                (2/97)128+         BR    RT1_LINK
+00016E                                     (2/98)129+RT1_TEST_CC2  DS    0H
+00016E 47D0D08E                0000A6      (2/99)130+         BNH   RT1_ABORT
+000172 FA20D10AD10D     000122 000125     (2/100)131+         AP    RT1_TOT,RT1_ONE
+000178 07FB                               (2/101)132+         BR    RT1_LINK
+00017A                                    (2/102)133+RT1_TEST_CC3  DS    0H
+00017A 47E0D08E                0000A6     (2/103)134+         BNO   RT1_ABORT
+00017E FA20D10AD10D     000122 000125     (2/104)135+         AP    RT1_TOT,RT1_ONE
+000184 07FB                               (2/105)136+         BR    RT1_LINK
+000186                                    (2/106)137+RT1_TEST_CCGE  DS    0H
+000186 4740D08E                0000A6     (2/107)138+         BL    RT1_ABORT
+00018A FA20D10AD10D     000122 000125     (2/108)139+         AP    RT1_TOT,RT1_ONE
+000190 07FB                               (2/109)140+         BR    RT1_LINK
+000192                                    (2/110)141+RT1_TEST_CCLE  DS    0H
+000192 4720D08E                0000A6     (2/111)142+         BH    RT1_ABORT
+000196 FA20D10AD10D     000122 000125     (2/112)143+         AP    RT1_TOT,RT1_ONE
+00019C 07FB                               (2/113)144+         BR    RT1_LINK
+00019E                                    (2/114)145+*MEXIT #=     1 LV= 1 RT1
+00019E                                     (1/58)146 *MCALL #=     9 LV= 1          EQUREGS 
+00019E                  00000000           (7/41)147+R0     EQU 0
+00019E                  00000001           (7/41)148+R1     EQU 1
+00019E                  00000002           (7/41)149+R2     EQU 2
+00019E                  00000003           (7/41)150+R3     EQU 3
+00019E                  00000004           (7/41)151+R4     EQU 4
+00019E                  00000005           (7/41)152+R5     EQU 5
+00019E                  00000006           (7/41)153+R6     EQU 6
+00019E                  00000007           (7/41)154+R7     EQU 7
+00019E                  00000008           (7/41)155+R8     EQU 8
+00019E                  00000009           (7/41)156+R9     EQU 9
+00019E                  0000000A           (7/41)157+R10    EQU 10
+00019E                  0000000B           (7/41)158+R11    EQU 11
+00019E                  0000000C           (7/41)159+R12    EQU 12
+00019E                  0000000D           (7/41)160+R13    EQU 13
+00019E                  0000000E           (7/41)161+R14    EQU 14
+00019E                  0000000F           (7/41)162+R15    EQU 15
+00019E                                     (7/41)163+*MEXIT #=     9 LV= 1 EQUREGS
+0001A0 00000000                            (1/59)164 F1       DC    A(0)
+0001A4 00000006                            (1/60)165 F2       DC    A(L'X2)
+0001A8 C1C2C3                              (1/61)166 A        DC    C'ABC'
+0001AB                  0001A8             (1/62)167          ORG   A
+0001A8 F1F2                                (1/63)168          DC    C'12'
+0001AA                  0001AB             (1/64)169          ORG 
+0001AB C4                                  (1/65)170          DC    C'D'
+0001AC                                     (1/66)171 * TEST ORG AFTER ABS
+0001AC C1C2C3C4                            (1/67)172 RPI87    DC    C'ABCD'
+0001B0                  00000000           (1/68)173 ABS1     EQU   0
+0001B0                  0001AD             (1/69)174          ORG   RPI87+1
+0001AD E7E7                                (1/70)175          DC    C'XX'
+0001AF                  00000000           (1/71)176 ABS2     EQU   0
+0001AF                  0001B0             (1/72)177          ORG 
+0001B0                                     (1/73)178 * TEST ORG COMMA DELIMITER
+0001B0                  0001A0             (1/74)179          ORG    *-16   BACKUP  16
+0001A0                  0001B0             (1/75)180          ORG    ,      FORWARD 16 AGAIN
+0001B0                                     (1/76)181 * TEST B,C,X SYMBOLS
+0001B0 C2                                  (1/77)182 B        DC    C'B'
+0001B1 C3                                  (1/78)183 C        DC    C'C'
+0001B2 E7                                  (1/79)184 X        DC    C'X'
+0001B3                                     (1/80)185 X3       DS    0CL10
+0001B3 F1F2                                (1/81)186 Y3       DC    CL2'12'
+0001B5 F3F4F5F6F7F8F9F0                    (1/82)187          DC    CL8'34567890'
+0001BD F0F1F2F3F4F5F6F7                    (1/83)188 TRFIELD  DC    X'F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF'
+0001C5 F8F9FAFBFCFDFEFF
+0001CD                                     (1/84)189 *MCALL #=    10 LV= 1          RT1   START
+0001CE                                    (2/116)190+RT1_START DS  0H
+0001CE                                    (2/117)191+*MEXIT #=    10 LV= 1 RT1
+0001CE                                     (1/85)192 * TEST ALIGNMENT OPERATOR
+0001CE 0700                                (1/86)193          CNOP  0,4
+0001D0 0700                                (1/87)194          CNOP  2,4
+0001D2 0700                                (1/88)195          CNOP  0,4
+0001D4 47000700                            (1/89)196          CNOP  0,8
+0001D8 070047000700                        (1/90)197          CNOP  6,8
+0001DE 070047000700                        (1/91)198          CNOP  4,8
+0001E4 070047000700                        (1/92)199          CNOP  2,8
+0001EA 070047000700                        (1/93)200          CNOP  0,8
+0001F0                                     (1/94)201 * TEST LENGTH OPERATOR
+0001F0 D203D188D18C     0001A0 0001A4      (1/95)202 X2       MVC   F1(L'F2),F2
+0001F6                                     (1/96)203 *MCALL #=    11 LV= 1          RT1   CCE,F1,=A(6)
+0001F6                                     (2/38)204+         DS    0H
+0001F6 D503D188D1F0     0001A0 000208      (2/49)205+         CLC   F1,=A(6)
+0001FC 4DB0D13E                000156     (2/120)206+RT1_TEST1        BAS   RT1_LINK,RT1_TEST_CC0
+000200                                    (2/121)207+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000200 LEN=01000 REG=B OFF=00000 LAB=
+000200 47F0B00C                00020C     (2/122)208+         B     RT1_CCE1
+000204                                    (2/123)209+         LTORG 
+000208 00000006         =A(6)
+00020C                                    (2/124)210+RT1_CCE1        DS 0H
+00020C                                    (2/125)211+*MEXIT #=    11 LV= 1 RT1
+00020C                                     (1/97)212 * TEST ORG VALUE AFTER OVERLAY
+00020C D503D190B020     0001A8 000220      (1/98)213          CLC   A(4),=C'12CD'
+000212                                     (1/99)214 *MCALL #=    12 LV= 1          RT1   CCE
+000212                                     (2/38)215+         DS    0H
+000212 4DB0D13E                000156     (2/120)216+RT1_TEST2        BAS   RT1_LINK,RT1_TEST_CC0
+000216                                    (2/121)217+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000216 LEN=01000 REG=B OFF=00000 LAB=
+000216 47F0B00E                000224     (2/122)218+         B     RT1_CCE2
+00021A                                    (2/123)219+         LTORG 
+000220 F1F2C3C4         =C'12CD'
+000224                                    (2/124)220+RT1_CCE2        DS 0H
+000224                                    (2/125)221+*MEXIT #=    12 LV= 1 RT1
+000224                                    (1/100)222 * TEST ORG AFTER ABS VALUE CALC FOR RPI87
+000224 D503D194B022     0001AC 000238     (1/101)223          CLC   RPI87(4),=C'AXXD'
+00022A                                    (1/102)224 *MCALL #=    13 LV= 1          RT1   CCE
+00022A                                     (2/38)225+         DS    0H
+00022A 4DB0D13E                000156     (2/120)226+RT1_TEST3        BAS   RT1_LINK,RT1_TEST_CC0
+00022E                                    (2/121)227+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=0000022E LEN=01000 REG=B OFF=00000 LAB=
+00022E 47F0B00E                00023C     (2/122)228+         B     RT1_CCE3
+000232                                    (2/123)229+         LTORG 
+000238 C1E7E7C4         =C'AXXD'
+00023C                                    (2/124)230+RT1_CCE3        DS 0H
+00023C                                    (2/125)231+*MEXIT #=    13 LV= 1 RT1
+00023C                                    (1/103)232 * TEST B,C,X SYMBOLS FOR RPI90
+00023C 95C2D198                0001B0     (1/104)233          CLI   B,C'B'
+000240                                    (1/105)234 *MCALL #=    14 LV= 1          RT1   CCE
+000240                                     (2/38)235+         DS    0H
+000240 4DB0D13E                000156     (2/120)236+RT1_TEST4        BAS   RT1_LINK,RT1_TEST_CC0
+000244                                    (2/121)237+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000244 LEN=01000 REG=B OFF=00000 LAB=
+000244 47F0B004                000248     (2/122)238+         B     RT1_CCE4
+000248                                    (2/123)239+         LTORG 
+000248                                    (2/124)240+RT1_CCE4        DS 0H
+000248                                    (2/125)241+*MEXIT #=    14 LV= 1 RT1
+000248 95C3D199                0001B1     (1/106)242          CLI   C,C'C'
+00024C                                    (1/107)243 *MCALL #=    15 LV= 1          RT1   CCE
+00024C                                     (2/38)244+         DS    0H
+00024C 4DB0D13E                000156     (2/120)245+RT1_TEST5        BAS   RT1_LINK,RT1_TEST_CC0
+000250                                    (2/121)246+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000250 LEN=01000 REG=B OFF=00000 LAB=
+000250 47F0B008                000258     (2/122)247+         B     RT1_CCE5
+000254                                    (2/123)248+         LTORG 
+000258                                    (2/124)249+RT1_CCE5        DS 0H
+000258                                    (2/125)250+*MEXIT #=    15 LV= 1 RT1
+000258 95E7D19A                0001B2     (1/108)251          CLI   X,C'X'
+00025C                                    (1/109)252 *MCALL #=    16 LV= 1          RT1   CCE
+00025C                                     (2/38)253+         DS    0H
+00025C 4DB0D13E                000156     (2/120)254+RT1_TEST6        BAS   RT1_LINK,RT1_TEST_CC0
+000260                                    (2/121)255+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000260 LEN=01000 REG=B OFF=00000 LAB=
+000260 47F0B008                000268     (2/122)256+         B     RT1_CCE6
+000264                                    (2/123)257+         LTORG 
+000268                                    (2/124)258+RT1_CCE6        DS 0H
+000268                                    (2/125)259+*MEXIT #=    16 LV= 1 RT1
+000268                                    (1/110)260 * TEST UNARY OPERATORS
+000268 D503B018B01C     000278 00027C     (1/111)261          CLC   =A(-1),=A(1-2)
+00026E                                    (1/112)262 *MCALL #=    17 LV= 1          RT1   CCE
+00026E                                     (2/38)263+         DS    0H
+00026E 4DB0D13E                000156     (2/120)264+RT1_TEST7        BAS   RT1_LINK,RT1_TEST_CC0
+000272                                    (2/121)265+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000272 LEN=01000 REG=B OFF=00000 LAB=
+000272 47F0B00E                000280     (2/122)266+         B     RT1_CCE7
+000276                                    (2/123)267+         LTORG 
+000278 FFFFFFFF         =A(-1)
+00027C FFFFFFFF         =A(1-2)
+000280                                    (2/124)268+RT1_CCE7        DS 0H
+000280                                    (2/125)269+*MEXIT #=    17 LV= 1 RT1
+000280 D503B01EB022     000290 000294     (1/113)270          CLC   =A(--1),=A(1)
+000286                                    (1/114)271 *MCALL #=    18 LV= 1          RT1   CCE
+000286                                     (2/38)272+         DS    0H
+000286 4DB0D13E                000156     (2/120)273+RT1_TEST8        BAS   RT1_LINK,RT1_TEST_CC0
+00028A                                    (2/121)274+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=0000028A LEN=01000 REG=B OFF=00000 LAB=
+00028A 47F0B00E                000298     (2/122)275+         B     RT1_CCE8
+00028E                                    (2/123)276+         LTORG 
+000290 00000001         =A(--1)
+000294 00000001         =A(1)
+000298                                    (2/124)277+RT1_CCE8        DS 0H
+000298                                    (2/125)278+*MEXIT #=    18 LV= 1 RT1
+000298 D503B01EB022     0002A8 0002AC     (1/115)279          CLC   =A(-1*-1),=A(1)
+00029E                                    (1/116)280 *MCALL #=    19 LV= 1          RT1   CCE
+00029E                                     (2/38)281+         DS    0H
+00029E 4DB0D13E                000156     (2/120)282+RT1_TEST9        BAS   RT1_LINK,RT1_TEST_CC0
+0002A2                                    (2/121)283+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=000002A2 LEN=01000 REG=B OFF=00000 LAB=
+0002A2 47F0B00E                0002B0     (2/122)284+         B     RT1_CCE9
+0002A6                                    (2/123)285+         LTORG 
+0002A8 00000001         =A(-1*-1)
+0002AC 00000001         =A(1)
+0002B0                                    (2/124)286+RT1_CCE9        DS 0H
+0002B0                                    (2/125)287+*MEXIT #=    19 LV= 1 RT1
+0002B0 D503B01EB022     0002C0 0002C4     (1/117)288          CLC   =A(-1*(-1+2)),=A(1-2)
+0002B6                                    (1/118)289 *MCALL #=    20 LV= 1          RT1   CCE
+0002B6                                     (2/38)290+         DS    0H
+0002B6 4DB0D13E                000156     (2/120)291+RT1_TEST10       BAS   RT1_LINK,RT1_TEST_CC0
+0002BA                                    (2/121)292+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=000002BA LEN=01000 REG=B OFF=00000 LAB=
+0002BA 47F0B00E                0002C8     (2/122)293+         B     RT1_CCE10
+0002BE                                    (2/123)294+         LTORG 
+0002C0 FFFFFFFF         =A(-1*(-1+2))
+0002C4 FFFFFFFF         =A(1-2)
+0002C8                                    (2/124)295+RT1_CCE10       DS 0H
+0002C8                                    (2/125)296+*MEXIT #=    20 LV= 1 RT1
+0002C8 D503B01EB022     0002D8 0002DC     (1/119)297          CLC   =A(+1*+1),=A(1)
+0002CE                                    (1/120)298 *MCALL #=    21 LV= 1          RT1   CCE
+0002CE                                     (2/38)299+         DS    0H
+0002CE 4DB0D13E                000156     (2/120)300+RT1_TEST11       BAS   RT1_LINK,RT1_TEST_CC0
+0002D2                                    (2/121)301+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=000002D2 LEN=01000 REG=B OFF=00000 LAB=
+0002D2 47F0B00E                0002E0     (2/122)302+         B     RT1_CCE11
+0002D6                                    (2/123)303+         LTORG 
+0002D8 00000001         =A(+1*+1)
+0002DC 00000001         =A(1)
+0002E0                                    (2/124)304+RT1_CCE11       DS 0H
+0002E0                                    (2/125)305+*MEXIT #=    21 LV= 1 RT1
+0002E0 D503B01EB022     0002F0 0002F4     (1/121)306          CLC   =A(+1*(+1+2)),=A(3)
+0002E6                                    (1/122)307 *MCALL #=    22 LV= 1          RT1   CCE
+0002E6                                     (2/38)308+         DS    0H
+0002E6 4DB0D13E                000156     (2/120)309+RT1_TEST12       BAS   RT1_LINK,RT1_TEST_CC0
+0002EA                                    (2/121)310+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=000002EA LEN=01000 REG=B OFF=00000 LAB=
+0002EA 47F0B00E                0002F8     (2/122)311+         B     RT1_CCE12
+0002EE                                    (2/123)312+         LTORG 
+0002F0 00000003         =A(+1*(+1+2))
+0002F4 00000003         =A(3)
+0002F8                                    (2/124)313+RT1_CCE12       DS 0H
+0002F8                                    (2/125)314+*MEXIT #=    22 LV= 1 RT1
+0002F8 D503B01EB022     000308 00030C     (1/123)315          CLC   =A(-(2-1)),=A(-1)     RPI-313
+0002FE                                    (1/124)316 *MCALL #=    23 LV= 1          RT1   CCE
+0002FE                                     (2/38)317+         DS    0H
+0002FE 4DB0D13E                000156     (2/120)318+RT1_TEST13       BAS   RT1_LINK,RT1_TEST_CC0
+000302                                    (2/121)319+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000302 LEN=01000 REG=B OFF=00000 LAB=
+000302 47F0B00E                000310     (2/122)320+         B     RT1_CCE13
+000306                                    (2/123)321+         LTORG 
+000308 FFFFFFFF         =A(-(2-1))
+00030C FFFFFFFF         =A(-1)
+000310                                    (2/124)322+RT1_CCE13       DS 0H
+000310                                    (2/125)323+*MEXIT #=    23 LV= 1 RT1
+000310                                    (1/125)324 * TEST L' IN OPERANDS
+000310                                    (1/126)325          MACRO
+000310                                    (1/127)326          TEST  &A,&B
+000310                                    (1/128)327          MVC   &A(1).(&A(2)),&B
+000310                                    (1/129)328          MEND
+000310                                    (1/130)329 *MCALL #=    24 LV= 1          TEST  (X3+L'Y3,L'X3-L'Y3),=8C'X'
+000310 D207D19DB026     0001B5 000328     (1/128)330+         MVC   X3+L'Y3(L'X3-L'Y3),=8C'X'
+000316                                    (1/128)331+*MEXIT #=    24 LV= 1 TEST
+000316                                    (1/131)332 *MCALL #=    25 LV= 1          RT1   CCE,X3,=C'12XXXXXXXX'
+000316                                     (2/38)333+         DS    0H
+000316 D509D19BB02E     0001B3 000330      (2/49)334+         CLC   X3,=C'12XXXXXXXX'
+00031C 4DB0D13E                000156     (2/120)335+RT1_TEST14       BAS   RT1_LINK,RT1_TEST_CC0
+000320                                    (2/121)336+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000320 LEN=01000 REG=B OFF=00000 LAB=
+000320 47F0B01A                00033A     (2/122)337+         B     RT1_CCE14
+000324                                    (2/123)338+         LTORG 
+000328 E7E7E7E7E7E7E7E7 =8C'X'
+000330 F1F2E7E7E7E7E7E7 =C'12XXXXXXXX'
+000338 E7E7
+00033A                                    (2/124)339+RT1_CCE14       DS 0H
+00033A                                    (2/125)340+*MEXIT #=    25 LV= 1 RT1
+00033A 41100002                           (1/133)341          LA    L'X,2
+00033E 5510B030                000350     (1/134)342          CL    1,=A(2)
+000342                                    (1/135)343 *MCALL #=    26 LV= 1          RT1   CCE
+000342                                     (2/38)344+         DS    0H
+000342 4DB0D13E                000156     (2/120)345+RT1_TEST15       BAS   RT1_LINK,RT1_TEST_CC0
+000346                                    (2/121)346+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000346 LEN=01000 REG=B OFF=00000 LAB=
+000346 47F0B00E                000354     (2/122)347+         B     RT1_CCE15
+00034A                                    (2/123)348+         LTORG 
+000350 00000002         =A(2)
+000354                                    (2/124)349+RT1_CCE15       DS 0H
+000354                                    (2/125)350+*MEXIT #=    26 LV= 1 RT1
+000354 5810B02A                000370     (1/136)351          L     R1,=A(MYCOM)
+000358                                    (1/137)352 *MCALL #=    27 LV= 1          CALL  MYRSECT
+000358                                     (8/17)353+*MCALL #=    28 LV= 2          ZCALL MYRSECT,,,ID=,LINKINST=BALR,MF=I
+000358                                     (9/29)354+         CNOP  0,4
+000358 C4FD0000000E            000374      (9/79)355+         LRL    15,=V(MYRSECT)
+00035E 05EF                                (9/84)356+         BALR      14,15
+000360                                     (9/51)357+*MEXIT #=    28 LV= 2 ZCALL
+000360                                     (9/51)358+*MEXIT #=    27 LV= 1 CALL
+000360                                    (1/138)359 * TEST L'=CL3'ABC'
+000360 9503B032                000378     (1/139)360          CLI   =AL1(3),L'=C'ABC'
+000364                                    (1/140)361 *MCALL #=    29 LV= 1          RT1   CCE
+000364                                     (2/38)362+         DS    0H
+000364 4DB0D13E                000156     (2/120)363+RT1_TEST16       BAS   RT1_LINK,RT1_TEST_CC0
+000368                                    (2/121)364+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000368 LEN=01000 REG=B OFF=00000 LAB=
+000368 47F0B014                00037C     (2/122)365+         B     RT1_CCE16
+00036C                                    (2/123)366+         LTORG 
+000370 00000458         =A(MYCOM)
+000374 00000000         =V(MYRSECT)
+000378 03               =AL1(3)
+000379 C1C2C3           =C'ABC'
+00037C                                    (2/124)367+RT1_CCE16       DS 0H
+00037C                                    (2/125)368+*MEXIT #=    29 LV= 1 RT1
+00037C                                    (1/141)369 * TEST EQU IGNORE 4TH AND 5TH
+00037C                  00000001          (1/142)370 x1       EQU   1,2,3,4,gr
+00037C 9501B020                000388     (1/143)371          CLI   =AL1(1),X1
+000380                                    (1/144)372 *MCALL #=    30 LV= 1          RT1   CCE
+000380                                     (2/38)373+         DS    0H
+000380 4DB0D13E                000156     (2/120)374+RT1_TEST17       BAS   RT1_LINK,RT1_TEST_CC0
+000384                                    (2/121)375+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000384 LEN=01000 REG=B OFF=00000 LAB=
+000384 47F0B006                00038A     (2/122)376+         B     RT1_CCE17
+000388                                    (2/123)377+         LTORG 
+000388 01               =AL1(1)
+00038A                                    (2/124)378+RT1_CCE17       DS 0H
+00038A                                    (2/125)379+*MEXIT #=    30 LV= 1 RT1
+00038A                                    (1/145)380 * IGNORE ACONTROL AND ALIAS
+00038A                                    (1/146)381          ACONTROL 
+00038A                                    (1/147)382          ALIAS 
+00038A                                    (1/148)383 * TEST USING R0 FOR PSA TYPE DSECT
+00038A                                    (1/149)384          USING PSA,0
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000384 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+00038A 41100020                000020     (1/150)385          LA    1,OLDPSW
+00038E D5000001B01C            0003A0     (1/151)386          CLC   1,=A(OLDPSW-PSA)
+000394                                    (1/152)387 *MCALL #=    31 LV= 1          RT1   CCE
+000394                                     (2/38)388+         DS    0H
+000394 4DB0D13E                000156     (2/120)389+RT1_TEST18       BAS   RT1_LINK,RT1_TEST_CC0
+000398                                    (2/121)390+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000398 LEN=01000 REG=B OFF=00000 LAB=
+000398 47F0B00C                0003A4     (2/122)391+         B     RT1_CCE18
+00039C                                    (2/123)392+         LTORG 
+0003A0 00000020         =A(OLDPSW-PSA)
+0003A4                                    (2/124)393+RT1_CCE18       DS 0H
+0003A4                                    (2/125)394+*MEXIT #=    31 LV= 1 RT1
+0003A4                                    (1/153)395 * TEST ENTRY TO FWD REF MAC LABEL
+0003A4                                    (1/154)396          ENTRY TESTENT
+0003A4                                    (1/155)397 *MCALL #=    32 LV= 1 TESTENT  WTO   'ENTRY TESTEND TEST'
+0003A4                                     (4/35)398+TESTENT  DS    0H
+0003A4 A715000D                0003BE      (4/49)399+         BRAS  1,*+(WTO#0032_EOT-*+1)/2*2
+0003A8 00160000C5D5E3D9                    (4/50)400+         DC    AL2(WTO#0032_EOT-*,0),C'ENTRY TESTEND TEST'
+0003B0 E840E3C5E2E3C5D5
+0003B8 C440E3C5E2E3
+0003BE                  000003BE           (4/51)401+WTO#0032_EOT     EQU *
+0003BE 0A23                                (4/52)402+         SVC   35
+0003C0                                     (4/53)403+*MEXIT #=    32 LV= 1 WTO
+0003C0                                    (1/157)404 *MCALL #=    33 LV= 1          WTO   'TEST BLANK CONTINUATION'                               
+0003C0 A7150010                0003E0      (4/49)406+         BRAS  1,*+(WTO#0033_EOT-*+1)/2*2
+0003C4 001B0000E3C5E2E3                    (4/50)407+         DC    AL2(WTO#0033_EOT-*,0),C'TEST BLANK CONTINUATION'
+0003CC 40C2D3C1D5D240C3
+0003D4 D6D5E3C9D5E4C1E3
+0003DC C9D6D5
+0003DF                  000003DF           (4/51)408+WTO#0033_EOT     EQU *
+0003E0 0A23                                (4/52)409+         SVC   35
+0003E2                                     (4/53)410+*MEXIT #=    33 LV= 1 WTO
+0003E2                                    (1/158)411 * TEST IPK OPSYN WITH NO OPERANDS AND IPK WITH NO OPERANDS OR COMMA
+0003E2 47F0B056                0003EE     (1/159)412          B     SKIP_IPK
+0003E6                                    (1/160)413 _IPK     OPSYN IPK
+0003E6 B20B0000                           (1/161)414          _IPK 
+0003EA B20B0000                           (1/162)415          IPK 
+0003EE                  000003EE          (1/163)416 SKIP_IPK EQU   *
+0003EE                                    (1/164)417 * TEST BIT LENGTH DS LAST FIELD SUPPORT
+0003EE D500B068B069     000400 000401     (1/165)418          CLC   =AL1(L'B15),=AL1(2)
+0003F4                                    (1/166)419 *MCALL #=    34 LV= 1          RT1   CCE
+0003F4                                     (2/38)420+         DS    0H
+0003F4 4DB0D13E                000156     (2/120)421+RT1_TEST19       BAS   RT1_LINK,RT1_TEST_CC0
+0003F8                                    (2/121)422+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=000003F8 LEN=01000 REG=B OFF=00000 LAB=
+0003F8 47F0B00A                000402     (2/122)423+         B     RT1_CCE19
+0003FC                                    (2/123)424+         LTORG 
+000400 02               =AL1(L'B15)
+000401 02               =AL1(2)
+000402                                    (2/124)425+RT1_CCE19       DS 0H
+000402                                    (2/125)426+*MEXIT #=    34 LV= 1 RT1
+000402                                    (1/167)427 * TEST LITERAL = ABS EXP.
+000402 DC0FD1A5D310     0001BD 000328     (1/168)428          TR    TRFIELD,=C'0123456789ABCDEF'-X'F0'
+000408 D50FD1A5B020     0001BD 000418     (1/169)429          CLC   TRFIELD,=C'0123456789ABCDEF'
+00040E                                    (1/170)430 *MCALL #=    35 LV= 1          RT1   CCE
+00040E                                     (2/38)431+         DS    0H
+00040E 4DB0D13E                000156     (2/120)432+RT1_TEST20       BAS   RT1_LINK,RT1_TEST_CC0
+000412                                    (2/121)433+         USING *,RT1_LINK
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000412 LEN=01000 REG=B OFF=00000 LAB=
+000412 47F0B016                000428     (2/122)434+         B     RT1_CCE20
+000416                                    (2/123)435+         LTORG 
+000418 F0F1F2F3F4F5F6F7 =C'0123456789ABCDEF'
+000420 F8F9C1C2C3C4C5C6
+000428                                    (2/124)436+RT1_CCE20       DS 0H
+000428                                    (2/125)437+*MEXIT #=    35 LV= 1 RT1
+000428                                    (1/171)438 * TEST DROP WITH EXPRESSION
+000428                                    (1/172)439          USING *,15
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000412 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000428 LEN=01000 REG=F OFF=00000 LAB=
+000428                                    (1/173)440          USING X4,2
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000412 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000428 LEN=01000 REG=F OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000450 LEN=01000 REG=2 OFF=00000 LAB=
+000428 41102000                000450     (1/174)441          LA    1,X4
+00042C                                    (1/175)442          DROP  1+1
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000412 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000428 LEN=01000 REG=F OFF=00000 LAB=
+00042C 4110F028                000450     (1/176)443          LA    1,X4
+000430                                    (1/177)444          USING X4,2
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000412 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000428 LEN=01000 REG=F OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000450 LEN=01000 REG=2 OFF=00000 LAB=
+000430                                    (1/178)445          DROP  1+1,15
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000412 LEN=01000 REG=B OFF=00000 LAB=
+000430                                    (1/179)446 * RPI-743 test CNOP LABEL ATTR I
+000430                                    (1/180)447 CNOPLAB  CNOP  0,4
+000430                                    (1/185)448          MNOTE 'CNOP TYPE I OK'
+000430                                    (1/187)449 * RPI-743 test comment on prototype after last keyword parm
+000430                                    (1/188)450 *MCALL #=    36 LV= 1          TESTASM1 
+000430                                     (10/3)451+         MNOTE 'TESTMAC1 WITH TESTMACX PROTOTYPE OK'
+000430                                     (10/3)452+*MEXIT #=    36 LV= 1 TESTASM1
+000430                                    (1/189)453          PUNCH ' PHASE SECTEXIT,*                                                               '  *BX
+000430                                    (1/190)455 * RPI-743 test PUNCH with following comments
+000430                                    (1/191)456          PUNCH ' PHASE SECTEXIT,*                                                               '  *BX
+000430                                    (1/192)458 * RPI-745 test AREAD with CLOCKB and CLOCKD
+000430                                    (1/200)459          MNOTE 'CLOCKB=08122456 HH=22 MM=33 SS=44 TH=56'
+000430                                    (1/202)460          MNOTE 'CLOCKD=22334456'
+000430                                    (1/203)461 * RPI-835 * IN LABEL VAR CREATES COMMENT
+000430                                    (1/205)462 * THIS IS TEST FOR RPI-835  
+000430                                    (1/206)463 * RPI-929 * IN LABEL VAR CREATES COMMENT REGUARDLESS OF OPCODE
+000430                                    (1/208)464 * SETC COMMENT 1  
+000430                                    (1/210)465 * EQU  COMMENT 2  
+000430                                    (1/211)466 *
+000430                                    (1/212)467 * END OF TESTS
+000430                                    (1/213)468 *
+000430                                    (1/214)469 *MCALL #=    37 LV= 1          WTO   'TEST1 ENDED OK'
+000430 A715000B                000446      (4/49)470+         BRAS  1,*+(WTO#0037_EOT-*+1)/2*2
+000434 00120000E3C5E2E3                    (4/50)471+         DC    AL2(WTO#0037_EOT-*,0),C'TEST1 ENDED OK'
+00043C F140C5D5C4C5C440
+000444 D6D2
+000446                  00000446           (4/51)472+WTO#0037_EOT     EQU *
+000446 0A23                                (4/52)473+         SVC   35
+000448                                     (4/53)474+*MEXIT #=    37 LV= 1 WTO
+000448                                    (1/215)475 *MCALL #=    38 LV= 1          RT1   END
+000448 47F0D0B8                0000D0     (2/174)476+         B      RT1_END
+00044C                                    (2/175)477+*MEXIT #=    38 LV= 1 RT1
+00044C                                    (1/216)478          LTORG 
+000450                                    (1/217)479 X4       DS    X
+000458                                    (1/218)480 MYCOM    COM   , RPI-230 TEST COM SECTION (NO LINKER SUPPORT YET)
+000458 0000007B                           (1/219)481 MYCOM1   DC    F'123'
+00045C 000001C8                           (1/220)482 MYCOM2   DC    F'456'
+000460                                    (1/221)483 MYRSECT  RSECT , RPI-230 TEST RSECT (NO WARNINGS YET)
+000460                                    (1/222)484          USING *,R15
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000412 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE MYRSECT  ESD=0005 LOC=00000460 LEN=01000 REG=F OFF=00000 LAB=
+000460 D5071000F028            000488     (1/223)485          CLC   0(8,R1),=F'123,456'
+000466 47700001                           (1/224)486          BNE   1
+00046A 58100010                           (1/225)487          L     R1,16
+00046E                                    (1/226)488          USING IHACVT,R1
+LISTUSE TESTASM1 ESD=0002 LOC=00000018 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE PSA      ESD=0007 LOC=00000000 LEN=01000 REG=0 OFF=00000 LAB=
+LISTUSE TESTASM1 ESD=0002 LOC=00000412 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE MYRSECT  ESD=0005 LOC=00000460 LEN=01000 REG=F OFF=00000 LAB=
+LISTUSE IHACVT   ESD=0006 LOC=00000000 LEN=01000 REG=1 OFF=00000 LAB=
+00046E 959B1074                000074     (1/227)489          CLI   CVTDCB,X'9B'  VERIFY X'80' 31 BIT AND X'13' MVS+ SUPPORT
+000472 47700001                           (1/228)490          BNE   1
+000476                                    (1/229)491 *MCALL #=    39 LV= 1          ENQ   (QN,RN)
+000476                                    (11/21)492+*MEXIT #=    39 LV= 1 ENQ
+000476                                    (1/230)493 *MCALL #=    40 LV= 1          DEQ   (QN,RN)
+000476                                    (12/22)494+*MEXIT #=    40 LV= 1 DEQ
+000476 07FE                               (1/231)495          BR    14
+000478 C9C5C1E7E7E7E7E7                   (1/232)496 QN       DC    CL8'IEAXXXXX'
+000480 E2E3C5D7D5C1D4C5                   (1/233)497 RN       DC    CL8'STEPNAME'
+000488                                    (1/234)498          LTORG 
+000488 0000007B000001C8 =F'123,456'
+000490                                    (1/235)499 *MCALL #=    41 LV= 1          CVTD 
+000000                                    (13/23)500+IHACVT   DSECT 
+000000                  000038            (13/24)501+         ORG    IHACVT+X'38'
+000038                                    (13/25)502+CVTDATE  DS     PL4   IPL DATE SET BY IPL(TESTIPL1)
+00003C                  000074            (13/26)503+         ORG    IHACVT+X'74'
+000074                                    (13/27)504+CVTDCB   DS     X     OS FLAGS X'80' = 31 BITS, X'13' = MVS+
+000075                  0000C8            (13/28)505+         ORG    IHACVT+200
+0000C8                                    (13/29)506+CVTABEND DS     A     SECONDARY CVT  (ZERO FOR NOW)
+0000CC                                    (13/30)507+CVTUSER  DS     A     USER POINTER
+0000D0                                    (13/31)508+CVTCDE   DS     A     ADDRESS FIRST CDE FOR Z390 RPI 1063
+0000D4                                    (13/31)509+*MEXIT #=    41 LV= 1 CVTD
+000000                                    (1/236)510 PSA      DSECT 
+000000                  000020            (1/237)511          ORG   PSA+X'20'
+000020                                    (1/238)512 OLDPSW   DS    XL8
+000028                                    (1/239)513 B15      DS    BL.015   2 BYTES
+00002A                                    (1/240)514          END 
+Relocation Definitions
+ ESD=0001 LOC=00000008 LEN=4 SIGN=+ XESD=0002
+ ESD=0002 LOC=00000360 LEN=4 SIGN=+ XESD=0004
+ ESD=0002 LOC=00000364 LEN=4 SIGN=+ XESD=0003
+
+Symbol Table Listing
+
+ SYM=$PRIVATE LOC=00000000 LEN=00000010 ESD=0001 TYPE=CST  XREF=46 
+ SYM=A        LOC=000001A8 LEN=00000003 ESD=0002 TYPE=REL  XREF=166 167 213 
+ SYM=ABS1     LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=173 
+ SYM=ABS2     LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=176 
+ SYM=B        LOC=000001B0 LEN=00000001 ESD=0002 TYPE=REL  XREF=182 233 
+ SYM=B15      LOC=00000028 LEN=00000002 ESD=0007 TYPE=REL  XREF=513 418 424 
+ SYM=C        LOC=000001B1 LEN=00000001 ESD=0002 TYPE=REL  XREF=183 242 
+ SYM=CNOPLAB  LOC=00000430 LEN=00000002 ESD=0002 TYPE=REL  XREF=447 
+ SYM=CVTABEND LOC=000000C8 LEN=00000004 ESD=0006 TYPE=REL  XREF=506 
+ SYM=CVTCDE   LOC=000000D0 LEN=00000004 ESD=0006 TYPE=REL  XREF=508 
+ SYM=CVTDATE  LOC=00000038 LEN=00000004 ESD=0006 TYPE=REL  XREF=502 
+ SYM=CVTDCB   LOC=00000074 LEN=00000001 ESD=0006 TYPE=REL  XREF=504 489 
+ SYM=CVTUSER  LOC=000000CC LEN=00000004 ESD=0006 TYPE=REL  XREF=507 
+ SYM=F1       LOC=000001A0 LEN=00000004 ESD=0002 TYPE=REL  XREF=164 202 205 
+ SYM=F2       LOC=000001A4 LEN=00000004 ESD=0002 TYPE=REL  XREF=165 202 
+ SYM=IHACVT   LOC=00000000 LEN=000000D8 ESD=0006 TYPE=DST  XREF=500 488 501 503 505 
+ SYM=MYCOM    LOC=00000458 LEN=00000008 ESD=0004 TYPE=CST  XREF=480 351 366 
+ SYM=MYCOM1   LOC=00000458 LEN=00000004 ESD=0004 TYPE=REL  XREF=481 
+ SYM=MYCOM2   LOC=0000045C LEN=00000004 ESD=0004 TYPE=REL  XREF=482 
+ SYM=MYRSECT  LOC=00000460 LEN=00000030 ESD=0005 TYPE=CST  XREF=483 
+ SYM=MYRSECT  LOC=00000000 LEN=00000000 ESD=0003 TYPE=EXT  XREF=355 366 
+ SYM=OLDPSW   LOC=00000020 LEN=00000008 ESD=0007 TYPE=REL  XREF=512 385 386 392 
+ SYM=PSA      LOC=00000000 LEN=00000030 ESD=0007 TYPE=DST  XREF=510 384 386 392 511 
+ SYM=QN       LOC=00000478 LEN=00000008 ESD=0005 TYPE=REL  XREF=496 
+ SYM=R0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=147 
+ SYM=R10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=157 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=148 351 485 487 488 
+ SYM=R11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=158 
+ SYM=R12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=159 
+ SYM=R13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=160 
+ SYM=R14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=161 
+ SYM=R15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=162 47 51 52 53 484 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=149 
+ SYM=R3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=150 
+ SYM=R4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=151 
+ SYM=R5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=152 
+ SYM=R6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=153 
+ SYM=R7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=154 
+ SYM=R8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=155 
+ SYM=R9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=156 
+ SYM=RN       LOC=00000480 LEN=00000008 ESD=0005 TYPE=REL  XREF=497 
+ SYM=RPI87    LOC=000001AC LEN=00000004 ESD=0002 TYPE=REL  XREF=172 174 223 
+ SYM=RT1_ABORT LOC=000000A6 LEN=00000002 ESD=0002 TYPE=REL  XREF=76 121 126 130 134 
+  138 142 
+ SYM=RT1_ABORTED LOC=0000014F LEN=00000001 ESD=0002 TYPE=REL  XREF=118 77 91 
+ SYM=RT1_CCE10 LOC=000002C8 LEN=00000002 ESD=0002 TYPE=REL  XREF=295 293 
+ SYM=RT1_CCE1 LOC=0000020C LEN=00000002 ESD=0002 TYPE=REL  XREF=210 208 
+ SYM=RT1_CCE11 LOC=000002E0 LEN=00000002 ESD=0002 TYPE=REL  XREF=304 302 
+ SYM=RT1_CCE12 LOC=000002F8 LEN=00000002 ESD=0002 TYPE=REL  XREF=313 311 
+ SYM=RT1_CCE13 LOC=00000310 LEN=00000002 ESD=0002 TYPE=REL  XREF=322 320 
+ SYM=RT1_CCE14 LOC=0000033A LEN=00000002 ESD=0002 TYPE=REL  XREF=339 337 
+ SYM=RT1_CCE15 LOC=00000354 LEN=00000002 ESD=0002 TYPE=REL  XREF=349 347 
+ SYM=RT1_CCE16 LOC=0000037C LEN=00000002 ESD=0002 TYPE=REL  XREF=367 365 
+ SYM=RT1_CCE17 LOC=0000038A LEN=00000002 ESD=0002 TYPE=REL  XREF=378 376 
+ SYM=RT1_CCE18 LOC=000003A4 LEN=00000002 ESD=0002 TYPE=REL  XREF=393 391 
+ SYM=RT1_CCE19 LOC=00000402 LEN=00000002 ESD=0002 TYPE=REL  XREF=425 423 
+ SYM=RT1_CCE20 LOC=00000428 LEN=00000002 ESD=0002 TYPE=REL  XREF=436 434 
+ SYM=RT1_CCE2 LOC=00000224 LEN=00000002 ESD=0002 TYPE=REL  XREF=220 218 
+ SYM=RT1_CCE3 LOC=0000023C LEN=00000002 ESD=0002 TYPE=REL  XREF=230 228 
+ SYM=RT1_CCE4 LOC=00000248 LEN=00000002 ESD=0002 TYPE=REL  XREF=240 238 
+ SYM=RT1_CCE5 LOC=00000258 LEN=00000002 ESD=0002 TYPE=REL  XREF=249 247 
+ SYM=RT1_CCE6 LOC=00000268 LEN=00000002 ESD=0002 TYPE=REL  XREF=258 256 
+ SYM=RT1_CCE7 LOC=00000280 LEN=00000002 ESD=0002 TYPE=REL  XREF=268 266 
+ SYM=RT1_CCE8 LOC=00000298 LEN=00000002 ESD=0002 TYPE=REL  XREF=277 275 
+ SYM=RT1_CCE9 LOC=000002B0 LEN=00000002 ESD=0002 TYPE=REL  XREF=286 284 
+ SYM=RT1_DATA LOC=00000122 LEN=00000001 ESD=0002 TYPE=REL  XREF=112 
+ SYM=RT1_DTOT LOC=00000149 LEN=00000006 ESD=0002 TYPE=REL  XREF=116 85 86 
+ SYM=RT1_DUMP LOC=0000011C LEN=00000002 ESD=0002 TYPE=REL  XREF=106 92 
+ SYM=RT1_END  LOC=000000D0 LEN=00000002 ESD=0002 TYPE=REL  XREF=84 476 
+ SYM=RT1_LINK LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=111 124 128 132 136 
+  140 144 206 207 216 217 226 227 236 237 245 246 254 255 264 265 273 274 282 283 
+  291 292 300 301 309 310 318 319 335 336 345 346 363 364 374 375 389 390 421 422 
+  432 433 
+ SYM=RT1_OK   LOC=0000015A LEN=00000002 ESD=0002 TYPE=REL  XREF=122 
+ SYM=RT1_ONE  LOC=00000125 LEN=00000001 ESD=0002 TYPE=REL  XREF=114 123 127 131 135 
+  139 143 
+ SYM=RT1_START LOC=000001CE LEN=00000002 ESD=0002 TYPE=REL  XREF=190 75 
+ SYM=RT1_TEST10 LOC=000002B6 LEN=00000004 ESD=0002 TYPE=REL  XREF=291 
+ SYM=RT1_TEST1 LOC=000001FC LEN=00000004 ESD=0002 TYPE=REL  XREF=206 
+ SYM=RT1_TEST11 LOC=000002CE LEN=00000004 ESD=0002 TYPE=REL  XREF=300 
+ SYM=RT1_TEST12 LOC=000002E6 LEN=00000004 ESD=0002 TYPE=REL  XREF=309 
+ SYM=RT1_TEST13 LOC=000002FE LEN=00000004 ESD=0002 TYPE=REL  XREF=318 
+ SYM=RT1_TEST14 LOC=0000031C LEN=00000004 ESD=0002 TYPE=REL  XREF=335 
+ SYM=RT1_TEST15 LOC=00000342 LEN=00000004 ESD=0002 TYPE=REL  XREF=345 
+ SYM=RT1_TEST16 LOC=00000364 LEN=00000004 ESD=0002 TYPE=REL  XREF=363 
+ SYM=RT1_TEST17 LOC=00000380 LEN=00000004 ESD=0002 TYPE=REL  XREF=374 
+ SYM=RT1_TEST18 LOC=00000394 LEN=00000004 ESD=0002 TYPE=REL  XREF=389 
+ SYM=RT1_TEST19 LOC=000003F4 LEN=00000004 ESD=0002 TYPE=REL  XREF=421 
+ SYM=RT1_TEST20 LOC=0000040E LEN=00000004 ESD=0002 TYPE=REL  XREF=432 
+ SYM=RT1_TEST2 LOC=00000212 LEN=00000004 ESD=0002 TYPE=REL  XREF=216 
+ SYM=RT1_TEST3 LOC=0000022A LEN=00000004 ESD=0002 TYPE=REL  XREF=226 
+ SYM=RT1_TEST4 LOC=00000240 LEN=00000004 ESD=0002 TYPE=REL  XREF=236 
+ SYM=RT1_TEST5 LOC=0000024C LEN=00000004 ESD=0002 TYPE=REL  XREF=245 
+ SYM=RT1_TEST6 LOC=0000025C LEN=00000004 ESD=0002 TYPE=REL  XREF=254 
+ SYM=RT1_TEST7 LOC=0000026E LEN=00000004 ESD=0002 TYPE=REL  XREF=264 
+ SYM=RT1_TEST8 LOC=00000286 LEN=00000004 ESD=0002 TYPE=REL  XREF=273 
+ SYM=RT1_TEST9 LOC=0000029E LEN=00000004 ESD=0002 TYPE=REL  XREF=282 
+ SYM=RT1_TEST_CC0 LOC=00000156 LEN=00000002 ESD=0002 TYPE=REL  XREF=120 206 216 226 
+  236 245 254 264 273 282 291 300 309 318 335 345 363 374 389 421 432 
+ SYM=RT1_TEST_CC1 LOC=00000162 LEN=00000002 ESD=0002 TYPE=REL  XREF=125 
+ SYM=RT1_TEST_CC2 LOC=0000016E LEN=00000002 ESD=0002 TYPE=REL  XREF=129 
+ SYM=RT1_TEST_CC3 LOC=0000017A LEN=00000002 ESD=0002 TYPE=REL  XREF=133 
+ SYM=RT1_TEST_CCGE LOC=00000186 LEN=00000002 ESD=0002 TYPE=REL  XREF=137 
+ SYM=RT1_TEST_CCLE LOC=00000192 LEN=00000002 ESD=0002 TYPE=REL  XREF=141 
+ SYM=RT1_TOT  LOC=00000122 LEN=00000003 ESD=0002 TYPE=REL  XREF=113 86 123 127 131 
+  135 139 143 
+ SYM=RT1_WTO1 LOC=00000126 LEN=00000002 ESD=0002 TYPE=REL  XREF=115 88 
+ SYM=RT1_WTO_END LOC=0000014F LEN=00000001 ESD=0002 TYPE=REL  XREF=117 115 
+ SYM=SKIP_IPK LOC=000003EE LEN=00000001 ESD=0002 TYPE=REL  XREF=416 412 
+ SYM=TESTASM1 LOC=00000010 LEN=00000448 ESD=0002 TYPE=CST  XREF=57 51 54 67 
+ SYM=TESTENT  LOC=000003A4 LEN=00000002 ESD=0002 TYPE=REL  XREF=398 396 
+ SYM=TRFIELD  LOC=000001BD LEN=00000010 ESD=0002 TYPE=REL  XREF=188 428 429 
+ SYM=WTO#0003_EOT LOC=0000009E LEN=00000001 ESD=0002 TYPE=REL  XREF=72 70 71 
+ SYM=WTO#0004_EOT LOC=000000CE LEN=00000001 ESD=0002 TYPE=REL  XREF=81 79 80 
+ SYM=WTO#0006_EOT LOC=00000107 LEN=00000001 ESD=0002 TYPE=REL  XREF=96 94 95 
+ SYM=WTO#0032_EOT LOC=000003BE LEN=00000001 ESD=0002 TYPE=REL  XREF=401 399 400 
+ SYM=WTO#0033_EOT LOC=000003DF LEN=00000001 ESD=0002 TYPE=REL  XREF=408 406 407 
+ SYM=WTO#0037_EOT LOC=00000446 LEN=00000001 ESD=0002 TYPE=REL  XREF=472 470 471 
+ SYM=X        LOC=000001B2 LEN=00000001 ESD=0002 TYPE=REL  XREF=184 251 341 
+ SYM=X2       LOC=000001F0 LEN=00000006 ESD=0002 TYPE=REL  XREF=202 165 
+ SYM=X3       LOC=000001B3 LEN=0000000A ESD=0002 TYPE=REL  XREF=185 330 334 
+ SYM=X4       LOC=00000450 LEN=00000001 ESD=0002 TYPE=REL  XREF=479 440 441 443 444 
+ SYM=Y3       LOC=000001B3 LEN=00000002 ESD=0002 TYPE=REL  XREF=186 330 
+ SYM=x1       LOC=00000001 LEN=00000002 ESD=0000 TYPE=ABS  XREF=370 371 
+
+Literal Table Listing
+
+ LIT=8C'X'    LOC=00000328 LEN=00000001 ESD=0002 POOL=0010 XREF=330 
+ LIT=A(+1*(+1+2)) LOC=000002F0 LEN=00000004 ESD=0002 POOL=000E XREF=306 
+ LIT=A(+1*+1) LOC=000002D8 LEN=00000004 ESD=0002 POOL=000D XREF=297 
+ LIT=A(-(2-1)) LOC=00000308 LEN=00000004 ESD=0002 POOL=000F XREF=315 
+ LIT=A(--1)   LOC=00000290 LEN=00000004 ESD=0002 POOL=000A XREF=270 
+ LIT=A(-1)    LOC=00000278 LEN=00000004 ESD=0002 POOL=0009 XREF=261 
+ LIT=A(-1)    LOC=0000030C LEN=00000004 ESD=0002 POOL=000F XREF=315 
+ LIT=A(-1*(-1+2)) LOC=000002C0 LEN=00000004 ESD=0002 POOL=000C XREF=288 
+ LIT=A(-1*-1) LOC=000002A8 LEN=00000004 ESD=0002 POOL=000B XREF=279 
+ LIT=A(1)     LOC=00000294 LEN=00000004 ESD=0002 POOL=000A XREF=270 
+ LIT=A(1)     LOC=000002AC LEN=00000004 ESD=0002 POOL=000B XREF=279 
+ LIT=A(1)     LOC=000002DC LEN=00000004 ESD=0002 POOL=000D XREF=297 
+ LIT=A(1-2)   LOC=0000027C LEN=00000004 ESD=0002 POOL=0009 XREF=261 
+ LIT=A(1-2)   LOC=000002C4 LEN=00000004 ESD=0002 POOL=000C XREF=288 
+ LIT=A(2)     LOC=00000350 LEN=00000004 ESD=0002 POOL=0011 XREF=342 
+ LIT=A(3)     LOC=000002F4 LEN=00000004 ESD=0002 POOL=000E XREF=306 
+ LIT=A(6)     LOC=00000208 LEN=00000004 ESD=0002 POOL=0003 XREF=205 
+ LIT=A(MYCOM) LOC=00000370 LEN=00000004 ESD=0002 POOL=0012 XREF=351 
+ LIT=A(OLDPSW-PSA) LOC=000003A0 LEN=00000004 ESD=0002 POOL=0014 XREF=386 
+ LIT=A(TESTASM1) LOC=00000008 LEN=00000004 ESD=0001 POOL=0001 XREF=51 
+ LIT=AL1(1)   LOC=00000388 LEN=00000001 ESD=0002 POOL=0013 XREF=371 
+ LIT=AL1(2)   LOC=00000401 LEN=00000001 ESD=0002 POOL=0015 XREF=418 
+ LIT=AL1(3)   LOC=00000378 LEN=00000001 ESD=0002 POOL=0012 XREF=360 
+ LIT=AL1(L'B15) LOC=00000400 LEN=00000001 ESD=0002 POOL=0015 XREF=418 
+ LIT=C'0123456789ABCDEF' LOC=00000418 LEN=00000010 ESD=0002 POOL=0016 XREF=428 429 
+ LIT=C'12CD'  LOC=00000220 LEN=00000004 ESD=0002 POOL=0004 XREF=213 
+ LIT=C'12XXXXXXXX' LOC=00000330 LEN=0000000A ESD=0002 POOL=0010 XREF=334 
+ LIT=C'ABC'   LOC=00000379 LEN=00000003 ESD=0002 POOL=0012 XREF=360 
+ LIT=C'AXXD'  LOC=00000238 LEN=00000004 ESD=0002 POOL=0005 XREF=223 
+ LIT=F'123,456' LOC=00000488 LEN=00000004 ESD=0005 POOL=0018 XREF=485 
+ LIT=V(MYRSECT) LOC=00000374 LEN=00000004 ESD=0002 POOL=0012 XREF=355 
+ LIT=X'402020202020' LOC=00000150 LEN=00000006 ESD=0002 POOL=0002 XREF=85 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTASM1  MZ390 ENDED RC= 0 IO=2567

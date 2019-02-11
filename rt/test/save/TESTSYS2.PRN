@@ -1,0 +1,99 @@
+TESTSYS2  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSYS2
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  bs2000 systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000000C0 TYPE=CST NAME=TESTSYS2
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH         Initial version                           *
+000000                                      (1/13)13 * 2007-05-14  DSH RPI-604 Test option BS2000 system variables       *
+000000                                      (1/14)14 *********************************************************************
+000000                                      (1/16)15 TESTSYS2 SUBENTRY 
+000000                                      (2/78)16+TESTSYS2 CSECT 
+000000 90ECD00C                            (2/168)17+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)18+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)19+         DC    18F'0'
+000050 E3C5E2E3E2E8E2F2                    (2/171)20+         DC    CL8'TESTSYS2'
+000058 F0F1F0F2F0F5F0F0                    (2/172)21+         DC    CL8'010205002'
+000060 F2F2F3F3F4F44040                    (2/173)22+         DC    CL8'223344'
+000068 50FD0008                            (2/174)23+         ST    15,8(13)
+00006C 50DF0004                            (2/175)24+         ST    13,4(15)
+000070 18DF                                (2/176)25+         LR    13,15
+000072                                     (2/189)26+         USING TESTSYS2+8,13
+LISTUSE TESTSYS2 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/17)28          WTO   'TESTSYS2 STARTED'
+000072 A715000C                00008A       (3/49)29+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00140000E3C5E2E3                     (3/50)30+         DC    AL2(WTO#0002_EOT-*,0),C'TESTSYS2 STARTED'
+00008A                  0000008A            (3/51)31+WTO#0002_EOT     EQU *
+00008A 0A23                                 (3/52)32+         SVC   35
+00008C                                      (1/18)34          MNOTE 'SYSTEM=1507'
+00008C                                      (1/19)35          MNOTE 'SYSMOD=24'
+00008C                                      (1/20)36          MNOTE 'SYSTIME=223344'
+00008C                                      (1/21)37          MNOTE 'SYSDATE=010205002'
+00008C                                      (1/22)38          MNOTE 'SYSVERM=VER   '
+00008C                                      (1/23)39          MNOTE 'SYSVERS=VER   '
+00008C                                      (1/24)40          MACRO
+00008C                                      (1/25)41          TEST
+00008C                                      (1/26)42          MNOTE 'SYSTSEC=&SYSTSEC'
+00008C                                      (1/27)43          MEND
+00008C                                      (1/28)44          TEST 
+00008C                                      (1/26)45+         MNOTE 'SYSTSEC=CSECT'
+000000                                      (1/29)47 TESTD    DSECT 
+000000                                      (1/30)48          TEST 
+000000                                      (1/26)49+         MNOTE 'SYSTSEC=DSECT'
+000000                                      (1/31)51 TESTDLOC LOCTR 
+000000                                      (1/32)52          TEST 
+000000                                      (1/26)53+         MNOTE 'SYSTSEC=DSECT'
+00008C                                      (1/33)55 TESTSYS2 CSECT 
+00008C                                      (1/34)56          TEST 
+00008C                                      (1/26)57+         MNOTE 'SYSTSEC=CSECT'
+00008C                                      (1/35)59          GPARMOD 31
+00008C                                      (1/36)61          MNOTE 'SYSMOD=31'
+00008C                                      (1/37)62          GPARMOD 24
+00008C                                      (1/38)64          MNOTE 'SYSMOD=24'
+00008C                                      (1/39)65          WTO   'TESTSYS2 ENDED OK'
+00008C A715000D                0000A6       (3/49)66+         BRAS  1,*+(WTO#0009_EOT-*+1)/2*2
+000090 00150000E3C5E2E3                     (3/50)67+         DC    AL2(WTO#0009_EOT-*,0),C'TESTSYS2 ENDED OK'
+0000A5                  000000A5            (3/51)68+WTO#0009_EOT     EQU *
+0000A6 0A23                                 (3/52)69+         SVC   35
+0000A8                                      (1/40)71          SUBEXIT 
+0000A8 41F00000                             (5/33)72+         LA    15,0
+0000AC 58D0D004                             (5/50)73+         L     13,4(,13)
+0000B0 58E0D00C                             (5/51)74+         L     14,12(,13)
+0000B4 982CD01C                             (5/52)75+         LM    2,12,28(13)
+0000B8 07FE                                 (5/53)76+         BR    14
+0000BA                                      (1/41)78          END 
+
+Symbol Table Listing
+
+ SYM=TESTD    LOC=00000000 LEN=00000000 ESD=0002 TYPE=DST  XREF=47 
+ SYM=TESTDLOC LOC=00000000 LEN=00000000 ESD=0002 TYPE=DST  XREF=51 
+ SYM=TESTSYS2 LOC=00000000 LEN=000000C0 ESD=0001 TYPE=CST  XREF=16 26 55 
+ SYM=WTO#0002_EOT LOC=0000008A LEN=00000001 ESD=0001 TYPE=REL  XREF=31 29 30 
+ SYM=WTO#0009_EOT LOC=000000A5 LEN=00000001 ESD=0001 TYPE=REL  XREF=68 66 67 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSYS2  MZ390 ENDED RC= 0 IO=621

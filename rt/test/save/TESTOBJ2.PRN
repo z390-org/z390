@@ -1,0 +1,112 @@
+TESTOBJ2  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTOBJ2
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  @TESTOBJ2.OPT=(objhex mem(49) rmode31) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=02000030 TYPE=CST NAME=TESTOBJ2
+ ESD=0002 LOC=00000000 LEN=00000000 TYPE=EXT NAME=TESTSUB1
+ ESD=0003 LOC=00000000 LEN=00000000 TYPE=WXT NAME=TESTSUB2
+ ESD=0001 LOC=02000000 LEN=00000001 TYPE=ENT NAME=MYSUB
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH          Initial version                          *
+000000                                      (1/13)13 *********************************************************************
+000000                                      (1/14)14 * Note: This program has 32MB CSECT requiring OBJHEX and MEM(49)    *
+000000                                      (1/15)15 *       options the default binary OBJ format is limited to 24 bit  *
+000000                                      (1/16)16 *       16MB CSECTS.                                                *
+000000                                      (1/17)17 *       The default MEM(1) only allows loading 1MB 390 load modules *
+000000                                      (1/18)18 *********************************************************************
+000000                                      (1/20)19 TESTOBJ2 SUBENTRY                   CST/SD TYPE ESD
+000000                                      (2/78)21+TESTOBJ2 CSECT 
+000000 90ECD00C                            (2/168)22+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)23+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)24+         DC    18F'0'
+000050 E3C5E2E3D6C2D1F2                    (2/171)25+         DC    CL8'TESTOBJ2'
+000058 F0F161F0F261F0F5                    (2/172)26+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)27+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)28+         ST    15,8(13)
+00006C 50DF0004                            (2/175)29+         ST    13,4(15)
+000070 18DF                                (2/176)30+         LR    13,15
+000072                                     (2/189)31+         USING TESTOBJ2+8,13
+LISTUSE TESTOBJ2 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/21)33          WTO 'TESTOBJ2 TEST OBJHEX SUPPORT FOR 32MB SINGLE CSECT'
+000072 A715001D                0000AC       (3/49)35+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00360000E3C5E2E3                     (3/50)36+         DC    AL2(WTO#0002_EOT-*,0),C'TESTOBJ2 TEST OBJHEX SUPPORT FOR 32MB SINGLE CSECT'
+0000AC                  000000AC            (3/51)38+WTO#0002_EOT     EQU *
+0000AC 0A23                                 (3/52)39+         SVC   35
+0000AE                                      (1/22)41          CALL TESTSUB1              EXT/ER TYPE ESD
+0000AE 0700                                 (5/29)44+         CNOP  0,4
+0000B0 C4FD00000024            0000F8       (5/79)45+         LRL    15,=V(TESTSUB1)
+0000B6 05EF                                 (5/84)46+         BALR      14,15
+0000B8                                      (1/23)49          WXTRN TESTSUB2             WXT/WX TYPE ESD
+0000B8 58F0D0F4                0000FC       (1/24)50          L    15,=A(TESTSUB2)
+0000BC 05EF                                 (1/25)51          BALR 14,15
+0000BE                                      (1/26)52          ENTRY MYSUB                ENT/LD TYPE ESD
+0000BE 58F0D0F8                000100       (1/27)53          L    15,=A(MYSUB)
+0000C2 05EF                                 (1/28)54          BALR 14,15
+0000C4                                      (1/29)55          WTO  'TESTOBJ2 ENDED OK'
+0000C4 A715000D                0000DE       (3/49)56+         BRAS  1,*+(WTO#0005_EOT-*+1)/2*2
+0000C8 00150000E3C5E2E3                     (3/50)57+         DC    AL2(WTO#0005_EOT-*,0),C'TESTOBJ2 ENDED OK'
+0000DD                  000000DD            (3/51)58+WTO#0005_EOT     EQU *
+0000DE 0A23                                 (3/52)59+         SVC   35
+0000E0                                      (1/30)61          SUBEXIT 
+0000E0 41F00000                             (6/33)62+         LA    15,0
+0000E4 58D0D004                             (6/50)63+         L     13,4(,13)
+0000E8 58E0D00C                             (6/51)64+         L     14,12(,13)
+0000EC 982CD01C                             (6/52)65+         LM    2,12,28(13)
+0000F0 07FE                                 (6/53)66+         BR    14
+0000F2                                      (1/31)68          LTORG 
+0000F8 00000000         =V(TESTSUB1)
+0000FC 00000000         =A(TESTSUB2)
+000100 02000000         =A(MYSUB)
+000104                  000000              (1/32)69          ORG  TESTOBJ2+X'2000000' FORCE MYSUB TO ENTRY + 32MB
+000000                  02000000            (1/33)70 MYSUB    EQU  *
+000000                                      (1/34)71          WTO  'HELLO FROM MYSUB AT 32MB FROM ENTRY'
+000000 A7150016                00002C       (3/49)73+         BRAS  1,*+(WTO#0007_EOT-*+1)/2*2
+000004 00270000C8C5D3D3                     (3/50)74+         DC    AL2(WTO#0007_EOT-*,0),C'HELLO FROM MYSUB AT 32MB FROM ENTRY'
+00002B                  0200002B            (3/51)76+WTO#0007_EOT     EQU *
+00002C 0A23                                 (3/52)77+         SVC   35
+00002E 07FE                                 (1/35)79          BR   14
+000030                                      (1/36)80          END 
+Relocation Definitions
+ ESD=0001 LOC=000000F8 LEN=4 SIGN=+ XESD=0002
+ ESD=0001 LOC=000000FC LEN=4 SIGN=+ XESD=0003
+ ESD=0001 LOC=00000100 LEN=4 SIGN=+ XESD=0001
+
+Symbol Table Listing
+
+ SYM=MYSUB    LOC=02000000 LEN=00000001 ESD=0001 TYPE=REL  XREF=70 52 53 68 
+ SYM=TESTOBJ2 LOC=00000000 LEN=02000030 ESD=0001 TYPE=CST  XREF=21 31 69 
+ SYM=TESTSUB1 LOC=00000000 LEN=00000000 ESD=0002 TYPE=EXT  XREF=45 68 
+ SYM=TESTSUB2 LOC=00000000 LEN=00000000 ESD=0003 TYPE=WXT  XREF=
+ SYM=WTO#0002_EOT LOC=000000AC LEN=00000001 ESD=0001 TYPE=REL  XREF=38 35 36 
+ SYM=WTO#0005_EOT LOC=000000DD LEN=00000001 ESD=0001 TYPE=REL  XREF=58 56 57 
+ SYM=WTO#0007_EOT LOC=0200002B LEN=00000001 ESD=0001 TYPE=REL  XREF=76 73 74 
+
+Literal Table Listing
+
+ LIT=A(MYSUB) LOC=00000100 LEN=00000004 ESD=0001 POOL=0001 XREF=53 
+ LIT=A(TESTSUB2) LOC=000000FC LEN=00000004 ESD=0001 POOL=0001 XREF=50 
+ LIT=V(TESTSUB1) LOC=000000F8 LEN=00000004 ESD=0001 POOL=0001 XREF=45 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTOBJ2  MZ390 ENDED RC= 0 IO=771

@@ -1,0 +1,406 @@
+TESTSYM1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSYM1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000002A0 TYPE=CST NAME=TESTSYM1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH         Initial version                           *
+000000                                      (1/13)13 * 2006-01-29  DSH RPI-193 Test mz390 symbol length for implicit CPZ *
+000000                                      (1/14)14 * 2006-08-29  DSH RPI-415 Test AIF reference to ordinary symbol     *
+000000                                      (1/15)15 *                         length                                    *
+000000                                      (1/16)16 * 2006-08-30  DSH RPI-419 Test AIF reference to ordinary symbol     *
+000000                                      (1/17)17 *                         SETC parameter with labeled using prefix  *
+000000                                      (1/18)18 *                         and trailing expression operands          *
+000000                                      (1/19)19 * 2006-09-08  DSH RPI-442 Test AIF reference to DSECT sym defined   *
+000000                                      (1/20)20 *                         via * loc                                 *
+000000                                      (1/21)21 * 2008-01-22  DSH RPI-790 Update tests for I' and S'                *
+000000                                      (1/22)22 *********************************************************************
+000000                                      (1/24)23 TESTSYM1 SUBENTRY 
+000000                                      (2/78)24+TESTSYM1 CSECT 
+000000 90ECD00C                            (2/168)25+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)26+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)27+         DC    18F'0'
+000050 E3C5E2E3E2E8D4F1                    (2/171)28+         DC    CL8'TESTSYM1'
+000058 F0F161F0F261F0F5                    (2/172)29+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)30+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)31+         ST    15,8(13)
+00006C 50DF0004                            (2/175)32+         ST    13,4(15)
+000070 18DF                                (2/176)33+         LR    13,15
+000072                                     (2/189)34+         USING TESTSYM1+8,13
+LISTUSE TESTSYM1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/25)36          WTO   'TESTSYM1 - TEST SYMBOL T,L,I,S OPERATORS'
+000072 A7150018                0000A2       (3/49)38+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 002C0000E3C5E2E3                     (3/50)39+         DC    AL2(WTO#0002_EOT-*,0),C'TESTSYM1 - TEST SYMBOL T,L,I,S OPERATORS'
+0000A2                  000000A2            (3/51)41+WTO#0002_EOT     EQU *
+0000A2 0A23                                 (3/52)42+         SVC   35
+0000A4                                      (1/26)44 * TEST I' AND S'
+0000A4                                      (1/27)45          MACRO
+0000A4                                      (1/28)46 &N       TESTIS &DC,&I,&S
+0000A4                                      (1/29)47          B     TESTIS&SYSNDX
+0000A4                                      (1/30)48 &N       DC    &DC
+0000A4                                      (1/31)49 TESTIS&SYSNDX DS 0H
+0000A4                                      (1/32)50          CLC  =AL1(I'&N),=AL1(&I)
+0000A4                                      (1/33)51          BNE  ERR2
+0000A4                                      (1/34)52          CLC  =AL1(S'&N),=AL1(&S)
+0000A4                                      (1/35)53          BNE  ERR3
+0000A4                                      (1/36)54          MEND
+0000A4                                      (1/37)55 PI1S2    TESTIS P'7.50,8.1',1,2
+0000A4 47F0D0A4                0000AC       (1/29)56+         B     TESTIS0003
+0000A8 750C081C                             (1/30)57+PI1S2    DC    P'7.50,8.1'
+0000AC                                      (1/31)58+TESTIS0003    DS 0H
+0000AC D500D280D281     000288 000289       (1/32)59+         CLC  =AL1(I'PI1S2),=AL1(1)
+0000B2 4770D1C0                0001C8       (1/33)60+         BNE  ERR2
+0000B6 D500D282D283     00028A 00028B       (1/34)61+         CLC  =AL1(S'PI1S2),=AL1(2)
+0000BC 4770D1E6                0001EE       (1/35)62+         BNE  ERR3
+0000C0                                      (1/38)64 ZI1S2    TESTIS Z'7.50,8.1',1,2
+0000C0 47F0D0C2                0000CA       (1/29)65+         B     TESTIS0004
+0000C4 F7F5C0F0F8C1                         (1/30)66+ZI1S2    DC    Z'7.50,8.1'
+0000CA                                      (1/31)67+TESTIS0004    DS 0H
+0000CA D500D284D281     00028C 000289       (1/32)68+         CLC  =AL1(I'ZI1S2),=AL1(1)
+0000D0 4770D1C0                0001C8       (1/33)69+         BNE  ERR2
+0000D4 D500D285D283     00028D 00028B       (1/34)70+         CLC  =AL1(S'ZI1S2),=AL1(2)
+0000DA 4770D1E6                0001EE       (1/35)71+         BNE  ERR3
+0000DE                                      (1/39)73 DDI14S2  TESTIS DD'7.50,8.1',14,2
+0000DE 47F0D0F0                0000F8       (1/29)74+         B     TESTIS0005
+0000E8 22300000000003D0                     (1/30)75+DDI14S2  DC    DD'7.50,8.1'
+0000F8                                      (1/31)76+TESTIS0005    DS 0H
+0000F8 D500D286D287     00028E 00028F       (1/32)77+         CLC  =AL1(I'DDI14S2),=AL1(14)
+0000FE 4770D1C0                0001C8       (1/33)78+         BNE  ERR2
+000102 D500D288D283     000290 00028B       (1/34)79+         CLC  =AL1(S'DDI14S2),=AL1(2)
+000108 4770D1E6                0001EE       (1/35)80+         BNE  ERR3
+00010C                                      (1/40)82 EDI5S2   TESTIS ED'7.50,8.1',5,2
+00010C 47F0D110                000118       (1/29)83+         B     TESTIS0006
+000110 223003D02240000B                     (1/30)84+EDI5S2   DC    ED'7.50,8.1'
+000118                                      (1/31)85+TESTIS0006    DS 0H
+000118 D500D289D28A     000291 000292       (1/32)86+         CLC  =AL1(I'EDI5S2),=AL1(5)
+00011E 4770D1C0                0001C8       (1/33)87+         BNE  ERR2
+000122 D500D28BD283     000293 00028B       (1/34)88+         CLC  =AL1(S'EDI5S2),=AL1(2)
+000128 4770D1E6                0001EE       (1/35)89+         BNE  ERR3
+00012C                                      (1/41)91 LDI32S2  TESTIS LD'7.50,8.1',32,2
+00012C 47F0D148                000150       (1/29)92+         B     TESTIS0007
+000130 2207800000000000                     (1/30)93+LDI32S2  DC    LD'7.50,8.1'
+000150                                      (1/31)94+TESTIS0007    DS 0H
+000150 D500D28CD28D     000294 000295       (1/32)95+         CLC  =AL1(I'LDI32S2),=AL1(32)
+000156 4770D1C0                0001C8       (1/33)96+         BNE  ERR2
+00015A D500D28ED283     000296 00028B       (1/34)97+         CLC  =AL1(S'LDI32S2),=AL1(2)
+000160 4770D1E6                0001EE       (1/35)98+         BNE  ERR3
+000164                                     (1/42)100 FI26S5   TESTIS FS5'1',26,5
+000164 47F0D164                00016C      (1/29)101+         B     TESTIS0008
+000168 00000020                            (1/30)102+FI26S5   DC    FS5'1'
+00016C                                     (1/31)103+TESTIS0008    DS 0H
+00016C D500D28FD290     000297 000298      (1/32)104+         CLC  =AL1(I'FI26S5),=AL1(26)
+000172 4770D1C0                0001C8      (1/33)105+         BNE  ERR2
+000176 D500D291D28A     000299 000292      (1/34)106+         CLC  =AL1(S'FI26S5),=AL1(5)
+00017C 4770D1E6                0001EE      (1/35)107+         BNE  ERR3
+000180                                     (1/43)109 HI10S5   TESTIS HS5'1',10,5
+000180 47F0D17E                000186      (1/29)110+         B     TESTIS0009
+000184 0020                                (1/30)111+HI10S5   DC    HS5'1'
+000186                                     (1/31)112+TESTIS0009    DS 0H
+000186 D500D292D293     00029A 00029B      (1/32)113+         CLC  =AL1(I'HI10S5),=AL1(10)
+00018C 4770D1C0                0001C8      (1/33)114+         BNE  ERR2
+000190 D500D294D28A     00029C 000292      (1/34)115+         CLC  =AL1(S'HI10S5),=AL1(5)
+000196 4770D1E6                0001EE      (1/35)116+         BNE  ERR3
+00019A                                     (1/44)118          WTO    'TESTSYM1 ENDED OK'
+00019A A715000D                0001B4      (3/49)119+         BRAS  1,*+(WTO#0010_EOT-*+1)/2*2
+00019E 00150000E3C5E2E3                    (3/50)120+         DC    AL2(WTO#0010_EOT-*,0),C'TESTSYM1 ENDED OK'
+0001B3                  000001B3           (3/51)121+WTO#0010_EOT     EQU *
+0001B4 0A23                                (3/52)122+         SVC   35
+0001B6                                     (1/45)124          SUBEXIT 
+0001B6 41F00000                            (4/33)125+         LA    15,0
+0001BA 58D0D004                            (4/50)126+         L     13,4(,13)
+0001BE 58E0D00C                            (4/51)127+         L     14,12(,13)
+0001C2 982CD01C                            (4/52)128+         LM    2,12,28(13)
+0001C6 07FE                                (4/53)129+         BR    14
+0001C8                                     (1/46)131 ERR2     WTO   'INVALID I' VALUE'
+0001C8                                     (3/35)132+ERR2     DS    0H
+0001C8 A7150009                0001DA      (3/49)133+         BRAS  1,*+(WTO#0012_EOT-*+1)/2*2
+0001CC 000D0000C9D5E5C1                    (3/50)134+         DC    AL2(WTO#0012_EOT-*,0),C'INVALID I'
+0001D9                  000001D9           (3/51)135+WTO#0012_EOT     EQU *
+0001DA 0A23                                (3/52)136+         SVC   35
+0001DC                                     (1/47)138          SUBEXIT RC=16
+0001DC 41F00010                            (4/33)139+         LA    15,16
+0001E0 58D0D004                            (4/50)140+         L     13,4(,13)
+0001E4 58E0D00C                            (4/51)141+         L     14,12(,13)
+0001E8 982CD01C                            (4/52)142+         LM    2,12,28(13)
+0001EC 07FE                                (4/53)143+         BR    14
+0001EE                                     (1/48)145 ERR3     WTO   'INVALID S' VALUE'
+0001EE                                     (3/35)146+ERR3     DS    0H
+0001EE A7150009                000200      (3/49)147+         BRAS  1,*+(WTO#0014_EOT-*+1)/2*2
+0001F2 000D0000C9D5E5C1                    (3/50)148+         DC    AL2(WTO#0014_EOT-*,0),C'INVALID S'
+0001FF                  000001FF           (3/51)149+WTO#0014_EOT     EQU *
+000200 0A23                                (3/52)150+         SVC   35
+000202                                     (1/49)152          SUBEXIT RC=16
+000202 41F00010                            (4/33)153+         LA    15,16
+000206 58D0D004                            (4/50)154+         L     13,4(,13)
+00020A 58E0D00C                            (4/51)155+         L     14,12(,13)
+00020E 982CD01C                            (4/52)156+         LM    2,12,28(13)
+000212 07FE                                (4/53)157+         BR    14
+000214                                     (1/50)159 * TEST DS/DC SYMBOL TYPE AND LENGTH
+000214                                     (1/51)160          MACRO
+000214                                     (1/52)161          TSYM  &SDS,&ST,&SL
+000214                                     (1/53)162 &T       SETC  T'&SDS
+000214                                     (1/54)163 &L       SETA  L'&SDS
+000214                                     (1/55)164          MNOTE 'DS=&SDS T=&T L=&L'
+000214                                     (1/56)165          AIF   (&T NE &ST).ERR
+000214                                     (1/57)166          AIF   (&L NE &SL).ERR
+000214                                     (1/58)167          MEXIT
+000214                                     (1/59)168 .ERR     ANOP
+000214                                     (1/60)169          MNOTE 12,'SYMBOL TYPE OR LENGTH ERROR'
+000214                                     (1/61)170          MEND
+000214                                     (1/62)171          TSYM  SA,A,4
+000214                                     (1/55)172+         MNOTE 'DS=SA T=A L=4'
+000214                                     (1/63)174          TSYM  SAL3,R,3
+000214                                     (1/55)175+         MNOTE 'DS=SAL3 T=R L=3'
+000214                                     (1/64)177          TSYM  S2A,A,4
+000214                                     (1/55)178+         MNOTE 'DS=S2A T=A L=4'
+000214                                     (1/65)180          TSYM  SEAL3,R,3
+000214                                     (1/55)181+         MNOTE 'DS=SEAL3 T=R L=3'
+000214                                     (1/66)183          TSYM  SCL2,C,2
+000214                                     (1/55)184+         MNOTE 'DS=SCL2 T=C L=2'
+000214                                     (1/67)186          TSYM  SF,F,4
+000214                                     (1/55)187+         MNOTE 'DS=SF T=F L=4'
+000214                                     (1/68)189          TSYM  SH,H,2
+000214                                     (1/55)190+         MNOTE 'DS=SH T=H L=2'
+000214                                     (1/69)192          TSYM  SY,Y,2
+000214                                     (1/55)193+         MNOTE 'DS=SY T=Y L=2'
+000214                                     (1/70)195          TSYM  SF1,G,1
+000214                                     (1/55)196+         MNOTE 'DS=SF1 T=G L=1'
+000214                                     (1/71)198          TSYM  SH2,G,2
+000214                                     (1/55)199+         MNOTE 'DS=SH2 T=G L=2'
+000214                                     (1/72)201          TSYM  SY3,R,3
+000214                                     (1/55)202+         MNOTE 'DS=SY3 T=R L=3'
+000214                                     (1/73)204          TSYM  SE,E,4
+000214                                     (1/55)205+         MNOTE 'DS=SE T=E L=4'
+000214                                     (1/74)207          TSYM  SD,D,8
+000214                                     (1/55)208+         MNOTE 'DS=SD T=D L=8'
+000214                                     (1/75)210          TSYM  SL,L,16
+000214                                     (1/55)211+         MNOTE 'DS=SL T=L L=16'
+000214                                     (1/76)213          TSYM  SE1,K,1
+000214                                     (1/55)214+         MNOTE 'DS=SE1 T=K L=1'
+000214                                     (1/77)216          TSYM  SD2,K,2
+000214                                     (1/55)217+         MNOTE 'DS=SD2 T=K L=2'
+000214                                     (1/78)219          TSYM  SL3,K,3
+000214                                     (1/55)220+         MNOTE 'DS=SL3 T=K L=3'
+000214                                     (1/79)222          TSYM  SS,S,2
+000214                                     (1/55)223+         MNOTE 'DS=SS T=S L=2'
+000214                                     (1/80)225          TSYM  SS1,R,1
+000214                                     (1/55)226+         MNOTE 'DS=SS1 T=R L=1'
+000214                                     (1/81)228          TSYM  SP,P,1
+000214                                     (1/55)229+         MNOTE 'DS=SP T=P L=1'
+000214                                     (1/82)231          TSYM  SP2,P,2
+000214                                     (1/55)232+         MNOTE 'DS=SP2 T=P L=2'
+000214                                     (1/83)234          TSYM  SZ,Z,1
+000214                                     (1/55)235+         MNOTE 'DS=SZ T=Z L=1'
+000214                                     (1/84)237          TSYM  SZ2,Z,2
+000214                                     (1/55)238+         MNOTE 'DS=SZ2 T=Z L=2'
+000214                                     (1/85)240          TSYM  TESTSYM1,J,1
+000214                                     (1/55)241+         MNOTE 'DS=TESTSYM1 T=J L=1'
+000214                                     (1/86)243          TSYM  LR,I,2
+000214                                     (1/55)244+         MNOTE 'DS=LR T=I L=2'
+000214                                     (1/87)246          TSYM  ST,I,4
+000214                                     (1/55)247+         MNOTE 'DS=ST T=I L=4'
+000214                                     (1/88)249          TSYM  MVC,I,6
+000214                                     (1/55)250+         MNOTE 'DS=MVC T=I L=6'
+000214                                     (1/89)252          TSYM  SCD2,C,2
+000214                                     (1/55)253+         MNOTE 'DS=SCD2 T=C L=2'
+000214                                     (1/90)255          TSYM  SPD2,P,2
+000214                                     (1/55)256+         MNOTE 'DS=SPD2 T=P L=2'
+000214                                     (1/91)258          TSYM  SZD2,Z,2
+000214                                     (1/55)259+         MNOTE 'DS=SZD2 T=Z L=2'
+000214                                     (1/92)261 * TEST NUMERIC AND OMITTED TYPES
+000214                                     (1/93)262          MACRO
+000214                                     (1/94)263          TTYPE &P1,&P2
+000214                                     (1/95)264 &TYPE    SETC  T'&P1
+000214                                     (1/96)265          MNOTE 'P1=&P1 T''P1 = &TYPE'
+000214                                     (1/97)266 &TYPE    SETC  T'&P2
+000214                                     (1/98)267          MNOTE 'P2=&P2 T''P2 = &TYPE'
+000214                                     (1/99)268          MEND
+000214                                    (1/100)269          TTYPE A
+000214                                     (1/96)270+         MNOTE 'P1=A T'P1 = U'
+000214                                     (1/98)271+         MNOTE 'P2= T'P2 = O'
+000214                                    (1/101)273          TTYPE 
+000214                                     (1/96)274+         MNOTE 'P1= T'P1 = O'
+000214                                     (1/98)275+         MNOTE 'P2= T'P2 = O'
+000214                                    (1/102)277          TTYPE ,B
+000214                                     (1/96)278+         MNOTE 'P1= T'P1 = O'
+000214                                     (1/98)279+         MNOTE 'P2=B T'P2 = U'
+000214                                    (1/103)281          TTYPE 0
+000214                                     (1/96)282+         MNOTE 'P1=0 T'P1 = N'
+000214                                     (1/98)283+         MNOTE 'P2= T'P2 = O'
+000214                                    (1/104)285          TTYPE 9
+000214                                     (1/96)286+         MNOTE 'P1=9 T'P1 = N'
+000214                                     (1/98)287+         MNOTE 'P2= T'P2 = O'
+000214                  00000003          (1/105)289 ADUP     EQU   3
+000214                                    (1/106)290 SA       DS    A
+000218                                    (1/107)291 SAL3     DS    AL3
+00021C                                    (1/108)292 S2A      DS    2A
+000224                                    (1/109)293 SEAL3    DS    (ADUP)AL3
+00022D                                    (1/110)294 SCL2     DS    CL2
+00022F F1F2                               (1/111)295 SCD2     DC    C'12'
+000234                                    (1/112)296 SF       DS    F
+000238                                    (1/113)297 SH       DS    H
+00023A                                    (1/114)298 SY       DS    Y
+00023C                                    (1/115)299 SF1      DS    FL1
+00023D                                    (1/116)300 SH2      DS    HL2
+00023F                                    (1/117)301 SY3      DS    YL3
+000242                                    (1/118)302 SS       DS    S
+000244                                    (1/119)303 SS1      DS    SL1
+000248                                    (1/120)304 SE       DS    E
+000250                                    (1/121)305 SD       DS    D
+000258                                    (1/122)306 SL       DS    L
+000268                                    (1/123)307 SE1      DS    EL1
+000269                                    (1/124)308 SD2      DS    DL2
+00026B                                    (1/125)309 SL3      DS    LL3
+00026E                                    (1/126)310 SP       DS    P
+00026F                                    (1/127)311 SP2      DS    PL2
+000271 123C                               (1/128)312 SPD2     DC    P'123'
+000273                                    (1/129)313 SZ       DS    Z
+000274                                    (1/130)314 SZ2      DS    ZL2
+000276 F1C2                               (1/131)315 SZD2     DC    Z'12'
+000278 1811                               (1/132)316 LR       LR    1,1
+00027A 50110000                           (1/133)317 ST       ST    1,0(1)
+00027E D20010002000                       (1/134)318 MVC      MVC   0(1,1),0(2)
+000284                                    (1/135)319 * TEST AIF REF TO ORDINARY SYMBOL LENGTH OF DSECT
+000000                                    (1/136)320 D        DSECT 
+000000                                    (1/137)321 DF1      DS   XL10
+00000A                  0000000A          (1/138)322 DL       EQU  *-D
+00000A                                    (1/143)323          MNOTE 'DL EQ 10 OK'
+00000A                                    (1/149)324          MNOTE 'LABEL.DL+2 EQ 10 OK'
+00000A                                    (1/151)325 * TEST AIF REF TO DSECT SYM DEFINED BY EQU *
+000000                                    (1/152)326 CVTFIX   DSECT 
+000000                                    (1/153)327          DS   8X
+000008                  00000008          (1/154)328 CVTMAP   EQU  *
+000008                  00000008          (1/155)329 CVT      EQU  CVTMAP,,T'CVTMAP
+000008                                    (1/157)330          MNOTE 'LCVT=8'
+000008                                    (1/161)331          END 
+000288 01               =AL1(I'PI1S2)
+000289 01               =AL1(1)
+00028A 02               =AL1(S'PI1S2)
+00028B 02               =AL1(2)
+00028C 01               =AL1(I'ZI1S2)
+00028D 02               =AL1(S'ZI1S2)
+00028E 0E               =AL1(I'DDI14S2)
+00028F 0E               =AL1(14)
+000290 02               =AL1(S'DDI14S2)
+000291 05               =AL1(I'EDI5S2)
+000292 05               =AL1(5)
+000293 02               =AL1(S'EDI5S2)
+000294 20               =AL1(I'LDI32S2)
+000295 20               =AL1(32)
+000296 02               =AL1(S'LDI32S2)
+000297 1A               =AL1(I'FI26S5)
+000298 1A               =AL1(26)
+000299 05               =AL1(S'FI26S5)
+00029A 0A               =AL1(I'HI10S5)
+00029B 0A               =AL1(10)
+00029C 05               =AL1(S'HI10S5)
+
+Symbol Table Listing
+
+ SYM=ADUP     LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=289 293 
+ SYM=CVT      LOC=00000008 LEN=00000001 ESD=0003 TYPE=REL  XREF=329 
+ SYM=CVTFIX   LOC=00000000 LEN=00000008 ESD=0003 TYPE=DST  XREF=326 
+ SYM=CVTMAP   LOC=00000008 LEN=00000001 ESD=0003 TYPE=REL  XREF=328 329 
+ SYM=D        LOC=00000000 LEN=00000010 ESD=0002 TYPE=DST  XREF=320 322 
+ SYM=DDI14S2  LOC=000000E8 LEN=00000008 ESD=0001 TYPE=REL  XREF=75 77 79 331 
+ SYM=DF1      LOC=00000000 LEN=0000000A ESD=0002 TYPE=REL  XREF=321 
+ SYM=DL       LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=322 
+ SYM=EDI5S2   LOC=00000110 LEN=00000004 ESD=0001 TYPE=REL  XREF=84 86 88 331 
+ SYM=ERR2     LOC=000001C8 LEN=00000002 ESD=0001 TYPE=REL  XREF=132 60 69 78 87 96 
+  105 114 
+ SYM=ERR3     LOC=000001EE LEN=00000002 ESD=0001 TYPE=REL  XREF=146 62 71 80 89 98 
+  107 116 
+ SYM=FI26S5   LOC=00000168 LEN=00000004 ESD=0001 TYPE=REL  XREF=102 104 106 331 
+ SYM=HI10S5   LOC=00000184 LEN=00000002 ESD=0001 TYPE=REL  XREF=111 113 115 331 
+ SYM=LDI32S2  LOC=00000130 LEN=00000010 ESD=0001 TYPE=REL  XREF=93 95 97 331 
+ SYM=LR       LOC=00000278 LEN=00000002 ESD=0001 TYPE=REL  XREF=316 
+ SYM=MVC      LOC=0000027E LEN=00000006 ESD=0001 TYPE=REL  XREF=318 
+ SYM=PI1S2    LOC=000000A8 LEN=00000002 ESD=0001 TYPE=REL  XREF=57 59 61 331 
+ SYM=S2A      LOC=0000021C LEN=00000004 ESD=0001 TYPE=REL  XREF=292 
+ SYM=SA       LOC=00000214 LEN=00000004 ESD=0001 TYPE=REL  XREF=290 
+ SYM=SAL3     LOC=00000218 LEN=00000003 ESD=0001 TYPE=REL  XREF=291 
+ SYM=SCD2     LOC=0000022F LEN=00000002 ESD=0001 TYPE=REL  XREF=295 
+ SYM=SCL2     LOC=0000022D LEN=00000002 ESD=0001 TYPE=REL  XREF=294 
+ SYM=SD       LOC=00000250 LEN=00000008 ESD=0001 TYPE=REL  XREF=305 
+ SYM=SD2      LOC=00000269 LEN=00000002 ESD=0001 TYPE=REL  XREF=308 
+ SYM=SE       LOC=00000248 LEN=00000004 ESD=0001 TYPE=REL  XREF=304 
+ SYM=SE1      LOC=00000268 LEN=00000001 ESD=0001 TYPE=REL  XREF=307 
+ SYM=SEAL3    LOC=00000224 LEN=00000003 ESD=0001 TYPE=REL  XREF=293 
+ SYM=SF       LOC=00000234 LEN=00000004 ESD=0001 TYPE=REL  XREF=296 
+ SYM=SF1      LOC=0000023C LEN=00000001 ESD=0001 TYPE=REL  XREF=299 
+ SYM=SH       LOC=00000238 LEN=00000002 ESD=0001 TYPE=REL  XREF=297 
+ SYM=SH2      LOC=0000023D LEN=00000002 ESD=0001 TYPE=REL  XREF=300 
+ SYM=SL       LOC=00000258 LEN=00000010 ESD=0001 TYPE=REL  XREF=306 
+ SYM=SL3      LOC=0000026B LEN=00000003 ESD=0001 TYPE=REL  XREF=309 
+ SYM=SP       LOC=0000026E LEN=00000001 ESD=0001 TYPE=REL  XREF=310 
+ SYM=SP2      LOC=0000026F LEN=00000002 ESD=0001 TYPE=REL  XREF=311 
+ SYM=SPD2     LOC=00000271 LEN=00000002 ESD=0001 TYPE=REL  XREF=312 
+ SYM=SS       LOC=00000242 LEN=00000002 ESD=0001 TYPE=REL  XREF=302 
+ SYM=SS1      LOC=00000244 LEN=00000001 ESD=0001 TYPE=REL  XREF=303 
+ SYM=ST       LOC=0000027A LEN=00000004 ESD=0001 TYPE=REL  XREF=317 
+ SYM=SY       LOC=0000023A LEN=00000002 ESD=0001 TYPE=REL  XREF=298 
+ SYM=SY3      LOC=0000023F LEN=00000003 ESD=0001 TYPE=REL  XREF=301 
+ SYM=SZ       LOC=00000273 LEN=00000001 ESD=0001 TYPE=REL  XREF=313 
+ SYM=SZ2      LOC=00000274 LEN=00000002 ESD=0001 TYPE=REL  XREF=314 
+ SYM=SZD2     LOC=00000276 LEN=00000002 ESD=0001 TYPE=REL  XREF=315 
+ SYM=TESTIS0003 LOC=000000AC LEN=00000002 ESD=0001 TYPE=REL  XREF=58 56 
+ SYM=TESTIS0004 LOC=000000CA LEN=00000002 ESD=0001 TYPE=REL  XREF=67 65 
+ SYM=TESTIS0005 LOC=000000F8 LEN=00000002 ESD=0001 TYPE=REL  XREF=76 74 
+ SYM=TESTIS0006 LOC=00000118 LEN=00000002 ESD=0001 TYPE=REL  XREF=85 83 
+ SYM=TESTIS0007 LOC=00000150 LEN=00000002 ESD=0001 TYPE=REL  XREF=94 92 
+ SYM=TESTIS0008 LOC=0000016C LEN=00000002 ESD=0001 TYPE=REL  XREF=103 101 
+ SYM=TESTIS0009 LOC=00000186 LEN=00000002 ESD=0001 TYPE=REL  XREF=112 110 
+ SYM=TESTSYM1 LOC=00000000 LEN=000002A0 ESD=0001 TYPE=CST  XREF=24 34 
+ SYM=WTO#0002_EOT LOC=000000A2 LEN=00000001 ESD=0001 TYPE=REL  XREF=41 38 39 
+ SYM=WTO#0010_EOT LOC=000001B3 LEN=00000001 ESD=0001 TYPE=REL  XREF=121 119 120 
+ SYM=WTO#0012_EOT LOC=000001D9 LEN=00000001 ESD=0001 TYPE=REL  XREF=135 133 134 
+ SYM=WTO#0014_EOT LOC=000001FF LEN=00000001 ESD=0001 TYPE=REL  XREF=149 147 148 
+ SYM=ZI1S2    LOC=000000C4 LEN=00000003 ESD=0001 TYPE=REL  XREF=66 68 70 331 
+
+Literal Table Listing
+
+ LIT=AL1(1)   LOC=00000289 LEN=00000001 ESD=0001 POOL=0001 XREF=59 68 
+ LIT=AL1(10)  LOC=0000029B LEN=00000001 ESD=0001 POOL=0001 XREF=113 
+ LIT=AL1(14)  LOC=0000028F LEN=00000001 ESD=0001 POOL=0001 XREF=77 
+ LIT=AL1(2)   LOC=0000028B LEN=00000001 ESD=0001 POOL=0001 XREF=61 70 79 88 97 
+ LIT=AL1(26)  LOC=00000298 LEN=00000001 ESD=0001 POOL=0001 XREF=104 
+ LIT=AL1(32)  LOC=00000295 LEN=00000001 ESD=0001 POOL=0001 XREF=95 
+ LIT=AL1(5)   LOC=00000292 LEN=00000001 ESD=0001 POOL=0001 XREF=86 106 115 
+ LIT=AL1(I'DDI14S2) LOC=0000028E LEN=00000001 ESD=0001 POOL=0001 XREF=77 
+ LIT=AL1(I'EDI5S2) LOC=00000291 LEN=00000001 ESD=0001 POOL=0001 XREF=86 
+ LIT=AL1(I'FI26S5) LOC=00000297 LEN=00000001 ESD=0001 POOL=0001 XREF=104 
+ LIT=AL1(I'HI10S5) LOC=0000029A LEN=00000001 ESD=0001 POOL=0001 XREF=113 
+ LIT=AL1(I'LDI32S2) LOC=00000294 LEN=00000001 ESD=0001 POOL=0001 XREF=95 
+ LIT=AL1(I'PI1S2) LOC=00000288 LEN=00000001 ESD=0001 POOL=0001 XREF=59 
+ LIT=AL1(I'ZI1S2) LOC=0000028C LEN=00000001 ESD=0001 POOL=0001 XREF=68 
+ LIT=AL1(S'DDI14S2) LOC=00000290 LEN=00000001 ESD=0001 POOL=0001 XREF=79 
+ LIT=AL1(S'EDI5S2) LOC=00000293 LEN=00000001 ESD=0001 POOL=0001 XREF=88 
+ LIT=AL1(S'FI26S5) LOC=00000299 LEN=00000001 ESD=0001 POOL=0001 XREF=106 
+ LIT=AL1(S'HI10S5) LOC=0000029C LEN=00000001 ESD=0001 POOL=0001 XREF=115 
+ LIT=AL1(S'LDI32S2) LOC=00000296 LEN=00000001 ESD=0001 POOL=0001 XREF=97 
+ LIT=AL1(S'PI1S2) LOC=0000028A LEN=00000001 ESD=0001 POOL=0001 XREF=61 
+ LIT=AL1(S'ZI1S2) LOC=0000028D LEN=00000001 ESD=0001 POOL=0001 XREF=70 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSYM1  MZ390 ENDED RC= 0 IO=1338

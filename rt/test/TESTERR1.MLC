@@ -1,0 +1,184 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH         Initial version                           *
+* 2005-11-10  DSH RPI-80  Add duplicate and missing macro label     *
+*                         errors                                    *
+* 2005-12-08  DSH RPI-119 Add test for subscript on multiple values *
+* 2006-01-28  DSH RPI-192 Test single quote and single &            *
+* 2006-05-14  DSH RPI-314 Test compound AIF and computed AGO        *
+*                         missing LAB                               *
+* 2007-03-09  DSH RPI-565 Test invalid use of &SYSLIST without      *
+*                         SUBSCRIPT                                 *
+* 2007-05-07  DSH RPI-609 Test invalid string conversion in SETB    *
+*                         expression                                *
+* 2007-07-06  DSH RPI-645 Test invalid substring subscript 0        *
+* 2007-11-30  DSH RPI-744 Test error on any non-printable ASCII     *
+*                         characters                                *
+* 2008-04-23  DSH RPI-836 Test error on SETC expression with        *
+*                         undefined symbol and SETC array without   *
+*                         subscript reference                       *
+* 2008-07-31  DSH RPI-886 Test dequote error if quotes unbalanced   *
+* 2008-08-18  DSH RPI-901 Move test of open code undef AGO tests to *
+*                         TESTERR8.MLC/TESTERR9.MLC                 *
+* 2008-11-07  DSH RPI-938 Test MNOTE syntax and all but 8,'?' on    *
+*                         SYSTERM *
+* 2009-06-15  DSH RPI-108 Test MNOTE syntax and all but 8,'?' on    *
+*                         SYSTERM *
+*********************************************************************
+
+         TITLE 'TESTERR1 TEST MZ390 ERRORS'
+
+TESTERR1 CSECT
+         USING *,15
+* INVALID USE OF ' VS '' QUOTE AND & VS && AMPERSAND
+&AMP     SETA  '&&' OK
+&AMP     SETA  '&'  BAD
+&AMP     SETA  '&X' BAD
+&AMP     SETA  '& ' BAD
+         MNOTE 'AMP=&&' OK
+         LA    1,=C'&&' OK
+         DC    C'&&' OK
+&SQ      SETC  '''' OK
+&SQ      SETC  '''  BAD
+* INVALID MULT VALUES BEYOND LIMIT
+         LCLA  &LA(2)
+&LA(1)   SETA  1,2,3
+         LCLB  &LB(2)
+&LB(1)   SETB  1,2,3
+         LCLC  &LC(2)
+&LC(1)   SETC  '1','2','3'
+         GBLA  &GA(2)
+&GA(1)   SETA  1,2,3
+         GBLB  &GB(2)
+&GB(1)   SETB  1,2,3
+         GBLC  &GC(2)
+&GC(1)   SETC  '1','2','3'
+* INVALID MACRO EXPRESSIONS
+&A1      SETA
+&A2      SETA 1+
+&A3      SETA 1/0
+&B1      SETB
+&B2      SETB 1+
+&B3      SETB 1/0
+&X1      SETC
+&X2      SETC 'XXX
+&X3      SETC 'X'(1, 
+         LCLA A(2)
+&A(0)    SETA 1
+&A(1)    SETA 1
+&A(3)    SETA 1
+         LCLB B(2)
+&B(0)    SETB 1
+&B(1)    SETB 1
+&B(3)    SETB 1
+         LCLC C(2)
+&C(0)    SETC 'C'
+&C(1)    SETC 'C'
+&C(3)    SETC 'C' 
+         GBLA GA(2)
+&GA(0)    SETA 1
+&GA(1)    SETA 1
+&GA(3)    SETA 1
+         GBLB GB(2)
+&GB(0)    SETB 1
+&GB(1)    SETB 1
+&GB(3)    SETB 1
+         GBLC GC(2)
+&GC(0)    SETC 'C'
+&GC(1)    SETC 'C'
+&GC(3)    SETC 'C' 
+* INVALID SYSLIST SUBSCRIPT
+         MACRO
+         TEST1 
+         MNOTE 'P1=&SYSLIST(-1)'       ERROR
+         MNOTE 'P1(1)=&SYSLIST(1)'     OK
+         MNOTE 'P1(1,2)=&SYSLIST(1,2)' OK
+         MNOTE 'P1(1,2)=&SYSLIST(1,0)' ERROR
+         MEND
+         TEST1 (A,
+         MACRO
+&N       TEST2 &P1,&K1=
+&N       SETA  1
+&P1      SETB  1
+&K1      SETC  'X'
+         MNOTE 'N=&N P1=&P1 K1=&K1'
+         MEND
+A        TEST2 B,K1=C
+* VALID COPY STATEMENT ON NEXT LINE IN TESTERR1.MLC
+         COPY  TESTERR1
+* TEST INVALID USE OF &SYSLIST
+&SLZ     SETC  &SYSLIST             ERR
+         MACRO 
+         TEST  &A,&B,&C             
+&SLX     SETA  &SYSLIST             ERR ASM AND MAC
+&SLY     SETB  &SYSLIST             ERR ASM AND MAC
+&SLZ     SETC  &SYSLIST             ERR ASM AND MAC
+         MNOTE 'SYSLIST=&SYSLIST'   ERR ASM AND MAC
+         MNOTE 'UNDEF=&UNDEF'       ERR IF MAC ELSE OK
+         MEND
+         TEST  A,B,C
+* ADD INVALID  SETB STRING CONV
+&SETB    SETB   '0'
+* ADD TEST INVALID SUBSTRING SUBSCRIPT 0
+&SETC    SETC   'X'(0,0)
+* RPI 744 test non-ascii character string error    (not reported)           
+         DC   C'e…'  MULTI-KEY VALUES 101 AND 201  (see TESTERRA)
+* RPI 836 REPORT UNDEFINE SYMBOL AND SET ARRAY WITHOUT SUBSC.
+         LCLA  &A836(10)
+&A836(2) SETA  2
+&Y       SETC  '&A836.1'
+&X       SETA  &A836)2)        
+&B836    SETA  &B836+COUNT
+* RPI 886 UNBALANCED DEQUOTE STRING
+* 07/31/08 RPI 886 - TEST DEQUOTE ERROR IF QUOTES UNBALANCED         
+&TT      SETC  '''A''B'
+&TY      SETC  DEQUOTE(&TT)
+&TT      SETC  'A''B'''
+&TY      SETC  DEQUOTE(&TT)
+* RPI 938 MNOTE TESTS
+         MNOTE 'TEST 1'       OK NO LVL, NO COMMA
+         MNOTE 'TEST 2'(1,4)  ERR TEXT NOT IN '..' 1 OF 4
+         MNOTE ,'TEST 3'      OK COMMA
+         MNOTE *,'TEST 4'     OK NOT ON SYSTERM
+         MNOTE 4,'TEST 5'     OK 
+         MNOTE -1,'TEST 6'    ERR LVL < 0          2 OF 4
+         MNOTE 256,'TEST 7'   ERR LVL > 255        3 OF 4
+         MNOTE 1              ERR MISSING LVL,TEXT 4 OR 4
+
+**********************************************************
+* ADD DUPLICATE AND MISSING MACRO ERRORS IN OPEN CODE
+*
+* THIS MUST BE LAST TEST WITH FAILING AGO IN OPEN CODE
+* (The warning no issued for CHKMAC(0) required with NOASM)
+* (See TESTERRA using ASM and CHKMAC(2) for warnings)
+**********************************************************
+         MACRO
+         TESTLAB
+.LAB1    ANOP
+.LAB2    ANOP
+.LAB1    ANOP
+         AGO    .UNDEFINED1
+         AIF    (1 EQ 1).UNDEFINED2
+         MEND
+.LAB1    ANOP
+.LAB2    ANOP
+.LAB1    ANOP
+         AGO    .UNDEFINED1
+         AIF    (1 EQ 1).UNDEFINED2
+* ADD COMPOND AIF AND COMPUTED AGO MISSING LABELS
+&I       SETA  2
+         AIF   (1 EQ 2).T11,(2 EQ 2).X11
+         AGO   (&I).T11,.X12,.T13
+.T11     MNOTE '.T11'
+.T12     MNOTE '.T12'
+.T13     MNOTE '.T13'
+         END 

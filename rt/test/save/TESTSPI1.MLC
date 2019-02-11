@@ -1,0 +1,34 @@
+*********************************************************************
+* Copyright 2006 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2006-05-01 DSH         Initial version                            *
+* 2006-05-01 DSH RPI-305 Test ESPIE exit with parameter and RESTART *
+* 2008-06-20 DSH RPI-845 Change EPIED to IHAEPIE                    *
+*********************************************************************
+
+         TITLE 'TESTSPI1 - TEST ESPIE'
+
+TESTSPI1 SUBENTRY
+         WTO   'TESTSPI1 TEST ESPIE STARTED'
+         ESPIE SET,EXIT,1,PARAM=RESTART
+         DC    X'0000' CAUSE 0C1
+RESTART  WTO   'TESTSPI1 RESTART SUCCESSFUL'
+         WTO   'TESTSPI1 ENDED OK'
+         SUBEXIT
+         DROP
+EXIT     DS    0H
+         USING *,15
+         USING EPIE,1
+         L     0,EPIEPARM
+         ST    0,EPIEPSW+4
+         BR    14
+         IHAEPIE
+         END

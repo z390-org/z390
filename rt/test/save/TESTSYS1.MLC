@@ -1,0 +1,110 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH         Initial version                           *
+* 2006-01-27  DSH RPI-192 Test correctly handling of && in strings  *
+* 2006-04-06  DSH RPI-259 Add remaining HLASM system variables for  *
+*                         compatibility                             *
+*********************************************************************
+
+TESTSYS1 SUBENTRY
+         WTO   'TESTSYS1 STARTED'
+         MNOTE '&&SYSASM=&SYSASM'
+         MNOTE '&&SYSCLOCK=&SYSCLOCK'
+         MNOTE '&&SYSDATC=&SYSDATC'
+         MNOTE '&&SYSDATE=&SYSDATE'
+         MNOTE '&&SYSPARM=&SYSPARM'
+         MNOTE '&&SYSTEM_ID=&SYSTEM_ID'
+         MNOTE '&&SYSTEM_JAVA=&SYSTEM_JAVA'
+         MNOTE '&&SYSTIME=&SYSTIME'
+         MNOTE '&&SYSVER=&SYSVER'
+         MACRO
+         TEST
+         MNOTE '&&SYSECT=&SYSECT'
+         MNOTE '&&SYSLOC=&SYSLOC'
+         MNOTE '&&SYSSTYP=&SYSSTYP'
+         MNOTE '&&SYSNDX=&SYSNDX'
+         MNOTE '&&SYSNEST=&SYSNEST'
+         MEND
+         TEST
+TESTD    DSECT
+         TEST
+TESTDLOC LOCTR
+         TEST
+TESTSYS1 CSECT
+         TEST
+         MNOTE '&&SYSCLOCK=&SYSCLOCK'
+&COUNT   SETA  10000
+         MNOTE 'COUNT TO &COUNT'
+         ACTR  &COUNT
+.LOOP    ANOP           LOOP TO CHANGE SYSCLOCK IF TIMING ON
+&COUNT   SETA  &COUNT-1
+         AIF   (&COUNT GT 0).LOOP
+         MNOTE '&&SYSCLOCK=&SYSCLOCK'
+* TEST SYSMAC
+         MNOTE '&&SYSMAC=&SYSMAC'
+         MNOTE '&&SYSMAC(0)=&SYSMAC(0)'
+         MNOTE '&&SYSMAC(1)=&SYSMAC(1)'
+         MNOTE '&&SYSMAC(2)=&SYSMAC(2)'
+         MNOTE '&&SYSMAC(3)=&SYSMAC(3)'
+         MNOTE '&&SYSNEST=&SYSNEST SYSMAC(SYSNEST)=&SYSMAC(&SYSNEST)'
+         MACRO
+         TESTA
+         MNOTE 'EXECUTING TESTA'
+         MNOTE '&&SYSMAC=&SYSMAC'
+         MNOTE '&&SYSMAC(0)=&SYSMAC(0)'
+         MNOTE '&&SYSMAC(1)=&SYSMAC(1)'
+         MNOTE '&&SYSMAC(2)=&SYSMAC(2)'
+         MNOTE '&&SYSMAC(3)=&SYSMAC(3)'
+         MNOTE '&&SYSNEST=&SYSNEST &&SYSMAC(SYSNEST)=&SYSMAC(&SYSNEST)'
+         MEND
+         MACRO
+         TESTB
+         MNOTE 'EXECUTING TESTB'
+         TESTA
+         MEND
+         TESTA
+         TESTB
+* TEST REMAINING SYSTEM VARIABLES ADDED FOR COMPATIBLITY
+           MNOTE '&&SYSADATA_DSN=&SYSADATA_DSN' 
+           MNOTE '&&SYSADATA_MEMBER=&SYSADATA_MEMBER'
+           MNOTE '&&SYSADATA_VOLUME=&SYSADATA_VOLUME'
+           MNOTE '&&SYSIN_DSN=&SYSIN_DSN' 
+           MNOTE '&&SYSIN_MEMBER=&SYSIN_MEMBER'
+           MNOTE '&&SYSIN_VOLUME=&SYSIN_VOLUME'
+           MNOTE '&&SYSJOB=&SYSJOB'
+           MNOTE '&&SYSLIB_DSN=&SYSLIB_DSN'
+           MNOTE '&&SYSLIB_MEMBER=&SYSLIB_MEMBER' 
+           MNOTE '&&SYSLIB_VOLUME=&SYSLIB_VOLUME' 
+           MNOTE '&&SYSLIN_DSN=&SYSLIN_DSN'
+           MNOTE '&&SYSLIN_MEMBER=&SYSLIN_MEMBER' 
+           MNOTE '&&SYSLIN_VOLUME=&SYSLIN_VOLUME' 
+           MNOTE '&&SYSM_HSEV=&SYSM_HSEV'
+           MNOTE '&&SYSM_SEV=&SYSM_SEV'
+           MNOTE '&&SYSOPT_DBCS=&SYSOPT_DBCS'
+           MNOTE '&&SYSOPT_OPTABLE=&SYSOPT_OPTABLE'
+           MNOTE '&&SYSOPT_RENT=&SYSOPT_RENT'
+           MNOTE '&&SYSOPT_XOBJECT=&SYSOPT_XOBJECT'
+           MNOTE '&&SYSPRINT_DSN=&SYSPRINT_DSN'
+           MNOTE '&&SYSPRINT_MEMBER=&SYSPRINT_MEMBER'
+           MNOTE '&&SYSPRINT_VOLUME=&SYSPRINT_VOLUME'
+           MNOTE '&&SYSPUNCH_DSN=&SYSPUNCH_DSN'
+           MNOTE '&&SYSPUNCH_MEMBER=&SYSPUNCH_MEMBER'
+           MNOTE '&&SYSPUNCH_VOLUME=&SYSPUNCH_VOLUME'
+           MNOTE '&&SYSSEQF=&SYSSEQF'
+           MNOTE '&&SYSSTEP=&SYSSTEP'
+           MNOTE '&&SYSSTMT=&SYSSTMT'
+           MNOTE '&&SYSTERM_DSN=&SYSTERM_DSN'
+           MNOTE '&&SYSTERM_MEMBER=&SYSTERM_MEMBER'
+           MNOTE '&&SYSTERM_VOLUME=&SYSTERM_VOLUME'
+         WTO   'TESTSYS1 ENDED OK'
+         SUBEXIT
+         END

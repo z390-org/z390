@@ -1,0 +1,687 @@
+TESTSDT1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSDT1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000480 TYPE=CST NAME=TESTSDT1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30 DSH         Initial version                            *
+000000                                      (1/13)13 * 2005-10-05 DSH RPI-5 - Add ASCII mode support                     *
+000000                                      (1/14)14 *                        (see TESTASC2.MLC test also)               *
+000000                                      (1/15)15 * 2006-03-20 DSH RPI-232 Test integer with exponent 1E3 = 1000      *
+000000                                      (1/16)16 * 2006-04-05 DSH RPI-270 Test CA'...' and CE'...'  MZ390 and AZ390  *
+000000                                      (1/17)17 *                        SDTS                                       *
+000000                                      (1/18)18 * 2008-11-09 DSH RPI-943 Use signed to substitute signed value in   *
+000000                                      (1/19)19 *                        model                                      *
+000000                                      (1/20)20 *********************************************************************
+000000                                      (1/21)21 TESTSDT1 RT1   MAIN
+000000                                      (3/78)23+TESTSDT1 CSECT 
+000000 90ECD00C                            (3/168)24+         STM   14,12,12(13)
+000004 45FF0068                            (3/169)25+         BAL   15,104(15)
+000008 0000000000000000                    (3/170)26+         DC    18F'0'
+000050 E3C5E2E3E2C4E3F1                    (3/171)27+         DC    CL8'TESTSDT1'
+000058 F0F161F0F261F0F5                    (3/172)28+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (3/173)29+         DC    CL8'22.33'
+000068 50FD0008                            (3/174)30+         ST    15,8(13)
+00006C 50DF0004                            (3/175)31+         ST    13,4(15)
+000070 18DF                                (3/176)32+         LR    13,15
+000072                                     (3/189)33+         USING TESTSDT1+8,13
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072 A715000E                00008E       (4/49)36+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+000076 00180000E3C5E2E3                     (4/50)37+         DC    AL2(WTO#0003_EOT-*,0),C'TESTSDT1 RT1 STARTED'
+00008E                  0000008E            (4/51)38+WTO#0003_EOT     EQU *
+00008E 0A23                                 (4/52)39+         SVC   35
+000090 C0F40000007F            00018E       (2/66)41+         BRCL    15,RT1_START
+000096                                      (2/67)42+RT1_ABORT DS 0H
+000096 92E3D137                00013F       (2/68)43+         MVI   RT1_ABORTED,C'T'
+00009A A7150012                0000BE       (4/49)45+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+00009E 00200000E3C5E2E3                     (4/50)46+         DC    AL2(WTO#0004_EOT-*,0),C'TESTSDT1 RT1 TESTING ABORTED'
+0000BE                  000000BE            (4/51)47+WTO#0004_EOT     EQU *
+0000BE 0A23                                 (4/52)48+         SVC   35
+0000C0                                      (2/70)50+RT1_END  DS    0H
+0000C0 D205D131D138     000139 000140       (2/71)51+         MVC   RT1_DTOT,=X'402020202020'
+0000C6 DE05D131D10A     000139 000112       (2/72)52+         ED    RT1_DTOT,RT1_TOT
+0000CC 4110D10E                000116       (4/61)54+         LA    1,RT1_WTO1
+0000D0 0A23                                 (4/66)55+         SVC   35
+0000D2 95E3D137                00013F       (2/74)57+         CLI   RT1_ABORTED,C'T'
+0000D6 4780D104                00010C       (2/75)58+         BE    RT1_DUMP
+0000DA A715000F                0000F8       (4/49)60+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000DE 00190000E3C5E2E3                     (4/50)61+         DC    AL2(WTO#0006_EOT-*,0),C'TESTSDT1 RT1 ENDED OK'
+0000F7                  000000F7            (4/51)62+WTO#0006_EOT     EQU *
+0000F8 0A23                                 (4/52)63+         SVC   35
+0000FA 41F00000                             (5/33)66+         LA    15,0
+0000FE 58D0D004                             (5/50)67+         L     13,4(,13)
+000102 58E0D00C                             (5/51)68+         L     14,12(,13)
+000106 982CD01C                             (5/52)69+         LM    2,12,28(13)
+00010A 07FE                                 (5/53)70+         BR    14
+00010C                                      (2/78)72+RT1_DUMP DS    0H
+00010C 41100065                             (6/39)74+         LA   1,101
+000110 0A0D                                 (6/47)75+         SVC  13 ABEND R1=COMP CODE AND HIGH BIT = DUMP PGM STORAGE
+000112                  0000000B            (2/80)77+RT1_LINK EQU   11
+000112                  00000112            (2/81)78+RT1_DATA EQU   *
+000112 00000C                               (2/82)79+RT1_TOT  DC    PL3'0' TOTAL RT1 TESTS COMPLETED
+000115 1C                                   (2/83)80+RT1_ONE  DC    P'1'
+000116 00290000E3C5E2E3                     (2/84)81+RT1_WTO1 DC    AL2(RT1_WTO_END-*,0),C'TESTSDT1 RT1 TESTS COMPLETED = '
+000139 40E9E9E9E9E9                         (2/85)82+RT1_DTOT DC    CL6' ZZZZZ'
+00013F                  0000013F            (2/86)83+RT1_WTO_END EQU *
+00013F C6                                   (2/87)84+RT1_ABORTED DC C'F'
+000140                                      (2/88)85+         LTORG 
+000140 402020202020     =X'402020202020'
+000146                                      (2/89)86+RT1_TEST_CC0  DS    0H
+000146 4770D08E                000096       (2/90)87+         BNE   RT1_ABORT
+00014A                                      (2/91)88+RT1_OK   DS    0H
+00014A FA20D10AD10D     000112 000115       (2/92)89+         AP    RT1_TOT,RT1_ONE
+000150 07FB                                 (2/93)90+         BR    RT1_LINK
+000152                                      (2/94)91+RT1_TEST_CC1  DS    0H
+000152 47B0D08E                000096       (2/95)92+         BNL   RT1_ABORT
+000156 FA20D10AD10D     000112 000115       (2/96)93+         AP    RT1_TOT,RT1_ONE
+00015C 07FB                                 (2/97)94+         BR    RT1_LINK
+00015E                                      (2/98)95+RT1_TEST_CC2  DS    0H
+00015E 47D0D08E                000096       (2/99)96+         BNH   RT1_ABORT
+000162 FA20D10AD10D     000112 000115      (2/100)97+         AP    RT1_TOT,RT1_ONE
+000168 07FB                                (2/101)98+         BR    RT1_LINK
+00016A                                     (2/102)99+RT1_TEST_CC3  DS    0H
+00016A 47E0D08E                000096     (2/103)100+         BNO   RT1_ABORT
+00016E FA20D10AD10D     000112 000115     (2/104)101+         AP    RT1_TOT,RT1_ONE
+000174 07FB                               (2/105)102+         BR    RT1_LINK
+000176                                    (2/106)103+RT1_TEST_CCGE  DS    0H
+000176 4740D08E                000096     (2/107)104+         BL    RT1_ABORT
+00017A FA20D10AD10D     000112 000115     (2/108)105+         AP    RT1_TOT,RT1_ONE
+000180 07FB                               (2/109)106+         BR    RT1_LINK
+000182                                    (2/110)107+RT1_TEST_CCLE  DS    0H
+000182 4720D08E                000096     (2/111)108+         BH    RT1_ABORT
+000186 FA20D10AD10D     000112 000115     (2/112)109+         AP    RT1_TOT,RT1_ONE
+00018C 07FB                               (2/113)110+         BR    RT1_LINK
+00018E                                     (1/22)112          RT1   START
+00018E                                    (2/116)113+RT1_START DS  0H
+00018E                                     (1/23)115 * TEST MZ390 SDTS
+00018E                                     (1/26)116          RT1 CCL,=A(1),=A(2)
+00018E                                     (2/38)117+         DS    0H
+00018E D503D198D19C     0001A0 0001A4      (2/49)118+         CLC   =A(1),=A(2)
+000194 4DB0D14A                000152     (2/128)119+RT1_TEST1        BAS   RT1_LINK,RT1_TEST_CC1
+000198                                    (2/129)120+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000198 LEN=01000 REG=B OFF=00000 LAB=
+000198 47F0B010                0001A8     (2/130)121+         B     RT1_CCL1
+00019C                                    (2/131)122+         LTORG 
+0001A0 00000001         =A(1)
+0001A4 00000002         =A(2)
+0001A8                                    (2/132)123+RT1_CCL1        DS 0H
+0001A8                                     (1/29)125          RT1 CCH,=A(194),=A(193)
+0001A8                                     (2/38)126+         DS    0H
+0001A8 D503B020B024     0001B8 0001BC      (2/49)127+         CLC   =A(194),=A(193)
+0001AE 4DB0D156                00015E     (2/136)128+RT1_TEST2        BAS   RT1_LINK,RT1_TEST_CC2
+0001B2                                    (2/137)129+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000001B2 LEN=01000 REG=B OFF=00000 LAB=
+0001B2 47F0B00E                0001C0     (2/138)130+         B     RT1_CCH2
+0001B6                                    (2/139)131+         LTORG 
+0001B8 000000C2         =A(194)
+0001BC 000000C1         =A(193)
+0001C0                                    (2/140)132+RT1_CCH2        DS 0H
+0001C0                                     (1/32)134          RT1 CCE,=A(123),=A(123)
+0001C0                                     (2/38)135+         DS    0H
+0001C0 D503B01EB01E     0001D0 0001D0      (2/49)136+         CLC   =A(123),=A(123)
+0001C6 4DB0D13E                000146     (2/120)137+RT1_TEST3        BAS   RT1_LINK,RT1_TEST_CC0
+0001CA                                    (2/121)138+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000001CA LEN=01000 REG=B OFF=00000 LAB=
+0001CA 47F0B00A                0001D4     (2/122)139+         B     RT1_CCE3
+0001CE                                    (2/123)140+         LTORG 
+0001D0 0000007B         =A(123)
+0001D4                                    (2/124)141+RT1_CCE3        DS 0H
+0001D4                                     (1/35)143          RT1 CCE,=A(3),=A(3)
+0001D4                                     (2/38)144+         DS    0H
+0001D4 D503B01EB01E     0001E8 0001E8      (2/49)145+         CLC   =A(3),=A(3)
+0001DA 4DB0D13E                000146     (2/120)146+RT1_TEST4        BAS   RT1_LINK,RT1_TEST_CC0
+0001DE                                    (2/121)147+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000001DE LEN=01000 REG=B OFF=00000 LAB=
+0001DE 47F0B00E                0001EC     (2/122)148+         B     RT1_CCE4
+0001E2                                    (2/123)149+         LTORG 
+0001E8 00000003         =A(3)
+0001EC                                    (2/124)150+RT1_CCE4        DS 0H
+0001EC                                     (1/39)152          RT1   CCL,=C'A',=C'1'     EBCDIC LETTERS < DIGITS
+0001EC                                     (2/38)154+         DS    0H
+0001EC D500B022B023     000200 000201      (2/49)155+         CLC   =C'A',=C'1'
+0001F2 4DB0D14A                000152     (2/128)156+RT1_TEST5        BAS   RT1_LINK,RT1_TEST_CC1
+0001F6                                    (2/129)157+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000001F6 LEN=01000 REG=B OFF=00000 LAB=
+0001F6 47F0B00C                000202     (2/130)158+         B     RT1_CCL5
+0001FA                                    (2/131)159+         LTORG 
+000200 C1               =C'A'
+000201 F1               =C'1'
+000202                                    (2/132)160+RT1_CCL5        DS 0H
+000202                                     (1/40)162          RT1 CCE,=AL1(B'11000001'),=AL1(C'A')       TEST EBCDIC SDTS
+000202                                     (2/38)164+         DS    0H
+000202 D500B01AB01B     000210 000211      (2/49)165+         CLC   =AL1(B'11000001'),=AL1(C'A')
+000208 4DB0D13E                000146     (2/120)166+RT1_TEST6        BAS   RT1_LINK,RT1_TEST_CC0
+00020C                                    (2/121)167+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000020C LEN=01000 REG=B OFF=00000 LAB=
+00020C 47F0B006                000212     (2/122)168+         B     RT1_CCE6
+000210                                    (2/123)169+         LTORG 
+000210 C1               =AL1(B'11000001')
+000211 C1               =AL1(C'A')
+000212                                    (2/124)170+RT1_CCE6        DS 0H
+000212                                     (1/41)172          RT1 CCE,=AL1(C' '),=AL1(X'40')
+000212                                     (2/38)173+         DS    0H
+000212 D500B014B015     000220 000221      (2/49)174+         CLC   =AL1(C' '),=AL1(X'40')
+000218 4DB0D13E                000146     (2/120)175+RT1_TEST7        BAS   RT1_LINK,RT1_TEST_CC0
+00021C                                    (2/121)176+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000021C LEN=01000 REG=B OFF=00000 LAB=
+00021C 47F0B006                000222     (2/122)177+         B     RT1_CCE7
+000220                                    (2/123)178+         LTORG 
+000220 40               =AL1(C' ')
+000221 40               =AL1(X'40')
+000222                                    (2/124)179+RT1_CCE7        DS 0H
+000222                                     (1/42)181          RT1 CCE,=A(C'ABCD'),=A(X'C1C2C3C4')
+000222                                     (2/38)182+         DS    0H
+000222 D503B014B018     000230 000234      (2/49)183+         CLC   =A(C'ABCD'),=A(X'C1C2C3C4')
+000228 4DB0D13E                000146     (2/120)184+RT1_TEST8        BAS   RT1_LINK,RT1_TEST_CC0
+00022C                                    (2/121)185+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000022C LEN=01000 REG=B OFF=00000 LAB=
+00022C 47F0B00C                000238     (2/122)186+         B     RT1_CCE8
+000230                                    (2/123)187+         LTORG 
+000230 C1C2C3C4         =A(C'ABCD')
+000234 C1C2C3C4         =A(X'C1C2C3C4')
+000238                                    (2/124)188+RT1_CCE8        DS 0H
+000238                                     (1/43)190          RT1 CCE,=A(B'1100000111000001'),=A(C'AA')
+000238                                     (2/38)192+         DS    0H
+000238 D503B01CB020     000248 00024C      (2/49)193+         CLC   =A(B'1100000111000001'),=A(C'AA')
+00023E 4DB0D13E                000146     (2/120)194+RT1_TEST9        BAS   RT1_LINK,RT1_TEST_CC0
+000242                                    (2/121)195+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000242 LEN=01000 REG=B OFF=00000 LAB=
+000242 47F0B00E                000250     (2/122)196+         B     RT1_CCE9
+000246                                    (2/123)197+         LTORG 
+000248 0000C1C1         =A(B'1100000111000001')
+00024C 0000C1C1         =A(C'AA')
+000250                                    (2/124)198+RT1_CCE9        DS 0H
+000250                                     (1/46)200          RT1 CCE,=A(193),=A(193)
+000250                                     (2/38)201+         DS    0H
+000250 D503B01EB01E     000260 000260      (2/49)202+         CLC   =A(193),=A(193)
+000256 4DB0D13E                000146     (2/120)203+RT1_TEST10       BAS   RT1_LINK,RT1_TEST_CC0
+00025A                                    (2/121)204+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000025A LEN=01000 REG=B OFF=00000 LAB=
+00025A 47F0B00A                000264     (2/122)205+         B     RT1_CCE10
+00025E                                    (2/123)206+         LTORG 
+000260 000000C1         =A(193)
+000264                                    (2/124)207+RT1_CCE10       DS 0H
+000264                                     (1/49)209          RT1 CCE,=A(64),=A(64)
+000264                                     (2/38)210+         DS    0H
+000264 D503B01EB01E     000278 000278      (2/49)211+         CLC   =A(64),=A(64)
+00026A 4DB0D13E                000146     (2/120)212+RT1_TEST11       BAS   RT1_LINK,RT1_TEST_CC0
+00026E                                    (2/121)213+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000026E LEN=01000 REG=B OFF=00000 LAB=
+00026E 47F0B00E                00027C     (2/122)214+         B     RT1_CCE11
+000272                                    (2/123)215+         LTORG 
+000278 00000040         =A(64)
+00027C                                    (2/124)216+RT1_CCE11       DS 0H
+00027C                                     (1/52)218          RT1 CCE,=A(1044200508),=A(1044200508)
+00027C                                     (2/38)219+         DS    0H
+00027C D503B022B022     000290 000290      (2/49)220+         CLC   =A(1044200508),=A(1044200508)
+000282 4DB0D13E                000146     (2/120)221+RT1_TEST12       BAS   RT1_LINK,RT1_TEST_CC0
+000286                                    (2/121)222+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000286 LEN=01000 REG=B OFF=00000 LAB=
+000286 47F0B00E                000294     (2/122)223+         B     RT1_CCE12
+00028A                                    (2/123)224+         LTORG 
+000290 3E3D3C3C         =A(1044200508)
+000294                                    (2/124)225+RT1_CCE12       DS 0H
+000294                                     (1/55)227          RT1 CCE,=A(49601),=A(49601)
+000294                                     (2/38)228+         DS    0H
+000294 D503B022B022     0002A8 0002A8      (2/49)229+         CLC   =A(49601),=A(49601)
+00029A 4DB0D13E                000146     (2/120)230+RT1_TEST13       BAS   RT1_LINK,RT1_TEST_CC0
+00029E                                    (2/121)231+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000029E LEN=01000 REG=B OFF=00000 LAB=
+00029E 47F0B00E                0002AC     (2/122)232+         B     RT1_CCE13
+0002A2                                    (2/123)233+         LTORG 
+0002A8 0000C1C1         =A(49601)
+0002AC                                    (2/124)234+RT1_CCE13       DS 0H
+0002AC                                     (1/58)236          RT1 CCE,=A(15826418),=A(15826418)
+0002AC                                     (2/38)237+         DS    0H
+0002AC D503B022B022     0002C0 0002C0      (2/49)238+         CLC   =A(15826418),=A(15826418)
+0002B2 4DB0D13E                000146     (2/120)239+RT1_TEST14       BAS   RT1_LINK,RT1_TEST_CC0
+0002B6                                    (2/121)240+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000002B6 LEN=01000 REG=B OFF=00000 LAB=
+0002B6 47F0B00E                0002C4     (2/122)241+         B     RT1_CCE14
+0002BA                                    (2/123)242+         LTORG 
+0002C0 00F17DF2         =A(15826418)
+0002C4                                    (2/124)243+RT1_CCE14       DS 0H
+0002C4                                     (1/61)245          RT1 CCE,=A(3220018),=A(3220018)
+0002C4                                     (2/38)246+         DS    0H
+0002C4 D503B022B022     0002D8 0002D8      (2/49)247+         CLC   =A(3220018),=A(3220018)
+0002CA 4DB0D13E                000146     (2/120)248+RT1_TEST15       BAS   RT1_LINK,RT1_TEST_CC0
+0002CE                                    (2/121)249+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000002CE LEN=01000 REG=B OFF=00000 LAB=
+0002CE 47F0B00E                0002DC     (2/122)250+         B     RT1_CCE15
+0002D2                                    (2/123)251+         LTORG 
+0002D8 00312232         =A(3220018)
+0002DC                                    (2/124)252+RT1_CCE15       DS 0H
+0002DC                                     (1/62)254          RT1   CCE,=A(C'1''2'),=A(X'F17DF2')
+0002DC                                     (2/38)255+         DS    0H
+0002DC D503B022B026     0002F0 0002F4      (2/49)256+         CLC   =A(C'1''2'),=A(X'F17DF2')
+0002E2 4DB0D13E                000146     (2/120)257+RT1_TEST16       BAS   RT1_LINK,RT1_TEST_CC0
+0002E6                                    (2/121)258+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000002E6 LEN=01000 REG=B OFF=00000 LAB=
+0002E6 47F0B012                0002F8     (2/122)259+         B     RT1_CCE16
+0002EA                                    (2/123)260+         LTORG 
+0002F0 00F17DF2         =A(C'1''2')
+0002F4 00F17DF2         =A(X'F17DF2')
+0002F8                                    (2/124)261+RT1_CCE16       DS 0H
+0002F8                                     (1/63)263          RT1   CCE,=A(C"1""2"),=A(X'312232')
+0002F8                                     (2/38)264+         DS    0H
+0002F8 D503B022B026     000308 00030C      (2/49)265+         CLC   =A(C"1""2"),=A(X'312232')
+0002FE 4DB0D13E                000146     (2/120)266+RT1_TEST17       BAS   RT1_LINK,RT1_TEST_CC0
+000302                                    (2/121)267+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000302 LEN=01000 REG=B OFF=00000 LAB=
+000302 47F0B00E                000310     (2/122)268+         B     RT1_CCE17
+000306                                    (2/123)269+         LTORG 
+000308 00312232         =A(C"1""2")
+00030C 00312232         =A(X'312232')
+000310                                    (2/124)270+RT1_CCE17       DS 0H
+000310                                     (1/64)272 * TEST CA/CE SDT'S
+000310                                     (1/69)273          RT1   CCE,=AL1(49),=X'31'
+000310                                     (2/38)274+         DS    0H
+000310 D500B01EB01F     000320 000321      (2/49)275+         CLC   =AL1(49),=X'31'
+000316 4DB0D13E                000146     (2/120)276+RT1_TEST18       BAS   RT1_LINK,RT1_TEST_CC0
+00031A                                    (2/121)277+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000031A LEN=01000 REG=B OFF=00000 LAB=
+00031A 47F0B008                000322     (2/122)278+         B     RT1_CCE18
+00031E                                    (2/123)279+         LTORG 
+000320 31               =AL1(49)
+000321 31               =X'31'
+000322                                    (2/124)280+RT1_CCE18       DS 0H
+000322                                     (1/70)282          RT1   CCE,=AL1(62194),=X'F2F2'
+000322                                     (2/38)283+         DS    0H
+000322 D500B018B016     000332 000330      (2/49)284+         CLC   =AL1(62194),=X'F2F2'
+000328 4DB0D13E                000146     (2/120)285+RT1_TEST19       BAS   RT1_LINK,RT1_TEST_CC0
+00032C                                    (2/121)286+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000032C LEN=01000 REG=B OFF=00000 LAB=
+00032C 47F0B008                000334     (2/122)287+         B     RT1_CCE19
+000330                                    (2/123)288+         LTORG 
+000330 F2F2             =X'F2F2'
+000332 F2               =AL1(62194)
+000334                                    (2/124)289+RT1_CCE19       DS 0H
+000334                                     (1/71)291          RT1   CCE,=AL1(3355443),=X'333333'
+000334                                     (2/38)292+         DS    0H
+000334 D500B01CB01D     000348 000349      (2/49)293+         CLC   =AL1(3355443),=X'333333'
+00033A 4DB0D13E                000146     (2/120)294+RT1_TEST20       BAS   RT1_LINK,RT1_TEST_CC0
+00033E                                    (2/121)295+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000033E LEN=01000 REG=B OFF=00000 LAB=
+00033E 47F0B00E                00034C     (2/122)296+         B     RT1_CCE20
+000342                                    (2/123)297+         LTORG 
+000348 33               =AL1(3355443)
+000349 333333           =X'333333'
+00034C                                    (2/124)298+RT1_CCE20       DS 0H
+00034C                                     (1/72)300          RT1   CCE,=AL1(-185273100),=X'F4F4F4F4'
+00034C                                     (2/38)301+         DS    0H
+00034C D500B026B022     000364 000360      (2/49)302+         CLC   =AL1(-185273100),=X'F4F4F4F4'
+000352 4DB0D13E                000146     (2/120)303+RT1_TEST21       BAS   RT1_LINK,RT1_TEST_CC0
+000356                                    (2/121)304+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000356 LEN=01000 REG=B OFF=00000 LAB=
+000356 47F0B010                000366     (2/122)305+         B     RT1_CCE21
+00035A                                    (2/123)306+         LTORG 
+000360 F4F4F4F4         =X'F4F4F4F4'
+000364 F4               =AL1(-185273100)
+000366                                    (2/124)307+RT1_CCE21       DS 0H
+000366                                     (1/73)309          RT1   CCE,=AL1(CA'1'),=X'31'
+000366                                     (2/38)310+         DS    0H
+000366 D500B022B023     000378 000379      (2/49)311+         CLC   =AL1(CA'1'),=X'31'
+00036C 4DB0D13E                000146     (2/120)312+RT1_TEST22       BAS   RT1_LINK,RT1_TEST_CC0
+000370                                    (2/121)313+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000370 LEN=01000 REG=B OFF=00000 LAB=
+000370 47F0B00A                00037A     (2/122)314+         B     RT1_CCE22
+000374                                    (2/123)315+         LTORG 
+000378 31               =AL1(CA'1')
+000379 31               =X'31'
+00037A                                    (2/124)316+RT1_CCE22       DS 0H
+00037A                                     (1/74)318          RT1   CCE,=AL1(CE'22'),=X'F2F2'
+00037A                                     (2/38)319+         DS    0H
+00037A D500B01AB018     00038A 000388      (2/49)320+         CLC   =AL1(CE'22'),=X'F2F2'
+000380 4DB0D13E                000146     (2/120)321+RT1_TEST23       BAS   RT1_LINK,RT1_TEST_CC0
+000384                                    (2/121)322+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000384 LEN=01000 REG=B OFF=00000 LAB=
+000384 47F0B008                00038C     (2/122)323+         B     RT1_CCE23
+000388                                    (2/123)324+         LTORG 
+000388 F2F2             =X'F2F2'
+00038A F2               =AL1(CE'22')
+00038C                                    (2/124)325+RT1_CCE23       DS 0H
+00038C                                     (1/75)327          RT1   CCE,=AL1(ca'333'),=X'333333'
+00038C                                     (2/38)328+         DS    0H
+00038C D500B01CB01D     0003A0 0003A1      (2/49)329+         CLC   =AL1(ca'333'),=X'333333'
+000392 4DB0D13E                000146     (2/120)330+RT1_TEST24       BAS   RT1_LINK,RT1_TEST_CC0
+000396                                    (2/121)331+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000396 LEN=01000 REG=B OFF=00000 LAB=
+000396 47F0B00E                0003A4     (2/122)332+         B     RT1_CCE24
+00039A                                    (2/123)333+         LTORG 
+0003A0 33               =AL1(ca'333')
+0003A1 333333           =X'333333'
+0003A4                                    (2/124)334+RT1_CCE24       DS 0H
+0003A4                                     (1/76)336          RT1   CCE,=AL1(ce'4444'),=X'F4F4F4F4'
+0003A4                                     (2/38)337+         DS    0H
+0003A4 D500B026B022     0003BC 0003B8      (2/49)338+         CLC   =AL1(ce'4444'),=X'F4F4F4F4'
+0003AA 4DB0D13E                000146     (2/120)339+RT1_TEST25       BAS   RT1_LINK,RT1_TEST_CC0
+0003AE                                    (2/121)340+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000003AE LEN=01000 REG=B OFF=00000 LAB=
+0003AE 47F0B010                0003BE     (2/122)341+         B     RT1_CCE25
+0003B2                                    (2/123)342+         LTORG 
+0003B8 F4F4F4F4         =X'F4F4F4F4'
+0003BC F4               =AL1(ce'4444')
+0003BE                                    (2/124)343+RT1_CCE25       DS 0H
+0003BE                                    (1/120)345          RT1 CCE,=A(256),=A(256)
+0003BE                                     (2/38)346+         DS    0H
+0003BE D503B022B022     0003D0 0003D0      (2/49)347+         CLC   =A(256),=A(256)
+0003C4 4DB0D13E                000146     (2/120)348+RT1_TEST26       BAS   RT1_LINK,RT1_TEST_CC0
+0003C8                                    (2/121)349+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000003C8 LEN=01000 REG=B OFF=00000 LAB=
+0003C8 47F0B00C                0003D4     (2/122)350+         B     RT1_CCE26
+0003CC                                    (2/123)351+         LTORG 
+0003D0 00000100         =A(256)
+0003D4                                    (2/124)352+RT1_CCE26       DS 0H
+0003D4                                    (1/123)354          RT1 CCE,=A(1),=A(1)
+0003D4                                     (2/38)355+         DS    0H
+0003D4 D503B020B020     0003E8 0003E8      (2/49)356+         CLC   =A(1),=A(1)
+0003DA 4DB0D13E                000146     (2/120)357+RT1_TEST27       BAS   RT1_LINK,RT1_TEST_CC0
+0003DE                                    (2/121)358+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000003DE LEN=01000 REG=B OFF=00000 LAB=
+0003DE 47F0B00E                0003EC     (2/122)359+         B     RT1_CCE27
+0003E2                                    (2/123)360+         LTORG 
+0003E8 00000001         =A(1)
+0003EC                                    (2/124)361+RT1_CCE27       DS 0H
+0003EC                                    (1/124)363 * TEST AZ390 NON-CHAR SDTS
+0003EC                                    (1/125)364          RT1 CCL,=AL1(1),=AL1(2)
+0003EC                                     (2/38)365+         DS    0H
+0003EC D500B022B023     000400 000401      (2/49)366+         CLC   =AL1(1),=AL1(2)
+0003F2 4DB0D14A                000152     (2/128)367+RT1_TEST28       BAS   RT1_LINK,RT1_TEST_CC1
+0003F6                                    (2/129)368+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=000003F6 LEN=01000 REG=B OFF=00000 LAB=
+0003F6 47F0B00C                000402     (2/130)369+         B     RT1_CCL28
+0003FA                                    (2/131)370+         LTORG 
+000400 01               =AL1(1)
+000401 02               =AL1(2)
+000402                                    (2/132)371+RT1_CCL28       DS 0H
+000402                                    (1/126)373          RT1 CCE,=AL1(123),=AL1(123)
+000402                                     (2/38)374+         DS    0H
+000402 D500B01AB01A     000410 000410      (2/49)375+         CLC   =AL1(123),=AL1(123)
+000408 4DB0D13E                000146     (2/120)376+RT1_TEST29       BAS   RT1_LINK,RT1_TEST_CC0
+00040C                                    (2/121)377+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000040C LEN=01000 REG=B OFF=00000 LAB=
+00040C 47F0B006                000412     (2/122)378+         B     RT1_CCE29
+000410                                    (2/123)379+         LTORG 
+000410 7B               =AL1(123)
+000412                                    (2/124)380+RT1_CCE29       DS 0H
+000412                                    (1/127)382          RT1 CCE,=AL1(B'11'),=AL1(X'3')
+000412                                     (2/38)383+         DS    0H
+000412 D500B014B015     000420 000421      (2/49)384+         CLC   =AL1(B'11'),=AL1(X'3')
+000418 4DB0D13E                000146     (2/120)385+RT1_TEST30       BAS   RT1_LINK,RT1_TEST_CC0
+00041C                                    (2/121)386+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000041C LEN=01000 REG=B OFF=00000 LAB=
+00041C 47F0B006                000422     (2/122)387+         B     RT1_CCE30
+000420                                    (2/123)388+         LTORG 
+000420 03               =AL1(B'11')
+000421 03               =AL1(X'3')
+000422                                    (2/124)389+RT1_CCE30       DS 0H
+000422                                    (1/128)391          RT1 CCE,=A(X'100'),=A(256)
+000422                                     (2/38)392+         DS    0H
+000422 D503B014B018     000430 000434      (2/49)393+         CLC   =A(X'100'),=A(256)
+000428 4DB0D13E                000146     (2/120)394+RT1_TEST31       BAS   RT1_LINK,RT1_TEST_CC0
+00042C                                    (2/121)395+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000042C LEN=01000 REG=B OFF=00000 LAB=
+00042C 47F0B00C                000438     (2/122)396+         B     RT1_CCE31
+000430                                    (2/123)397+         LTORG 
+000430 00000100         =A(X'100')
+000434 00000100         =A(256)
+000438                                    (2/124)398+RT1_CCE31       DS 0H
+000438                                    (1/129)400          RT1 CCE,=F'-1',=A(X'FFFFFFFF')
+000438                                     (2/38)401+         DS    0H
+000438 D503B01CB020     000448 00044C      (2/49)402+         CLC   =F'-1',=A(X'FFFFFFFF')
+00043E 4DB0D13E                000146     (2/120)403+RT1_TEST32       BAS   RT1_LINK,RT1_TEST_CC0
+000442                                    (2/121)404+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000442 LEN=01000 REG=B OFF=00000 LAB=
+000442 47F0B00E                000450     (2/122)405+         B     RT1_CCE32
+000446                                    (2/123)406+         LTORG 
+000448 FFFFFFFF         =F'-1'
+00044C FFFFFFFF         =A(X'FFFFFFFF')
+000450                                    (2/124)407+RT1_CCE32       DS 0H
+000450                                    (1/130)409 * TEST EXPONENTS IN INTS
+000450                                    (1/131)410          RT1 CCE,=A(1E3),=F'1000'
+000450                                     (2/38)411+         DS    0H
+000450 D503B01EB022     000460 000464      (2/49)412+         CLC   =A(1E3),=F'1000'
+000456 4DB0D13E                000146     (2/120)413+RT1_TEST33       BAS   RT1_LINK,RT1_TEST_CC0
+00045A                                    (2/121)414+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=0000045A LEN=01000 REG=B OFF=00000 LAB=
+00045A 47F0B00E                000468     (2/122)415+         B     RT1_CCE33
+00045E                                    (2/123)416+         LTORG 
+000460 000003E8         =A(1E3)
+000464 000003E8         =F'1000'
+000468                                    (2/124)417+RT1_CCE33       DS 0H
+000468                                    (1/132)419          RT1 CCE,=H'1E3',=H'1000'
+000468                                     (2/38)420+         DS    0H
+000468 D501B01EB020     000478 00047A      (2/49)421+         CLC   =H'1E3',=H'1000'
+00046E 4DB0D13E                000146     (2/120)422+RT1_TEST34       BAS   RT1_LINK,RT1_TEST_CC0
+000472                                    (2/121)423+         USING *,RT1_LINK
+LISTUSE TESTSDT1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSDT1 ESD=0001 LOC=00000472 LEN=01000 REG=B OFF=00000 LAB=
+000472 47F0B00A                00047C     (2/122)424+         B     RT1_CCE34
+000476                                    (2/123)425+         LTORG 
+000478 03E8             =H'1E3'
+00047A 03E8             =H'1000'
+00047C                                    (2/124)426+RT1_CCE34       DS 0H
+00047C                                    (1/133)428          RT1 END
+00047C 47F0D0B8                0000C0     (2/174)429+         B      RT1_END
+000480                                    (1/134)431          END 
+
+Symbol Table Listing
+
+ SYM=RT1_ABORT LOC=00000096 LEN=00000002 ESD=0001 TYPE=REL  XREF=42 87 92 96 100 
+  104 108 
+ SYM=RT1_ABORTED LOC=0000013F LEN=00000001 ESD=0001 TYPE=REL  XREF=84 43 57 
+ SYM=RT1_CCE10 LOC=00000264 LEN=00000002 ESD=0001 TYPE=REL  XREF=207 205 
+ SYM=RT1_CCE11 LOC=0000027C LEN=00000002 ESD=0001 TYPE=REL  XREF=216 214 
+ SYM=RT1_CCE12 LOC=00000294 LEN=00000002 ESD=0001 TYPE=REL  XREF=225 223 
+ SYM=RT1_CCE13 LOC=000002AC LEN=00000002 ESD=0001 TYPE=REL  XREF=234 232 
+ SYM=RT1_CCE14 LOC=000002C4 LEN=00000002 ESD=0001 TYPE=REL  XREF=243 241 
+ SYM=RT1_CCE15 LOC=000002DC LEN=00000002 ESD=0001 TYPE=REL  XREF=252 250 
+ SYM=RT1_CCE16 LOC=000002F8 LEN=00000002 ESD=0001 TYPE=REL  XREF=261 259 
+ SYM=RT1_CCE17 LOC=00000310 LEN=00000002 ESD=0001 TYPE=REL  XREF=270 268 
+ SYM=RT1_CCE18 LOC=00000322 LEN=00000002 ESD=0001 TYPE=REL  XREF=280 278 
+ SYM=RT1_CCE19 LOC=00000334 LEN=00000002 ESD=0001 TYPE=REL  XREF=289 287 
+ SYM=RT1_CCE20 LOC=0000034C LEN=00000002 ESD=0001 TYPE=REL  XREF=298 296 
+ SYM=RT1_CCE21 LOC=00000366 LEN=00000002 ESD=0001 TYPE=REL  XREF=307 305 
+ SYM=RT1_CCE22 LOC=0000037A LEN=00000002 ESD=0001 TYPE=REL  XREF=316 314 
+ SYM=RT1_CCE23 LOC=0000038C LEN=00000002 ESD=0001 TYPE=REL  XREF=325 323 
+ SYM=RT1_CCE24 LOC=000003A4 LEN=00000002 ESD=0001 TYPE=REL  XREF=334 332 
+ SYM=RT1_CCE25 LOC=000003BE LEN=00000002 ESD=0001 TYPE=REL  XREF=343 341 
+ SYM=RT1_CCE26 LOC=000003D4 LEN=00000002 ESD=0001 TYPE=REL  XREF=352 350 
+ SYM=RT1_CCE27 LOC=000003EC LEN=00000002 ESD=0001 TYPE=REL  XREF=361 359 
+ SYM=RT1_CCE29 LOC=00000412 LEN=00000002 ESD=0001 TYPE=REL  XREF=380 378 
+ SYM=RT1_CCE30 LOC=00000422 LEN=00000002 ESD=0001 TYPE=REL  XREF=389 387 
+ SYM=RT1_CCE3 LOC=000001D4 LEN=00000002 ESD=0001 TYPE=REL  XREF=141 139 
+ SYM=RT1_CCE31 LOC=00000438 LEN=00000002 ESD=0001 TYPE=REL  XREF=398 396 
+ SYM=RT1_CCE32 LOC=00000450 LEN=00000002 ESD=0001 TYPE=REL  XREF=407 405 
+ SYM=RT1_CCE33 LOC=00000468 LEN=00000002 ESD=0001 TYPE=REL  XREF=417 415 
+ SYM=RT1_CCE34 LOC=0000047C LEN=00000002 ESD=0001 TYPE=REL  XREF=426 424 
+ SYM=RT1_CCE4 LOC=000001EC LEN=00000002 ESD=0001 TYPE=REL  XREF=150 148 
+ SYM=RT1_CCE6 LOC=00000212 LEN=00000002 ESD=0001 TYPE=REL  XREF=170 168 
+ SYM=RT1_CCE7 LOC=00000222 LEN=00000002 ESD=0001 TYPE=REL  XREF=179 177 
+ SYM=RT1_CCE8 LOC=00000238 LEN=00000002 ESD=0001 TYPE=REL  XREF=188 186 
+ SYM=RT1_CCE9 LOC=00000250 LEN=00000002 ESD=0001 TYPE=REL  XREF=198 196 
+ SYM=RT1_CCH2 LOC=000001C0 LEN=00000002 ESD=0001 TYPE=REL  XREF=132 130 
+ SYM=RT1_CCL1 LOC=000001A8 LEN=00000002 ESD=0001 TYPE=REL  XREF=123 121 
+ SYM=RT1_CCL28 LOC=00000402 LEN=00000002 ESD=0001 TYPE=REL  XREF=371 369 
+ SYM=RT1_CCL5 LOC=00000202 LEN=00000002 ESD=0001 TYPE=REL  XREF=160 158 
+ SYM=RT1_DATA LOC=00000112 LEN=00000001 ESD=0001 TYPE=REL  XREF=78 
+ SYM=RT1_DTOT LOC=00000139 LEN=00000006 ESD=0001 TYPE=REL  XREF=82 51 52 
+ SYM=RT1_DUMP LOC=0000010C LEN=00000002 ESD=0001 TYPE=REL  XREF=72 58 
+ SYM=RT1_END  LOC=000000C0 LEN=00000002 ESD=0001 TYPE=REL  XREF=50 429 
+ SYM=RT1_LINK LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=77 90 94 98 102 106 
+  110 119 120 128 129 137 138 146 147 156 157 166 167 175 176 184 185 194 195 203 
+  204 212 213 221 222 230 231 239 240 248 249 257 258 266 267 276 277 285 286 294 
+  295 303 304 312 313 321 322 330 331 339 340 348 349 357 358 367 368 376 377 385 
+  386 394 395 403 404 413 414 422 423 
+ SYM=RT1_OK   LOC=0000014A LEN=00000002 ESD=0001 TYPE=REL  XREF=88 
+ SYM=RT1_ONE  LOC=00000115 LEN=00000001 ESD=0001 TYPE=REL  XREF=80 89 93 97 101 105 
+  109 
+ SYM=RT1_START LOC=0000018E LEN=00000002 ESD=0001 TYPE=REL  XREF=113 41 
+ SYM=RT1_TEST10 LOC=00000256 LEN=00000004 ESD=0001 TYPE=REL  XREF=203 
+ SYM=RT1_TEST1 LOC=00000194 LEN=00000004 ESD=0001 TYPE=REL  XREF=119 
+ SYM=RT1_TEST11 LOC=0000026A LEN=00000004 ESD=0001 TYPE=REL  XREF=212 
+ SYM=RT1_TEST12 LOC=00000282 LEN=00000004 ESD=0001 TYPE=REL  XREF=221 
+ SYM=RT1_TEST13 LOC=0000029A LEN=00000004 ESD=0001 TYPE=REL  XREF=230 
+ SYM=RT1_TEST14 LOC=000002B2 LEN=00000004 ESD=0001 TYPE=REL  XREF=239 
+ SYM=RT1_TEST15 LOC=000002CA LEN=00000004 ESD=0001 TYPE=REL  XREF=248 
+ SYM=RT1_TEST16 LOC=000002E2 LEN=00000004 ESD=0001 TYPE=REL  XREF=257 
+ SYM=RT1_TEST17 LOC=000002FE LEN=00000004 ESD=0001 TYPE=REL  XREF=266 
+ SYM=RT1_TEST18 LOC=00000316 LEN=00000004 ESD=0001 TYPE=REL  XREF=276 
+ SYM=RT1_TEST19 LOC=00000328 LEN=00000004 ESD=0001 TYPE=REL  XREF=285 
+ SYM=RT1_TEST20 LOC=0000033A LEN=00000004 ESD=0001 TYPE=REL  XREF=294 
+ SYM=RT1_TEST2 LOC=000001AE LEN=00000004 ESD=0001 TYPE=REL  XREF=128 
+ SYM=RT1_TEST21 LOC=00000352 LEN=00000004 ESD=0001 TYPE=REL  XREF=303 
+ SYM=RT1_TEST22 LOC=0000036C LEN=00000004 ESD=0001 TYPE=REL  XREF=312 
+ SYM=RT1_TEST23 LOC=00000380 LEN=00000004 ESD=0001 TYPE=REL  XREF=321 
+ SYM=RT1_TEST24 LOC=00000392 LEN=00000004 ESD=0001 TYPE=REL  XREF=330 
+ SYM=RT1_TEST25 LOC=000003AA LEN=00000004 ESD=0001 TYPE=REL  XREF=339 
+ SYM=RT1_TEST26 LOC=000003C4 LEN=00000004 ESD=0001 TYPE=REL  XREF=348 
+ SYM=RT1_TEST27 LOC=000003DA LEN=00000004 ESD=0001 TYPE=REL  XREF=357 
+ SYM=RT1_TEST28 LOC=000003F2 LEN=00000004 ESD=0001 TYPE=REL  XREF=367 
+ SYM=RT1_TEST29 LOC=00000408 LEN=00000004 ESD=0001 TYPE=REL  XREF=376 
+ SYM=RT1_TEST30 LOC=00000418 LEN=00000004 ESD=0001 TYPE=REL  XREF=385 
+ SYM=RT1_TEST3 LOC=000001C6 LEN=00000004 ESD=0001 TYPE=REL  XREF=137 
+ SYM=RT1_TEST31 LOC=00000428 LEN=00000004 ESD=0001 TYPE=REL  XREF=394 
+ SYM=RT1_TEST32 LOC=0000043E LEN=00000004 ESD=0001 TYPE=REL  XREF=403 
+ SYM=RT1_TEST33 LOC=00000456 LEN=00000004 ESD=0001 TYPE=REL  XREF=413 
+ SYM=RT1_TEST34 LOC=0000046E LEN=00000004 ESD=0001 TYPE=REL  XREF=422 
+ SYM=RT1_TEST4 LOC=000001DA LEN=00000004 ESD=0001 TYPE=REL  XREF=146 
+ SYM=RT1_TEST5 LOC=000001F2 LEN=00000004 ESD=0001 TYPE=REL  XREF=156 
+ SYM=RT1_TEST6 LOC=00000208 LEN=00000004 ESD=0001 TYPE=REL  XREF=166 
+ SYM=RT1_TEST7 LOC=00000218 LEN=00000004 ESD=0001 TYPE=REL  XREF=175 
+ SYM=RT1_TEST8 LOC=00000228 LEN=00000004 ESD=0001 TYPE=REL  XREF=184 
+ SYM=RT1_TEST9 LOC=0000023E LEN=00000004 ESD=0001 TYPE=REL  XREF=194 
+ SYM=RT1_TEST_CC0 LOC=00000146 LEN=00000002 ESD=0001 TYPE=REL  XREF=86 137 146 166 
+  175 184 194 203 212 221 230 239 248 257 266 276 285 294 303 312 321 330 339 348 
+  357 376 385 394 403 413 422 
+ SYM=RT1_TEST_CC1 LOC=00000152 LEN=00000002 ESD=0001 TYPE=REL  XREF=91 119 156 367 
+ SYM=RT1_TEST_CC2 LOC=0000015E LEN=00000002 ESD=0001 TYPE=REL  XREF=95 128 
+ SYM=RT1_TEST_CC3 LOC=0000016A LEN=00000002 ESD=0001 TYPE=REL  XREF=99 
+ SYM=RT1_TEST_CCGE LOC=00000176 LEN=00000002 ESD=0001 TYPE=REL  XREF=103 
+ SYM=RT1_TEST_CCLE LOC=00000182 LEN=00000002 ESD=0001 TYPE=REL  XREF=107 
+ SYM=RT1_TOT  LOC=00000112 LEN=00000003 ESD=0001 TYPE=REL  XREF=79 52 89 93 97 101 
+  105 109 
+ SYM=RT1_WTO1 LOC=00000116 LEN=00000002 ESD=0001 TYPE=REL  XREF=81 54 
+ SYM=RT1_WTO_END LOC=0000013F LEN=00000001 ESD=0001 TYPE=REL  XREF=83 81 
+ SYM=TESTSDT1 LOC=00000000 LEN=00000480 ESD=0001 TYPE=CST  XREF=23 33 
+ SYM=WTO#0003_EOT LOC=0000008E LEN=00000001 ESD=0001 TYPE=REL  XREF=38 36 37 
+ SYM=WTO#0004_EOT LOC=000000BE LEN=00000001 ESD=0001 TYPE=REL  XREF=47 45 46 
+ SYM=WTO#0006_EOT LOC=000000F7 LEN=00000001 ESD=0001 TYPE=REL  XREF=62 60 61 
+
+Literal Table Listing
+
+ LIT=A(1)     LOC=000001A0 LEN=00000004 ESD=0001 POOL=0002 XREF=118 
+ LIT=A(1)     LOC=000003E8 LEN=00000004 ESD=0001 POOL=001C XREF=356 
+ LIT=A(1044200508) LOC=00000290 LEN=00000004 ESD=0001 POOL=000D XREF=220 
+ LIT=A(123)   LOC=000001D0 LEN=00000004 ESD=0001 POOL=0004 XREF=136 
+ LIT=A(15826418) LOC=000002C0 LEN=00000004 ESD=0001 POOL=000F XREF=238 
+ LIT=A(193)   LOC=000001BC LEN=00000004 ESD=0001 POOL=0003 XREF=127 
+ LIT=A(193)   LOC=00000260 LEN=00000004 ESD=0001 POOL=000B XREF=202 
+ LIT=A(194)   LOC=000001B8 LEN=00000004 ESD=0001 POOL=0003 XREF=127 
+ LIT=A(1E3)   LOC=00000460 LEN=00000004 ESD=0001 POOL=0022 XREF=412 
+ LIT=A(2)     LOC=000001A4 LEN=00000004 ESD=0001 POOL=0002 XREF=118 
+ LIT=A(256)   LOC=000003D0 LEN=00000004 ESD=0001 POOL=001B XREF=347 
+ LIT=A(256)   LOC=00000434 LEN=00000004 ESD=0001 POOL=0020 XREF=393 
+ LIT=A(3)     LOC=000001E8 LEN=00000004 ESD=0001 POOL=0005 XREF=145 
+ LIT=A(3220018) LOC=000002D8 LEN=00000004 ESD=0001 POOL=0010 XREF=247 
+ LIT=A(49601) LOC=000002A8 LEN=00000004 ESD=0001 POOL=000E XREF=229 
+ LIT=A(64)    LOC=00000278 LEN=00000004 ESD=0001 POOL=000C XREF=211 
+ LIT=A(B'1100000111000001') LOC=00000248 LEN=00000004 ESD=0001 POOL=000A XREF=193 
+ LIT=A(C"1""2") LOC=00000308 LEN=00000004 ESD=0001 POOL=0012 XREF=265 
+ LIT=A(C'1''2') LOC=000002F0 LEN=00000004 ESD=0001 POOL=0011 XREF=256 
+ LIT=A(C'AA') LOC=0000024C LEN=00000004 ESD=0001 POOL=000A XREF=193 
+ LIT=A(C'ABCD') LOC=00000230 LEN=00000004 ESD=0001 POOL=0009 XREF=183 
+ LIT=A(X'100') LOC=00000430 LEN=00000004 ESD=0001 POOL=0020 XREF=393 
+ LIT=A(X'312232') LOC=0000030C LEN=00000004 ESD=0001 POOL=0012 XREF=265 
+ LIT=A(X'C1C2C3C4') LOC=00000234 LEN=00000004 ESD=0001 POOL=0009 XREF=183 
+ LIT=A(X'F17DF2') LOC=000002F4 LEN=00000004 ESD=0001 POOL=0011 XREF=256 
+ LIT=A(X'FFFFFFFF') LOC=0000044C LEN=00000004 ESD=0001 POOL=0021 XREF=402 
+ LIT=AL1(-185273100) LOC=00000364 LEN=00000001 ESD=0001 POOL=0016 XREF=302 
+ LIT=AL1(1)   LOC=00000400 LEN=00000001 ESD=0001 POOL=001D XREF=366 
+ LIT=AL1(123) LOC=00000410 LEN=00000001 ESD=0001 POOL=001E XREF=375 
+ LIT=AL1(2)   LOC=00000401 LEN=00000001 ESD=0001 POOL=001D XREF=366 
+ LIT=AL1(3355443) LOC=00000348 LEN=00000001 ESD=0001 POOL=0015 XREF=293 
+ LIT=AL1(49)  LOC=00000320 LEN=00000001 ESD=0001 POOL=0013 XREF=275 
+ LIT=AL1(62194) LOC=00000332 LEN=00000001 ESD=0001 POOL=0014 XREF=284 
+ LIT=AL1(B'11') LOC=00000420 LEN=00000001 ESD=0001 POOL=001F XREF=384 
+ LIT=AL1(B'11000001') LOC=00000210 LEN=00000001 ESD=0001 POOL=0007 XREF=165 
+ LIT=AL1(C' ') LOC=00000220 LEN=00000001 ESD=0001 POOL=0008 XREF=174 
+ LIT=AL1(C'A') LOC=00000211 LEN=00000001 ESD=0001 POOL=0007 XREF=165 
+ LIT=AL1(CA'1') LOC=00000378 LEN=00000001 ESD=0001 POOL=0017 XREF=311 
+ LIT=AL1(CE'22') LOC=0000038A LEN=00000001 ESD=0001 POOL=0018 XREF=320 
+ LIT=AL1(X'3') LOC=00000421 LEN=00000001 ESD=0001 POOL=001F XREF=384 
+ LIT=AL1(X'40') LOC=00000221 LEN=00000001 ESD=0001 POOL=0008 XREF=174 
+ LIT=AL1(ca'333') LOC=000003A0 LEN=00000001 ESD=0001 POOL=0019 XREF=329 
+ LIT=AL1(ce'4444') LOC=000003BC LEN=00000001 ESD=0001 POOL=001A XREF=338 
+ LIT=C'1'     LOC=00000201 LEN=00000001 ESD=0001 POOL=0006 XREF=155 
+ LIT=C'A'     LOC=00000200 LEN=00000001 ESD=0001 POOL=0006 XREF=155 
+ LIT=F'-1'    LOC=00000448 LEN=00000004 ESD=0001 POOL=0021 XREF=402 
+ LIT=F'1000'  LOC=00000464 LEN=00000004 ESD=0001 POOL=0022 XREF=412 
+ LIT=H'1000'  LOC=0000047A LEN=00000002 ESD=0001 POOL=0023 XREF=421 
+ LIT=H'1E3'   LOC=00000478 LEN=00000002 ESD=0001 POOL=0023 XREF=421 
+ LIT=X'31'    LOC=00000321 LEN=00000001 ESD=0001 POOL=0013 XREF=275 
+ LIT=X'31'    LOC=00000379 LEN=00000001 ESD=0001 POOL=0017 XREF=311 
+ LIT=X'333333' LOC=00000349 LEN=00000003 ESD=0001 POOL=0015 XREF=293 
+ LIT=X'333333' LOC=000003A1 LEN=00000003 ESD=0001 POOL=0019 XREF=329 
+ LIT=X'402020202020' LOC=00000140 LEN=00000006 ESD=0001 POOL=0001 XREF=51 
+ LIT=X'F2F2'  LOC=00000330 LEN=00000002 ESD=0001 POOL=0014 XREF=284 
+ LIT=X'F2F2'  LOC=00000388 LEN=00000002 ESD=0001 POOL=0018 XREF=320 
+ LIT=X'F4F4F4F4' LOC=00000360 LEN=00000004 ESD=0001 POOL=0016 XREF=302 
+ LIT=X'F4F4F4F4' LOC=000003B8 LEN=00000004 ESD=0001 POOL=001A XREF=338 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSDT1  MZ390 ENDED RC= 0 IO=1921

@@ -1,0 +1,11 @@
+TESTPRM1  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTPRM1.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  sysmac(mac+rt\test) systerm(rt\test\RTTEST)
+TESTPRM1 TEST POSITIONAL AND KEYWORD PARMS
+EZ390I total errors         = 0
+TESTPRM1  EZ390 ENDED RC= 0 IO=157 INS=13

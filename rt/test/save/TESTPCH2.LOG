@@ -1,0 +1,15 @@
+TESTPCH2  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTPCH2.390
+EZ390I options = bal notiming stats systerm(rt\test\RTTEST)
+START TESTPCH2 AREAD AND PUNCH USING DDNAME FILES
+TESTPCH2 DAT RECORD 1
+TESTPCH2 DAT RECORD 2
+END   AREAD TEXT
+START PUNCH TEST
+END TESTPCH2 OK
+EZ390I total errors         = 0
+TESTPCH2  EZ390 ENDED RC= 0 IO=162 INS=23

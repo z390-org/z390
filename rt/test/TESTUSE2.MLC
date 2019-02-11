@@ -1,0 +1,37 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH         Initial version                           *
+* 2007-04-14  DSH RPI-590 Correct BDDD offsets to both be less than *
+*                         X'100'                                    *
+*********************************************************************
+
+TESTUSE2 SUBENTRY
+         WTO   'TESTUSE2 TEST PUSH/POP USING'
+         CLC   =S(TESTUSE2+8),=X'D000'
+         BNE   ERR
+         PUSH  USING    SAVE USING 13
+         DROP  ,        DROP ALL
+         BALR  12,0
+         USING *,12     NEW USING 12
+LA12X    LA    11,LA12X
+         CLI   LA12X+2,X'C0'
+         BNE   ERR
+         POP   USING   RESTORE USING 13
+LA12X2   LA    11,LA12X
+         CLI   LA12X2+2,X'D0'
+         BNE   ERR
+         WTO   'TESTUSE2 ENDED OK'
+         SUBEXIT
+ERR      WTO   'TESTUSE2 ERROR ABORTING'
+         SUBEXIT RC=16
+X        DC    C'X'
+         END

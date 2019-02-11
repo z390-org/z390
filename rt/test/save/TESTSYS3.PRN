@@ -1,0 +1,86 @@
+TESTSYS3  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSYS3
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0003 LOC=00000000 LEN=00000008 TYPE=CST NAME=TEST
+ ESD=0004 LOC=00000008 LEN=00000010 TYPE=CST NAME=TEST2
+ ESD=0006 LOC=00000018 LEN=00000008 TYPE=CST NAME=TEST3
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2012-05-06  DSH Initial version                                   *
+000000                                      (1/13)13 *********************************************************************
+000000                                      (1/15)14          TITLE 'TEST RPI-1213 FIXES FOR SYSECT, SYSLOC, SYSSTYP'
+000000                                      (1/17)15          MACRO
+000000                                      (1/18)16          SECTTEST &LOC,&BASE,&TYPE
+000000                                      (1/19)17          MNOTE 'SYSLOC=&SYSLOC SYSECT=&SYSECT SYSSTYP=&SYSSTYP'
+000000                                      (1/20)18  AIF (NOT('&SYSLOC' NE '&LOC')).AIF_1_1
+000000                                      (1/21)19              MNOTE 12,'SYSLOC ERROR'
+000000                                      (1/22)20 .AIF_1_1 ANOP
+000000                                      (1/23)21  AIF (NOT('&SYSECT' NE '&BASE')).AIF_2_1
+000000                                      (1/24)22              MNOTE 12,'SYSECT ERROR'
+000000                                      (1/25)23 .AIF_2_1 ANOP
+000000                                      (1/26)24  AIF (NOT('&SYSSTYP' NE '&TYPE')).AIF_3_1
+000000                                      (1/27)25              MONTE 12,'SYSSTYP ERROR'
+000000                                      (1/28)26 .AIF_3_1 ANOP
+000000                                      (1/29)27          MEND
+000000                                      (1/30)28          SECTTEST 
+000000                                      (1/19)29+         MNOTE 'SYSLOC= SYSECT= SYSSTYP='
+000000                                      (1/31)31 REGS     DSECT 
+000000                                      (1/32)32          SECTTEST REGS,REGS,DSECT
+000000                                      (1/19)33+         MNOTE 'SYSLOC=REGS SYSECT=REGS SYSSTYP=DSECT'
+000000                                      (1/33)35 REGS2L   LOCTR 
+000000                                      (1/34)36          SECTTEST REGS2L,REGS,DSECT
+000000                                      (1/19)37+         MNOTE 'SYSLOC=REGS2L SYSECT=REGS SYSSTYP=DSECT'
+000000                                      (1/35)39 TEST     START 
+000000 1BFF                                 (1/36)40          SR   15,15
+000002 07FE                                 (1/37)41          BR   14
+000004                                      (1/38)42          SECTTEST TEST,TEST,CSECT
+000004                                      (1/19)43+         MNOTE 'SYSLOC=TEST SYSECT=TEST SYSSTYP=CSECT'
+000008                                      (1/39)45 TEST2    CSECT 
+000008 E3C5E2E3F2404040                     (1/40)46          DC   CL8'TEST2'
+000010                                      (1/41)47          SECTTEST TEST2,TEST2,CSECT
+000010                                      (1/19)48+         MNOTE 'SYSLOC=TEST2 SYSECT=TEST2 SYSSTYP=CSECT'
+000010                                      (1/42)50 TEST2L   LOCTR 
+000010 E3C5E2E3F2D34040                     (1/43)51          DC   CL8'TEST2L'
+000018                                      (1/44)52          SECTTEST TEST2L,TEST2,CSECT
+000018                                      (1/19)53+         MNOTE 'SYSLOC=TEST2L SYSECT=TEST2 SYSSTYP=CSECT'
+000018                                      (1/45)55 TEST3    RSECT 
+000018 E3C5E2E3F3404040                     (1/46)56          DC   CL8'TEST3'
+000020                                      (1/47)57          SECTTEST TEST3,TEST3,RSECT
+000020                                      (1/19)58+         MNOTE 'SYSLOC=TEST3 SYSECT=TEST3 SYSSTYP=RSECT'
+000020                                      (1/48)60          END 
+
+Symbol Table Listing
+
+ SYM=REGS     LOC=00000000 LEN=00000000 ESD=0001 TYPE=DST  XREF=31 
+ SYM=REGS2L   LOC=00000000 LEN=00000000 ESD=0001 TYPE=DST  XREF=35 
+ SYM=TEST     LOC=00000000 LEN=00000008 ESD=0003 TYPE=CST  XREF=39 
+ SYM=TEST2    LOC=00000008 LEN=00000010 ESD=0004 TYPE=CST  XREF=45 
+ SYM=TEST2L   LOC=00000010 LEN=00000008 ESD=0004 TYPE=CST  XREF=50 
+ SYM=TEST3    LOC=00000018 LEN=00000008 ESD=0006 TYPE=CST  XREF=55 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSYS3  MZ390 ENDED RC= 0 IO=225

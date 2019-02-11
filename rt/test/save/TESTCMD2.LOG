@@ -1,0 +1,34 @@
+TESTCMD2  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTCMD2.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+TESTCMD2 TEST SVC 34 CMDPROC MULT TASK SUPPORT
+MSG FROM CMD0=Microsoft Windows [Version 10.0.17763.292]
+MSG FROM CMD1=Microsoft Windows [Version 10.0.17763.292]
+MSG FROM CMD0=(c) 2018 Microsoft Corporation. Alle Rechte vorbehalten.
+MSG FROM CMD1=(c) 2018 Microsoft Corporation. Alle Rechte vorbehalten.
+MSG FROM CMD0=C:\Users\Achim\GitHub\z390>rt\test\TESTCMDA.BAT
+MSG FROM CMD1=C:\Users\Achim\GitHub\z390>rt\test\TESTCMDB.BAT
+MSG FROM CMD0=C:\Users\Achim\GitHub\z390>REM
+MSG FROM CMD1=C:\Users\Achim\GitHub\z390>REM
+MSG FROM CMD0=C:\Users\Achim\GitHub\z390>REM TESTCMDA.BAT executed by TESTCMD2.MLC via SVC 34
+MSG FROM CMD1=C:\Users\Achim\GitHub\z390>REM TESTCMDB.BAT executed by TESTCMD2.MLC via SVC 34
+MSG FROM CMD0=C:\Users\Achim\GitHub\z390>REM
+MSG FROM CMD1=C:\Users\Achim\GitHub\z390>REM
+MSG FROM CMD0=C:\Users\Achim\GitHub\z390>REM TESTCMDA.BAT HELLO
+MSG FROM CMD1=C:\Users\Achim\GitHub\z390>REM TESTCMDB.BAT HELLO
+MSG FROM CMD0=C:\Users\Achim\GitHub\z390>REM TESTCMDA.BAT HELLO AGAIN
+MSG FROM CMD1=C:\Users\Achim\GitHub\z390>REM TESTCMDB.BAT HELLO AGAIN
+MSG FROM CMD0=C:\Users\Achim\GitHub\z390>REM TESTCMDA.BAT HELLO FOR LAST TIME
+MSG FROM CMD1=C:\Users\Achim\GitHub\z390>REM TESTCMDB.BAT HELLO FOR LAST TIME
+MSG FROM CMD0=C:\Users\Achim\GitHub\z390>REM
+MSG FROM CMD1=C:\Users\Achim\GitHub\z390>REM
+MSG FROM CMD0=C:\Users\Achim\GitHub\z390>REM END = End for TESTCMDA.BAT
+MSG FROM CMD1=C:\Users\Achim\GitHub\z390>REM END = End for TESTCMDB.BAT
+TESTSVC1 ENDING OK
+EZ390I total errors         = 0
+TESTCMD2  EZ390 ENDED RC= 0 IO=228 INS=10959

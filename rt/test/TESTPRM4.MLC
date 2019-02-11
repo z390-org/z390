@@ -1,0 +1,36 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2006-02-08 DSH RPI-198 Test PARM(...) using SYSPARM(...) to       *
+*                        compare                                    *
+* 2006-04-07 DSH RPI-582 Correct LR to L to fetch address of        *
+*                        parameter                                  *
+* 2008-04-22 DSH RPI-833 Add string quotes for HLASM compatibility  *
+*********************************************************************
+
+&PARM    SETC  '&SYSPARM'
+         AIF   ('&PARM'(1,1) NE '''').SKP1
+&PARM    SETC  '&PARM'(2,K'&PARM-2)
+.SKP1    ANOP
+&LPARM   SETA  K'&PARM
+TESTPRM4 SUBENTRY
+         L     R4,0(R1)  SAVE PARM ADDR RPI 582
+         WTO   'TESTPRM4 TEST PARM(&PARM) MAPPED TO JCL EXEC PARM=&PARMX
+               '
+         CLC   0(2,R4),=H'&LPARM'
+         BNE   1
+         CLC   2(&LPARM,R4),=C'&PARM'
+         BNE   1
+         WTO   'TESTPRM4 ENDED OK'
+         SUBEXIT
+         EQUREGS
+         END

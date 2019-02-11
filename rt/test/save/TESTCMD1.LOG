@@ -1,0 +1,23 @@
+TESTCMD1  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTCMD1.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+TESTCMD1 TEST USE OF SVC 34 COMMAND PROCESSOR
+MSG FROM CMD=Microsoft Windows [Version 10.0.17763.292]
+MSG FROM CMD=(c) 2018 Microsoft Corporation. Alle Rechte vorbehalten.
+MSG FROM CMD=C:\Users\Achim\GitHub\z390>rt\test\TESTCMD1.BAT
+MSG FROM CMD=C:\Users\Achim\GitHub\z390>REM
+MSG FROM CMD=C:\Users\Achim\GitHub\z390>REM TESTSVC1.BAT executed by TESTSVC1.MLC via SVC 34
+MSG FROM CMD=C:\Users\Achim\GitHub\z390>REM
+MSG FROM CMD=C:\Users\Achim\GitHub\z390>REM HELLO FROM TESTCMD1.BAT
+MSG FROM CMD=C:\Users\Achim\GitHub\z390>REM HELLO AGAIN
+MSG FROM CMD=C:\Users\Achim\GitHub\z390>REM HELLO FOR LAST TIME
+MSG FROM CMD=C:\Users\Achim\GitHub\z390>REM
+MSG FROM CMD=C:\Users\Achim\GitHub\z390>REM END = End of command, detected by TESTCMD1 to end
+TESTSVC1 ENDING OK
+EZ390I total errors         = 0
+TESTCMD1  EZ390 ENDED RC= 0 IO=193 INS=4584

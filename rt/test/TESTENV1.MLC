@@ -1,0 +1,27 @@
+*********************************************************************************
+* Copyright 2007 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2007-07-12 DSH         Initial version                            *
+* 2007-07-12 DSH RPI-413 Test GETENV and SETENV                     *
+*********************************************************************
+
+         TITLE 'TESTENV1 - TEST ENVIRONMENT VARIABLE GET/SET'
+
+TESTENV1 SUBENTRY
+         WTO   'TESTENV1 START GETENV TEST'
+         GETENV MYENV
+         LR    4,2   Save the environment value we got
+         LA    5,256(4)
+         SNAP  ID=1,TEXT='ENV.VAR. VALUE',STORAGE=((4),(5))
+         WTO   'TESTENV1 ENDED OK'
+         SUBEXIT
+MYENV    DC    C'PSModulePath',X'00'
+         END

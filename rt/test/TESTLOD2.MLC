@@ -1,0 +1,61 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2005-11-19 DSH RPI-102 Test new non-390 file loading              *
+*                        DDNAME/DSNAME option                       *
+* 2005-11-25 DSH RPI-111 Test loading same file twice and deleting  *
+*                        twice                                      *
+* 2005-02-07 DSH RPI-532 Correct path case for Linux                *
+*********************************************************************
+
+         TITLE 'TESTLOD2 TEST LOAD DDNAME AND DSNAME OPTIONS'
+
+TESTLOD2 RT1  MAIN
+         EQUREGS
+DSNFILE1 DC   C'rt\test\TESTLOD2.TF2',X'00'
+DSNFILE2 DC   C'rt\test\TESTLOD2.TF3',X'00'
+ABORT    WTO  'TESTLOD1 ABORTING DUE TO ERROR'
+         ABEND 111,DUMP
+         RT1  START
+         LOAD DSNAME=DSNFILE1
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R2,R0
+         LR   R3,R1
+         LA   R6,0(R2,R3)
+         SNAP STORAGE=((R2),(R6)),TEXT='SNAP FILE 1'
+         LOAD DSNAME=DSNFILE2
+         LTR  R15,R15
+         BNZ  ABORT
+         LOAD DSNAME=DSNFILE2 LOAD IT AGAIN TO GET USE COUNT 2
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R4,R0
+         LR   R5,R1
+         LR   R5,R1
+         LA   R6,0(R4,R5)
+         SNAP STORAGE=((R4),(R6)),TEXT='SNAP FILE 2'
+         CLCL R2,R4    COMPARE FILE1 TO FILE2
+         RT1  CCE      VERIFY FILES EQUAL
+         SNAP TEXT='CDES BEFORE DELETES',PDATA=CDE
+         DELETE DSNAME=DSNFILE1
+         LTR  R15,R15
+         BNZ  ABORT
+         DELETE DSNAME=DSNFILE2  DELETE ONCE TO GET USE COUNT 1
+         LTR  R15,R15
+         BNZ  ABORT
+         DELETE DSNAME=DSNFILE2  DELETE AGAIN TO REALLY DELETE
+         LTR  R15,R15
+         BNZ  ABORT
+         SNAP TEXT='CDES AFTER DELETES',PDATA=CDE
+         RT1  END
+         END

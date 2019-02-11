@@ -1,0 +1,44 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH         Initial version                           *
+* 2006-03-28  DSH RPI-266 Create TESTMAC8.MLC and TESTMAC8.MAC test *
+*                         inlines                                   *
+* 2006-04-09  DSH RPI-274 Test .EXIT on nested MENDS/END            *
+*********************************************************************
+
+TESTMAC8 SUBENTRY
+         WTO   'TESTMAC8 - TEST INLINE MACROS WITHIN MACROS'
+         MACRO
+&L       ILM1  &P,&K=
+.LOOP    ANOP
+&A       SETA  &A+1
+         AIF   (&A LT 3).LOOP
+         MNOTE 'ILM1 L=&L P=&P K=&K A=&A'
+         MACRO
+&L       ILM2  &P,&K=
+.LOOP    ANOP
+&A       SETA  &A+1
+         AIF   (&A LT 3).LOOP
+         MNOTE 'ILM2 L=&L P=&P K=&K A=&A'
+         MNOTE 'TEST .EXIT FOR ILM2'
+         AGO   .EXIT
+.EXIT    MEND
+L2       ILM2  P2,K=K2
+         MNOTE 'TEST .EXIT FOR ILM1'
+         AGO   .EXIT
+.EXIT    MEND
+L1       ILM1  P1,K=K1
+L3       TESTMAC8 P3,K=K3 TEST EXTERNAL MACRO WITH INLINE MACROS
+         WTO   'TESTMAC8 ENDED OK'
+         SUBEXIT
+         MNOTE 'TEST .EXIT FOR MLC ON END'
+.EXIT    END

@@ -1,0 +1,105 @@
+TESTRLD2  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTRLD2
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  NOLOADHIGH TRACE systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000000C8 TYPE=CST NAME=TESTRLD2
+ ESD=0002 LOC=000000C8 LEN=000000A0 TYPE=CST NAME=SUB2
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2008 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2008-08-13 DSH         Initial version                            *
+000000                                      (1/13)13 * 2008-08-13 DSH RPI-894 Test AL2 RLD support using NOLOADHIGH      *
+000000                                      (1/14)14 *********************************************************************
+000000                                      (1/16)15 TESTRLD2 SUBENTRY 
+000000                                      (2/78)16+TESTRLD2 CSECT 
+000000 90ECD00C                            (2/168)17+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)18+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)19+         DC    18F'0'
+000050 E3C5E2E3D9D3C4F2                    (2/171)20+         DC    CL8'TESTRLD2'
+000058 F0F161F0F261F0F5                    (2/172)21+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)22+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)23+         ST    15,8(13)
+00006C 50DF0004                            (2/175)24+         ST    13,4(15)
+000070 18DF                                (2/176)25+         LR    13,15
+000072                                     (2/189)26+         USING TESTRLD2+8,13
+LISTUSE TESTRLD2 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/17)28          WTO   'TESTRLD2 STARTED'
+000072 A715000C                00008A       (3/49)29+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00140000E3C5E2E3                     (3/50)30+         DC    AL2(WTO#0002_EOT-*,0),C'TESTRLD2 STARTED'
+00008A                  0000008A            (3/51)31+WTO#0002_EOT     EQU *
+00008A 0A23                                 (3/52)32+         SVC   35
+00008C E3F0D0BA0095            0000C2       (1/18)34          LLH   15,AL2SUB2
+000092 05EF                                 (1/19)35          BALR  14,15
+000094                                      (1/20)36          WTO   'TESTRLD2 ENDING OK'
+000094 A715000D                0000AE       (3/49)37+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+000098 00160000E3C5E2E3                     (3/50)38+         DC    AL2(WTO#0003_EOT-*,0),C'TESTRLD2 ENDING OK'
+0000AE                  000000AE            (3/51)39+WTO#0003_EOT     EQU *
+0000AE 0A23                                 (3/52)40+         SVC   35
+0000B0                                      (1/21)42          SUBEXIT 
+0000B0 41F00000                             (4/33)43+         LA    15,0
+0000B4 58D0D004                             (4/50)44+         L     13,4(,13)
+0000B8 58E0D00C                             (4/51)45+         L     14,12(,13)
+0000BC 982CD01C                             (4/52)46+         LM    2,12,28(13)
+0000C0 07FE                                 (4/53)47+         BR    14
+0000C2 00C8                                 (1/22)49 AL2SUB2  DC    AL2(SUB2)
+0000C4                                      (1/23)50 SUB2     SUBENTRY 
+0000C8                                      (2/78)51+SUB2     CSECT 
+0000C8 90ECD00C                            (2/168)52+         STM   14,12,12(13)
+0000CC 45FF0068                            (2/169)53+         BAL   15,104(15)
+0000D0 0000000000000000                    (2/170)54+         DC    18F'0'
+000118 E2E4C2F240404040                    (2/171)55+         DC    CL8'SUB2'
+000120 F0F161F0F261F0F5                    (2/172)56+         DC    CL8'01/02/05'
+000128 F2F24BF3F3404040                    (2/173)57+         DC    CL8'22.33'
+000130 50FD0008                            (2/174)58+         ST    15,8(13)
+000134 50DF0004                            (2/175)59+         ST    13,4(15)
+000138 18DF                                (2/176)60+         LR    13,15
+00013A                                     (2/189)61+         USING SUB2+8,13
+LISTUSE SUB2     ESD=0002 LOC=000000D0 LEN=01000 REG=D OFF=00000 LAB=
+00013A                                      (1/24)63          WTO   'SUB2 ENTERED OK'
+00013A A715000C                000152       (3/49)64+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+00013E 00130000E2E4C2F2                     (3/50)65+         DC    AL2(WTO#0006_EOT-*,0),C'SUB2 ENTERED OK'
+000151                  00000151            (3/51)66+WTO#0006_EOT     EQU *
+000152 0A23                                 (3/52)67+         SVC   35
+000154                                      (1/25)69          SUBEXIT 
+000154 41F00000                             (4/33)70+         LA    15,0
+000158 58D0D004                             (4/50)71+         L     13,4(,13)
+00015C 58E0D00C                             (4/51)72+         L     14,12(,13)
+000160 982CD01C                             (4/52)73+         LM    2,12,28(13)
+000164 07FE                                 (4/53)74+         BR    14
+000166                                      (1/26)76          END 
+Relocation Definitions
+ ESD=0001 LOC=000000C2 LEN=2 SIGN=+ XESD=0002
+
+Symbol Table Listing
+
+ SYM=AL2SUB2  LOC=000000C2 LEN=00000002 ESD=0001 TYPE=REL  XREF=49 34 
+ SYM=SUB2     LOC=000000C8 LEN=000000A0 ESD=0002 TYPE=CST  XREF=51 49 61 
+ SYM=TESTRLD2 LOC=00000000 LEN=000000C8 ESD=0001 TYPE=CST  XREF=16 26 
+ SYM=WTO#0002_EOT LOC=0000008A LEN=00000001 ESD=0001 TYPE=REL  XREF=31 29 30 
+ SYM=WTO#0003_EOT LOC=000000AE LEN=00000001 ESD=0001 TYPE=REL  XREF=39 37 38 
+ SYM=WTO#0006_EOT LOC=00000151 LEN=00000001 ESD=0002 TYPE=REL  XREF=66 64 65 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTRLD2  MZ390 ENDED RC= 0 IO=589

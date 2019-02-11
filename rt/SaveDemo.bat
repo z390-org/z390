@@ -7,7 +7,7 @@
 @SET dirRtDiffs=%dirRtWork%\diff
 
 @ECHO.
-@ECHO RT Save Demo - Clean %dirRtDiffs% and save rt %demo% files to %dirRtSaved%
+@ECHO RT Save Demo - Clean %dirRtDiffs% and save rt-work files to %dirRtSaved%
 
 @ECHO.
 @ECHO RT Save Demo - Go one level up to z390 main program directory

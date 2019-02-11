@@ -1,0 +1,19 @@
+.*********************************************************************
+.* Copyright 2006 Automated Software Tools Corporation               *
+.* Copyright 2013 Cat Herder Software, LLC                           *
+.* Copyright 2018 Joachim Bartz, Germany                             *
+.*                                                                   *
+.* This source code is part of z390 assembler/emulator package.      *
+.*                                                                   *
+.* The z390 package is distributed under GNU general public license  *
+.*                                                                   *
+.* Author - Don Higgins                                              *
+.*********************************************************************
+.* 2006-04-09  DSH         Initial version                           *
+.* 2006-04-09  DSH RPI-276 Termination test macro - see TESTPRO1.CPY *
+.*********************************************************************
+
+         MACRO
+         TESTPROT
+         MNOTE 'MZ390 TESTPROT MACRO ENDED  &SYSDATE &SYSTIME &SYSJOB'
+         MEND

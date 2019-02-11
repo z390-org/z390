@@ -1,0 +1,567 @@
+TESTMAC2  MZ390 START
+MZ390I Copyright 2011 Automated Software Tools Corporation
+MZ390I Copyright 2013 Cat Herder Software, LLC
+MZ390I Copyright 2018 Joachim Bartz, Germany
+MZ390I z390 is licensed under GNU General Public License
+MZ390I program = rt\test\TESTMAC2.MLC
+MZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  tracep systerm(rt\test\RTTEST)
+LOADING FILE rt\test\TESTMAC2.MLC
+OPEN CODE     1     (1/1) *********************************************************************
+OPEN CODE     2     (1/2) * Copyright 2005 Automated Software Tools Corporation               *
+OPEN CODE     3     (1/3) * Copyright 2013 Cat Herder Software, LLC                           *
+OPEN CODE     4     (1/4) * Copyright 2018 Joachim Bartz, Germany                             *
+OPEN CODE     5     (1/5) *                                                                   *
+OPEN CODE     6     (1/6) * This source code is part of z390 assembler/emulator package.      *
+OPEN CODE     7     (1/7) *                                                                   *
+OPEN CODE     8     (1/8) * The z390 package is distributed under GNU general public license  *
+OPEN CODE     9     (1/9) *                                                                   *
+OPEN CODE    10    (1/10) * Author - Don Higgins                                              *
+OPEN CODE    11    (1/11) *********************************************************************
+OPEN CODE    12    (1/12) * 2005-09-30 DSH         Initial version                            *
+OPEN CODE    13    (1/13) * 2005-11-02 DSH RPI-60  Add multiple logical operator tests for    *
+OPEN CODE    14    (1/14) *                        AND OR NOT                                 *
+OPEN CODE    15    (1/15) * 2006-04-07 DSH RPI-274 Add test for                               *
+OPEN CODE    16    (1/16) *                        AIF ('A' EQ 'B' AND ('C' EQ 'D')).ERR      *
+OPEN CODE    17    (1/17) * 2006-05-13 DSH RPI-314 Add AIFB and AGOB alias tests              *
+OPEN CODE    18    (1/18) * 2006-05-14 DSH RPI-315 Add AIF alternate format and computed ago  *
+OPEN CODE    19    (1/19) * 2008-01-31 DSH RPI-803 Test repeated execution of AGO             *
+OPEN CODE    20    (1/20) * 2008-04-22 DSH RPI-833 Add string quotes for HLASM compatibility  *
+OPEN CODE    21    (1/21) *********************************************************************
+OPEN CODE    23    (1/23) *MCALL #=     1 LV= 1 TESTMAC2 SUBENTRY 
+LOADING FILE C:\Users\Achim\GitHub\z390\mac\SUBENTRY.MAC
+ 
+SUBENTRY     66                  GBLC  &PSTKREG,&PBASREG,&PBASLAB
+SUBENTRY     67                  GBLB  &PSTKSW,&PBASESW,&PSAVESW,&PCHKSW
+SUBENTRY     68                  GBLA  &STKSIZE,&STKENT
+SUBENTRY     69                  GBLB  &STKOPT,&RENTOPT
+SUBENTRY     70                  LCLA  &NBASE,&S,&OFFSET
+SUBENTRY     71         &PSTKSW  SETB  0
+  GEN  PC LOC=    1 OP= PUSHA()=0
+  GEN  PC LOC=    2 OP= STORV(&PSTKSW)=0
+SUBENTRY     72         &PBASESW SETB  0
+  GEN  PC LOC=    3 OP= PUSHA()=0
+  GEN  PC LOC=    4 OP= STORV(&PBASESW)=0
+SUBENTRY     73         &PSAVESW SETB  0
+  GEN  PC LOC=    5 OP= PUSHA()=0
+  GEN  PC LOC=    6 OP= STORV(&PSAVESW)=0
+SUBENTRY     74         &PCHKSW  SETB  0
+  GEN  PC LOC=    7 OP= PUSHA()=0
+  GEN  PC LOC=    8 OP= STORV(&PCHKSW)=0
+SUBENTRY     75         &STKOPT  SETB  0
+  GEN  PC LOC=    9 OP= PUSHA()=0
+  GEN  PC LOC=   10 OP= STORV(&STKOPT)=0
+SUBENTRY     76         &RENTOPT SETB  0
+  GEN  PC LOC=   11 OP= PUSHA()=0
+  GEN  PC LOC=   12 OP= STORV(&RENTOPT)=0
+SUBENTRY     77                  AIF   ('&CSECT'(1,1) EQ 'N').NOCSECT
+  GEN  PC LOC=   13 OP= PUSHV(&CSECT)='YES'
+  GEN  PC LOC=   14 OP= PUSHA()=1
+  GEN  PC LOC=   15 OP= PUSHA()=1
+  GEN  PC LOC=   16 OP= SUBSTR('YES',1,1)='Y'
+  GEN  PC LOC=   17 OP= COMPEQ('Y','N')=0
+  GEN  PC LOC=   18 OP= AIF(0)=.NOCSECT NO BRANCH
+SUBENTRY     78    (2/78)+TESTMAC2 CSECT 
+SUBENTRY     79                  AGO   .STM
+ 
+SUBENTRY     83                  AIF   ('&RENT'(1,1) EQ 'N').NORENT
+  GEN  PC LOC=   19 OP= PUSHV(&RENT)='NO'
+  GEN  PC LOC=   20 OP= PUSHA()=1
+  GEN  PC LOC=   21 OP= PUSHA()=1
+  GEN  PC LOC=   22 OP= SUBSTR('NO',1,1)='N'
+  GEN  PC LOC=   23 OP= COMPEQ('N','N')=1
+  GEN  PC LOC=   24 OP= AIF(1)=.NORENT BRANCH
+ 
+SUBENTRY    168   (2/168)+         STM   14,12,12(13)
+SUBENTRY    169   (2/169)+         BAL   15,104(15)
+SUBENTRY    170   (2/170)+         DC    18F'0'
+SUBENTRY    171                  DC    CL8'&NAME'
+SUBENTRY    171   (2/171)+         DC    CL8'TESTMAC2'
+SUBENTRY    172                  DC    CL8'&SYSDATE'
+SUBENTRY    172   (2/172)+         DC    CL8'01/02/05'
+SUBENTRY    173                  DC    CL8'&SYSTIME'
+SUBENTRY    173   (2/173)+         DC    CL8'22.33'
+SUBENTRY    174   (2/174)+         ST    15,8(13)
+SUBENTRY    175   (2/175)+         ST    13,4(15)
+SUBENTRY    176   (2/176)+         LR    13,15
+SUBENTRY    177                  AIF   (T'&BASES(1) NE 'N').CHKR13
+  GEN  PC LOC=   25 OP= PUSHV(&BASES)='(13)'
+  GEN  PC LOC=   26 OP= PUSHA()=1
+  GEN  PC LOC=   27 OP= SUBLST('(13)',1)='13'
+T' N = T'13
+  GEN  PC LOC=   28 OP= T'('13')='N'
+  GEN  PC LOC=   29 OP= COMPNE('N','N')=0
+  GEN  PC LOC=   30 OP= AIF(0)=.CHKR13 NO BRANCH
+SUBENTRY    178                  AIF   (&BASES(1) EQ 13).GENB13
+  GEN  PC LOC=   31 OP= PUSHV(&BASES)='(13)'
+  GEN  PC LOC=   32 OP= PUSHA()=1
+  GEN  PC LOC=   33 OP= SUBLST('(13)',1)='13'
+  GEN  PC LOC=   34 OP= COMPEQ(13,13)=1
+  GEN  PC LOC=   35 OP= AIF(1)=.GENB13 BRANCH
+ 
+SUBENTRY    189                  USING &NAME+8,13
+SUBENTRY    189   (2/189)+         USING TESTMAC2+8,13
+SUBENTRY    191         &NBASE   SETA  N'&BASES
+  GEN  PC LOC=   36 OP= PUSHV(&BASES)='(13)'
+  GEN  PC LOC=   37 OP= N'('(13)')=1
+  GEN  PC LOC=   38 OP= STORV(&NBASE)=1
+SUBENTRY    192         &S       SETA  1
+  GEN  PC LOC=   39 OP= PUSHA()=1
+  GEN  PC LOC=   40 OP= STORV(&S)=1
+SUBENTRY    194         &S       SETA  &S+1
+  GEN  PC LOC=   41 OP= PUSHV(&S)=1
+ADD 2 = 1 + 1
+  GEN  PC LOC=   42 OP= ADD(1,1)=2
+  GEN  PC LOC=   43 OP= STORV(&S)=2
+SUBENTRY    195                  AIF   (&S GT &NBASE).EXIT
+  GEN  PC LOC=   44 OP= PUSHV(&S)=2
+  GEN  PC LOC=   45 OP= PUSHV(&NBASE)=1
+  GEN  PC LOC=   46 OP= COMPGT(2,1)=1
+  GEN  PC LOC=   47 OP= AIF(1)=.EXIT BRANCH
+ 
+SUBENTRY    201                  MEXIT
+ 
+SUBENTRY    201   (2/201)+*MEXIT #=     1 LV= 1 SUBENTRY
+OPEN CODE    24    (1/24) *MCALL #=     2 LV= 1          WTO   'TESTMAC2 - TEST CONDITIONAL COMPARES'
+LOADING FILE C:\Users\Achim\GitHub\z390\mac\WTO.MAC
+ 
+WTO          34                  AIF   ('&N' EQ '').SKIPDS
+  GEN  PC LOC=   48 OP= PUSHV(&N)=''
+  GEN  PC LOC=   49 OP= COMPEQ('','')=1
+  GEN  PC LOC=   50 OP= AIF(1)=.SKIPDS BRANCH
+ 
+WTO          37                  AIF   (N'&SYSLIST LE 1).NPOK
+  GEN  PC LOC=   51 OP= PUSHV(&SYSLIST)=''
+  GEN  PC LOC=   52 OP= N'('&SYSLIST')=1
+  GEN  PC LOC=   53 OP= COMPLE(1,1)=1
+  GEN  PC LOC=   54 OP= AIF(1)=.NPOK BRANCH
+ 
+WTO          41                  AIF   ('&MF' NE 'I').MF
+  GEN  PC LOC=   55 OP= PUSHV(&MF)='I'
+  GEN  PC LOC=   56 OP= COMPNE('I','I')=0
+  GEN  PC LOC=   57 OP= AIF(0)=.MF NO BRANCH
+WTO          42                  AIF   ('&TEXT' NE '').ERR2
+  GEN  PC LOC=   58 OP= PUSHV(&TEXT)=''
+  GEN  PC LOC=   59 OP= COMPNE('','')=0
+  GEN  PC LOC=   60 OP= AIF(0)=.ERR2 NO BRANCH
+WTO          43                  AIF   ('&MSG' EQ '').ERR3
+  GEN  PC LOC=   61 OP= PUSHV(&MSG)=''TESTMAC2 - TEST CONDITIONAL COMPARES''
+  GEN  PC LOC=   62 OP= COMPEQ(''TESTMAC2 - TEST CONDITIONAL COMPARES'','')=0
+  GEN  PC LOC=   63 OP= AIF(0)=.ERR3 NO BRANCH
+WTO          44         &MSGTEXT SETC  '&MSG'
+  GEN  PC LOC=   64 OP= PUSHV(&MSG)=''TESTMAC2 - TEST CONDITIONAL COMPARES''
+  GEN  PC LOC=   65 OP= STORV(&MSGTEXT)=''TESTMAC2 - TEST CONDITIONAL COMPARES''
+WTO          45                  AIF   ('&MSG'(1,1) EQ '''').WTOMSG
+  GEN  PC LOC=   66 OP= PUSHV(&MSG)=''TESTMAC2 - TEST CONDITIONAL COMPARES''
+  GEN  PC LOC=   67 OP= PUSHA()=1
+  GEN  PC LOC=   68 OP= PUSHA()=1
+  GEN  PC LOC=   69 OP= SUBSTR(''TESTMAC2 - TEST CONDITIONAL COMPARES'',1,1)='''
+  GEN  PC LOC=   70 OP= COMPEQ(''',''')=1
+  GEN  PC LOC=   71 OP= AIF(1)=.WTOMSG BRANCH
+ 
+WTO          49                  BRAS  1,*+(WTO#&SYSNDX._EOT-*+1)/2*2
+WTO          49    (3/49)+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+WTO          50                  DC    AL2(WTO#&SYSNDX._EOT-*,0),C&MSGTEXT
+WTO          50    (3/50)+         DC    AL2(WTO#0002_EOT-*,0),C'TESTMAC2 - TEST CONDITIONAL COMPARES'
+WTO          51    (3/51)+WTO#0002_EOT     EQU *
+WTO          52    (3/52)+         SVC   35
+WTO          53                  MEXIT
+ 
+WTO          53    (3/53)+*MEXIT #=     2 LV= 1 WTO
+OPEN CODE    25                  MACRO
+OPEN CODE    25    (1/25)          MACRO
+LOADING INLINE MACRO
+OPEN CODE    25    (1/26) &N       TEST  &P1
+OPEN CODE    25    (1/27)          MNOTE 'N=&N P1=&P1'
+OPEN CODE    25    (1/28)          AIF   ('&N' NE '&P1').SKIP
+OPEN CODE    25    (1/29)          MNOTE '&N EQ &P1'
+OPEN CODE    25    (1/30)          MEXIT
+OPEN CODE    25    (1/31) .SKIP    ANOP
+OPEN CODE    25    (1/32)          MNOTE '&N NE &P1'
+OPEN CODE    25    (1/33)          MEND
+OPEN CODE    34    (1/34) *MCALL #=     3 LV= 1 A        TEST  P1
+ 
+TEST         27                  MNOTE 'N=&N P1=&P1'
+TEST         27    (1/27)          MNOTE 'N=A P1=P1'
+TEST         28                  AIF   ('&N' NE '&P1').SKIP
+  GEN  PC LOC=   72 OP= PUSHV(&N)='A'
+  GEN  PC LOC=   73 OP= PUSHV(&P1)='P1'
+  GEN  PC LOC=   74 OP= COMPNE('A','P1')=1
+  GEN  PC LOC=   75 OP= AIF(1)=.SKIP BRANCH
+ 
+TEST         31         .SKIP    ANOP
+TEST         32                  MNOTE '&N NE &P1'
+TEST         32    (1/32)          MNOTE 'A NE P1'
+TEST         32    (1/32) *MEXIT #=     3 LV= 1 TEST
+OPEN CODE    35    (1/35) *MCALL #=     4 LV= 1 B        TEST  P2
+ 
+TEST         27                  MNOTE 'N=&N P1=&P1'
+TEST         27    (1/27)          MNOTE 'N=B P1=P2'
+TEST         28                  AIF   ('&N' NE '&P1').SKIP
+  EXEC PC LOC=   72 OP= PUSHV(&N)='B'
+  EXEC PC LOC=   73 OP= PUSHV(&P1)='P2'
+  EXEC PC LOC=   74 OP= COMPNE('B','P2')=1
+  EXEC PC LOC=   75 OP= AIF(1)=.SKIP BRANCH
+ 
+TEST         31         .SKIP    ANOP
+TEST         32                  MNOTE '&N NE &P1'
+TEST         32    (1/32)          MNOTE 'B NE P2'
+TEST         32    (1/32) *MEXIT #=     4 LV= 1 TEST
+OPEN CODE    36    (1/36) *MCALL #=     5 LV= 1 XYZ      TEST  XYZ
+ 
+TEST         27                  MNOTE 'N=&N P1=&P1'
+TEST         27    (1/27)          MNOTE 'N=XYZ P1=XYZ'
+TEST         28                  AIF   ('&N' NE '&P1').SKIP
+  EXEC PC LOC=   72 OP= PUSHV(&N)='XYZ'
+  EXEC PC LOC=   73 OP= PUSHV(&P1)='XYZ'
+  EXEC PC LOC=   74 OP= COMPNE('XYZ','XYZ')=0
+  EXEC PC LOC=   75 OP= AIF(0)=.SKIP NO BRANCH
+TEST         29                  MNOTE '&N EQ &P1'
+TEST         29    (1/29)          MNOTE 'XYZ EQ XYZ'
+TEST         30                  MEXIT
+ 
+TEST         30    (1/30) *MEXIT #=     5 LV= 1 TEST
+OPEN CODE    37                  AIF   (1 EQ 0 OR 1 EQ 1).OK1
+  GEN  PC LOC=   76 OP= PUSHA()=1
+  GEN  PC LOC=   77 OP= COMPEQ(1,0)=0
+  GEN  PC LOC=   78 OP= PUSHA()=1
+  GEN  PC LOC=   79 OP= COMPEQ(1,1)=1
+OR 1 = 0 OR 1
+  GEN  PC LOC=   80 OP= OR(0,1)=1
+  GEN  PC LOC=   81 OP= AIF(1)=.OK1 BRANCH
+ 
+OPEN CODE    40                  MNOTE 'OK1'
+OPEN CODE    40    (1/40)          MNOTE 'OK1'
+OPEN CODE    41                  AIF   (1 EQ 1 AND 1 EQ 0).ERR
+  GEN  PC LOC=   82 OP= PUSHA()=1
+  GEN  PC LOC=   83 OP= COMPEQ(1,1)=1
+  GEN  PC LOC=   84 OP= PUSHA()=1
+  GEN  PC LOC=   85 OP= COMPEQ(1,0)=0
+AND 0 = 1 AND 0
+  GEN  PC LOC=   86 OP= AND(1,0)=0
+  GEN  PC LOC=   87 OP= AIF(0)=.ERR NO BRANCH
+OPEN CODE    42                  AIF   (NOT 1 EQ 0).OK2
+  GEN  PC LOC=   88 OP= PUSHA()=1
+  GEN  PC LOC=   89 OP= COMPEQ(1,0)=0
+NOT 1 = NOT 0
+  GEN  PC LOC=   90 OP= NOT(0)=1
+  GEN  PC LOC=   91 OP= AIF(1)=.OK2 BRANCH
+ 
+OPEN CODE    45                  MNOTE 'OK2'
+OPEN CODE    45    (1/45)          MNOTE 'OK2'
+OPEN CODE    46                  AIF   (1 EQ 0 OR NOT 1 EQ 0).OK3
+  GEN  PC LOC=   92 OP= PUSHA()=1
+  GEN  PC LOC=   93 OP= COMPEQ(1,0)=0
+  GEN  PC LOC=   94 OP= PUSHA()=1
+  GEN  PC LOC=   95 OP= COMPEQ(1,0)=0
+NOT 1 = NOT 0
+  GEN  PC LOC=   96 OP= NOT(0)=1
+OR 1 = 0 OR 1
+  GEN  PC LOC=   97 OP= OR(0,1)=1
+  GEN  PC LOC=   98 OP= AIF(1)=.OK3 BRANCH
+ 
+OPEN CODE    49                  MNOTE 'OK3'
+OPEN CODE    49    (1/49)          MNOTE 'OK3'
+OPEN CODE    50    (1/50) * TEST AGO AND AIF LABELS WITHOUT ANOP
+OPEN CODE    51         &I       SETA  3
+  GEN  PC LOC=   99 OP= PUSHA()=3
+  GEN  PC LOC=  100 OP= STORV(&I)=3
+OPEN CODE    52         .TEST    AIF   (&I EQ 0).TESTEND
+  GEN  PC LOC=  101 OP= PUSHV(&I)=3
+  GEN  PC LOC=  102 OP= COMPEQ(3,0)=0
+  GEN  PC LOC=  103 OP= AIF(0)=.TESTEND NO BRANCH
+OPEN CODE    53         &I       SETA  &I-1
+  GEN  PC LOC=  104 OP= PUSHV(&I)=3
+SUB 2 = 3 - 1
+  GEN  PC LOC=  105 OP= SUB(3,1)=2
+  GEN  PC LOC=  106 OP= STORV(&I)=2
+OPEN CODE    54                  AGO   .TEST
+ 
+OPEN CODE    52         .TEST    AIF   (&I EQ 0).TESTEND
+  EXEC PC LOC=  101 OP= PUSHV(&I)=2
+  EXEC PC LOC=  102 OP= COMPEQ(2,0)=0
+  EXEC PC LOC=  103 OP= AIF(0)=.TESTEND NO BRANCH
+OPEN CODE    53         &I       SETA  &I-1
+  EXEC PC LOC=  104 OP= DEC(&I)=1
+OPEN CODE    54                  AGO   .TEST
+ 
+OPEN CODE    52         .TEST    AIF   (&I EQ 0).TESTEND
+  EXEC PC LOC=  101 OP= PUSHV(&I)=1
+  EXEC PC LOC=  102 OP= COMPEQ(1,0)=0
+  EXEC PC LOC=  103 OP= AIF(0)=.TESTEND NO BRANCH
+OPEN CODE    53         &I       SETA  &I-1
+  EXEC PC LOC=  104 OP= DEC(&I)=0
+OPEN CODE    54                  AGO   .TEST
+ 
+OPEN CODE    52         .TEST    AIF   (&I EQ 0).TESTEND
+  EXEC PC LOC=  101 OP= PUSHV(&I)=0
+  EXEC PC LOC=  102 OP= COMPEQ(0,0)=1
+  EXEC PC LOC=  103 OP= AIF(1)=.TESTEND BRANCH
+ 
+OPEN CODE    55         .TESTEND WTO   'TESTEND I=&I'
+OPEN CODE    55    (1/55) *MCALL #=     6 LV= 1          WTO   'TESTEND I=0'
+ 
+WTO          34                  AIF   ('&N' EQ '').SKIPDS
+  EXEC PC LOC=   48 OP= PUSHV(&N)=''
+  EXEC PC LOC=   49 OP= COMPEQ('','')=1
+  EXEC PC LOC=   50 OP= AIF(1)=.SKIPDS BRANCH
+ 
+WTO          37                  AIF   (N'&SYSLIST LE 1).NPOK
+  EXEC PC LOC=   51 OP= PUSHV(&SYSLIST)=''
+  EXEC PC LOC=   52 OP= N'('')=1
+  EXEC PC LOC=   53 OP= COMPLE(1,1)=1
+  EXEC PC LOC=   54 OP= AIF(1)=.NPOK BRANCH
+ 
+WTO          41                  AIF   ('&MF' NE 'I').MF
+  EXEC PC LOC=   55 OP= PUSHV(&MF)='I'
+  EXEC PC LOC=   56 OP= COMPNE('I','I')=0
+  EXEC PC LOC=   57 OP= AIF(0)=.MF NO BRANCH
+WTO          42                  AIF   ('&TEXT' NE '').ERR2
+  EXEC PC LOC=   58 OP= PUSHV(&TEXT)=''
+  EXEC PC LOC=   59 OP= COMPNE('','')=0
+  EXEC PC LOC=   60 OP= AIF(0)=.ERR2 NO BRANCH
+WTO          43                  AIF   ('&MSG' EQ '').ERR3
+  EXEC PC LOC=   61 OP= PUSHV(&MSG)=''TESTEND I=0''
+  EXEC PC LOC=   62 OP= COMPEQ(''TESTEND I=0'','')=0
+  EXEC PC LOC=   63 OP= AIF(0)=.ERR3 NO BRANCH
+WTO          44         &MSGTEXT SETC  '&MSG'
+  EXEC PC LOC=   64 OP= PUSHV(&MSG)=''TESTEND I=0''
+  EXEC PC LOC=   65 OP= STORV(&MSGTEXT)=''TESTEND I=0''
+WTO          45                  AIF   ('&MSG'(1,1) EQ '''').WTOMSG
+  EXEC PC LOC=   66 OP= PUSHV(&MSG)=''TESTEND I=0''
+  EXEC PC LOC=   67 OP= PUSHA()=1
+  EXEC PC LOC=   68 OP= PUSHA()=1
+  EXEC PC LOC=   69 OP= SUBSTR(''TESTEND I=0'',1,1)='''
+  EXEC PC LOC=   70 OP= COMPEQ(''',''')=1
+  EXEC PC LOC=   71 OP= AIF(1)=.WTOMSG BRANCH
+ 
+WTO          49                  BRAS  1,*+(WTO#&SYSNDX._EOT-*+1)/2*2
+WTO          49    (3/49)+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+WTO          50                  DC    AL2(WTO#&SYSNDX._EOT-*,0),C&MSGTEXT
+WTO          50    (3/50)+         DC    AL2(WTO#0006_EOT-*,0),C'TESTEND I=0'
+WTO          51    (3/51)+WTO#0006_EOT     EQU *
+WTO          52    (3/52)+         SVC   35
+WTO          53                  MEXIT
+ 
+WTO          53    (3/53)+*MEXIT #=     6 LV= 1 WTO
+OPEN CODE    56    (1/56) * TEST COMPLEX AIF
+OPEN CODE    57                  MACRO
+OPEN CODE    57    (1/57)          MACRO
+LOADING INLINE MACRO
+OPEN CODE    57    (1/58)          TEST  &MF=I,&SF=I
+OPEN CODE    57    (1/59)          AIF   ('&MF' EQ 'L' OR('&SF' EQ 'L' AND '&MF(1)' EQ 'E')).ERR
+OPEN CODE    57    (1/60)          MNOTE 'AIF NO BRANCH OK - MF=&MF SF=&SF'
+OPEN CODE    57    (1/61)          AGO   .SKPERR
+OPEN CODE    57    (1/62) .ERR     MNOTE 12,'AIF BRANCDED TO ERR'
+OPEN CODE    57    (1/63)          SUBEXIT RC=12
+OPEN CODE    57    (1/64) .SKPERR   ANOP
+OPEN CODE    57    (1/65)          MEND
+OPEN CODE    66    (1/66) *MCALL #=     7 LV= 1          TEST 
+ 
+TEST         59                  AIF   ('&MF' EQ 'L' OR('&SF' EQ 'L' AND '&MF(1)' EQ 'E')).ERR
+  GEN  PC LOC=  105 OP= PUSHV(&MF)='I'
+  GEN  PC LOC=  106 OP= COMPEQ('I','L')=0
+  GEN  PC LOC=  107 OP= PUSHV(&SF)='I'
+  GEN  PC LOC=  108 OP= COMPEQ('I','L')=0
+  GEN  PC LOC=  109 OP= PUSHC()=''
+  GEN  PC LOC=  110 OP= PUSHV(&MF)='I'
+  GEN  PC LOC=  111 OP= PUSHA()=1
+  GEN  PC LOC=  112 OP= SUBLST('I',1)='I'
+  GEN  PC LOC=  113 OP= CONCAT('','I')='I'
+  GEN  PC LOC=  114 OP= COMPEQ('I','E')=0
+AND 0 = 0 AND 0
+  GEN  PC LOC=  115 OP= AND(0,0)=0
+OR 0 = 0 OR 0
+  GEN  PC LOC=  116 OP= OR(0,0)=0
+  GEN  PC LOC=  117 OP= AIF(0)=.ERR NO BRANCH
+TEST         60                  MNOTE 'AIF NO BRANCH OK - MF=&MF SF=&SF'
+TEST         60    (1/60)          MNOTE 'AIF NO BRANCH OK - MF=I SF=I'
+TEST         61                  AGO   .SKPERR
+ 
+TEST         64         .SKPERR   ANOP
+TEST         64    (1/64) *MEXIT #=     7 LV= 1 TEST
+OPEN CODE    67    (1/67) * TEST AIFB AND AGOB
+OPEN CODE    68                  AIFB  (1 EQ 0).ERR
+  GEN  PC LOC=  118 OP= PUSHA()=1
+  GEN  PC LOC=  119 OP= COMPEQ(1,0)=0
+  GEN  PC LOC=  120 OP= AIF(0)=.ERR NO BRANCH
+OPEN CODE    69                  AIFB  (1 EQ 1).AIFBOK
+  GEN  PC LOC=  121 OP= PUSHA()=1
+  GEN  PC LOC=  122 OP= COMPEQ(1,1)=1
+  GEN  PC LOC=  123 OP= AIF(1)=.AIFBOK BRANCH
+ 
+OPEN CODE    72                  AGOB  .AGOBOK
+ 
+OPEN CODE    75    (1/75) * TEST ALTERNATE AIF FORMAT COMPOUND TESTS
+OPEN CODE    77                  AIF   ('A' EQ 'B').TOK1,('C' EQ 'C').TOK2
+  GEN  PC LOC=  124 OP= PUSHC()='A'
+  GEN  PC LOC=  125 OP= COMPEQ('A','B')=0
+  GEN  PC LOC=  126 OP= AIF(0)=.TOK1 NO BRANCH
+  GEN  PC LOC=  127 OP= PUSHC()='C'
+  GEN  PC LOC=  128 OP= COMPEQ('C','C')=1
+  GEN  PC LOC=  129 OP= AIF(1)=.TOK2 BRANCH
+ 
+OPEN CODE    80         .TOK2    MNOTE 'TOK2'
+OPEN CODE    80    (1/80)          MNOTE 'TOK2'
+OPEN CODE    81    (1/81) * TEST COMPUTED AGO
+OPEN CODE    82         &I       SETA  0
+  GEN  PC LOC=  130 OP= PUSHA()=0
+  GEN  PC LOC=  131 OP= STORV(&I)=0
+OPEN CODE    83         .T1      AGO   (&I).T11,.T12,.T13
+  GEN  PC LOC=  132 OP= PUSHV(&I)=0
+  GEN  PC LOC=  133 OP= AGO(0)= NO BRANCH
+OPEN CODE    84                  MNOTE 'AGO NO BRANCH'
+OPEN CODE    84    (1/84)          MNOTE 'AGO NO BRANCH'
+OPEN CODE    85                  AGO    .E1
+ 
+OPEN CODE    92         &i       SETA  &I+1
+  GEN  PC LOC=  134 OP= PUSHV(&I)=0
+ADD 1 = 0 + 1
+  GEN  PC LOC=  135 OP= ADD(0,1)=1
+  GEN  PC LOC=  136 OP= STORV(&I)=1
+OPEN CODE    93                  AIF   (&I LE 4).T1
+  GEN  PC LOC=  137 OP= PUSHV(&I)=1
+  GEN  PC LOC=  138 OP= COMPLE(1,4)=1
+  GEN  PC LOC=  139 OP= AIF(1)=.T1 BRANCH
+ 
+OPEN CODE    83         .T1      AGO   (&I).T11,.T12,.T13
+  EXEC PC LOC=  132 OP= PUSHV(&I)=1
+  EXEC PC LOC=  133 OP= AGO(1)=.T11 BRANCH
+ 
+OPEN CODE    86         .T11     MNOTE '.T11'
+OPEN CODE    86    (1/86)          MNOTE '.T11'
+OPEN CODE    87                  AGO   .E1
+ 
+OPEN CODE    92         &i       SETA  &I+1
+  EXEC PC LOC=  134 OP= INC(&I)=2
+OPEN CODE    93                  AIF   (&I LE 4).T1
+  EXEC PC LOC=  137 OP= PUSHV(&I)=2
+  EXEC PC LOC=  138 OP= COMPLE(2,4)=1
+  EXEC PC LOC=  139 OP= AIF(1)=.T1 BRANCH
+ 
+OPEN CODE    83         .T1      AGO   (&I).T11,.T12,.T13
+  EXEC PC LOC=  132 OP= PUSHV(&I)=2
+  EXEC PC LOC=  133 OP= AGO(2)=.T12 BRANCH
+ 
+OPEN CODE    88         .T12     MNOTE '.T12'
+OPEN CODE    88    (1/88)          MNOTE '.T12'
+OPEN CODE    89                  AGO   .E1
+ 
+OPEN CODE    92         &i       SETA  &I+1
+  EXEC PC LOC=  134 OP= INC(&I)=3
+OPEN CODE    93                  AIF   (&I LE 4).T1
+  EXEC PC LOC=  137 OP= PUSHV(&I)=3
+  EXEC PC LOC=  138 OP= COMPLE(3,4)=1
+  EXEC PC LOC=  139 OP= AIF(1)=.T1 BRANCH
+ 
+OPEN CODE    83         .T1      AGO   (&I).T11,.T12,.T13
+  EXEC PC LOC=  132 OP= PUSHV(&I)=3
+  EXEC PC LOC=  133 OP= AGO(3)=.T13 BRANCH
+ 
+OPEN CODE    90         .T13     MNOTE '.T13'
+OPEN CODE    90    (1/90)          MNOTE '.T13'
+OPEN CODE    92         &i       SETA  &I+1
+  EXEC PC LOC=  134 OP= INC(&I)=4
+OPEN CODE    93                  AIF   (&I LE 4).T1
+  EXEC PC LOC=  137 OP= PUSHV(&I)=4
+  EXEC PC LOC=  138 OP= COMPLE(4,4)=1
+  EXEC PC LOC=  139 OP= AIF(1)=.T1 BRANCH
+ 
+OPEN CODE    83         .T1      AGO   (&I).T11,.T12,.T13
+  EXEC PC LOC=  132 OP= PUSHV(&I)=4
+  EXEC PC LOC=  133 OP= AGO(4)= NO BRANCH
+OPEN CODE    84                  MNOTE 'AGO NO BRANCH'
+OPEN CODE    84    (1/84)          MNOTE 'AGO NO BRANCH'
+OPEN CODE    85                  AGO    .E1
+ 
+OPEN CODE    92         &i       SETA  &I+1
+  EXEC PC LOC=  134 OP= INC(&I)=5
+OPEN CODE    93                  AIF   (&I LE 4).T1
+  EXEC PC LOC=  137 OP= PUSHV(&I)=5
+  EXEC PC LOC=  138 OP= COMPLE(5,4)=0
+  EXEC PC LOC=  139 OP= AIF(0)=.T1 NO BRANCH
+OPEN CODE    94    (1/94) *MCALL #=     8 LV= 1          WTO   'TESTMAC2 ENDED OK'
+ 
+WTO          34                  AIF   ('&N' EQ '').SKIPDS
+  EXEC PC LOC=   48 OP= PUSHV(&N)=''
+  EXEC PC LOC=   49 OP= COMPEQ('','')=1
+  EXEC PC LOC=   50 OP= AIF(1)=.SKIPDS BRANCH
+ 
+WTO          37                  AIF   (N'&SYSLIST LE 1).NPOK
+  EXEC PC LOC=   51 OP= PUSHV(&SYSLIST)=''
+  EXEC PC LOC=   52 OP= N'('')=1
+  EXEC PC LOC=   53 OP= COMPLE(1,1)=1
+  EXEC PC LOC=   54 OP= AIF(1)=.NPOK BRANCH
+ 
+WTO          41                  AIF   ('&MF' NE 'I').MF
+  EXEC PC LOC=   55 OP= PUSHV(&MF)='I'
+  EXEC PC LOC=   56 OP= COMPNE('I','I')=0
+  EXEC PC LOC=   57 OP= AIF(0)=.MF NO BRANCH
+WTO          42                  AIF   ('&TEXT' NE '').ERR2
+  EXEC PC LOC=   58 OP= PUSHV(&TEXT)=''
+  EXEC PC LOC=   59 OP= COMPNE('','')=0
+  EXEC PC LOC=   60 OP= AIF(0)=.ERR2 NO BRANCH
+WTO          43                  AIF   ('&MSG' EQ '').ERR3
+  EXEC PC LOC=   61 OP= PUSHV(&MSG)=''TESTMAC2 ENDED OK''
+  EXEC PC LOC=   62 OP= COMPEQ(''TESTMAC2 ENDED OK'','')=0
+  EXEC PC LOC=   63 OP= AIF(0)=.ERR3 NO BRANCH
+WTO          44         &MSGTEXT SETC  '&MSG'
+  EXEC PC LOC=   64 OP= PUSHV(&MSG)=''TESTMAC2 ENDED OK''
+  EXEC PC LOC=   65 OP= STORV(&MSGTEXT)=''TESTMAC2 ENDED OK''
+WTO          45                  AIF   ('&MSG'(1,1) EQ '''').WTOMSG
+  EXEC PC LOC=   66 OP= PUSHV(&MSG)=''TESTMAC2 ENDED OK''
+  EXEC PC LOC=   67 OP= PUSHA()=1
+  EXEC PC LOC=   68 OP= PUSHA()=1
+  EXEC PC LOC=   69 OP= SUBSTR(''TESTMAC2 ENDED OK'',1,1)='''
+  EXEC PC LOC=   70 OP= COMPEQ(''',''')=1
+  EXEC PC LOC=   71 OP= AIF(1)=.WTOMSG BRANCH
+ 
+WTO          49                  BRAS  1,*+(WTO#&SYSNDX._EOT-*+1)/2*2
+WTO          49    (3/49)+         BRAS  1,*+(WTO#0008_EOT-*+1)/2*2
+WTO          50                  DC    AL2(WTO#&SYSNDX._EOT-*,0),C&MSGTEXT
+WTO          50    (3/50)+         DC    AL2(WTO#0008_EOT-*,0),C'TESTMAC2 ENDED OK'
+WTO          51    (3/51)+WTO#0008_EOT     EQU *
+WTO          52    (3/52)+         SVC   35
+WTO          53                  MEXIT
+ 
+WTO          53    (3/53)+*MEXIT #=     8 LV= 1 WTO
+OPEN CODE    95    (1/95) *MCALL #=     9 LV= 1          SUBEXIT 
+LOADING FILE C:\Users\Achim\GitHub\z390\mac\SUBEXIT.MAC
+ 
+SUBEXIT      28                  AIF   ('&NAME' EQ '').SKIPDS
+  GEN  PC LOC=  135 OP= PUSHV(&NAME)=''
+  GEN  PC LOC=  136 OP= COMPEQ('','')=1
+  GEN  PC LOC=  140 OP= AIF(1)=.SKIPDS BRANCH
+ 
+SUBEXIT      31                  GBLB  &RENTOPT
+SUBEXIT      32                  AIF   ('&RC'(1,1) EQ '(').RCREG
+  GEN  PC LOC=  141 OP= PUSHV(&RC)='0'
+  GEN  PC LOC=  142 OP= PUSHA()=1
+  GEN  PC LOC=  143 OP= PUSHA()=1
+  GEN  PC LOC=  144 OP= SUBSTR('0',1,1)='0'
+  GEN  PC LOC=  145 OP= COMPEQ('0','(')=0
+  GEN  PC LOC=  146 OP= AIF(0)=.RCREG NO BRANCH
+SUBEXIT      33                  LA    15,&RC
+SUBEXIT      33    (4/33)+         LA    15,0
+SUBEXIT      34                  AGO   .CHKRENT
+ 
+SUBEXIT      38                  AIF   (&RENTOPT EQ 0).NORENT
+  GEN  PC LOC=  147 OP= PUSHV(&RENTOPT)=0
+  GEN  PC LOC=  148 OP= COMPEQ(0,0)=1
+  GEN  PC LOC=  149 OP= AIF(1)=.NORENT BRANCH
+ 
+SUBEXIT      50    (4/50)+         L     13,4(,13)
+SUBEXIT      51    (4/51)+         L     14,12(,13)
+SUBEXIT      52    (4/52)+         LM    2,12,28(13)
+SUBEXIT      53    (4/53)+         BR    14
+SUBEXIT      53    (4/53)+*MEXIT #=     9 LV= 1 SUBEXIT
+OPEN CODE    96                  AGO   .EXIT
+ 
+OPEN CODE    99    (1/99)          END 
+MZ390I total mnote warnings  = 0
+MZ390I total mnote errors    = 0
+MZ390I max   mnote level     = 0
+MZ390I total mz390 errors    = 0
+MZ390I total az390 errors    = 0
+TESTMAC2  MZ390 ENDED RC= 0 IO=1421

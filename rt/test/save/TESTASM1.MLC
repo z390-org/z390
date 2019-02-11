@@ -1,0 +1,240 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2005-10-03 DSH RPI-9   Test length operator in INS and DC         *
+* 2005-11-13 DSH RPI-87  Test ORG preceded by ABS value CALC        *
+* 2005-11-13 DSH RPI-90  Test single character B,C,X symbols        *
+* 2006-01-13 DSH RPI-171 Test unary operators                       *
+* 2006-03-16 DSH RPI-230 Test COM, RSECT, START limited support     *
+* 2006-03-17 DSH RPI-228 Test CVTDCB macro OS flag indicating       *
+*                        31 bit and MVS+                            *
+* 2006-03-21 DSH RPI-258 Test ORG , delimiter                       *
+* 2006-04-12 DSH RPI-278 Test PUSH, POP NOPRINT                     *
+* 2006-04-24 DSH RPI-291 Test ENQ/DEQ macros                        *
+* 2006-04-28 DSH RPI-304 Test PRINT DATA,NOPRINT                    *
+* 2006-05-12 DSH RPI-313 Add unary op test and L'OP in continued    *
+*                        statement test                             *
+* 2006-07-03 DSH RPI-342 Test operands with L' operators            *
+* 2006-07-19 DSH RPI-365 Test literal as target of L'               *
+* 2006-07-19 DSH RPI-369 Test ignoring 4th and 5th EQU parameters   *
+* 2006-08-27 DSH RPI-415 Correct value of EQU 5th parameter         *
+* 2006-09-26 DSH RPI-465 Test using R0 for PSA type DSECT           *
+* 2006-11-09 DSH RPI-489 Test B macro LAB, entry FWD reference      *
+* 2006-11-12 DSH RPI-492 Test blank continuation lines              *
+* 2006-11-12 DSH RPI-493 Test OPSYN with no operands and IPK with   *
+*                        no comma                                   *
+* 2006-11-12 DSH RPI-494 Test DS BIT LENGTH SUPPORT FOR LAST FIELD  *
+* 2006-11-28 DSH RPI-501 Test literal-ABS expression                *
+* 2007-08-22 DSH RPI-673 Test drop with expression 1+1 etc.         *
+* 2007-11-30 DSH RPI-743 Test comment on prototype , CNOP ATTR I,   *
+*                        PUNCH CMTS                                 *
+* 2007-11-30 DSH RPI-745 Test AREAD skip NOPRINT, NOSTMT, SUPPORT   *
+*                        CLOCKB/D                                   *
+* 2008-04-23 DSH RPI-835 Test * in SETC LABEL VAR created comment   *
+* 2008-10-27 DSH RPI-929 Test * in SETC LABEL VAR created comment   *
+*********************************************************************
+
+         TITLE 'TESTASM1 - MISC ASSEMBLER TESTS'
+
+         START , RPI-230 TEST START CSECT
+         USING *,R15
+         PUSH  USING,NOPRINT
+         POP   USING,NOPRINT
+         PRINT DATA,NOPRINT
+         L     R15,=A(TESTASM1)
+         BR    R15
+         DROP  R15
+         LTORG
+TESTASM1 RT1   MAIN
+         EQUREGS
+F1       DC    A(0)
+F2       DC    A(L'X2)
+A        DC    C'ABC'
+         ORG   A
+         DC    C'12'
+         ORG
+         DC    C'D'
+* TEST ORG AFTER ABS
+RPI87    DC    C'ABCD'
+ABS1     EQU   0
+         ORG   RPI87+1
+         DC    C'XX'
+ABS2     EQU   0
+         ORG
+* TEST ORG COMMA DELIMITER
+         ORG    *-16   BACKUP  16
+         ORG    ,      FORWARD 16 AGAIN
+* TEST B,C,X SYMBOLS
+B        DC    C'B'
+C        DC    C'C'
+X        DC    C'X'
+X3       DS    0CL10
+Y3       DC    CL2'12'
+         DC    CL8'34567890'
+TRFIELD  DC    X'F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF'
+         RT1   START
+* TEST ALIGNMENT OPERATOR
+         CNOP  0,4
+         CNOP  2,4
+         CNOP  0,4
+         CNOP  0,8
+         CNOP  6,8
+         CNOP  4,8
+         CNOP  2,8
+         CNOP  0,8
+* TEST LENGTH OPERATOR
+X2       MVC   F1(L'F2),F2
+         RT1   CCE,F1,=A(6)
+* TEST ORG VALUE AFTER OVERLAY
+         CLC   A(4),=C'12CD'
+         RT1   CCE
+* TEST ORG AFTER ABS VALUE CALC FOR RPI87
+         CLC   RPI87(4),=C'AXXD'
+         RT1   CCE
+* TEST B,C,X SYMBOLS FOR RPI90
+         CLI   B,C'B'
+         RT1   CCE
+         CLI   C,C'C'
+         RT1   CCE
+         CLI   X,C'X'
+         RT1   CCE
+* TEST UNARY OPERATORS
+         CLC   =A(-1),=A(1-2)
+         RT1   CCE
+         CLC   =A(--1),=A(1)
+         RT1   CCE
+         CLC   =A(-1*-1),=A(1)
+         RT1   CCE
+         CLC   =A(-1*(-1+2)),=A(1-2)
+         RT1   CCE
+         CLC   =A(+1*+1),=A(1)
+         RT1   CCE
+         CLC   =A(+1*(+1+2)),=A(3)
+         RT1   CCE
+         CLC   =A(-(2-1)),=A(-1)     RPI-313
+         RT1   CCE
+* TEST L' IN OPERANDS
+         MACRO
+         TEST  &A,&B
+         MVC   &A(1).(&A(2)),&B
+         MEND
+         TEST  (X3+L'Y3,L'X3-L'Y3),=8C'X'
+         RT1   CCE,X3,=C'12XXXXXXXX'
+         LA    L'X,                  RPI-313 TEST L' IN COMMA CONT.    X
+               2
+         CL    1,=A(2)
+         RT1   CCE
+         L     R1,=A(MYCOM)
+         CALL  MYRSECT
+* TEST L'=CL3'ABC'
+         CLI   =AL1(3),L'=C'ABC'
+         RT1   CCE
+* TEST EQU IGNORE 4TH AND 5TH
+x1       equ   1,2,3,4,gr
+         CLI   =AL1(1),X1
+         RT1   CCE
+* IGNORE ACONTROL AND ALIAS
+         ACONTROL
+         ALIAS
+* TEST USING R0 FOR PSA TYPE DSECT
+         USING PSA,0
+         LA    1,OLDPSW
+         CLC   1,=A(OLDPSW-PSA)
+         RT1   CCE
+* TEST ENTRY TO FWD REF MAC LABEL
+         ENTRY TESTENT
+TESTENT  WTO   'ENTRY TESTEND TEST'
+         WTO   'TEST BLANK CONTINUATION'                               X
+
+* TEST IPK OPSYN WITH NO OPERANDS AND IPK WITH NO OPERANDS OR COMMA
+         B     SKIP_IPK
+_IPK     OPSYN IPK
+         _IPK
+         IPK
+SKIP_IPK EQU   *
+* TEST BIT LENGTH DS LAST FIELD SUPPORT
+         CLC   =AL1(L'B15),=AL1(2)
+         RT1   CCE
+* TEST LITERAL = ABS EXP.
+         TR    TRFIELD,=C'0123456789ABCDEF'-X'F0'
+         CLC   TRFIELD,=C'0123456789ABCDEF'
+         RT1   CCE
+* TEST DROP WITH EXPRESSION
+         USING *,15
+         USING X4,2
+         LA    1,X4
+         DROP  1+1
+         LA    1,X4
+         USING X4,2
+         DROP  1+1,15
+* RPI-743 test CNOP LABEL ATTR I
+CNOPLAB  CNOP  0,4
+         AIF   (T'CNOPLAB EQ 'I').CNOPOK
+         MNOTE 8,'CNOP LABEL TYPE NOT I'
+         AGO  .CNOPEND
+.CNOPOK  ANOP
+         MNOTE 'CNOP TYPE I OK'
+.CNOPEND ANOP
+* RPI-743 test comment on prototype after last keyword parm
+         TESTASM1
+         PUNCH ' PHASE SECTEXIT,*'  *BX
+* RPI-743 test PUNCH with following comments
+         PUNCH ' PHASE SECTEXIT,*'  *BX
+* RPI-745 test AREAD with CLOCKB and CLOCKD
+&TOD     AREAD NOPRINT,NOSTMT,CLOCKB
+&SS      SETA  &TOD/100
+&MM      SETA  &SS/60
+&DHH      SETA  &MM/60
+&DMM      SETA  &MM-&DHH*60
+&DSS      SETA  &SS-60*(&DMM+60*&DHH))
+&DTH      SETA  &TOD-&SS*100
+         MNOTE 'CLOCKB=&TOD HH=&DHH MM=&DMM SS=&DSS TH=&DTH'
+&TOD     AREAD CLOCKD
+         MNOTE 'CLOCKD=&TOD'
+* RPI-835 * IN LABEL VAR CREATES COMMENT
+&COMM    SETC  '* THIS IS TEST FOR RPI-835'
+&COMM
+* RPI-929 * IN LABEL VAR CREATES COMMENT REGUARDLESS OF OPCODE
+&COMM    SETC  '* SETC COMMENT 1'
+&COMM
+&COMM    SETC  '* EQU  COMMENT 2'
+&COMM
+*
+* END OF TESTS
+*
+         WTO   'TEST1 ENDED OK'
+         RT1   END
+         LTORG
+X4       DS    X
+MYCOM    COM   , RPI-230 TEST COM SECTION (NO LINKER SUPPORT YET)
+MYCOM1   DC    F'123'
+MYCOM2   DC    F'456'
+MYRSECT  RSECT , RPI-230 TEST RSECT (NO WARNINGS YET)
+         USING *,R15
+         CLC   0(8,R1),=F'123,456'
+         BNE   1
+         L     R1,16
+         USING IHACVT,R1
+         CLI   CVTDCB,X'9B'  VERIFY X'80' 31 BIT AND X'13' MVS+ SUPPORT
+         BNE   1
+         ENQ   (QN,RN)
+         DEQ   (QN,RN)
+         BR    14
+QN       DC    CL8'IEAXXXXX'
+RN       DC    CL8'STEPNAME'
+         LTORG
+         CVTD
+PSA      DSECT
+         ORG   PSA+X'20'
+OLDPSW   DS    XL8
+B15      DS    BL.015   2 BYTES
+         END

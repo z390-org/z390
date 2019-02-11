@@ -1,0 +1,59 @@
+*********************************************************************
+* Copyright 2008 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2008-12-10  DSH         Initial version                           *
+* 2008-12-10  DSH RPI-956 Initial test for AINSERT for AREAD/SOURCE *
+*********************************************************************
+
+         MACRO
+         TEST1
+         AINSERT 'RECORD 2 &SYSTIME',FRONT
+         AINSERT 'RECORD 3 &SYSTIME',BACK
+         AINSERT 'RECORD 1 &SYSTIME',FRONT
+&REC     AREAD
+         MNOTE 'AREAD AINSERT 1 = &REC'
+&REC     AREAD
+         MNOTE 'AREAD AINSERT 2 = &REC'
+&REC     AREAD
+         MNOTE 'AREAD AINSERT 3 = &REC'
+         MEND
+         MACRO
+         TEST2
+         AINSERT ' MNOTE ''SOURCE AINSERT 1''',BACK
+         AINSERT ' MNOTE ''SOURCE AINSERT 2''',BACK
+         AINSERT ' MNOTE ''SOURCE AINSERT 3''',BACK
+         AINSERT ' MACRO',BACK
+         AINSERT ' TEST3',BACK
+         AINSERT ' MNOTE ''HELLO FROM TEST3 INSERTED MACRO''',BACK
+         AINSERT ' MEND',BACK
+         AINSERT ' MACRO',BACK
+         AINSERT ' TEST4 &&P1, 3456789012345678901234567890123456789012X
+               3456789012345678901X',BACK  NOTE ADD 1 MORE FOR &&
+         AINSERT '               &&K1=''K1V'', 789012345678901234567890X
+               123456789012345678901X',BACK NOTE ADD 3 FOR &&,'',''
+         AINSERT '               &&K2=''K2V''',BACK
+         AINSERT ' MNOTE ''TEST4 K1=&&K1 K2=&&K2''',BACK
+         AINSERT '&&I SETA 5',BACK
+         AINSERT '.LOOP ANOP',BACK
+         AINSERT ' MNOTE ''TEST4 I=&&I''',BACK
+         AINSERT '&&I SETA &&I-1',BACK
+         AINSERT ' AIF (&&I GT 0).LOOP',BACK
+         AINSERT ' MEND',BACK
+         MEND
+TESTAIN1 SUBENTRY
+         WTO   'TEST1 STARTED'
+         TEST1
+         TEST2
+         TEST3
+         TEST4
+         WTO   'TEST1 ENDED'
+         SUBEXIT
+         END

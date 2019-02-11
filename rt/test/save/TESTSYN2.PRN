@@ -1,0 +1,103 @@
+TESTSYN2  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSYN2
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  sysmac(mac+rt\test) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000138 TYPE=CST NAME=TESTSYN2
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2006 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Note: Needs extra macro file rt\test\TESTSYN2.MAC                 *
+000000                                      (1/11)11 *                                                                   *
+000000                                      (1/12)12 * Author - Don Higgins                                              *
+000000                                      (1/13)13 *********************************************************************
+000000                                      (1/14)14 * 2006-04-30  DSH         Initial version                           *
+000000                                      (1/15)15 * 2006-04-30  DSH RPI-306 Test OPSYN for MACRO VS OPCODE            *
+000000                                      (1/16)16 * 2007-03-06  DSH RPI-352 Test OPSYN redefine of MAC OP             *
+000000                                      (1/17)17 * 2006-08-07  DSH RPI-403 Test OPCODE used before first and after   *
+000000                                      (1/18)18 *                         last restore                              *
+000000                                      (1/19)19 *********************************************************************
+000000                                      (1/21)20 TESTSYN2 SUBENTRY 
+000000                                      (2/78)21+TESTSYN2 CSECT 
+000000 90ECD00C                            (2/168)22+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)23+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)24+         DC    18F'0'
+000050 E3C5E2E3E2E8D5F2                    (2/171)25+         DC    CL8'TESTSYN2'
+000058 F0F161F0F261F0F5                    (2/172)26+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)27+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)28+         ST    15,8(13)
+00006C 50DF0004                            (2/175)29+         ST    13,4(15)
+000070 18DF                                (2/176)30+         LR    13,15
+000072                                     (2/189)31+         USING TESTSYN2+8,13
+LISTUSE TESTSYN2 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/22)33          WTO   'TESTSYN2 STARTED'
+000072 A715000C                00008A       (3/49)34+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00140000E3C5E2E3                     (3/50)35+         DC    AL2(WTO#0002_EOT-*,0),C'TESTSYN2 STARTED'
+00008A                  0000008A            (3/51)36+WTO#0002_EOT     EQU *
+00008A 0A23                                 (3/52)37+         SVC   35
+00008C 47F0D09E                0000A6       (1/23)39          B     SKIPDC
+000090 C4C340C2C5C6D6D9                     (1/24)40          DC    C'DC BEFORE FIRST OPSYN'
+0000A6                                      (1/25)41 SKIPDC   DS    0H
+0000A6                                      (1/26)42          PUSH  PRINT
+0000A6                                      (1/27)43 _PUSH    OPSYN PUSH
+0000A6                                      (1/28)44 PUSH     OPSYN TESTSYN2  * Using extra macro file here
+0000A6                                      (1/29)45          PUSH  123
+0000A6 A7150013                0000CC       (3/49)47+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+0000AA 00210000E6E3D640                     (3/50)48+         DC    AL2(WTO#0004_EOT-*,0),C'WTO FROM TESTSYN2 WITH P1=123'
+0000CB                  000000CB            (3/51)49+WTO#0004_EOT     EQU *
+0000CC 0A23                                 (3/52)50+         SVC   35
+0000CE                                      (1/30)53 TESTSYNX OPSYN TESTSYN2
+0000CE                                      (1/31)54          TESTSYNX ABC
+0000CE A7150013                0000F4       (3/49)56+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000D2 00210000E6E3D640                     (3/50)57+         DC    AL2(WTO#0006_EOT-*,0),C'WTO FROM TESTSYN2 WITH P1=ABC'
+0000F3                  000000F3            (3/51)58+WTO#0006_EOT     EQU *
+0000F4 0A23                                 (3/52)59+         SVC   35
+0000F6                                      (1/32)62          WTO   'TESTSYN2 ENDED'
+0000F6 A715000B                00010C       (3/49)63+         BRAS  1,*+(WTO#0007_EOT-*+1)/2*2
+0000FA 00120000E3C5E2E3                     (3/50)64+         DC    AL2(WTO#0007_EOT-*,0),C'TESTSYN2 ENDED'
+00010C                  0000010C            (3/51)65+WTO#0007_EOT     EQU *
+00010C 0A23                                 (3/52)66+         SVC   35
+00010E                                      (1/33)68          SUBEXIT 
+00010E 41F00000                             (5/33)69+         LA    15,0
+000112 58D0D004                             (5/50)70+         L     13,4(,13)
+000116 58E0D00C                             (5/51)71+         L     14,12(,13)
+00011A 982CD01C                             (5/52)72+         LM    2,12,28(13)
+00011E 07FE                                 (5/53)73+         BR    14
+000120                                      (1/34)75 * TEST DC AFTER
+000120                                      (1/35)76 DCX      OPSYN DC
+000120                                      (1/36)77 DC       OPSYN MNOTE
+000120                                      (1/37)78          MNOTE 'DC MNOTE'
+000120                                      (1/38)79 DC       OPSYN DCX
+000120 C4C340C1C6E3C5D9                     (1/39)80          DC    C'DC AFTER OPSYN RESTORE'
+000136                                      (1/40)81          END 
+
+Symbol Table Listing
+
+ SYM=SKIPDC   LOC=000000A6 LEN=00000002 ESD=0001 TYPE=REL  XREF=41 39 
+ SYM=TESTSYN2 LOC=00000000 LEN=00000138 ESD=0001 TYPE=CST  XREF=21 31 
+ SYM=WTO#0002_EOT LOC=0000008A LEN=00000001 ESD=0001 TYPE=REL  XREF=36 34 35 
+ SYM=WTO#0004_EOT LOC=000000CB LEN=00000001 ESD=0001 TYPE=REL  XREF=49 47 48 
+ SYM=WTO#0006_EOT LOC=000000F3 LEN=00000001 ESD=0001 TYPE=REL  XREF=58 56 57 
+ SYM=WTO#0007_EOT LOC=0000010C LEN=00000001 ESD=0001 TYPE=REL  XREF=65 63 64 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSYN2  MZ390 ENDED RC= 0 IO=621

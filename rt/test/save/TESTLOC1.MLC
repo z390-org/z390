@@ -1,0 +1,29 @@
+*********************************************************************
+* Copyright 2006 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2006-04-28 DSH         Initial version                            *
+* 2006-04-28 DSH RPI-301 Test multiple LOCTRS and USING             *
+*********************************************************************
+
+         TITLE 'TESTLOC1 - TEST MULIPLE LOCTRS'
+
+TESTLOC1 SUBENTRY
+INS      LOCTR
+         WTO   'TESTLOC1 STARTED'
+DATA     LOCTR
+X        DS    X
+INS      LOCTR
+         LA    1,X
+         CL    1,=A(X)
+         BNE   1
+         WTO   'TESTLOC1 ENDED OK'
+         SUBEXIT
+         END

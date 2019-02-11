@@ -1,0 +1,11 @@
+TESTERR6  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTERR6.390
+EZ390I options = notiming stats systerm(rt\test\RTTEST)
+TESTERR6 TEST INVALID DCB VALIDATION AT EXECUTION
+EZ390E error  80 Invalid DCB address or ID at DCB=(000FFE18)=00C3C2E5F1F0F0F1
+EZ390I total errors         = 1
+TESTERR6  EZ390 ENDED RC=16 IO=181 INS=11

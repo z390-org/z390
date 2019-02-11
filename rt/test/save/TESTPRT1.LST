@@ -1,0 +1,12 @@
+TESTPRT1  LZ390 START
+LZ390I Copyright 2011 Automated Software Tools Corporation
+LZ390I Copyright 2013 Cat Herder Software, LLC
+LZ390I Copyright 2018 Joachim Bartz, Germany
+LZ390I z390 is licensed under GNU General Public License
+LZ390I options = @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+LZ390I program = rt\test\TESTPRT1.OBJ
+LZ390I ESD=TESTPRT1 LOC=00000000 LEN=000001A8
+LZ390I INCLUDE = rt\test\TESTPRT1.OBJ
+LZ390I total errors         = 0
+TESTPRT1  LZ390 ENDED RC= 0 IO=221

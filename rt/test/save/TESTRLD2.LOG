@@ -1,0 +1,13 @@
+TESTRLD2  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTRLD2.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  NOLOADHIGH TRACE systerm(rt\test\RTTEST)
+TESTRLD2 STARTED
+SUB2 ENTERED OK
+TESTRLD2 ENDING OK
+EZ390I total errors         = 0
+TESTRLD2  EZ390 ENDED RC= 0 IO=161 INS=29

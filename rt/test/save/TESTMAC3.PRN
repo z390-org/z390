@@ -1,0 +1,113 @@
+TESTMAC3  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTMAC3
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000000E8 TYPE=CST NAME=TESTMAC3
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH         Initial version                           *
+000000                                      (1/13)13 * 2005-12-30  DSH RPI-49  Test redefine of instruction via inline   *
+000000                                      (1/14)14 *                         macro                                     *
+000000                                      (1/15)15 * 2006-01-22  DSH RPI-178 Test macro defining local overriding      *
+000000                                      (1/16)16 *                         global                                    *
+000000                                      (1/17)17 * 2006-01-22  DSH RPI-179 Test macro expanding arrays               *
+000000                                      (1/18)18 *********************************************************************
+000000                                      (1/20)19 TESTMAC3 SUBENTRY 
+000000                                      (2/78)20+TESTMAC3 CSECT 
+000000 90ECD00C                            (2/168)21+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)22+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)23+         DC    18F'0'
+000050 E3C5E2E3D4C1C3F3                    (2/171)24+         DC    CL8'TESTMAC3'
+000058 F0F161F0F261F0F5                    (2/172)25+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)26+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)27+         ST    15,8(13)
+00006C 50DF0004                            (2/175)28+         ST    13,4(15)
+000070 18DF                                (2/176)29+         LR    13,15
+000072                                     (2/189)30+         USING TESTMAC3+8,13
+LISTUSE TESTMAC3 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/21)32          WTO   'TESTMAC3 - TEST REDEFINE INSTRUCTION VIA INLINE MACRO'
+000072 A715001F                0000B0       (3/49)34+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00390000E3C5E2E3                     (3/50)35+         DC    AL2(WTO#0002_EOT-*,0),C'TESTMAC3 - TEST REDEFINE INSTRUCTION VIA INLINE MACRO'
+0000AF                  000000AF            (3/51)37+WTO#0002_EOT     EQU *
+0000B0 0A23                                 (3/52)38+         SVC   35
+0000B2                                      (1/22)40 * TEST REDEFINE OF B AS BRC
+0000B2                                      (1/23)41          MACRO
+0000B2                                      (1/24)42 &N       B     &P1
+0000B2                                      (1/25)43 &N       BRC   15,&P1
+0000B2                                      (1/26)44          MEND
+0000B2                                      (1/27)45 A        B     B
+0000B2 A7F40002                0000B6       (1/25)46+A        BRC   15,B
+0000B6                                      (1/28)48 B        B     *+4
+0000B6 A7F40002                0000BA       (1/25)49+B        BRC   15,*+4
+0000BA                                      (1/29)51 * TEST REDEFINE OF GLOBAL AS LOCAL FOR NEW MACRO
+0000BA                                      (1/30)52          MACRO
+0000BA                                      (1/31)53          DEFG1
+0000BA                                      (1/32)54          GBLC  &X
+0000BA                                      (1/33)55 &X       SETC  'GLOBAL'
+0000BA                                      (1/34)56          MNOTE 'DEFG1 X=&X'
+0000BA                                      (1/35)57          MEND
+0000BA                                      (1/36)58          DEFG1 
+0000BA                                      (1/34)59+         MNOTE 'DEFG1 X=GLOBAL'
+0000BA                                      (1/37)61          MACRO
+0000BA                                      (1/38)62          DEFL1
+0000BA                                      (1/39)63          LCLC  &X
+0000BA                                      (1/40)64 &X       SETC  'LOCAL'
+0000BA                                      (1/41)65          MNOTE 'DEFL1 X=&X'
+0000BA                                      (1/42)66          MEND
+0000BA                                      (1/43)67          DEFL1 
+0000BA                                      (1/41)68+         MNOTE 'DEFL1 X=LOCAL'
+0000BA                                      (1/44)70          MACRO
+0000BA                                      (1/45)71          DEFG2
+0000BA                                      (1/46)72          GBLC  &X
+0000BA                                      (1/47)73          MNOTE 'DEFG2 X=&X'
+0000BA                                      (1/48)74          MEND
+0000BA                                      (1/49)75          DEFG2 
+0000BA                                      (1/47)76+         MNOTE 'DEFG2 X=GLOBAL'
+0000BA                                      (1/50)78 * TEST MACRO ARRAY EXPANSION
+0000BA                                      (1/66)79          MNOTE 'A AND B EXPANSION OK'
+0000BA                                      (1/72)80          WTO   'TESTMAC3 ENDED OK'
+0000BA A715000D                0000D4       (3/49)81+         BRAS  1,*+(WTO#0008_EOT-*+1)/2*2
+0000BE 00150000E3C5E2E3                     (3/50)82+         DC    AL2(WTO#0008_EOT-*,0),C'TESTMAC3 ENDED OK'
+0000D3                  000000D3            (3/51)83+WTO#0008_EOT     EQU *
+0000D4 0A23                                 (3/52)84+         SVC   35
+0000D6                                      (1/73)86          SUBEXIT 
+0000D6 41F00000                             (4/33)87+         LA    15,0
+0000DA 58D0D004                             (4/50)88+         L     13,4(,13)
+0000DE 58E0D00C                             (4/51)89+         L     14,12(,13)
+0000E2 982CD01C                             (4/52)90+         LM    2,12,28(13)
+0000E6 07FE                                 (4/53)91+         BR    14
+0000E8                                      (1/74)93          END 
+
+Symbol Table Listing
+
+ SYM=A        LOC=000000B2 LEN=00000004 ESD=0001 TYPE=REL  XREF=46 
+ SYM=B        LOC=000000B6 LEN=00000004 ESD=0001 TYPE=REL  XREF=49 46 
+ SYM=TESTMAC3 LOC=00000000 LEN=000000E8 ESD=0001 TYPE=CST  XREF=20 30 
+ SYM=WTO#0002_EOT LOC=000000AF LEN=00000001 ESD=0001 TYPE=REL  XREF=37 34 35 
+ SYM=WTO#0008_EOT LOC=000000D3 LEN=00000001 ESD=0001 TYPE=REL  XREF=83 81 82 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTMAC3  MZ390 ENDED RC= 0 IO=656

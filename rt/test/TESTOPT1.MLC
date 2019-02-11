@@ -1,0 +1,23 @@
+*********************************************************************
+* Copyright 2007 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2007-11-30  DSH         Initial version                           *
+* 2007-11-30  DSH RPI-742 Test nested @FILE options using command   *
+*                         RT1 RT\TEST\TESTOPT1 @TESTOPT1            *
+*                         See options in TESTOPT1.OPT, TESTOPTA.OPT,*
+*                         TESTOPTB.OPT                              *
+* 2008-07-21  DSH RPI-877 Test nested @FILE options with all options*
+*********************************************************************
+
+TESTOPT1 SUBENTRY
+         WTO   'TESTOPT1 TEST NESTED @FILE OPTIONS'
+         SUBEXIT
+         END

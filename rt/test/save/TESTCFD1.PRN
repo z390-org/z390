@@ -1,0 +1,1763 @@
+TESTCFD1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTCFD1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00001068 TYPE=CST NAME=TESTCTD1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2006 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2006-07-19 DSH         Initial version                            *
+000000                                      (1/13)13 * 2006-11-10 DSH RPI-477 Add ASCII support to CTD and CFD,          *
+000000                                      (1/14)14 *                        use IN=,OUPT=                              *
+000000                                      (1/15)15 * 2006-11-29 DSH RPI-507 Support IN=REG in addition to IN=(REG ADDR)*
+000000                                      (1/16)16 * 2006-12-02 DSH RPI-511 Support floating point format for INT128   *
+000000                                      (1/17)17 *                        input                                      *
+000000                                      (1/18)18 * 2006-12-03 DSH RPI-513 Add RC test                                *
+000000                                      (1/19)19 * 2006-12-11 DSH RPI-514 Add DFP DD, ED, and LD tests               *
+000000                                      (1/20)20 * 2008-01-14 DSH RPI-786 Use DFP COMP to handle diff canonizations  *
+000000                                      (1/21)21 * 2008-04-22 DSH RPI-833 Add string quotes for HLASM compatibility  *
+000000                                      (1/22)22 *********************************************************************
+000000                                      (1/24)23          PRINT DATA
+000000                                      (1/26)24 TESTCTD1 RT1   MAIN
+000000                                      (3/78)26+TESTCTD1 CSECT 
+000000 90ECD00C                            (3/168)27+         STM   14,12,12(13)
+000004 45FF0068                            (3/169)28+         BAL   15,104(15)
+000008 0000000000000000                    (3/170)29+         DC    18F'0'
+000010 0000000000000000
+000018 0000000000000000
+000020 0000000000000000
+000028 0000000000000000
+000030 0000000000000000
+000038 0000000000000000
+000040 0000000000000000
+000048 0000000000000000
+000050 E3C5E2E3C3E3C4F1                    (3/171)30+         DC    CL8'TESTCTD1'
+000058 F0F161F0F261F0F5                    (3/172)31+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (3/173)32+         DC    CL8'22.33'
+000068 50FD0008                            (3/174)33+         ST    15,8(13)
+00006C 50DF0004                            (3/175)34+         ST    13,4(15)
+000070 18DF                                (3/176)35+         LR    13,15
+000072                                     (3/189)36+         USING TESTCTD1+8,13
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072 A715000E                00008E       (4/49)39+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+000076 00180000E3C5E2E3                     (4/50)40+         DC    AL2(WTO#0003_EOT-*,0),C'TESTCTD1 RT1 STARTED'
+00007E C3E3C4F140D9E3F1
+000086 40E2E3C1D9E3C5C4
+00008E                  0000008E            (4/51)41+WTO#0003_EOT     EQU *
+00008E 0A23                                 (4/52)42+         SVC   35
+000090 C0F4000000A1            0001D2       (2/66)44+         BRCL    15,RT1_START
+000096                                      (2/67)45+RT1_ABORT DS 0H
+000096 92E3D137                00013F       (2/68)46+         MVI   RT1_ABORTED,C'T'
+00009A A7150012                0000BE       (4/49)48+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+00009E 00200000E3C5E2E3                     (4/50)49+         DC    AL2(WTO#0004_EOT-*,0),C'TESTCTD1 RT1 TESTING ABORTED'
+0000A6 C3E3C4F140D9E3F1
+0000AE 40E3C5E2E3C9D5C7
+0000B6 40C1C2D6D9E3C5C4
+0000BE                  000000BE            (4/51)50+WTO#0004_EOT     EQU *
+0000BE 0A23                                 (4/52)51+         SVC   35
+0000C0                                      (2/70)53+RT1_END  DS    0H
+0000C0 D205D131D138     000139 000140       (2/71)54+         MVC   RT1_DTOT,=X'402020202020'
+0000C6 DE05D131D10A     000139 000112       (2/72)55+         ED    RT1_DTOT,RT1_TOT
+0000CC 4110D10E                000116       (4/61)57+         LA    1,RT1_WTO1
+0000D0 0A23                                 (4/66)58+         SVC   35
+0000D2 95E3D137                00013F       (2/74)60+         CLI   RT1_ABORTED,C'T'
+0000D6 4780D104                00010C       (2/75)61+         BE    RT1_DUMP
+0000DA A715000F                0000F8       (4/49)63+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000DE 00190000E3C5E2E3                     (4/50)64+         DC    AL2(WTO#0006_EOT-*,0),C'TESTCTD1 RT1 ENDED OK'
+0000E6 C3E3C4F140D9E3F1
+0000EE 40C5D5C4C5C440D6
+0000F6 D2
+0000F7                  000000F7            (4/51)65+WTO#0006_EOT     EQU *
+0000F8 0A23                                 (4/52)66+         SVC   35
+0000FA 41F00000                             (5/33)69+         LA    15,0
+0000FE 58D0D004                             (5/50)70+         L     13,4(,13)
+000102 58E0D00C                             (5/51)71+         L     14,12(,13)
+000106 982CD01C                             (5/52)72+         LM    2,12,28(13)
+00010A 07FE                                 (5/53)73+         BR    14
+00010C                                      (2/78)75+RT1_DUMP DS    0H
+00010C 41100065                             (6/39)77+         LA   1,101
+000110 0A0D                                 (6/47)78+         SVC  13 ABEND R1=COMP CODE AND HIGH BIT = DUMP PGM STORAGE
+000112                  0000000B            (2/80)80+RT1_LINK EQU   11
+000112                  00000112            (2/81)81+RT1_DATA EQU   *
+000112 00000C                               (2/82)82+RT1_TOT  DC    PL3'0' TOTAL RT1 TESTS COMPLETED
+000115 1C                                   (2/83)83+RT1_ONE  DC    P'1'
+000116 00290000E3C5E2E3                     (2/84)84+RT1_WTO1 DC    AL2(RT1_WTO_END-*,0),C'TESTCTD1 RT1 TESTS COMPLETED = '
+00011E C3E3C4F140D9E3F1
+000126 40E3C5E2E3E240C3
+00012E D6D4D7D3C5E3C5C4
+000136 407E40
+000139 40E9E9E9E9E9                         (2/85)85+RT1_DTOT DC    CL6' ZZZZZ'
+00013F                  0000013F            (2/86)86+RT1_WTO_END EQU *
+00013F C6                                   (2/87)87+RT1_ABORTED DC C'F'
+000140                                      (2/88)88+         LTORG 
+000140 402020202020     =X'402020202020'
+000146                                      (2/89)89+RT1_TEST_CC0  DS    0H
+000146 4770D08E                000096       (2/90)90+         BNE   RT1_ABORT
+00014A                                      (2/91)91+RT1_OK   DS    0H
+00014A FA20D10AD10D     000112 000115       (2/92)92+         AP    RT1_TOT,RT1_ONE
+000150 07FB                                 (2/93)93+         BR    RT1_LINK
+000152                                      (2/94)94+RT1_TEST_CC1  DS    0H
+000152 47B0D08E                000096       (2/95)95+         BNL   RT1_ABORT
+000156 FA20D10AD10D     000112 000115       (2/96)96+         AP    RT1_TOT,RT1_ONE
+00015C 07FB                                 (2/97)97+         BR    RT1_LINK
+00015E                                      (2/98)98+RT1_TEST_CC2  DS    0H
+00015E 47D0D08E                000096       (2/99)99+         BNH   RT1_ABORT
+000162 FA20D10AD10D     000112 000115     (2/100)100+         AP    RT1_TOT,RT1_ONE
+000168 07FB                               (2/101)101+         BR    RT1_LINK
+00016A                                    (2/102)102+RT1_TEST_CC3  DS    0H
+00016A 47E0D08E                000096     (2/103)103+         BNO   RT1_ABORT
+00016E FA20D10AD10D     000112 000115     (2/104)104+         AP    RT1_TOT,RT1_ONE
+000174 07FB                               (2/105)105+         BR    RT1_LINK
+000176                                    (2/106)106+RT1_TEST_CCGE  DS    0H
+000176 4740D08E                000096     (2/107)107+         BL    RT1_ABORT
+00017A FA20D10AD10D     000112 000115     (2/108)108+         AP    RT1_TOT,RT1_ONE
+000180 07FB                               (2/109)109+         BR    RT1_LINK
+000182                                    (2/110)110+RT1_TEST_CCLE  DS    0H
+000182 4720D08E                000096     (2/111)111+         BH    RT1_ABORT
+000186 FA20D10AD10D     000112 000115     (2/112)112+         AP    RT1_TOT,RT1_ONE
+00018C 07FB                               (2/113)113+         BR    RT1_LINK
+00018E 0000000000000000                    (1/27)115 WORK     DC    XL16'00' INT128,E,D,L WORK AREA
+000196 0000000000000000
+00019E 4040404040404040                    (1/28)116 DECIMAL  DC    CL45' '  DECIMAL WORK AREA
+0001A6 4040404040404040
+0001AE 4040404040404040
+0001B6 4040404040404040
+0001BE 4040404040404040
+0001C6 4040404040
+0001CB                                     (1/29)117          EQUREGS 
+0001CB                  00000000           (7/41)118+R0     EQU 0
+0001CB                  00000001           (7/41)119+R1     EQU 1
+0001CB                  00000002           (7/41)120+R2     EQU 2
+0001CB                  00000003           (7/41)121+R3     EQU 3
+0001CB                  00000004           (7/41)122+R4     EQU 4
+0001CB                  00000005           (7/41)123+R5     EQU 5
+0001CB                  00000006           (7/41)124+R6     EQU 6
+0001CB                  00000007           (7/41)125+R7     EQU 7
+0001CB                  00000008           (7/41)126+R8     EQU 8
+0001CB                  00000009           (7/41)127+R9     EQU 9
+0001CB                  0000000A           (7/41)128+R10    EQU 10
+0001CB                  0000000B           (7/41)129+R11    EQU 11
+0001CB                  0000000C           (7/41)130+R12    EQU 12
+0001CB                  0000000D           (7/41)131+R13    EQU 13
+0001CB                  0000000E           (7/41)132+R14    EQU 14
+0001CB                  0000000F           (7/41)133+R15    EQU 15
+0001CB                                     (1/30)135 ABORT    ABEND 111
+0001CC                                     (6/25)136+ABORT    DS    0H
+0001CC 4110006F                            (6/39)137+         LA   1,111
+0001D0 0A0D                                (6/47)138+         SVC  13 ABEND R1=COMP CODE AND HIGH BIT = DUMP PGM STORAGE
+0001D2                                     (1/31)140          MACRO
+0001D2                                     (1/32)141          TEST  &TYPE,&IN,&VER
+0001D2                                     (1/33)142          BALR  R10,0                             RPI-786
+0001D2                                     (1/34)143          USING *,R10                             RPI-786
+0001D2                                     (1/35)144          MVC   DECIMAL,&IN
+0001D2                                     (1/36)145 * TEST CFD OUT=RX
+0001D2                                     (1/37)146          CFD   CFD_&TYPE,OUT=WORK,IN=DECIMAL
+0001D2                                     (1/38)147          LTR   R15,R15
+0001D2                                     (1/39)148          BNZ   ABORT
+0001D2                                     (1/40)149          LX    R4,WORK
+0001D2                                     (1/41)150          TESTC &TYPE,&VER
+0001D2                                     (1/42)151 * TEST CFD OUT=(REG)
+0001D2                                     (1/43)152          LA    R2,WORK
+0001D2                                     (1/44)153          CFD   CFD_&TYPE,OUT=(R2),IN=DECIMAL
+0001D2                                     (1/45)154          LTR   R15,R15
+0001D2                                     (1/46)155          BNZ   ABORT
+0001D2                                     (1/47)156          LX    R4,WORK
+0001D2                                     (1/48)157          TESTC &TYPE,&VER
+0001D2                                     (1/49)158 * TEST CFD OUT-REG (VALUE 0-15)
+0001D2                                     (1/50)159          CFD   CFD_&TYPE,OUT=R4,IN=DECIMAL
+0001D2                                     (1/51)160          LTR   R15,R15
+0001D2                                     (1/52)161          BNZ   ABORT
+0001D2                                     (1/53)162          TESTC &TYPE,&VER
+0001D2                                     (1/54)163          MEND
+0001D2                                     (1/55)164          MACRO
+0001D2                                     (1/56)165          TESTC &TYPE,&VAL
+0001D2                                     (1/57)166          AIF   ('&TYPE' EQ 'ED').ED_COMP
+0001D2                                     (1/58)167          AIF   ('&TYPE' EQ 'DD').DD_COMP
+0001D2                                     (1/59)168          AIF   ('&TYPE' EQ 'LD').LD_COMP
+0001D2                                     (1/60)169          AGO   .CLC_COMP
+0001D2                                     (1/61)170 .ED_COMP ANOP
+0001D2                                     (1/62)171          LE    R0,&VAL
+0001D2                                     (1/63)172          LDETR R0,R0,0
+0001D2                                     (1/64)173          LDETR R4,R4,0
+0001D2                                     (1/65)174          CDTR  R0,R4
+0001D2                                     (1/66)175          AGO   .END_COMP
+0001D2                                     (1/67)176 .DD_COMP ANOP
+0001D2                                     (1/68)177          LD    R0,&VAL
+0001D2                                     (1/69)178          CDTR  R0,R4
+0001D2                                     (1/70)179          AGO   .END_COMP
+0001D2                                     (1/71)180 .LD_COMP ANOP
+0001D2                                     (1/72)181          LX    R0,&VAL
+0001D2                                     (1/73)182          CXTR  R0,R4
+0001D2                                     (1/74)183          AGO   .END_COMP
+0001D2                                     (1/75)184 .CLC_COMP ANOP
+0001D2                                     (1/76)185          STX   R4,WORK
+0001D2                                     (1/77)186          LA    R1,L'&VAL
+0001D2                                     (1/78)187          BCTR  R1,0
+0001D2                                     (1/79)188          EX    R1,*+4+4
+0001D2                                     (1/80)189          B     *+4+6
+0001D2                                     (1/81)190          CLC   WORK(0),&VAL  VERIFY CTD CONSTANT WITH CFD RESULT
+0001D2                                     (1/82)191 .END_COMP ANOP
+0001D2                                     (1/83)192          RT1   CCE
+0001D2                                     (1/84)193          MEND
+0001D2                                     (1/85)194          RT1   START
+0001D2                                    (2/116)195+RT1_START DS  0H
+0001D2                                     (1/86)197          WTO   'TEST CFD CONVERT FROM DISPLAY MACRO/SVC 171 SERVICE'
+0001D2 A715001E                00020E      (4/49)199+         BRAS  1,*+(WTO#0012_EOT-*+1)/2*2
+0001D6 00370000E3C5E2E3                    (4/50)200+         DC    AL2(WTO#0012_EOT-*,0),C'TEST CFD CONVERT FROM DISPLAY MACRO/SVC 171 SERVICE'
+0001DE 40C3C6C440C3D6D5
+0001E6 E5C5D9E340C6D9D6
+0001EE D440C4C9E2D7D3C1
+0001F6 E840D4C1C3D9D661
+0001FE E2E5C340F1F7F140
+000206 E2C5D9E5C9C3C5
+00020D                  0000020D           (4/51)202+WTO#0012_EOT     EQU *
+00020E 0A23                                (4/52)203+         SVC   35
+000210                                     (1/87)205          TEST  INT128,=CL45'2',=FL16'2'
+000210 05A0                                (1/33)206+         BALR  R10,0                             RPI-786
+000212                                     (1/34)207+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000212 LEN=01000 REG=A OFF=00000 LAB=
+000212 D22CD196A062     00019E 000274      (1/35)208+         MVC   DECIMAL,=CL45'2'
+000218                                     (1/36)209+* TEST CFD OUT=RX
+000218                                     (8/52)211+         DS    0H
+000218                  00000015           (8/57)212+CFD_INT128 EQU 21 CONVERT TO 128 BIT INT FROM 45 BYTE SN(39)
+000218                  00000016           (8/58)213+CFD_EH   EQU   22 CONVERT TO HFP SHORT EH FROM 45 BYTE SN.N(7)+ENNNN
+000218                  00000017           (8/59)214+CFD_EB   EQU   23 CONVERT TO BFP SHORT EB FROM 45 BYTE SN.N(7)+ENNNN
+000218                  00000018           (8/60)215+CFD_DH   EQU   24 CONVERT TO HFP LONG  DH FROM 45 BYTE SN.N(14)+ENNNN
+000218                  00000019           (8/61)216+CFD_DB   EQU   25 CONVERT TO BFP LONG  DB FROM 45 BYTE SN.N(14)+ENNNN
+000218                  0000001A           (8/62)217+CFD_LH   EQU   26 CONVERT TO HFP EXT.  LH FROM 45 BYTE SN.N(34)+ENNNN
+000218                  0000001B           (8/63)218+CFD_LB   EQU   27 CONVERT TO BFP EXT.  LB FROM 45 BYTE SN.N(34)+ENNNN
+000218                  0000001C           (8/64)219+CFD_DD   EQU   28 CONVERT TO DFP LONG  DD FROM 45 BYTE SN.N(16)+ENNNN
+000218                  0000001D           (8/65)220+CFD_ED   EQU   29 CONVERT TO DFP SHORT ED FROM 45 BYTE SN.N( 7)+ENNNN
+000218                  0000001E           (8/66)221+CFD_LD   EQU   30 CONVERT TO DFP EXT.  LD FROM 45 BYTE SN.N(34)+ENNNN
+000218 4110A056                000268      (8/68)222+         LA    1,=A(CFD_INT128,WORK,DECIMAL)
+00021C 0AAB                                (8/79)223+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+00021E 12FF                                (1/38)225+         LTR   R15,R15
+000220 4770D1C4                0001CC      (1/39)226+         BNZ   ABORT
+000224 41F0D186                00018E      (9/12)228+         LA    15,WORK
+000228 684F0000                            (9/13)229+         LD    R4,0(15)
+00022C 686F0008                            (9/14)230+         LD    R4+2,8(15)
+000230 41F0D186                00018E     (10/12)234+         LA    15,WORK
+000234 604F0000                           (10/13)235+         STD   R4,0(15)
+000238 606F0008                           (10/14)236+         STD   R4+2,8(15)
+00023C 41100010                            (1/77)238+         LA    R1,L'=FL16'2'
+000240 0610                                (1/78)239+         BCTR  R1,0
+000242 4410A038                00024A      (1/79)240+         EX    R1,*+4+4
+000246 47F0A03E                000250      (1/80)241+         B     *+4+6
+00024A D500D186A046     00018E 000258      (1/81)242+         CLC   WORK(0),=FL16'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000250                                     (2/38)244+         DS    0H
+000250 4DB0D13E                000146     (2/120)245+RT1_TEST1        BAS   RT1_LINK,RT1_TEST_CC0
+000254                                    (2/121)246+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000212 LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000254 LEN=01000 REG=B OFF=00000 LAB=
+000254 47F0B04E                0002A2     (2/122)247+         B     RT1_CCE1
+000258                                    (2/123)248+         LTORG 
+000258 0000000000000000 =FL16'2'
+000260 0000000000000002
+000268 000000150000018E =A(CFD_INT128,WORK,DECIMAL)
+000270 0000019E
+000274 F240404040404040 =CL45'2'
+00027C 4040404040404040
+000284 4040404040404040
+00028C 4040404040404040
+000294 4040404040404040
+00029C 4040404040
+0002A2                                    (2/124)249+RT1_CCE1        DS 0H
+0002A2                                     (1/42)252+* TEST CFD OUT=(REG)
+0002A2 4120D186                00018E      (1/43)253+         LA    R2,WORK
+0002A6                                     (8/52)255+         DS    0H
+0002A6 4110B0AC                000300      (8/68)256+         LA    1,=A(CFD_INT128,(R2),DECIMAL)
+0002AA 50210004                            (8/76)257+         ST    R2,4(1)                 RPI 507
+0002AE 0AAB                                (8/79)258+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+0002B0 12FF                                (1/45)260+         LTR   R15,R15
+0002B2 4770D1C4                0001CC      (1/46)261+         BNZ   ABORT
+0002B6 41F0D186                00018E      (9/12)263+         LA    15,WORK
+0002BA 684F0000                            (9/13)264+         LD    R4,0(15)
+0002BE 686F0008                            (9/14)265+         LD    R4+2,8(15)
+0002C2 41F0D186                00018E     (10/12)269+         LA    15,WORK
+0002C6 604F0000                           (10/13)270+         STD   R4,0(15)
+0002CA 606F0008                           (10/14)271+         STD   R4+2,8(15)
+0002CE 41100010                            (1/77)273+         LA    R1,L'=FL16'2'
+0002D2 0610                                (1/78)274+         BCTR  R1,0
+0002D4 4410B088                0002DC      (1/79)275+         EX    R1,*+4+4
+0002D8 47F0B08E                0002E2      (1/80)276+         B     *+4+6
+0002DC D500D186B09C     00018E 0002F0      (1/81)277+         CLC   WORK(0),=FL16'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+0002E2                                     (2/38)279+         DS    0H
+0002E2 4DB0D13E                000146     (2/120)280+RT1_TEST2        BAS   RT1_LINK,RT1_TEST_CC0
+0002E6                                    (2/121)281+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000212 LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000002E6 LEN=01000 REG=B OFF=00000 LAB=
+0002E6 47F0B026                00030C     (2/122)282+         B     RT1_CCE2
+0002EA                                    (2/123)283+         LTORG 
+0002F0 0000000000000000 =FL16'2'
+0002F8 0000000000000002
+000300 0000001500000002 =A(CFD_INT128,(R2),DECIMAL)
+000308 0000019E
+00030C                                    (2/124)284+RT1_CCE2        DS 0H
+00030C                                     (1/49)287+* TEST CFD OUT-REG (VALUE 0-15)
+00030C                                     (8/52)289+         DS    0H
+00030C 4110B06A                000350      (8/68)290+         LA    1,=A(CFD_INT128,R4,DECIMAL)
+000310 0AAB                                (8/79)291+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000312 12FF                                (1/51)293+         LTR   R15,R15
+000314 4770D1C4                0001CC      (1/52)294+         BNZ   ABORT
+000318 41F0D186                00018E     (10/12)297+         LA    15,WORK
+00031C 604F0000                           (10/13)298+         STD   R4,0(15)
+000320 606F0008                           (10/14)299+         STD   R4+2,8(15)
+000324 41100010                            (1/77)301+         LA    R1,L'=FL16'2'
+000328 0610                                (1/78)302+         BCTR  R1,0
+00032A 4410B04C                000332      (1/79)303+         EX    R1,*+4+4
+00032E 47F0B052                000338      (1/80)304+         B     *+4+6
+000332 D500D186B05A     00018E 000340      (1/81)305+         CLC   WORK(0),=FL16'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000338                                     (2/38)307+         DS    0H
+000338 4DB0D13E                000146     (2/120)308+RT1_TEST3        BAS   RT1_LINK,RT1_TEST_CC0
+00033C                                    (2/121)309+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000212 LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000033C LEN=01000 REG=B OFF=00000 LAB=
+00033C 47F0B020                00035C     (2/122)310+         B     RT1_CCE3
+000340                                    (2/123)311+         LTORG 
+000340 0000000000000000 =FL16'2'
+000348 0000000000000002
+000350 0000001500000004 =A(CFD_INT128,R4,DECIMAL)
+000358 0000019E
+00035C                                    (2/124)312+RT1_CCE3        DS 0H
+00035C                                     (1/88)316          TEST  INT128,=CL45'123E2',=FL16'12300'
+00035C 05A0                                (1/33)317+         BALR  R10,0                             RPI-786
+00035E                                     (1/34)318+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000033C LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000035E LEN=01000 REG=A OFF=00000 LAB=
+00035E D22CD196A066     00019E 0003C4      (1/35)319+         MVC   DECIMAL,=CL45'123E2'
+000364                                     (1/36)320+* TEST CFD OUT=RX
+000364                                     (8/52)322+         DS    0H
+000364 4110A05A                0003B8      (8/68)323+         LA    1,=A(CFD_INT128,WORK,DECIMAL)
+000368 0AAB                                (8/79)324+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+00036A 12FF                                (1/38)326+         LTR   R15,R15
+00036C 4770D1C4                0001CC      (1/39)327+         BNZ   ABORT
+000370 41F0D186                00018E      (9/12)329+         LA    15,WORK
+000374 684F0000                            (9/13)330+         LD    R4,0(15)
+000378 686F0008                            (9/14)331+         LD    R4+2,8(15)
+00037C 41F0D186                00018E     (10/12)335+         LA    15,WORK
+000380 604F0000                           (10/13)336+         STD   R4,0(15)
+000384 606F0008                           (10/14)337+         STD   R4+2,8(15)
+000388 41100010                            (1/77)339+         LA    R1,L'=FL16'12300'
+00038C 0610                                (1/78)340+         BCTR  R1,0
+00038E 4410A038                000396      (1/79)341+         EX    R1,*+4+4
+000392 47F0A03E                00039C      (1/80)342+         B     *+4+6
+000396 D500D186A04A     00018E 0003A8      (1/81)343+         CLC   WORK(0),=FL16'12300'  VERIFY CTD CONSTANT WITH CFD RESULT
+00039C                                     (2/38)346+         DS    0H
+00039C 4DB0D13E                000146     (2/120)347+RT1_TEST4        BAS   RT1_LINK,RT1_TEST_CC0
+0003A0                                    (2/121)348+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000035E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000003A0 LEN=01000 REG=B OFF=00000 LAB=
+0003A0 47F0B052                0003F2     (2/122)349+         B     RT1_CCE4
+0003A4                                    (2/123)350+         LTORG 
+0003A8 0000000000000000 =FL16'12300'
+0003B0 000000000000300C
+0003B8 000000150000018E =A(CFD_INT128,WORK,DECIMAL)
+0003C0 0000019E
+0003C4 F1F2F3C5F2404040 =CL45'123E2'
+0003CC 4040404040404040
+0003D4 4040404040404040
+0003DC 4040404040404040
+0003E4 4040404040404040
+0003EC 4040404040
+0003F2                                    (2/124)351+RT1_CCE4        DS 0H
+0003F2                                     (1/42)354+* TEST CFD OUT=(REG)
+0003F2 4120D186                00018E      (1/43)355+         LA    R2,WORK
+0003F6                                     (8/52)357+         DS    0H
+0003F6 4110B0B0                000450      (8/68)358+         LA    1,=A(CFD_INT128,(R2),DECIMAL)
+0003FA 50210004                            (8/76)359+         ST    R2,4(1)                 RPI 507
+0003FE 0AAB                                (8/79)360+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000400 12FF                                (1/45)362+         LTR   R15,R15
+000402 4770D1C4                0001CC      (1/46)363+         BNZ   ABORT
+000406 41F0D186                00018E      (9/12)365+         LA    15,WORK
+00040A 684F0000                            (9/13)366+         LD    R4,0(15)
+00040E 686F0008                            (9/14)367+         LD    R4+2,8(15)
+000412 41F0D186                00018E     (10/12)371+         LA    15,WORK
+000416 604F0000                           (10/13)372+         STD   R4,0(15)
+00041A 606F0008                           (10/14)373+         STD   R4+2,8(15)
+00041E 41100010                            (1/77)375+         LA    R1,L'=FL16'12300'
+000422 0610                                (1/78)376+         BCTR  R1,0
+000424 4410B08C                00042C      (1/79)377+         EX    R1,*+4+4
+000428 47F0B092                000432      (1/80)378+         B     *+4+6
+00042C D500D186B0A0     00018E 000440      (1/81)379+         CLC   WORK(0),=FL16'12300'  VERIFY CTD CONSTANT WITH CFD RESULT
+000432                                     (2/38)382+         DS    0H
+000432 4DB0D13E                000146     (2/120)383+RT1_TEST5        BAS   RT1_LINK,RT1_TEST_CC0
+000436                                    (2/121)384+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000035E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000436 LEN=01000 REG=B OFF=00000 LAB=
+000436 47F0B026                00045C     (2/122)385+         B     RT1_CCE5
+00043A                                    (2/123)386+         LTORG 
+000440 0000000000000000 =FL16'12300'
+000448 000000000000300C
+000450 0000001500000002 =A(CFD_INT128,(R2),DECIMAL)
+000458 0000019E
+00045C                                    (2/124)387+RT1_CCE5        DS 0H
+00045C                                     (1/49)390+* TEST CFD OUT-REG (VALUE 0-15)
+00045C                                     (8/52)392+         DS    0H
+00045C 4110B06A                0004A0      (8/68)393+         LA    1,=A(CFD_INT128,R4,DECIMAL)
+000460 0AAB                                (8/79)394+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000462 12FF                                (1/51)396+         LTR   R15,R15
+000464 4770D1C4                0001CC      (1/52)397+         BNZ   ABORT
+000468 41F0D186                00018E     (10/12)400+         LA    15,WORK
+00046C 604F0000                           (10/13)401+         STD   R4,0(15)
+000470 606F0008                           (10/14)402+         STD   R4+2,8(15)
+000474 41100010                            (1/77)404+         LA    R1,L'=FL16'12300'
+000478 0610                                (1/78)405+         BCTR  R1,0
+00047A 4410B04C                000482      (1/79)406+         EX    R1,*+4+4
+00047E 47F0B052                000488      (1/80)407+         B     *+4+6
+000482 D500D186B05A     00018E 000490      (1/81)408+         CLC   WORK(0),=FL16'12300'  VERIFY CTD CONSTANT WITH CFD RESULT
+000488                                     (2/38)411+         DS    0H
+000488 4DB0D13E                000146     (2/120)412+RT1_TEST6        BAS   RT1_LINK,RT1_TEST_CC0
+00048C                                    (2/121)413+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000035E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000048C LEN=01000 REG=B OFF=00000 LAB=
+00048C 47F0B020                0004AC     (2/122)414+         B     RT1_CCE6
+000490                                    (2/123)415+         LTORG 
+000490 0000000000000000 =FL16'12300'
+000498 000000000000300C
+0004A0 0000001500000004 =A(CFD_INT128,R4,DECIMAL)
+0004A8 0000019E
+0004AC                                    (2/124)416+RT1_CCE6        DS 0H
+0004AC                                     (1/89)420          TEST  INT128,=CL45'123.5',=FL16'123'
+0004AC 05A0                                (1/33)421+         BALR  R10,0                             RPI-786
+0004AE                                     (1/34)422+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000048C LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000004AE LEN=01000 REG=A OFF=00000 LAB=
+0004AE D22CD196A066     00019E 000514      (1/35)423+         MVC   DECIMAL,=CL45'123.5'
+0004B4                                     (1/36)424+* TEST CFD OUT=RX
+0004B4                                     (8/52)426+         DS    0H
+0004B4 4110A05A                000508      (8/68)427+         LA    1,=A(CFD_INT128,WORK,DECIMAL)
+0004B8 0AAB                                (8/79)428+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+0004BA 12FF                                (1/38)430+         LTR   R15,R15
+0004BC 4770D1C4                0001CC      (1/39)431+         BNZ   ABORT
+0004C0 41F0D186                00018E      (9/12)433+         LA    15,WORK
+0004C4 684F0000                            (9/13)434+         LD    R4,0(15)
+0004C8 686F0008                            (9/14)435+         LD    R4+2,8(15)
+0004CC 41F0D186                00018E     (10/12)439+         LA    15,WORK
+0004D0 604F0000                           (10/13)440+         STD   R4,0(15)
+0004D4 606F0008                           (10/14)441+         STD   R4+2,8(15)
+0004D8 41100010                            (1/77)443+         LA    R1,L'=FL16'123'
+0004DC 0610                                (1/78)444+         BCTR  R1,0
+0004DE 4410A038                0004E6      (1/79)445+         EX    R1,*+4+4
+0004E2 47F0A03E                0004EC      (1/80)446+         B     *+4+6
+0004E6 D500D186A04A     00018E 0004F8      (1/81)447+         CLC   WORK(0),=FL16'123'  VERIFY CTD CONSTANT WITH CFD RESULT
+0004EC                                     (2/38)449+         DS    0H
+0004EC 4DB0D13E                000146     (2/120)450+RT1_TEST7        BAS   RT1_LINK,RT1_TEST_CC0
+0004F0                                    (2/121)451+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000004AE LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000004F0 LEN=01000 REG=B OFF=00000 LAB=
+0004F0 47F0B052                000542     (2/122)452+         B     RT1_CCE7
+0004F4                                    (2/123)453+         LTORG 
+0004F8 0000000000000000 =FL16'123'
+000500 000000000000007B
+000508 000000150000018E =A(CFD_INT128,WORK,DECIMAL)
+000510 0000019E
+000514 F1F2F34BF5404040 =CL45'123.5'
+00051C 4040404040404040
+000524 4040404040404040
+00052C 4040404040404040
+000534 4040404040404040
+00053C 4040404040
+000542                                    (2/124)454+RT1_CCE7        DS 0H
+000542                                     (1/42)457+* TEST CFD OUT=(REG)
+000542 4120D186                00018E      (1/43)458+         LA    R2,WORK
+000546                                     (8/52)460+         DS    0H
+000546 4110B0B0                0005A0      (8/68)461+         LA    1,=A(CFD_INT128,(R2),DECIMAL)
+00054A 50210004                            (8/76)462+         ST    R2,4(1)                 RPI 507
+00054E 0AAB                                (8/79)463+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000550 12FF                                (1/45)465+         LTR   R15,R15
+000552 4770D1C4                0001CC      (1/46)466+         BNZ   ABORT
+000556 41F0D186                00018E      (9/12)468+         LA    15,WORK
+00055A 684F0000                            (9/13)469+         LD    R4,0(15)
+00055E 686F0008                            (9/14)470+         LD    R4+2,8(15)
+000562 41F0D186                00018E     (10/12)474+         LA    15,WORK
+000566 604F0000                           (10/13)475+         STD   R4,0(15)
+00056A 606F0008                           (10/14)476+         STD   R4+2,8(15)
+00056E 41100010                            (1/77)478+         LA    R1,L'=FL16'123'
+000572 0610                                (1/78)479+         BCTR  R1,0
+000574 4410B08C                00057C      (1/79)480+         EX    R1,*+4+4
+000578 47F0B092                000582      (1/80)481+         B     *+4+6
+00057C D500D186B0A0     00018E 000590      (1/81)482+         CLC   WORK(0),=FL16'123'  VERIFY CTD CONSTANT WITH CFD RESULT
+000582                                     (2/38)484+         DS    0H
+000582 4DB0D13E                000146     (2/120)485+RT1_TEST8        BAS   RT1_LINK,RT1_TEST_CC0
+000586                                    (2/121)486+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000004AE LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000586 LEN=01000 REG=B OFF=00000 LAB=
+000586 47F0B026                0005AC     (2/122)487+         B     RT1_CCE8
+00058A                                    (2/123)488+         LTORG 
+000590 0000000000000000 =FL16'123'
+000598 000000000000007B
+0005A0 0000001500000002 =A(CFD_INT128,(R2),DECIMAL)
+0005A8 0000019E
+0005AC                                    (2/124)489+RT1_CCE8        DS 0H
+0005AC                                     (1/49)492+* TEST CFD OUT-REG (VALUE 0-15)
+0005AC                                     (8/52)494+         DS    0H
+0005AC 4110B06A                0005F0      (8/68)495+         LA    1,=A(CFD_INT128,R4,DECIMAL)
+0005B0 0AAB                                (8/79)496+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+0005B2 12FF                                (1/51)498+         LTR   R15,R15
+0005B4 4770D1C4                0001CC      (1/52)499+         BNZ   ABORT
+0005B8 41F0D186                00018E     (10/12)502+         LA    15,WORK
+0005BC 604F0000                           (10/13)503+         STD   R4,0(15)
+0005C0 606F0008                           (10/14)504+         STD   R4+2,8(15)
+0005C4 41100010                            (1/77)506+         LA    R1,L'=FL16'123'
+0005C8 0610                                (1/78)507+         BCTR  R1,0
+0005CA 4410B04C                0005D2      (1/79)508+         EX    R1,*+4+4
+0005CE 47F0B052                0005D8      (1/80)509+         B     *+4+6
+0005D2 D500D186B05A     00018E 0005E0      (1/81)510+         CLC   WORK(0),=FL16'123'  VERIFY CTD CONSTANT WITH CFD RESULT
+0005D8                                     (2/38)512+         DS    0H
+0005D8 4DB0D13E                000146     (2/120)513+RT1_TEST9        BAS   RT1_LINK,RT1_TEST_CC0
+0005DC                                    (2/121)514+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000004AE LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000005DC LEN=01000 REG=B OFF=00000 LAB=
+0005DC 47F0B020                0005FC     (2/122)515+         B     RT1_CCE9
+0005E0                                    (2/123)516+         LTORG 
+0005E0 0000000000000000 =FL16'123'
+0005E8 000000000000007B
+0005F0 0000001500000004 =A(CFD_INT128,R4,DECIMAL)
+0005F8 0000019E
+0005FC                                    (2/124)517+RT1_CCE9        DS 0H
+0005FC                                     (1/90)521          TEST  EH,=CL45'2',=EH'2'
+0005FC 05A0                                (1/33)522+         BALR  R10,0                             RPI-786
+0005FE                                     (1/34)523+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000005DC LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000005FE LEN=01000 REG=A OFF=00000 LAB=
+0005FE D22CD196A05A     00019E 000658      (1/35)524+         MVC   DECIMAL,=CL45'2'
+000604                                     (1/36)525+* TEST CFD OUT=RX
+000604                                     (8/52)527+         DS    0H
+000604 4110A04A                000648      (8/68)528+         LA    1,=A(CFD_EH,WORK,DECIMAL)
+000608 0AAB                                (8/79)529+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+00060A 12FF                                (1/38)531+         LTR   R15,R15
+00060C 4770D1C4                0001CC      (1/39)532+         BNZ   ABORT
+000610 41F0D186                00018E      (9/12)534+         LA    15,WORK
+000614 684F0000                            (9/13)535+         LD    R4,0(15)
+000618 686F0008                            (9/14)536+         LD    R4+2,8(15)
+00061C 41F0D186                00018E     (10/12)540+         LA    15,WORK
+000620 604F0000                           (10/13)541+         STD   R4,0(15)
+000624 606F0008                           (10/14)542+         STD   R4+2,8(15)
+000628 41100004                            (1/77)544+         LA    R1,L'=EH'2'
+00062C 0610                                (1/78)545+         BCTR  R1,0
+00062E 4410A038                000636      (1/79)546+         EX    R1,*+4+4
+000632 47F0A03E                00063C      (1/80)547+         B     *+4+6
+000636 D500D186A056     00018E 000654      (1/81)548+         CLC   WORK(0),=EH'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+00063C                                     (2/38)550+         DS    0H
+00063C 4DB0D13E                000146     (2/120)551+RT1_TEST10       BAS   RT1_LINK,RT1_TEST_CC0
+000640                                    (2/121)552+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000005FE LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000640 LEN=01000 REG=B OFF=00000 LAB=
+000640 47F0B046                000686     (2/122)553+         B     RT1_CCE10
+000644                                    (2/123)554+         LTORG 
+000648 000000160000018E =A(CFD_EH,WORK,DECIMAL)
+000650 0000019E
+000654 41200000         =EH'2'
+000658 F240404040404040 =CL45'2'
+000660 4040404040404040
+000668 4040404040404040
+000670 4040404040404040
+000678 4040404040404040
+000680 4040404040
+000686                                    (2/124)555+RT1_CCE10       DS 0H
+000686                                     (1/42)558+* TEST CFD OUT=(REG)
+000686 4120D186                00018E      (1/43)559+         LA    R2,WORK
+00068A                                     (8/52)561+         DS    0H
+00068A 4110B090                0006D0      (8/68)562+         LA    1,=A(CFD_EH,(R2),DECIMAL)
+00068E 50210004                            (8/76)563+         ST    R2,4(1)                 RPI 507
+000692 0AAB                                (8/79)564+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000694 12FF                                (1/45)566+         LTR   R15,R15
+000696 4770D1C4                0001CC      (1/46)567+         BNZ   ABORT
+00069A 41F0D186                00018E      (9/12)569+         LA    15,WORK
+00069E 684F0000                            (9/13)570+         LD    R4,0(15)
+0006A2 686F0008                            (9/14)571+         LD    R4+2,8(15)
+0006A6 41F0D186                00018E     (10/12)575+         LA    15,WORK
+0006AA 604F0000                           (10/13)576+         STD   R4,0(15)
+0006AE 606F0008                           (10/14)577+         STD   R4+2,8(15)
+0006B2 41100004                            (1/77)579+         LA    R1,L'=EH'2'
+0006B6 0610                                (1/78)580+         BCTR  R1,0
+0006B8 4410B080                0006C0      (1/79)581+         EX    R1,*+4+4
+0006BC 47F0B086                0006C6      (1/80)582+         B     *+4+6
+0006C0 D500D186B09C     00018E 0006DC      (1/81)583+         CLC   WORK(0),=EH'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+0006C6                                     (2/38)585+         DS    0H
+0006C6 4DB0D13E                000146     (2/120)586+RT1_TEST11       BAS   RT1_LINK,RT1_TEST_CC0
+0006CA                                    (2/121)587+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000005FE LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000006CA LEN=01000 REG=B OFF=00000 LAB=
+0006CA 47F0B016                0006E0     (2/122)588+         B     RT1_CCE11
+0006CE                                    (2/123)589+         LTORG 
+0006D0 0000001600000002 =A(CFD_EH,(R2),DECIMAL)
+0006D8 0000019E
+0006DC 41200000         =EH'2'
+0006E0                                    (2/124)590+RT1_CCE11       DS 0H
+0006E0                                     (1/49)593+* TEST CFD OUT-REG (VALUE 0-15)
+0006E0                                     (8/52)595+         DS    0H
+0006E0 4110B04E                000718      (8/68)596+         LA    1,=A(CFD_EH,R4,DECIMAL)
+0006E4 0AAB                                (8/79)597+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+0006E6 12FF                                (1/51)599+         LTR   R15,R15
+0006E8 4770D1C4                0001CC      (1/52)600+         BNZ   ABORT
+0006EC 41F0D186                00018E     (10/12)603+         LA    15,WORK
+0006F0 604F0000                           (10/13)604+         STD   R4,0(15)
+0006F4 606F0008                           (10/14)605+         STD   R4+2,8(15)
+0006F8 41100004                            (1/77)607+         LA    R1,L'=EH'2'
+0006FC 0610                                (1/78)608+         BCTR  R1,0
+0006FE 4410B03C                000706      (1/79)609+         EX    R1,*+4+4
+000702 47F0B042                00070C      (1/80)610+         B     *+4+6
+000706 D500D186B05A     00018E 000724      (1/81)611+         CLC   WORK(0),=EH'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+00070C                                     (2/38)613+         DS    0H
+00070C 4DB0D13E                000146     (2/120)614+RT1_TEST12       BAS   RT1_LINK,RT1_TEST_CC0
+000710                                    (2/121)615+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000005FE LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000710 LEN=01000 REG=B OFF=00000 LAB=
+000710 47F0B018                000728     (2/122)616+         B     RT1_CCE12
+000714                                    (2/123)617+         LTORG 
+000718 0000001600000004 =A(CFD_EH,R4,DECIMAL)
+000720 0000019E
+000724 41200000         =EH'2'
+000728                                    (2/124)618+RT1_CCE12       DS 0H
+000728                                     (1/91)622          TEST  EB,=CL45'2',=EB'2'
+000728 05A0                                (1/33)623+         BALR  R10,0                             RPI-786
+00072A                                     (1/34)624+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000710 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000072A LEN=01000 REG=A OFF=00000 LAB=
+00072A D22CD196A056     00019E 000780      (1/35)625+         MVC   DECIMAL,=CL45'2'
+000730                                     (1/36)626+* TEST CFD OUT=RX
+000730                                     (8/52)628+         DS    0H
+000730 4110A046                000770      (8/68)629+         LA    1,=A(CFD_EB,WORK,DECIMAL)
+000734 0AAB                                (8/79)630+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000736 12FF                                (1/38)632+         LTR   R15,R15
+000738 4770D1C4                0001CC      (1/39)633+         BNZ   ABORT
+00073C 41F0D186                00018E      (9/12)635+         LA    15,WORK
+000740 684F0000                            (9/13)636+         LD    R4,0(15)
+000744 686F0008                            (9/14)637+         LD    R4+2,8(15)
+000748 41F0D186                00018E     (10/12)641+         LA    15,WORK
+00074C 604F0000                           (10/13)642+         STD   R4,0(15)
+000750 606F0008                           (10/14)643+         STD   R4+2,8(15)
+000754 41100004                            (1/77)645+         LA    R1,L'=EB'2'
+000758 0610                                (1/78)646+         BCTR  R1,0
+00075A 4410A038                000762      (1/79)647+         EX    R1,*+4+4
+00075E 47F0A03E                000768      (1/80)648+         B     *+4+6
+000762 D500D186A052     00018E 00077C      (1/81)649+         CLC   WORK(0),=EB'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000768                                     (2/38)651+         DS    0H
+000768 4DB0D13E                000146     (2/120)652+RT1_TEST13       BAS   RT1_LINK,RT1_TEST_CC0
+00076C                                    (2/121)653+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000072A LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000076C LEN=01000 REG=B OFF=00000 LAB=
+00076C 47F0B042                0007AE     (2/122)654+         B     RT1_CCE13
+000770                                    (2/123)655+         LTORG 
+000770 000000170000018E =A(CFD_EB,WORK,DECIMAL)
+000778 0000019E
+00077C 40000000         =EB'2'
+000780 F240404040404040 =CL45'2'
+000788 4040404040404040
+000790 4040404040404040
+000798 4040404040404040
+0007A0 4040404040404040
+0007A8 4040404040
+0007AE                                    (2/124)656+RT1_CCE13       DS 0H
+0007AE                                     (1/42)659+* TEST CFD OUT=(REG)
+0007AE 4120D186                00018E      (1/43)660+         LA    R2,WORK
+0007B2                                     (8/52)662+         DS    0H
+0007B2 4110B08C                0007F8      (8/68)663+         LA    1,=A(CFD_EB,(R2),DECIMAL)
+0007B6 50210004                            (8/76)664+         ST    R2,4(1)                 RPI 507
+0007BA 0AAB                                (8/79)665+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+0007BC 12FF                                (1/45)667+         LTR   R15,R15
+0007BE 4770D1C4                0001CC      (1/46)668+         BNZ   ABORT
+0007C2 41F0D186                00018E      (9/12)670+         LA    15,WORK
+0007C6 684F0000                            (9/13)671+         LD    R4,0(15)
+0007CA 686F0008                            (9/14)672+         LD    R4+2,8(15)
+0007CE 41F0D186                00018E     (10/12)676+         LA    15,WORK
+0007D2 604F0000                           (10/13)677+         STD   R4,0(15)
+0007D6 606F0008                           (10/14)678+         STD   R4+2,8(15)
+0007DA 41100004                            (1/77)680+         LA    R1,L'=EB'2'
+0007DE 0610                                (1/78)681+         BCTR  R1,0
+0007E0 4410B07C                0007E8      (1/79)682+         EX    R1,*+4+4
+0007E4 47F0B082                0007EE      (1/80)683+         B     *+4+6
+0007E8 D500D186B098     00018E 000804      (1/81)684+         CLC   WORK(0),=EB'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+0007EE                                     (2/38)686+         DS    0H
+0007EE 4DB0D13E                000146     (2/120)687+RT1_TEST14       BAS   RT1_LINK,RT1_TEST_CC0
+0007F2                                    (2/121)688+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000072A LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000007F2 LEN=01000 REG=B OFF=00000 LAB=
+0007F2 47F0B016                000808     (2/122)689+         B     RT1_CCE14
+0007F6                                    (2/123)690+         LTORG 
+0007F8 0000001700000002 =A(CFD_EB,(R2),DECIMAL)
+000800 0000019E
+000804 40000000         =EB'2'
+000808                                    (2/124)691+RT1_CCE14       DS 0H
+000808                                     (1/49)694+* TEST CFD OUT-REG (VALUE 0-15)
+000808                                     (8/52)696+         DS    0H
+000808 4110B04E                000840      (8/68)697+         LA    1,=A(CFD_EB,R4,DECIMAL)
+00080C 0AAB                                (8/79)698+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+00080E 12FF                                (1/51)700+         LTR   R15,R15
+000810 4770D1C4                0001CC      (1/52)701+         BNZ   ABORT
+000814 41F0D186                00018E     (10/12)704+         LA    15,WORK
+000818 604F0000                           (10/13)705+         STD   R4,0(15)
+00081C 606F0008                           (10/14)706+         STD   R4+2,8(15)
+000820 41100004                            (1/77)708+         LA    R1,L'=EB'2'
+000824 0610                                (1/78)709+         BCTR  R1,0
+000826 4410B03C                00082E      (1/79)710+         EX    R1,*+4+4
+00082A 47F0B042                000834      (1/80)711+         B     *+4+6
+00082E D500D186B05A     00018E 00084C      (1/81)712+         CLC   WORK(0),=EB'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000834                                     (2/38)714+         DS    0H
+000834 4DB0D13E                000146     (2/120)715+RT1_TEST15       BAS   RT1_LINK,RT1_TEST_CC0
+000838                                    (2/121)716+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000072A LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000838 LEN=01000 REG=B OFF=00000 LAB=
+000838 47F0B018                000850     (2/122)717+         B     RT1_CCE15
+00083C                                    (2/123)718+         LTORG 
+000840 0000001700000004 =A(CFD_EB,R4,DECIMAL)
+000848 0000019E
+00084C 40000000         =EB'2'
+000850                                    (2/124)719+RT1_CCE15       DS 0H
+000850                                     (1/92)723          TEST  DH,=CL45'2',=DH'2'
+000850 05A0                                (1/33)724+         BALR  R10,0                             RPI-786
+000852                                     (1/34)725+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000838 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000852 LEN=01000 REG=A OFF=00000 LAB=
+000852 D22CD196A05A     00019E 0008AC      (1/35)726+         MVC   DECIMAL,=CL45'2'
+000858                                     (1/36)727+* TEST CFD OUT=RX
+000858                                     (8/52)729+         DS    0H
+000858 4110A04E                0008A0      (8/68)730+         LA    1,=A(CFD_DH,WORK,DECIMAL)
+00085C 0AAB                                (8/79)731+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+00085E 12FF                                (1/38)733+         LTR   R15,R15
+000860 4770D1C4                0001CC      (1/39)734+         BNZ   ABORT
+000864 41F0D186                00018E      (9/12)736+         LA    15,WORK
+000868 684F0000                            (9/13)737+         LD    R4,0(15)
+00086C 686F0008                            (9/14)738+         LD    R4+2,8(15)
+000870 41F0D186                00018E     (10/12)742+         LA    15,WORK
+000874 604F0000                           (10/13)743+         STD   R4,0(15)
+000878 606F0008                           (10/14)744+         STD   R4+2,8(15)
+00087C 41100008                            (1/77)746+         LA    R1,L'=DH'2'
+000880 0610                                (1/78)747+         BCTR  R1,0
+000882 4410A038                00088A      (1/79)748+         EX    R1,*+4+4
+000886 47F0A03E                000890      (1/80)749+         B     *+4+6
+00088A D500D186A046     00018E 000898      (1/81)750+         CLC   WORK(0),=DH'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000890                                     (2/38)752+         DS    0H
+000890 4DB0D13E                000146     (2/120)753+RT1_TEST16       BAS   RT1_LINK,RT1_TEST_CC0
+000894                                    (2/121)754+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000852 LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000894 LEN=01000 REG=B OFF=00000 LAB=
+000894 47F0B046                0008DA     (2/122)755+         B     RT1_CCE16
+000898                                    (2/123)756+         LTORG 
+000898 4120000000000000 =DH'2'
+0008A0 000000180000018E =A(CFD_DH,WORK,DECIMAL)
+0008A8 0000019E
+0008AC F240404040404040 =CL45'2'
+0008B4 4040404040404040
+0008BC 4040404040404040
+0008C4 4040404040404040
+0008CC 4040404040404040
+0008D4 4040404040
+0008DA                                    (2/124)757+RT1_CCE16       DS 0H
+0008DA                                     (1/42)760+* TEST CFD OUT=(REG)
+0008DA 4120D186                00018E      (1/43)761+         LA    R2,WORK
+0008DE                                     (8/52)763+         DS    0H
+0008DE 4110B09C                000930      (8/68)764+         LA    1,=A(CFD_DH,(R2),DECIMAL)
+0008E2 50210004                            (8/76)765+         ST    R2,4(1)                 RPI 507
+0008E6 0AAB                                (8/79)766+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+0008E8 12FF                                (1/45)768+         LTR   R15,R15
+0008EA 4770D1C4                0001CC      (1/46)769+         BNZ   ABORT
+0008EE 41F0D186                00018E      (9/12)771+         LA    15,WORK
+0008F2 684F0000                            (9/13)772+         LD    R4,0(15)
+0008F6 686F0008                            (9/14)773+         LD    R4+2,8(15)
+0008FA 41F0D186                00018E     (10/12)777+         LA    15,WORK
+0008FE 604F0000                           (10/13)778+         STD   R4,0(15)
+000902 606F0008                           (10/14)779+         STD   R4+2,8(15)
+000906 41100008                            (1/77)781+         LA    R1,L'=DH'2'
+00090A 0610                                (1/78)782+         BCTR  R1,0
+00090C 4410B080                000914      (1/79)783+         EX    R1,*+4+4
+000910 47F0B086                00091A      (1/80)784+         B     *+4+6
+000914 D500D186B094     00018E 000928      (1/81)785+         CLC   WORK(0),=DH'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+00091A                                     (2/38)787+         DS    0H
+00091A 4DB0D13E                000146     (2/120)788+RT1_TEST17       BAS   RT1_LINK,RT1_TEST_CC0
+00091E                                    (2/121)789+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000852 LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000091E LEN=01000 REG=B OFF=00000 LAB=
+00091E 47F0B01E                00093C     (2/122)790+         B     RT1_CCE17
+000922                                    (2/123)791+         LTORG 
+000928 4120000000000000 =DH'2'
+000930 0000001800000002 =A(CFD_DH,(R2),DECIMAL)
+000938 0000019E
+00093C                                    (2/124)792+RT1_CCE17       DS 0H
+00093C                                     (1/49)795+* TEST CFD OUT-REG (VALUE 0-15)
+00093C                                     (8/52)797+         DS    0H
+00093C 4110B05A                000978      (8/68)798+         LA    1,=A(CFD_DH,R4,DECIMAL)
+000940 0AAB                                (8/79)799+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000942 12FF                                (1/51)801+         LTR   R15,R15
+000944 4770D1C4                0001CC      (1/52)802+         BNZ   ABORT
+000948 41F0D186                00018E     (10/12)805+         LA    15,WORK
+00094C 604F0000                           (10/13)806+         STD   R4,0(15)
+000950 606F0008                           (10/14)807+         STD   R4+2,8(15)
+000954 41100008                            (1/77)809+         LA    R1,L'=DH'2'
+000958 0610                                (1/78)810+         BCTR  R1,0
+00095A 4410B044                000962      (1/79)811+         EX    R1,*+4+4
+00095E 47F0B04A                000968      (1/80)812+         B     *+4+6
+000962 D500D186B052     00018E 000970      (1/81)813+         CLC   WORK(0),=DH'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000968                                     (2/38)815+         DS    0H
+000968 4DB0D13E                000146     (2/120)816+RT1_TEST18       BAS   RT1_LINK,RT1_TEST_CC0
+00096C                                    (2/121)817+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000852 LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000096C LEN=01000 REG=B OFF=00000 LAB=
+00096C 47F0B018                000984     (2/122)818+         B     RT1_CCE18
+000970                                    (2/123)819+         LTORG 
+000970 4120000000000000 =DH'2'
+000978 0000001800000004 =A(CFD_DH,R4,DECIMAL)
+000980 0000019E
+000984                                    (2/124)820+RT1_CCE18       DS 0H
+000984                                     (1/93)824          TEST  DB,=CL45'2',=DB'2'
+000984 05A0                                (1/33)825+         BALR  R10,0                             RPI-786
+000986                                     (1/34)826+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=0000096C LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000986 LEN=01000 REG=A OFF=00000 LAB=
+000986 D22CD196A05E     00019E 0009E4      (1/35)827+         MVC   DECIMAL,=CL45'2'
+00098C                                     (1/36)828+* TEST CFD OUT=RX
+00098C                                     (8/52)830+         DS    0H
+00098C 4110A052                0009D8      (8/68)831+         LA    1,=A(CFD_DB,WORK,DECIMAL)
+000990 0AAB                                (8/79)832+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000992 12FF                                (1/38)834+         LTR   R15,R15
+000994 4770D1C4                0001CC      (1/39)835+         BNZ   ABORT
+000998 41F0D186                00018E      (9/12)837+         LA    15,WORK
+00099C 684F0000                            (9/13)838+         LD    R4,0(15)
+0009A0 686F0008                            (9/14)839+         LD    R4+2,8(15)
+0009A4 41F0D186                00018E     (10/12)843+         LA    15,WORK
+0009A8 604F0000                           (10/13)844+         STD   R4,0(15)
+0009AC 606F0008                           (10/14)845+         STD   R4+2,8(15)
+0009B0 41100008                            (1/77)847+         LA    R1,L'=DB'2'
+0009B4 0610                                (1/78)848+         BCTR  R1,0
+0009B6 4410A038                0009BE      (1/79)849+         EX    R1,*+4+4
+0009BA 47F0A03E                0009C4      (1/80)850+         B     *+4+6
+0009BE D500D186A04A     00018E 0009D0      (1/81)851+         CLC   WORK(0),=DB'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+0009C4                                     (2/38)853+         DS    0H
+0009C4 4DB0D13E                000146     (2/120)854+RT1_TEST19       BAS   RT1_LINK,RT1_TEST_CC0
+0009C8                                    (2/121)855+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000986 LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=000009C8 LEN=01000 REG=B OFF=00000 LAB=
+0009C8 47F0B04A                000A12     (2/122)856+         B     RT1_CCE19
+0009CC                                    (2/123)857+         LTORG 
+0009D0 4000000000000000 =DB'2'
+0009D8 000000190000018E =A(CFD_DB,WORK,DECIMAL)
+0009E0 0000019E
+0009E4 F240404040404040 =CL45'2'
+0009EC 4040404040404040
+0009F4 4040404040404040
+0009FC 4040404040404040
+000A04 4040404040404040
+000A0C 4040404040
+000A12                                    (2/124)858+RT1_CCE19       DS 0H
+000A12                                     (1/42)861+* TEST CFD OUT=(REG)
+000A12 4120D186                00018E      (1/43)862+         LA    R2,WORK
+000A16                                     (8/52)864+         DS    0H
+000A16 4110B0A0                000A68      (8/68)865+         LA    1,=A(CFD_DB,(R2),DECIMAL)
+000A1A 50210004                            (8/76)866+         ST    R2,4(1)                 RPI 507
+000A1E 0AAB                                (8/79)867+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000A20 12FF                                (1/45)869+         LTR   R15,R15
+000A22 4770D1C4                0001CC      (1/46)870+         BNZ   ABORT
+000A26 41F0D186                00018E      (9/12)872+         LA    15,WORK
+000A2A 684F0000                            (9/13)873+         LD    R4,0(15)
+000A2E 686F0008                            (9/14)874+         LD    R4+2,8(15)
+000A32 41F0D186                00018E     (10/12)878+         LA    15,WORK
+000A36 604F0000                           (10/13)879+         STD   R4,0(15)
+000A3A 606F0008                           (10/14)880+         STD   R4+2,8(15)
+000A3E 41100008                            (1/77)882+         LA    R1,L'=DB'2'
+000A42 0610                                (1/78)883+         BCTR  R1,0
+000A44 4410B084                000A4C      (1/79)884+         EX    R1,*+4+4
+000A48 47F0B08A                000A52      (1/80)885+         B     *+4+6
+000A4C D500D186B098     00018E 000A60      (1/81)886+         CLC   WORK(0),=DB'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000A52                                     (2/38)888+         DS    0H
+000A52 4DB0D13E                000146     (2/120)889+RT1_TEST20       BAS   RT1_LINK,RT1_TEST_CC0
+000A56                                    (2/121)890+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000986 LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000A56 LEN=01000 REG=B OFF=00000 LAB=
+000A56 47F0B01E                000A74     (2/122)891+         B     RT1_CCE20
+000A5A                                    (2/123)892+         LTORG 
+000A60 4000000000000000 =DB'2'
+000A68 0000001900000002 =A(CFD_DB,(R2),DECIMAL)
+000A70 0000019E
+000A74                                    (2/124)893+RT1_CCE20       DS 0H
+000A74                                     (1/49)896+* TEST CFD OUT-REG (VALUE 0-15)
+000A74                                     (8/52)898+         DS    0H
+000A74 4110B05A                000AB0      (8/68)899+         LA    1,=A(CFD_DB,R4,DECIMAL)
+000A78 0AAB                                (8/79)900+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000A7A 12FF                                (1/51)902+         LTR   R15,R15
+000A7C 4770D1C4                0001CC      (1/52)903+         BNZ   ABORT
+000A80 41F0D186                00018E     (10/12)906+         LA    15,WORK
+000A84 604F0000                           (10/13)907+         STD   R4,0(15)
+000A88 606F0008                           (10/14)908+         STD   R4+2,8(15)
+000A8C 41100008                            (1/77)910+         LA    R1,L'=DB'2'
+000A90 0610                                (1/78)911+         BCTR  R1,0
+000A92 4410B044                000A9A      (1/79)912+         EX    R1,*+4+4
+000A96 47F0B04A                000AA0      (1/80)913+         B     *+4+6
+000A9A D500D186B052     00018E 000AA8      (1/81)914+         CLC   WORK(0),=DB'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000AA0                                     (2/38)916+         DS    0H
+000AA0 4DB0D13E                000146     (2/120)917+RT1_TEST21       BAS   RT1_LINK,RT1_TEST_CC0
+000AA4                                    (2/121)918+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000986 LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000AA4 LEN=01000 REG=B OFF=00000 LAB=
+000AA4 47F0B018                000ABC     (2/122)919+         B     RT1_CCE21
+000AA8                                    (2/123)920+         LTORG 
+000AA8 4000000000000000 =DB'2'
+000AB0 0000001900000004 =A(CFD_DB,R4,DECIMAL)
+000AB8 0000019E
+000ABC                                    (2/124)921+RT1_CCE21       DS 0H
+000ABC                                     (1/94)925          TEST  LH,=CL45'2',=LH'2'
+000ABC 05A0                                (1/33)926+         BALR  R10,0                             RPI-786
+000ABE                                     (1/34)927+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000AA4 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000ABE LEN=01000 REG=A OFF=00000 LAB=
+000ABE D22CD196A066     00019E 000B24      (1/35)928+         MVC   DECIMAL,=CL45'2'
+000AC4                                     (1/36)929+* TEST CFD OUT=RX
+000AC4                                     (8/52)931+         DS    0H
+000AC4 4110A05A                000B18      (8/68)932+         LA    1,=A(CFD_LH,WORK,DECIMAL)
+000AC8 0AAB                                (8/79)933+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000ACA 12FF                                (1/38)935+         LTR   R15,R15
+000ACC 4770D1C4                0001CC      (1/39)936+         BNZ   ABORT
+000AD0 41F0D186                00018E      (9/12)938+         LA    15,WORK
+000AD4 684F0000                            (9/13)939+         LD    R4,0(15)
+000AD8 686F0008                            (9/14)940+         LD    R4+2,8(15)
+000ADC 41F0D186                00018E     (10/12)944+         LA    15,WORK
+000AE0 604F0000                           (10/13)945+         STD   R4,0(15)
+000AE4 606F0008                           (10/14)946+         STD   R4+2,8(15)
+000AE8 41100010                            (1/77)948+         LA    R1,L'=LH'2'
+000AEC 0610                                (1/78)949+         BCTR  R1,0
+000AEE 4410A038                000AF6      (1/79)950+         EX    R1,*+4+4
+000AF2 47F0A03E                000AFC      (1/80)951+         B     *+4+6
+000AF6 D500D186A04A     00018E 000B08      (1/81)952+         CLC   WORK(0),=LH'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000AFC                                     (2/38)954+         DS    0H
+000AFC 4DB0D13E                000146     (2/120)955+RT1_TEST22       BAS   RT1_LINK,RT1_TEST_CC0
+000B00                                    (2/121)956+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000ABE LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000B00 LEN=01000 REG=B OFF=00000 LAB=
+000B00 47F0B052                000B52     (2/122)957+         B     RT1_CCE22
+000B04                                    (2/123)958+         LTORG 
+000B08 4120000000000000 =LH'2'
+000B10 3300000000000000
+000B18 0000001A0000018E =A(CFD_LH,WORK,DECIMAL)
+000B20 0000019E
+000B24 F240404040404040 =CL45'2'
+000B2C 4040404040404040
+000B34 4040404040404040
+000B3C 4040404040404040
+000B44 4040404040404040
+000B4C 4040404040
+000B52                                    (2/124)959+RT1_CCE22       DS 0H
+000B52                                     (1/42)962+* TEST CFD OUT=(REG)
+000B52 4120D186                00018E      (1/43)963+         LA    R2,WORK
+000B56                                     (8/52)965+         DS    0H
+000B56 4110B0B0                000BB0      (8/68)966+         LA    1,=A(CFD_LH,(R2),DECIMAL)
+000B5A 50210004                            (8/76)967+         ST    R2,4(1)                 RPI 507
+000B5E 0AAB                                (8/79)968+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000B60 12FF                                (1/45)970+         LTR   R15,R15
+000B62 4770D1C4                0001CC      (1/46)971+         BNZ   ABORT
+000B66 41F0D186                00018E      (9/12)973+         LA    15,WORK
+000B6A 684F0000                            (9/13)974+         LD    R4,0(15)
+000B6E 686F0008                            (9/14)975+         LD    R4+2,8(15)
+000B72 41F0D186                00018E     (10/12)979+         LA    15,WORK
+000B76 604F0000                           (10/13)980+         STD   R4,0(15)
+000B7A 606F0008                           (10/14)981+         STD   R4+2,8(15)
+000B7E 41100010                            (1/77)983+         LA    R1,L'=LH'2'
+000B82 0610                                (1/78)984+         BCTR  R1,0
+000B84 4410B08C                000B8C      (1/79)985+         EX    R1,*+4+4
+000B88 47F0B092                000B92      (1/80)986+         B     *+4+6
+000B8C D500D186B0A0     00018E 000BA0      (1/81)987+         CLC   WORK(0),=LH'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000B92                                     (2/38)989+         DS    0H
+000B92 4DB0D13E                000146     (2/120)990+RT1_TEST23       BAS   RT1_LINK,RT1_TEST_CC0
+000B96                                    (2/121)991+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000ABE LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000B96 LEN=01000 REG=B OFF=00000 LAB=
+000B96 47F0B026                000BBC     (2/122)992+         B     RT1_CCE23
+000B9A                                    (2/123)993+         LTORG 
+000BA0 4120000000000000 =LH'2'
+000BA8 3300000000000000
+000BB0 0000001A00000002 =A(CFD_LH,(R2),DECIMAL)
+000BB8 0000019E
+000BBC                                    (2/124)994+RT1_CCE23       DS 0H
+000BBC                                     (1/49)997+* TEST CFD OUT-REG (VALUE 0-15)
+000BBC                                     (8/52)999+         DS    0H
+000BBC 4110B06A                000C00     (8/68)1000+         LA    1,=A(CFD_LH,R4,DECIMAL)
+000BC0 0AAB                               (8/79)1001+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000BC2 12FF                               (1/51)1003+         LTR   R15,R15
+000BC4 4770D1C4                0001CC     (1/52)1004+         BNZ   ABORT
+000BC8 41F0D186                00018E    (10/12)1007+         LA    15,WORK
+000BCC 604F0000                          (10/13)1008+         STD   R4,0(15)
+000BD0 606F0008                          (10/14)1009+         STD   R4+2,8(15)
+000BD4 41100010                           (1/77)1011+         LA    R1,L'=LH'2'
+000BD8 0610                               (1/78)1012+         BCTR  R1,0
+000BDA 4410B04C                000BE2     (1/79)1013+         EX    R1,*+4+4
+000BDE 47F0B052                000BE8     (1/80)1014+         B     *+4+6
+000BE2 D500D186B05A     00018E 000BF0     (1/81)1015+         CLC   WORK(0),=LH'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000BE8                                    (2/38)1017+         DS    0H
+000BE8 4DB0D13E                000146    (2/120)1018+RT1_TEST24       BAS   RT1_LINK,RT1_TEST_CC0
+000BEC                                   (2/121)1019+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000ABE LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000BEC LEN=01000 REG=B OFF=00000 LAB=
+000BEC 47F0B020                000C0C    (2/122)1020+         B     RT1_CCE24
+000BF0                                   (2/123)1021+         LTORG 
+000BF0 4120000000000000 =LH'2'
+000BF8 3300000000000000
+000C00 0000001A00000004 =A(CFD_LH,R4,DECIMAL)
+000C08 0000019E
+000C0C                                   (2/124)1022+RT1_CCE24       DS 0H
+000C0C                                    (1/95)1026          TEST  LB,=CL45'2',=LB'2'
+000C0C 05A0                               (1/33)1027+         BALR  R10,0                             RPI-786
+000C0E                                    (1/34)1028+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000BEC LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000C0E LEN=01000 REG=A OFF=00000 LAB=
+000C0E D22CD196A066     00019E 000C74     (1/35)1029+         MVC   DECIMAL,=CL45'2'
+000C14                                    (1/36)1030+* TEST CFD OUT=RX
+000C14                                    (8/52)1032+         DS    0H
+000C14 4110A05A                000C68     (8/68)1033+         LA    1,=A(CFD_LB,WORK,DECIMAL)
+000C18 0AAB                               (8/79)1034+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000C1A 12FF                               (1/38)1036+         LTR   R15,R15
+000C1C 4770D1C4                0001CC     (1/39)1037+         BNZ   ABORT
+000C20 41F0D186                00018E     (9/12)1039+         LA    15,WORK
+000C24 684F0000                           (9/13)1040+         LD    R4,0(15)
+000C28 686F0008                           (9/14)1041+         LD    R4+2,8(15)
+000C2C 41F0D186                00018E    (10/12)1045+         LA    15,WORK
+000C30 604F0000                          (10/13)1046+         STD   R4,0(15)
+000C34 606F0008                          (10/14)1047+         STD   R4+2,8(15)
+000C38 41100010                           (1/77)1049+         LA    R1,L'=LB'2'
+000C3C 0610                               (1/78)1050+         BCTR  R1,0
+000C3E 4410A038                000C46     (1/79)1051+         EX    R1,*+4+4
+000C42 47F0A03E                000C4C     (1/80)1052+         B     *+4+6
+000C46 D500D186A04A     00018E 000C58     (1/81)1053+         CLC   WORK(0),=LB'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000C4C                                    (2/38)1055+         DS    0H
+000C4C 4DB0D13E                000146    (2/120)1056+RT1_TEST25       BAS   RT1_LINK,RT1_TEST_CC0
+000C50                                   (2/121)1057+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000C0E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000C50 LEN=01000 REG=B OFF=00000 LAB=
+000C50 47F0B052                000CA2    (2/122)1058+         B     RT1_CCE25
+000C54                                   (2/123)1059+         LTORG 
+000C58 4000000000000000 =LB'2'
+000C60 0000000000000000
+000C68 0000001B0000018E =A(CFD_LB,WORK,DECIMAL)
+000C70 0000019E
+000C74 F240404040404040 =CL45'2'
+000C7C 4040404040404040
+000C84 4040404040404040
+000C8C 4040404040404040
+000C94 4040404040404040
+000C9C 4040404040
+000CA2                                   (2/124)1060+RT1_CCE25       DS 0H
+000CA2                                    (1/42)1063+* TEST CFD OUT=(REG)
+000CA2 4120D186                00018E     (1/43)1064+         LA    R2,WORK
+000CA6                                    (8/52)1066+         DS    0H
+000CA6 4110B0B0                000D00     (8/68)1067+         LA    1,=A(CFD_LB,(R2),DECIMAL)
+000CAA 50210004                           (8/76)1068+         ST    R2,4(1)                 RPI 507
+000CAE 0AAB                               (8/79)1069+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000CB0 12FF                               (1/45)1071+         LTR   R15,R15
+000CB2 4770D1C4                0001CC     (1/46)1072+         BNZ   ABORT
+000CB6 41F0D186                00018E     (9/12)1074+         LA    15,WORK
+000CBA 684F0000                           (9/13)1075+         LD    R4,0(15)
+000CBE 686F0008                           (9/14)1076+         LD    R4+2,8(15)
+000CC2 41F0D186                00018E    (10/12)1080+         LA    15,WORK
+000CC6 604F0000                          (10/13)1081+         STD   R4,0(15)
+000CCA 606F0008                          (10/14)1082+         STD   R4+2,8(15)
+000CCE 41100010                           (1/77)1084+         LA    R1,L'=LB'2'
+000CD2 0610                               (1/78)1085+         BCTR  R1,0
+000CD4 4410B08C                000CDC     (1/79)1086+         EX    R1,*+4+4
+000CD8 47F0B092                000CE2     (1/80)1087+         B     *+4+6
+000CDC D500D186B0A0     00018E 000CF0     (1/81)1088+         CLC   WORK(0),=LB'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000CE2                                    (2/38)1090+         DS    0H
+000CE2 4DB0D13E                000146    (2/120)1091+RT1_TEST26       BAS   RT1_LINK,RT1_TEST_CC0
+000CE6                                   (2/121)1092+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000C0E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000CE6 LEN=01000 REG=B OFF=00000 LAB=
+000CE6 47F0B026                000D0C    (2/122)1093+         B     RT1_CCE26
+000CEA                                   (2/123)1094+         LTORG 
+000CF0 4000000000000000 =LB'2'
+000CF8 0000000000000000
+000D00 0000001B00000002 =A(CFD_LB,(R2),DECIMAL)
+000D08 0000019E
+000D0C                                   (2/124)1095+RT1_CCE26       DS 0H
+000D0C                                    (1/49)1098+* TEST CFD OUT-REG (VALUE 0-15)
+000D0C                                    (8/52)1100+         DS    0H
+000D0C 4110B06A                000D50     (8/68)1101+         LA    1,=A(CFD_LB,R4,DECIMAL)
+000D10 0AAB                               (8/79)1102+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000D12 12FF                               (1/51)1104+         LTR   R15,R15
+000D14 4770D1C4                0001CC     (1/52)1105+         BNZ   ABORT
+000D18 41F0D186                00018E    (10/12)1108+         LA    15,WORK
+000D1C 604F0000                          (10/13)1109+         STD   R4,0(15)
+000D20 606F0008                          (10/14)1110+         STD   R4+2,8(15)
+000D24 41100010                           (1/77)1112+         LA    R1,L'=LB'2'
+000D28 0610                               (1/78)1113+         BCTR  R1,0
+000D2A 4410B04C                000D32     (1/79)1114+         EX    R1,*+4+4
+000D2E 47F0B052                000D38     (1/80)1115+         B     *+4+6
+000D32 D500D186B05A     00018E 000D40     (1/81)1116+         CLC   WORK(0),=LB'2'  VERIFY CTD CONSTANT WITH CFD RESULT
+000D38                                    (2/38)1118+         DS    0H
+000D38 4DB0D13E                000146    (2/120)1119+RT1_TEST27       BAS   RT1_LINK,RT1_TEST_CC0
+000D3C                                   (2/121)1120+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000C0E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000D3C LEN=01000 REG=B OFF=00000 LAB=
+000D3C 47F0B020                000D5C    (2/122)1121+         B     RT1_CCE27
+000D40                                   (2/123)1122+         LTORG 
+000D40 4000000000000000 =LB'2'
+000D48 0000000000000000
+000D50 0000001B00000004 =A(CFD_LB,R4,DECIMAL)
+000D58 0000019E
+000D5C                                   (2/124)1123+RT1_CCE27       DS 0H
+000D5C                                    (1/96)1127          TEST  DD,=CL45'2',=DD'2'
+000D5C 05A0                               (1/33)1128+         BALR  R10,0                             RPI-786
+000D5E                                    (1/34)1129+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000D3C LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000D5E LEN=01000 REG=A OFF=00000 LAB=
+000D5E D22CD196A046     00019E 000DA4     (1/35)1130+         MVC   DECIMAL,=CL45'2'
+000D64                                    (1/36)1131+* TEST CFD OUT=RX
+000D64                                    (8/52)1133+         DS    0H
+000D64 4110A03A                000D98     (8/68)1134+         LA    1,=A(CFD_DD,WORK,DECIMAL)
+000D68 0AAB                               (8/79)1135+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000D6A 12FF                               (1/38)1137+         LTR   R15,R15
+000D6C 4770D1C4                0001CC     (1/39)1138+         BNZ   ABORT
+000D70 41F0D186                00018E     (9/12)1140+         LA    15,WORK
+000D74 684F0000                           (9/13)1141+         LD    R4,0(15)
+000D78 686F0008                           (9/14)1142+         LD    R4+2,8(15)
+000D7C 6800A032                000D90     (1/68)1145+         LD    R0,=DD'2'
+000D80 B3E40004                           (1/69)1146+         CDTR  R0,R4
+000D84                                    (2/38)1148+         DS    0H
+000D84 4DB0D13E                000146    (2/120)1149+RT1_TEST28       BAS   RT1_LINK,RT1_TEST_CC0
+000D88                                   (2/121)1150+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000D5E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000D88 LEN=01000 REG=B OFF=00000 LAB=
+000D88 47F0B04A                000DD2    (2/122)1151+         B     RT1_CCE28
+000D8C                                   (2/123)1152+         LTORG 
+000D90 2238000000000002 =DD'2'
+000D98 0000001C0000018E =A(CFD_DD,WORK,DECIMAL)
+000DA0 0000019E
+000DA4 F240404040404040 =CL45'2'
+000DAC 4040404040404040
+000DB4 4040404040404040
+000DBC 4040404040404040
+000DC4 4040404040404040
+000DCC 4040404040
+000DD2                                   (2/124)1153+RT1_CCE28       DS 0H
+000DD2                                    (1/42)1156+* TEST CFD OUT=(REG)
+000DD2 4120D186                00018E     (1/43)1157+         LA    R2,WORK
+000DD6                                    (8/52)1159+         DS    0H
+000DD6 4110B088                000E10     (8/68)1160+         LA    1,=A(CFD_DD,(R2),DECIMAL)
+000DDA 50210004                           (8/76)1161+         ST    R2,4(1)                 RPI 507
+000DDE 0AAB                               (8/79)1162+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000DE0 12FF                               (1/45)1164+         LTR   R15,R15
+000DE2 4770D1C4                0001CC     (1/46)1165+         BNZ   ABORT
+000DE6 41F0D186                00018E     (9/12)1167+         LA    15,WORK
+000DEA 684F0000                           (9/13)1168+         LD    R4,0(15)
+000DEE 686F0008                           (9/14)1169+         LD    R4+2,8(15)
+000DF2 6800B080                000E08     (1/68)1172+         LD    R0,=DD'2'
+000DF6 B3E40004                           (1/69)1173+         CDTR  R0,R4
+000DFA                                    (2/38)1175+         DS    0H
+000DFA 4DB0D13E                000146    (2/120)1176+RT1_TEST29       BAS   RT1_LINK,RT1_TEST_CC0
+000DFE                                   (2/121)1177+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000D5E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000DFE LEN=01000 REG=B OFF=00000 LAB=
+000DFE 47F0B01E                000E1C    (2/122)1178+         B     RT1_CCE29
+000E02                                   (2/123)1179+         LTORG 
+000E08 2238000000000002 =DD'2'
+000E10 0000001C00000002 =A(CFD_DD,(R2),DECIMAL)
+000E18 0000019E
+000E1C                                   (2/124)1180+RT1_CCE29       DS 0H
+000E1C                                    (1/49)1183+* TEST CFD OUT-REG (VALUE 0-15)
+000E1C                                    (8/52)1185+         DS    0H
+000E1C 4110B042                000E40     (8/68)1186+         LA    1,=A(CFD_DD,R4,DECIMAL)
+000E20 0AAB                               (8/79)1187+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000E22 12FF                               (1/51)1189+         LTR   R15,R15
+000E24 4770D1C4                0001CC     (1/52)1190+         BNZ   ABORT
+000E28 6800B03A                000E38     (1/68)1192+         LD    R0,=DD'2'
+000E2C B3E40004                           (1/69)1193+         CDTR  R0,R4
+000E30                                    (2/38)1195+         DS    0H
+000E30 4DB0D13E                000146    (2/120)1196+RT1_TEST30       BAS   RT1_LINK,RT1_TEST_CC0
+000E34                                   (2/121)1197+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000D5E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000E34 LEN=01000 REG=B OFF=00000 LAB=
+000E34 47F0B018                000E4C    (2/122)1198+         B     RT1_CCE30
+000E38                                   (2/123)1199+         LTORG 
+000E38 2238000000000002 =DD'2'
+000E40 0000001C00000004 =A(CFD_DD,R4,DECIMAL)
+000E48 0000019E
+000E4C                                   (2/124)1200+RT1_CCE30       DS 0H
+000E4C                                    (1/97)1204          TEST  ED,=CL45'2',=ED'2'
+000E4C 05A0                               (1/33)1205+         BALR  R10,0                             RPI-786
+000E4E                                    (1/34)1206+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000E34 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000E4E LEN=01000 REG=A OFF=00000 LAB=
+000E4E D22CD196A04A     00019E 000E98     (1/35)1207+         MVC   DECIMAL,=CL45'2'
+000E54                                    (1/36)1208+* TEST CFD OUT=RX
+000E54                                    (8/52)1210+         DS    0H
+000E54 4110A03A                000E88     (8/68)1211+         LA    1,=A(CFD_ED,WORK,DECIMAL)
+000E58 0AAB                               (8/79)1212+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000E5A 12FF                               (1/38)1214+         LTR   R15,R15
+000E5C 4770D1C4                0001CC     (1/39)1215+         BNZ   ABORT
+000E60 41F0D186                00018E     (9/12)1217+         LA    15,WORK
+000E64 684F0000                           (9/13)1218+         LD    R4,0(15)
+000E68 686F0008                           (9/14)1219+         LD    R4+2,8(15)
+000E6C 7800A046                000E94     (1/62)1222+         LE    R0,=ED'2'
+000E70 B3D40000                           (1/63)1223+         LDETR R0,R0,0
+000E74 B3D40044                           (1/64)1224+         LDETR R4,R4,0
+000E78 B3E40004                           (1/65)1225+         CDTR  R0,R4
+000E7C                                    (2/38)1227+         DS    0H
+000E7C 4DB0D13E                000146    (2/120)1228+RT1_TEST31       BAS   RT1_LINK,RT1_TEST_CC0
+000E80                                   (2/121)1229+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000E4E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000E80 LEN=01000 REG=B OFF=00000 LAB=
+000E80 47F0B046                000EC6    (2/122)1230+         B     RT1_CCE31
+000E84                                   (2/123)1231+         LTORG 
+000E88 0000001D0000018E =A(CFD_ED,WORK,DECIMAL)
+000E90 0000019E
+000E94 22500002         =ED'2'
+000E98 F240404040404040 =CL45'2'
+000EA0 4040404040404040
+000EA8 4040404040404040
+000EB0 4040404040404040
+000EB8 4040404040404040
+000EC0 4040404040
+000EC6                                   (2/124)1232+RT1_CCE31       DS 0H
+000EC6                                    (1/42)1235+* TEST CFD OUT=(REG)
+000EC6 4120D186                00018E     (1/43)1236+         LA    R2,WORK
+000ECA                                    (8/52)1238+         DS    0H
+000ECA 4110B080                000F00     (8/68)1239+         LA    1,=A(CFD_ED,(R2),DECIMAL)
+000ECE 50210004                           (8/76)1240+         ST    R2,4(1)                 RPI 507
+000ED2 0AAB                               (8/79)1241+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000ED4 12FF                               (1/45)1243+         LTR   R15,R15
+000ED6 4770D1C4                0001CC     (1/46)1244+         BNZ   ABORT
+000EDA 41F0D186                00018E     (9/12)1246+         LA    15,WORK
+000EDE 684F0000                           (9/13)1247+         LD    R4,0(15)
+000EE2 686F0008                           (9/14)1248+         LD    R4+2,8(15)
+000EE6 7800B08C                000F0C     (1/62)1251+         LE    R0,=ED'2'
+000EEA B3D40000                           (1/63)1252+         LDETR R0,R0,0
+000EEE B3D40044                           (1/64)1253+         LDETR R4,R4,0
+000EF2 B3E40004                           (1/65)1254+         CDTR  R0,R4
+000EF6                                    (2/38)1256+         DS    0H
+000EF6 4DB0D13E                000146    (2/120)1257+RT1_TEST32       BAS   RT1_LINK,RT1_TEST_CC0
+000EFA                                   (2/121)1258+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000E4E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000EFA LEN=01000 REG=B OFF=00000 LAB=
+000EFA 47F0B016                000F10    (2/122)1259+         B     RT1_CCE32
+000EFE                                   (2/123)1260+         LTORG 
+000F00 0000001D00000002 =A(CFD_ED,(R2),DECIMAL)
+000F08 0000019E
+000F0C 22500002         =ED'2'
+000F10                                   (2/124)1261+RT1_CCE32       DS 0H
+000F10                                    (1/49)1264+* TEST CFD OUT-REG (VALUE 0-15)
+000F10                                    (8/52)1266+         DS    0H
+000F10 4110B03E                000F38     (8/68)1267+         LA    1,=A(CFD_ED,R4,DECIMAL)
+000F14 0AAB                               (8/79)1268+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000F16 12FF                               (1/51)1270+         LTR   R15,R15
+000F18 4770D1C4                0001CC     (1/52)1271+         BNZ   ABORT
+000F1C 7800B04A                000F44     (1/62)1273+         LE    R0,=ED'2'
+000F20 B3D40000                           (1/63)1274+         LDETR R0,R0,0
+000F24 B3D40044                           (1/64)1275+         LDETR R4,R4,0
+000F28 B3E40004                           (1/65)1276+         CDTR  R0,R4
+000F2C                                    (2/38)1278+         DS    0H
+000F2C 4DB0D13E                000146    (2/120)1279+RT1_TEST33       BAS   RT1_LINK,RT1_TEST_CC0
+000F30                                   (2/121)1280+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000E4E LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000F30 LEN=01000 REG=B OFF=00000 LAB=
+000F30 47F0B018                000F48    (2/122)1281+         B     RT1_CCE33
+000F34                                   (2/123)1282+         LTORG 
+000F38 0000001D00000004 =A(CFD_ED,R4,DECIMAL)
+000F40 0000019E
+000F44 22500002         =ED'2'
+000F48                                   (2/124)1283+RT1_CCE33       DS 0H
+000F48                                    (1/98)1287          TEST  LD,=CL45'2',=LD'2'
+000F48 05A0                               (1/33)1288+         BALR  R10,0                             RPI-786
+000F4A                                    (1/34)1289+         USING *,R10                             RPI-786
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000F30 LEN=01000 REG=B OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000F4A LEN=01000 REG=A OFF=00000 LAB=
+000F4A D22CD196A052     00019E 000F9C     (1/35)1290+         MVC   DECIMAL,=CL45'2'
+000F50                                    (1/36)1291+* TEST CFD OUT=RX
+000F50                                    (8/52)1293+         DS    0H
+000F50 4110A046                000F90     (8/68)1294+         LA    1,=A(CFD_LD,WORK,DECIMAL)
+000F54 0AAB                               (8/79)1295+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000F56 12FF                               (1/38)1297+         LTR   R15,R15
+000F58 4770D1C4                0001CC     (1/39)1298+         BNZ   ABORT
+000F5C 41F0D186                00018E     (9/12)1300+         LA    15,WORK
+000F60 684F0000                           (9/13)1301+         LD    R4,0(15)
+000F64 686F0008                           (9/14)1302+         LD    R4+2,8(15)
+000F68 41F0A036                000F80     (9/12)1306+         LA    15,=LD'2'
+000F6C 680F0000                           (9/13)1307+         LD    R0,0(15)
+000F70 682F0008                           (9/14)1308+         LD    R0+2,8(15)
+000F74 B3EC0004                           (1/73)1310+         CXTR  R0,R4
+000F78                                    (2/38)1312+         DS    0H
+000F78 4DB0D13E                000146    (2/120)1313+RT1_TEST34       BAS   RT1_LINK,RT1_TEST_CC0
+000F7C                                   (2/121)1314+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000F4A LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000F7C LEN=01000 REG=B OFF=00000 LAB=
+000F7C 47F0B04E                000FCA    (2/122)1315+         B     RT1_CCE34
+000F80                                   (2/123)1316+         LTORG 
+000F80 2208000000000000 =LD'2'
+000F88 0000000000000002
+000F90 0000001E0000018E =A(CFD_LD,WORK,DECIMAL)
+000F98 0000019E
+000F9C F240404040404040 =CL45'2'
+000FA4 4040404040404040
+000FAC 4040404040404040
+000FB4 4040404040404040
+000FBC 4040404040404040
+000FC4 4040404040
+000FCA                                   (2/124)1317+RT1_CCE34       DS 0H
+000FCA                                    (1/42)1320+* TEST CFD OUT=(REG)
+000FCA 4120D186                00018E     (1/43)1321+         LA    R2,WORK
+000FCE                                    (8/52)1323+         DS    0H
+000FCE 4110B09C                001018     (8/68)1324+         LA    1,=A(CFD_LD,(R2),DECIMAL)
+000FD2 50210004                           (8/76)1325+         ST    R2,4(1)                 RPI 507
+000FD6 0AAB                               (8/79)1326+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+000FD8 12FF                               (1/45)1328+         LTR   R15,R15
+000FDA 4770D1C4                0001CC     (1/46)1329+         BNZ   ABORT
+000FDE 41F0D186                00018E     (9/12)1331+         LA    15,WORK
+000FE2 684F0000                           (9/13)1332+         LD    R4,0(15)
+000FE6 686F0008                           (9/14)1333+         LD    R4+2,8(15)
+000FEA 41F0B08C                001008     (9/12)1337+         LA    15,=LD'2'
+000FEE 680F0000                           (9/13)1338+         LD    R0,0(15)
+000FF2 682F0008                           (9/14)1339+         LD    R0+2,8(15)
+000FF6 B3EC0004                           (1/73)1341+         CXTR  R0,R4
+000FFA                                    (2/38)1343+         DS    0H
+000FFA 4DB0D13E                000146    (2/120)1344+RT1_TEST35       BAS   RT1_LINK,RT1_TEST_CC0
+000FFE                                   (2/121)1345+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000F4A LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000FFE LEN=01000 REG=B OFF=00000 LAB=
+000FFE 47F0B026                001024    (2/122)1346+         B     RT1_CCE35
+001002                                   (2/123)1347+         LTORG 
+001008 2208000000000000 =LD'2'
+001010 0000000000000002
+001018 0000001E00000002 =A(CFD_LD,(R2),DECIMAL)
+001020 0000019E
+001024                                   (2/124)1348+RT1_CCE35       DS 0H
+001024                                    (1/49)1351+* TEST CFD OUT-REG (VALUE 0-15)
+001024                                    (8/52)1353+         DS    0H
+001024 4110B05A                001058     (8/68)1354+         LA    1,=A(CFD_LD,R4,DECIMAL)
+001028 0AAB                               (8/79)1355+         SVC   171 CFD Z390 SVC R1=A(TYPE,OUT,IN)
+00102A 12FF                               (1/51)1357+         LTR   R15,R15
+00102C 4770D1C4                0001CC     (1/52)1358+         BNZ   ABORT
+001030 41F0B04A                001048     (9/12)1361+         LA    15,=LD'2'
+001034 680F0000                           (9/13)1362+         LD    R0,0(15)
+001038 682F0008                           (9/14)1363+         LD    R0+2,8(15)
+00103C B3EC0004                           (1/73)1365+         CXTR  R0,R4
+001040                                    (2/38)1367+         DS    0H
+001040 4DB0D13E                000146    (2/120)1368+RT1_TEST36       BAS   RT1_LINK,RT1_TEST_CC0
+001044                                   (2/121)1369+         USING *,RT1_LINK
+LISTUSE TESTCTD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00000F4A LEN=01000 REG=A OFF=00000 LAB=
+LISTUSE TESTCTD1 ESD=0001 LOC=00001044 LEN=01000 REG=B OFF=00000 LAB=
+001044 47F0B020                001064    (2/122)1370+         B     RT1_CCE36
+001048                                   (2/123)1371+         LTORG 
+001048 2208000000000000 =LD'2'
+001050 0000000000000002
+001058 0000001E00000004 =A(CFD_LD,R4,DECIMAL)
+001060 0000019E
+001064                                   (2/124)1372+RT1_CCE36       DS 0H
+001064                                    (1/99)1376          RT1   END
+001064 47F0D0B8                0000C0    (2/174)1377+         B      RT1_END
+001068                                   (1/100)1379          EQUREGS REGS=FPR
+001068                  00000000          (7/41)1380+F0     EQU 0
+001068                  00000001          (7/41)1381+F1     EQU 1
+001068                  00000002          (7/41)1382+F2     EQU 2
+001068                  00000003          (7/41)1383+F3     EQU 3
+001068                  00000004          (7/41)1384+F4     EQU 4
+001068                  00000005          (7/41)1385+F5     EQU 5
+001068                  00000006          (7/41)1386+F6     EQU 6
+001068                  00000007          (7/41)1387+F7     EQU 7
+001068                  00000008          (7/41)1388+F8     EQU 8
+001068                  00000009          (7/41)1389+F9     EQU 9
+001068                  0000000A          (7/41)1390+F10    EQU 10
+001068                  0000000B          (7/41)1391+F11    EQU 11
+001068                  0000000C          (7/41)1392+F12    EQU 12
+001068                  0000000D          (7/41)1393+F13    EQU 13
+001068                  0000000E          (7/41)1394+F14    EQU 14
+001068                  0000000F          (7/41)1395+F15    EQU 15
+001068                                   (1/101)1397          END 
+Relocation Definitions
+ ESD=0001 LOC=0000026C LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000270 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000308 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000358 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000003BC LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000003C0 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000458 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000004A8 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=0000050C LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000510 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000005A8 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000005F8 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=0000064C LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000650 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000006D8 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000720 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000774 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000778 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000800 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000848 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000008A4 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000008A8 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000938 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000980 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000009DC LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=000009E0 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000A70 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000AB8 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000B1C LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000B20 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000BB8 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000C08 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000C6C LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000C70 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000D08 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000D58 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000D9C LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000DA0 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000E18 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000E48 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000E8C LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000E90 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000F08 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000F40 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000F94 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00000F98 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00001020 LEN=4 SIGN=+ XESD=0001
+ ESD=0001 LOC=00001060 LEN=4 SIGN=+ XESD=0001
+
+Symbol Table Listing
+
+ SYM=ABORT    LOC=000001CC LEN=00000002 ESD=0001 TYPE=REL  XREF=136 226 261 294 327 
+  363 397 431 466 499 532 567 600 633 668 701 734 769 802 835 870 903 936 971 1004 
+  1037 1072 1105 1138 1165 1190 1215 1244 1271 1298 1329 1358 
+ SYM=CFD_DB   LOC=00000019 LEN=00000001 ESD=0000 TYPE=ABS  XREF=216 831 857 865 892 
+  899 920 
+ SYM=CFD_DD   LOC=0000001C LEN=00000001 ESD=0000 TYPE=ABS  XREF=219 1134 1152 1160 
+  1179 1186 1199 
+ SYM=CFD_DH   LOC=00000018 LEN=00000001 ESD=0000 TYPE=ABS  XREF=215 730 756 764 791 
+  798 819 
+ SYM=CFD_EB   LOC=00000017 LEN=00000001 ESD=0000 TYPE=ABS  XREF=214 629 655 663 690 
+  697 718 
+ SYM=CFD_ED   LOC=0000001D LEN=00000001 ESD=0000 TYPE=ABS  XREF=220 1211 1231 1239 
+  1260 1267 1282 
+ SYM=CFD_EH   LOC=00000016 LEN=00000001 ESD=0000 TYPE=ABS  XREF=213 528 554 562 589 
+  596 617 
+ SYM=CFD_INT128 LOC=00000015 LEN=00000001 ESD=0000 TYPE=ABS  XREF=212 222 248 256 
+  283 290 311 323 350 358 386 393 415 427 453 461 488 495 516 
+ SYM=CFD_LB   LOC=0000001B LEN=00000001 ESD=0000 TYPE=ABS  XREF=218 1033 1059 1067 
+  1094 1101 1122 
+ SYM=CFD_LD   LOC=0000001E LEN=00000001 ESD=0000 TYPE=ABS  XREF=221 1294 1316 1324 
+  1347 1354 1371 
+ SYM=CFD_LH   LOC=0000001A LEN=00000001 ESD=0000 TYPE=ABS  XREF=217 932 958 966 993 
+  1000 1021 
+ SYM=DECIMAL  LOC=0000019E LEN=0000002D ESD=0001 TYPE=REL  XREF=116 208 222 248 256 
+  283 290 311 319 323 350 358 386 393 415 423 427 453 461 488 495 516 524 528 554 
+  562 589 596 617 625 629 655 663 690 697 718 726 730 756 764 791 798 819 827 831 
+  857 865 892 899 920 928 932 958 966 993 1000 1021 1029 1033 1059 1067 1094 1101 
+  1122 1130 1134 1152 1160 1179 1186 1199 1207 1211 1231 1239 1260 1267 1282 1290 
+  1294 1316 1324 1347 1354 1371 
+ SYM=F0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1380 
+ SYM=F10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=1390 
+ SYM=F1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1381 
+ SYM=F11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=1391 
+ SYM=F12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=1392 
+ SYM=F13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=1393 
+ SYM=F14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=1394 
+ SYM=F15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=1395 
+ SYM=F2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1382 
+ SYM=F3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1383 
+ SYM=F4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1384 
+ SYM=F5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1385 
+ SYM=F6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1386 
+ SYM=F7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1387 
+ SYM=F8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1388 
+ SYM=F9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=1389 
+ SYM=R0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=118 1145 1146 1172 
+  1173 1192 1193 1222 1223 1225 1251 1252 1254 1273 1274 1276 1307 1308 1310 1338 
+  1339 1341 1362 1363 1365 
+ SYM=R10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=128 206 207 317 318 
+  421 422 522 523 623 624 724 725 825 826 926 927 1027 1028 1128 1129 1205 1206 1288 
+  1289 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=119 238 239 240 273 
+  274 275 301 302 303 339 340 341 375 376 377 404 405 406 443 444 445 478 479 480 
+  506 507 508 544 545 546 579 580 581 607 608 609 645 646 647 680 681 682 708 709 
+  710 746 747 748 781 782 783 809 810 811 847 848 849 882 883 884 910 911 912 948 
+  949 950 983 984 985 1011 1012 1013 1049 1050 1051 1084 1085 1086 1112 1113 1114 
+ SYM=R11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=129 
+ SYM=R12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=130 
+ SYM=R13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=131 
+ SYM=R14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=132 
+ SYM=R15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=133 225 260 293 326 
+  362 396 430 465 498 531 566 599 632 667 700 733 768 801 834 869 902 935 970 1003 
+  1036 1071 1104 1137 1164 1189 1214 1243 1270 1297 1328 1357 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=120 253 256 257 283 
+  355 358 359 386 458 461 462 488 559 562 563 589 660 663 664 690 761 764 765 791 
+  862 865 866 892 963 966 967 993 1064 1067 1068 1094 1157 1160 1161 1179 1236 1239 
+  1240 1260 1321 1324 1325 1347 
+ SYM=R3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=121 
+ SYM=R4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=122 229 230 235 236 
+  264 265 270 271 290 298 299 311 330 331 336 337 366 367 372 373 393 401 402 415 
+  434 435 440 441 469 470 475 476 495 503 504 516 535 536 541 542 570 571 576 577 
+  596 604 605 617 636 637 642 643 671 672 677 678 697 705 706 718 737 738 743 744 
+  772 773 778 779 798 806 807 819 838 839 844 845 873 874 879 880 899 907 908 920 
+  939 940 945 946 974 975 980 981 1000 1008 1009 1021 1040 1041 1046 1047 1075 1076 
+  1081 1082 1101 1109 1110 1122 1141 1142 1146 1168 1169 1173 1186 1193 1199 1218 
+  1219 1224 1225 1247 1248 1253 1254 1267 1275 1276 1282 1301 1302 1310 1332 1333 
+  1341 1354 1365 1371 
+ SYM=R5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=123 
+ SYM=R6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=124 
+ SYM=R7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=125 
+ SYM=R8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=126 
+ SYM=R9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=127 
+ SYM=RT1_ABORT LOC=00000096 LEN=00000002 ESD=0001 TYPE=REL  XREF=45 90 95 99 103 
+  107 111 
+ SYM=RT1_ABORTED LOC=0000013F LEN=00000001 ESD=0001 TYPE=REL  XREF=87 46 60 
+ SYM=RT1_CCE10 LOC=00000686 LEN=00000002 ESD=0001 TYPE=REL  XREF=555 553 
+ SYM=RT1_CCE1 LOC=000002A2 LEN=00000002 ESD=0001 TYPE=REL  XREF=249 247 
+ SYM=RT1_CCE11 LOC=000006E0 LEN=00000002 ESD=0001 TYPE=REL  XREF=590 588 
+ SYM=RT1_CCE12 LOC=00000728 LEN=00000002 ESD=0001 TYPE=REL  XREF=618 616 
+ SYM=RT1_CCE13 LOC=000007AE LEN=00000002 ESD=0001 TYPE=REL  XREF=656 654 
+ SYM=RT1_CCE14 LOC=00000808 LEN=00000002 ESD=0001 TYPE=REL  XREF=691 689 
+ SYM=RT1_CCE15 LOC=00000850 LEN=00000002 ESD=0001 TYPE=REL  XREF=719 717 
+ SYM=RT1_CCE16 LOC=000008DA LEN=00000002 ESD=0001 TYPE=REL  XREF=757 755 
+ SYM=RT1_CCE17 LOC=0000093C LEN=00000002 ESD=0001 TYPE=REL  XREF=792 790 
+ SYM=RT1_CCE18 LOC=00000984 LEN=00000002 ESD=0001 TYPE=REL  XREF=820 818 
+ SYM=RT1_CCE19 LOC=00000A12 LEN=00000002 ESD=0001 TYPE=REL  XREF=858 856 
+ SYM=RT1_CCE20 LOC=00000A74 LEN=00000002 ESD=0001 TYPE=REL  XREF=893 891 
+ SYM=RT1_CCE2 LOC=0000030C LEN=00000002 ESD=0001 TYPE=REL  XREF=284 282 
+ SYM=RT1_CCE21 LOC=00000ABC LEN=00000002 ESD=0001 TYPE=REL  XREF=921 919 
+ SYM=RT1_CCE22 LOC=00000B52 LEN=00000002 ESD=0001 TYPE=REL  XREF=959 957 
+ SYM=RT1_CCE23 LOC=00000BBC LEN=00000002 ESD=0001 TYPE=REL  XREF=994 992 
+ SYM=RT1_CCE24 LOC=00000C0C LEN=00000002 ESD=0001 TYPE=REL  XREF=1022 1020 
+ SYM=RT1_CCE25 LOC=00000CA2 LEN=00000002 ESD=0001 TYPE=REL  XREF=1060 1058 
+ SYM=RT1_CCE26 LOC=00000D0C LEN=00000002 ESD=0001 TYPE=REL  XREF=1095 1093 
+ SYM=RT1_CCE27 LOC=00000D5C LEN=00000002 ESD=0001 TYPE=REL  XREF=1123 1121 
+ SYM=RT1_CCE28 LOC=00000DD2 LEN=00000002 ESD=0001 TYPE=REL  XREF=1153 1151 
+ SYM=RT1_CCE29 LOC=00000E1C LEN=00000002 ESD=0001 TYPE=REL  XREF=1180 1178 
+ SYM=RT1_CCE30 LOC=00000E4C LEN=00000002 ESD=0001 TYPE=REL  XREF=1200 1198 
+ SYM=RT1_CCE3 LOC=0000035C LEN=00000002 ESD=0001 TYPE=REL  XREF=312 310 
+ SYM=RT1_CCE31 LOC=00000EC6 LEN=00000002 ESD=0001 TYPE=REL  XREF=1232 1230 
+ SYM=RT1_CCE32 LOC=00000F10 LEN=00000002 ESD=0001 TYPE=REL  XREF=1261 1259 
+ SYM=RT1_CCE33 LOC=00000F48 LEN=00000002 ESD=0001 TYPE=REL  XREF=1283 1281 
+ SYM=RT1_CCE34 LOC=00000FCA LEN=00000002 ESD=0001 TYPE=REL  XREF=1317 1315 
+ SYM=RT1_CCE35 LOC=00001024 LEN=00000002 ESD=0001 TYPE=REL  XREF=1348 1346 
+ SYM=RT1_CCE36 LOC=00001064 LEN=00000002 ESD=0001 TYPE=REL  XREF=1372 1370 
+ SYM=RT1_CCE4 LOC=000003F2 LEN=00000002 ESD=0001 TYPE=REL  XREF=351 349 
+ SYM=RT1_CCE5 LOC=0000045C LEN=00000002 ESD=0001 TYPE=REL  XREF=387 385 
+ SYM=RT1_CCE6 LOC=000004AC LEN=00000002 ESD=0001 TYPE=REL  XREF=416 414 
+ SYM=RT1_CCE7 LOC=00000542 LEN=00000002 ESD=0001 TYPE=REL  XREF=454 452 
+ SYM=RT1_CCE8 LOC=000005AC LEN=00000002 ESD=0001 TYPE=REL  XREF=489 487 
+ SYM=RT1_CCE9 LOC=000005FC LEN=00000002 ESD=0001 TYPE=REL  XREF=517 515 
+ SYM=RT1_DATA LOC=00000112 LEN=00000001 ESD=0001 TYPE=REL  XREF=81 
+ SYM=RT1_DTOT LOC=00000139 LEN=00000006 ESD=0001 TYPE=REL  XREF=85 54 55 
+ SYM=RT1_DUMP LOC=0000010C LEN=00000002 ESD=0001 TYPE=REL  XREF=75 61 
+ SYM=RT1_END  LOC=000000C0 LEN=00000002 ESD=0001 TYPE=REL  XREF=53 1377 
+ SYM=RT1_LINK LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=80 93 97 101 105 
+  109 113 245 246 280 281 308 309 347 348 383 384 412 413 450 451 485 486 513 514 
+  551 552 586 587 614 615 652 653 687 688 715 716 753 754 788 789 816 817 854 855 
+  889 890 917 918 955 956 990 991 1018 1019 1056 1057 1091 1092 1119 1120 1149 1150 
+  1176 1177 1196 1197 1228 1229 1257 1258 1279 1280 1313 1314 1344 1345 1368 1369 
+ SYM=RT1_OK   LOC=0000014A LEN=00000002 ESD=0001 TYPE=REL  XREF=91 
+ SYM=RT1_ONE  LOC=00000115 LEN=00000001 ESD=0001 TYPE=REL  XREF=83 92 96 100 104 
+  108 112 
+ SYM=RT1_START LOC=000001D2 LEN=00000002 ESD=0001 TYPE=REL  XREF=195 44 
+ SYM=RT1_TEST10 LOC=0000063C LEN=00000004 ESD=0001 TYPE=REL  XREF=551 
+ SYM=RT1_TEST1 LOC=00000250 LEN=00000004 ESD=0001 TYPE=REL  XREF=245 
+ SYM=RT1_TEST11 LOC=000006C6 LEN=00000004 ESD=0001 TYPE=REL  XREF=586 
+ SYM=RT1_TEST12 LOC=0000070C LEN=00000004 ESD=0001 TYPE=REL  XREF=614 
+ SYM=RT1_TEST13 LOC=00000768 LEN=00000004 ESD=0001 TYPE=REL  XREF=652 
+ SYM=RT1_TEST14 LOC=000007EE LEN=00000004 ESD=0001 TYPE=REL  XREF=687 
+ SYM=RT1_TEST15 LOC=00000834 LEN=00000004 ESD=0001 TYPE=REL  XREF=715 
+ SYM=RT1_TEST16 LOC=00000890 LEN=00000004 ESD=0001 TYPE=REL  XREF=753 
+ SYM=RT1_TEST17 LOC=0000091A LEN=00000004 ESD=0001 TYPE=REL  XREF=788 
+ SYM=RT1_TEST18 LOC=00000968 LEN=00000004 ESD=0001 TYPE=REL  XREF=816 
+ SYM=RT1_TEST19 LOC=000009C4 LEN=00000004 ESD=0001 TYPE=REL  XREF=854 
+ SYM=RT1_TEST20 LOC=00000A52 LEN=00000004 ESD=0001 TYPE=REL  XREF=889 
+ SYM=RT1_TEST2 LOC=000002E2 LEN=00000004 ESD=0001 TYPE=REL  XREF=280 
+ SYM=RT1_TEST21 LOC=00000AA0 LEN=00000004 ESD=0001 TYPE=REL  XREF=917 
+ SYM=RT1_TEST22 LOC=00000AFC LEN=00000004 ESD=0001 TYPE=REL  XREF=955 
+ SYM=RT1_TEST23 LOC=00000B92 LEN=00000004 ESD=0001 TYPE=REL  XREF=990 
+ SYM=RT1_TEST24 LOC=00000BE8 LEN=00000004 ESD=0001 TYPE=REL  XREF=1018 
+ SYM=RT1_TEST25 LOC=00000C4C LEN=00000004 ESD=0001 TYPE=REL  XREF=1056 
+ SYM=RT1_TEST26 LOC=00000CE2 LEN=00000004 ESD=0001 TYPE=REL  XREF=1091 
+ SYM=RT1_TEST27 LOC=00000D38 LEN=00000004 ESD=0001 TYPE=REL  XREF=1119 
+ SYM=RT1_TEST28 LOC=00000D84 LEN=00000004 ESD=0001 TYPE=REL  XREF=1149 
+ SYM=RT1_TEST29 LOC=00000DFA LEN=00000004 ESD=0001 TYPE=REL  XREF=1176 
+ SYM=RT1_TEST30 LOC=00000E30 LEN=00000004 ESD=0001 TYPE=REL  XREF=1196 
+ SYM=RT1_TEST3 LOC=00000338 LEN=00000004 ESD=0001 TYPE=REL  XREF=308 
+ SYM=RT1_TEST31 LOC=00000E7C LEN=00000004 ESD=0001 TYPE=REL  XREF=1228 
+ SYM=RT1_TEST32 LOC=00000EF6 LEN=00000004 ESD=0001 TYPE=REL  XREF=1257 
+ SYM=RT1_TEST33 LOC=00000F2C LEN=00000004 ESD=0001 TYPE=REL  XREF=1279 
+ SYM=RT1_TEST34 LOC=00000F78 LEN=00000004 ESD=0001 TYPE=REL  XREF=1313 
+ SYM=RT1_TEST35 LOC=00000FFA LEN=00000004 ESD=0001 TYPE=REL  XREF=1344 
+ SYM=RT1_TEST36 LOC=00001040 LEN=00000004 ESD=0001 TYPE=REL  XREF=1368 
+ SYM=RT1_TEST4 LOC=0000039C LEN=00000004 ESD=0001 TYPE=REL  XREF=347 
+ SYM=RT1_TEST5 LOC=00000432 LEN=00000004 ESD=0001 TYPE=REL  XREF=383 
+ SYM=RT1_TEST6 LOC=00000488 LEN=00000004 ESD=0001 TYPE=REL  XREF=412 
+ SYM=RT1_TEST7 LOC=000004EC LEN=00000004 ESD=0001 TYPE=REL  XREF=450 
+ SYM=RT1_TEST8 LOC=00000582 LEN=00000004 ESD=0001 TYPE=REL  XREF=485 
+ SYM=RT1_TEST9 LOC=000005D8 LEN=00000004 ESD=0001 TYPE=REL  XREF=513 
+ SYM=RT1_TEST_CC0 LOC=00000146 LEN=00000002 ESD=0001 TYPE=REL  XREF=89 245 280 308 
+  347 383 412 450 485 513 551 586 614 652 687 715 753 788 816 854 889 917 955 990 
+  1018 1056 1091 1119 1149 1176 1196 1228 1257 1279 1313 1344 1368 
+ SYM=RT1_TEST_CC1 LOC=00000152 LEN=00000002 ESD=0001 TYPE=REL  XREF=94 
+ SYM=RT1_TEST_CC2 LOC=0000015E LEN=00000002 ESD=0001 TYPE=REL  XREF=98 
+ SYM=RT1_TEST_CC3 LOC=0000016A LEN=00000002 ESD=0001 TYPE=REL  XREF=102 
+ SYM=RT1_TEST_CCGE LOC=00000176 LEN=00000002 ESD=0001 TYPE=REL  XREF=106 
+ SYM=RT1_TEST_CCLE LOC=00000182 LEN=00000002 ESD=0001 TYPE=REL  XREF=110 
+ SYM=RT1_TOT  LOC=00000112 LEN=00000003 ESD=0001 TYPE=REL  XREF=82 55 92 96 100 104 
+  108 112 
+ SYM=RT1_WTO1 LOC=00000116 LEN=00000002 ESD=0001 TYPE=REL  XREF=84 57 
+ SYM=RT1_WTO_END LOC=0000013F LEN=00000001 ESD=0001 TYPE=REL  XREF=86 84 
+ SYM=TESTCTD1 LOC=00000000 LEN=00001068 ESD=0001 TYPE=CST  XREF=26 36 
+ SYM=WORK     LOC=0000018E LEN=00000010 ESD=0001 TYPE=REL  XREF=115 222 228 234 242 
+  248 253 263 269 277 297 305 323 329 335 343 350 355 365 371 379 400 408 427 433 
+  439 447 453 458 468 474 482 502 510 528 534 540 548 554 559 569 575 583 603 611 
+  629 635 641 649 655 660 670 676 684 704 712 730 736 742 750 756 761 771 777 785 
+  805 813 831 837 843 851 857 862 872 878 886 906 914 932 938 944 952 958 963 973 
+  979 987 1007 1015 1033 1039 1045 1053 1059 1064 1074 1080 1088 1108 1116 1134 1140 
+  1152 1157 1167 1211 1217 1231 1236 1246 1294 1300 1316 1321 1331 
+ SYM=WTO#0003_EOT LOC=0000008E LEN=00000001 ESD=0001 TYPE=REL  XREF=41 39 40 
+ SYM=WTO#0004_EOT LOC=000000BE LEN=00000001 ESD=0001 TYPE=REL  XREF=50 48 49 
+ SYM=WTO#0006_EOT LOC=000000F7 LEN=00000001 ESD=0001 TYPE=REL  XREF=65 63 64 
+ SYM=WTO#0012_EOT LOC=0000020D LEN=00000001 ESD=0001 TYPE=REL  XREF=202 199 200 
+
+Literal Table Listing
+
+ LIT=A(CFD_DB,(R2),DECIMAL) LOC=00000A68 LEN=00000004 ESD=0001 POOL=0015 XREF=865 
+ LIT=A(CFD_DB,R4,DECIMAL) LOC=00000AB0 LEN=00000004 ESD=0001 POOL=0016 XREF=899 
+ LIT=A(CFD_DB,WORK,DECIMAL) LOC=000009D8 LEN=00000004 ESD=0001 POOL=0014 XREF=831 
+ LIT=A(CFD_DD,(R2),DECIMAL) LOC=00000E10 LEN=00000004 ESD=0001 POOL=001E XREF=1160 
+ LIT=A(CFD_DD,R4,DECIMAL) LOC=00000E40 LEN=00000004 ESD=0001 POOL=001F XREF=1186 
+ LIT=A(CFD_DD,WORK,DECIMAL) LOC=00000D98 LEN=00000004 ESD=0001 POOL=001D XREF=1134 
+ LIT=A(CFD_DH,(R2),DECIMAL) LOC=00000930 LEN=00000004 ESD=0001 POOL=0012 XREF=764 
+ LIT=A(CFD_DH,R4,DECIMAL) LOC=00000978 LEN=00000004 ESD=0001 POOL=0013 XREF=798 
+ LIT=A(CFD_DH,WORK,DECIMAL) LOC=000008A0 LEN=00000004 ESD=0001 POOL=0011 XREF=730 
+ LIT=A(CFD_EB,(R2),DECIMAL) LOC=000007F8 LEN=00000004 ESD=0001 POOL=000F XREF=663 
+ LIT=A(CFD_EB,R4,DECIMAL) LOC=00000840 LEN=00000004 ESD=0001 POOL=0010 XREF=697 
+ LIT=A(CFD_EB,WORK,DECIMAL) LOC=00000770 LEN=00000004 ESD=0001 POOL=000E XREF=629 
+ LIT=A(CFD_ED,(R2),DECIMAL) LOC=00000F00 LEN=00000004 ESD=0001 POOL=0021 XREF=1239 
+ LIT=A(CFD_ED,R4,DECIMAL) LOC=00000F38 LEN=00000004 ESD=0001 POOL=0022 XREF=1267 
+ LIT=A(CFD_ED,WORK,DECIMAL) LOC=00000E88 LEN=00000004 ESD=0001 POOL=0020 XREF=1211 
+ LIT=A(CFD_EH,(R2),DECIMAL) LOC=000006D0 LEN=00000004 ESD=0001 POOL=000C XREF=562 
+ LIT=A(CFD_EH,R4,DECIMAL) LOC=00000718 LEN=00000004 ESD=0001 POOL=000D XREF=596 
+ LIT=A(CFD_EH,WORK,DECIMAL) LOC=00000648 LEN=00000004 ESD=0001 POOL=000B XREF=528 
+ LIT=A(CFD_INT128,(R2),DECIMAL) LOC=00000300 LEN=00000004 ESD=0001 POOL=0003 XREF=256 
+ LIT=A(CFD_INT128,(R2),DECIMAL) LOC=00000450 LEN=00000004 ESD=0001 POOL=0006 XREF=358 
+ LIT=A(CFD_INT128,(R2),DECIMAL) LOC=000005A0 LEN=00000004 ESD=0001 POOL=0009 XREF=461 
+ LIT=A(CFD_INT128,R4,DECIMAL) LOC=00000350 LEN=00000004 ESD=0001 POOL=0004 XREF=290 
+ LIT=A(CFD_INT128,R4,DECIMAL) LOC=000004A0 LEN=00000004 ESD=0001 POOL=0007 XREF=393 
+ LIT=A(CFD_INT128,R4,DECIMAL) LOC=000005F0 LEN=00000004 ESD=0001 POOL=000A XREF=495 
+ LIT=A(CFD_INT128,WORK,DECIMAL) LOC=00000268 LEN=00000004 ESD=0001 POOL=0002 XREF=222 
+ LIT=A(CFD_INT128,WORK,DECIMAL) LOC=000003B8 LEN=00000004 ESD=0001 POOL=0005 XREF=323 
+ LIT=A(CFD_INT128,WORK,DECIMAL) LOC=00000508 LEN=00000004 ESD=0001 POOL=0008 XREF=427 
+ LIT=A(CFD_LB,(R2),DECIMAL) LOC=00000D00 LEN=00000004 ESD=0001 POOL=001B XREF=1067 
+ LIT=A(CFD_LB,R4,DECIMAL) LOC=00000D50 LEN=00000004 ESD=0001 POOL=001C XREF=1101 
+ LIT=A(CFD_LB,WORK,DECIMAL) LOC=00000C68 LEN=00000004 ESD=0001 POOL=001A XREF=1033 
+ LIT=A(CFD_LD,(R2),DECIMAL) LOC=00001018 LEN=00000004 ESD=0001 POOL=0024 XREF=1324 
+ LIT=A(CFD_LD,R4,DECIMAL) LOC=00001058 LEN=00000004 ESD=0001 POOL=0025 XREF=1354 
+ LIT=A(CFD_LD,WORK,DECIMAL) LOC=00000F90 LEN=00000004 ESD=0001 POOL=0023 XREF=1294 
+ LIT=A(CFD_LH,(R2),DECIMAL) LOC=00000BB0 LEN=00000004 ESD=0001 POOL=0018 XREF=966 
+ LIT=A(CFD_LH,R4,DECIMAL) LOC=00000C00 LEN=00000004 ESD=0001 POOL=0019 XREF=1000 
+ LIT=A(CFD_LH,WORK,DECIMAL) LOC=00000B18 LEN=00000004 ESD=0001 POOL=0017 XREF=932 
+ LIT=CL45'123.5' LOC=00000514 LEN=0000002D ESD=0001 POOL=0008 XREF=423 
+ LIT=CL45'123E2' LOC=000003C4 LEN=0000002D ESD=0001 POOL=0005 XREF=319 
+ LIT=CL45'2'  LOC=00000274 LEN=0000002D ESD=0001 POOL=0002 XREF=208 
+ LIT=CL45'2'  LOC=00000658 LEN=0000002D ESD=0001 POOL=000B XREF=524 
+ LIT=CL45'2'  LOC=00000780 LEN=0000002D ESD=0001 POOL=000E XREF=625 
+ LIT=CL45'2'  LOC=000008AC LEN=0000002D ESD=0001 POOL=0011 XREF=726 
+ LIT=CL45'2'  LOC=000009E4 LEN=0000002D ESD=0001 POOL=0014 XREF=827 
+ LIT=CL45'2'  LOC=00000B24 LEN=0000002D ESD=0001 POOL=0017 XREF=928 
+ LIT=CL45'2'  LOC=00000C74 LEN=0000002D ESD=0001 POOL=001A XREF=1029 
+ LIT=CL45'2'  LOC=00000DA4 LEN=0000002D ESD=0001 POOL=001D XREF=1130 
+ LIT=CL45'2'  LOC=00000E98 LEN=0000002D ESD=0001 POOL=0020 XREF=1207 
+ LIT=CL45'2'  LOC=00000F9C LEN=0000002D ESD=0001 POOL=0023 XREF=1290 
+ LIT=DB'2'    LOC=000009D0 LEN=00000008 ESD=0001 POOL=0014 XREF=847 851 
+ LIT=DB'2'    LOC=00000A60 LEN=00000008 ESD=0001 POOL=0015 XREF=882 886 
+ LIT=DB'2'    LOC=00000AA8 LEN=00000008 ESD=0001 POOL=0016 XREF=910 914 
+ LIT=DD'2'    LOC=00000D90 LEN=00000008 ESD=0001 POOL=001D XREF=1145 
+ LIT=DD'2'    LOC=00000E08 LEN=00000008 ESD=0001 POOL=001E XREF=1172 
+ LIT=DD'2'    LOC=00000E38 LEN=00000008 ESD=0001 POOL=001F XREF=1192 
+ LIT=DH'2'    LOC=00000898 LEN=00000008 ESD=0001 POOL=0011 XREF=746 750 
+ LIT=DH'2'    LOC=00000928 LEN=00000008 ESD=0001 POOL=0012 XREF=781 785 
+ LIT=DH'2'    LOC=00000970 LEN=00000008 ESD=0001 POOL=0013 XREF=809 813 
+ LIT=EB'2'    LOC=0000077C LEN=00000004 ESD=0001 POOL=000E XREF=645 649 
+ LIT=EB'2'    LOC=00000804 LEN=00000004 ESD=0001 POOL=000F XREF=680 684 
+ LIT=EB'2'    LOC=0000084C LEN=00000004 ESD=0001 POOL=0010 XREF=708 712 
+ LIT=ED'2'    LOC=00000E94 LEN=00000004 ESD=0001 POOL=0020 XREF=1222 
+ LIT=ED'2'    LOC=00000F0C LEN=00000004 ESD=0001 POOL=0021 XREF=1251 
+ LIT=ED'2'    LOC=00000F44 LEN=00000004 ESD=0001 POOL=0022 XREF=1273 
+ LIT=EH'2'    LOC=00000654 LEN=00000004 ESD=0001 POOL=000B XREF=544 548 
+ LIT=EH'2'    LOC=000006DC LEN=00000004 ESD=0001 POOL=000C XREF=579 583 
+ LIT=EH'2'    LOC=00000724 LEN=00000004 ESD=0001 POOL=000D XREF=607 611 
+ LIT=FL16'123' LOC=000004F8 LEN=00000010 ESD=0001 POOL=0008 XREF=443 447 
+ LIT=FL16'123' LOC=00000590 LEN=00000010 ESD=0001 POOL=0009 XREF=478 482 
+ LIT=FL16'123' LOC=000005E0 LEN=00000010 ESD=0001 POOL=000A XREF=506 510 
+ LIT=FL16'12300' LOC=000003A8 LEN=00000010 ESD=0001 POOL=0005 XREF=339 343 
+ LIT=FL16'12300' LOC=00000440 LEN=00000010 ESD=0001 POOL=0006 XREF=375 379 
+ LIT=FL16'12300' LOC=00000490 LEN=00000010 ESD=0001 POOL=0007 XREF=404 408 
+ LIT=FL16'2'  LOC=00000258 LEN=00000010 ESD=0001 POOL=0002 XREF=238 242 
+ LIT=FL16'2'  LOC=000002F0 LEN=00000010 ESD=0001 POOL=0003 XREF=273 277 
+ LIT=FL16'2'  LOC=00000340 LEN=00000010 ESD=0001 POOL=0004 XREF=301 305 
+ LIT=LB'2'    LOC=00000C58 LEN=00000010 ESD=0001 POOL=001A XREF=1049 1053 
+ LIT=LB'2'    LOC=00000CF0 LEN=00000010 ESD=0001 POOL=001B XREF=1084 1088 
+ LIT=LB'2'    LOC=00000D40 LEN=00000010 ESD=0001 POOL=001C XREF=1112 1116 
+ LIT=LD'2'    LOC=00000F80 LEN=00000010 ESD=0001 POOL=0023 XREF=1306 
+ LIT=LD'2'    LOC=00001008 LEN=00000010 ESD=0001 POOL=0024 XREF=1337 
+ LIT=LD'2'    LOC=00001048 LEN=00000010 ESD=0001 POOL=0025 XREF=1361 
+ LIT=LH'2'    LOC=00000B08 LEN=00000010 ESD=0001 POOL=0017 XREF=948 952 
+ LIT=LH'2'    LOC=00000BA0 LEN=00000010 ESD=0001 POOL=0018 XREF=983 987 
+ LIT=LH'2'    LOC=00000BF0 LEN=00000010 ESD=0001 POOL=0019 XREF=1011 1015 
+ LIT=X'402020202020' LOC=00000140 LEN=00000006 ESD=0001 POOL=0001 XREF=54 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTCFD1  MZ390 ENDED RC= 0 IO=4330

@@ -1,0 +1,181 @@
+TESTSPI1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSPI1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  trace systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000118 TYPE=CST NAME=TESTSPI1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2006 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2006-05-01 DSH         Initial version                            *
+000000                                      (1/13)13 * 2006-05-01 DSH RPI-305 Test ESPIE exit with parameter and RESTART *
+000000                                      (1/14)14 * 2008-06-20 DSH RPI-845 Change EPIED to IHAEPIE                    *
+000000                                      (1/15)15 *********************************************************************
+000000                                      (1/17)16          TITLE 'TESTSPI1 - TEST ESPIE'
+000000                                      (1/19)17 TESTSPI1 SUBENTRY 
+000000                                      (2/78)18+TESTSPI1 CSECT 
+000000 90ECD00C                            (2/168)19+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)20+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)21+         DC    18F'0'
+000050 E3C5E2E3E2D7C9F1                    (2/171)22+         DC    CL8'TESTSPI1'
+000058 F0F161F0F261F0F5                    (2/172)23+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)24+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)25+         ST    15,8(13)
+00006C 50DF0004                            (2/175)26+         ST    13,4(15)
+000070 18DF                                (2/176)27+         LR    13,15
+000072                                     (2/189)28+         USING TESTSPI1+8,13
+LISTUSE TESTSPI1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/20)30          WTO   'TESTSPI1 TEST ESPIE STARTED'
+000072 A7150012                000096       (3/49)31+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 001F0000E3C5E2E3                     (3/50)32+         DC    AL2(WTO#0002_EOT-*,0),C'TESTSPI1 TEST ESPIE STARTED'
+000095                  00000095            (3/51)33+WTO#0002_EOT     EQU *
+000096 0A23                                 (3/52)34+         SVC   35
+000098                                      (1/21)36          ESPIE SET,EXIT,1,PARAM=RESTART
+000098 41F0D0A6                0000AE       (4/80)37+        LA     15,RESTART
+00009C B2220000                             (4/94)38+        IPM    0  GET CURRENT PGM MASK
+0000A0 0400                                (4/131)39+        SPM    0 TURN ON ANY MASKS REQUIRED
+0000A2 5800D108                000110      (4/140)40+        L      0,=B'01000000000000000000000000000000'
+0000A6 4110D0FA                000102      (4/142)41+        LA     1,EXIT
+0000AA 0A6D                                (4/150)42+        SVC    X'6D' ESPIE R0=INT BITS R1=EXIT R15=PARAM
+0000AC 0000                                 (1/22)44          DC    X'0000' CAUSE 0C1
+0000AE                                      (1/23)45 RESTART  WTO   'TESTSPI1 RESTART SUCCESSFUL'
+0000AE                                      (3/35)46+RESTART  DS    0H
+0000AE A7150012                0000D2       (3/49)47+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+0000B2 001F0000E3C5E2E3                     (3/50)48+         DC    AL2(WTO#0004_EOT-*,0),C'TESTSPI1 RESTART SUCCESSFUL'
+0000D1                  000000D1            (3/51)49+WTO#0004_EOT     EQU *
+0000D2 0A23                                 (3/52)50+         SVC   35
+0000D4                                      (1/24)52          WTO   'TESTSPI1 ENDED OK'
+0000D4 A715000D                0000EE       (3/49)53+         BRAS  1,*+(WTO#0005_EOT-*+1)/2*2
+0000D8 00150000E3C5E2E3                     (3/50)54+         DC    AL2(WTO#0005_EOT-*,0),C'TESTSPI1 ENDED OK'
+0000ED                  000000ED            (3/51)55+WTO#0005_EOT     EQU *
+0000EE 0A23                                 (3/52)56+         SVC   35
+0000F0                                      (1/25)58          SUBEXIT 
+0000F0 41F00000                             (5/33)59+         LA    15,0
+0000F4 58D0D004                             (5/50)60+         L     13,4(,13)
+0000F8 58E0D00C                             (5/51)61+         L     14,12(,13)
+0000FC 982CD01C                             (5/52)62+         LM    2,12,28(13)
+000100 07FE                                 (5/53)63+         BR    14
+000102                                      (1/26)65          DROP 
+LISTUSE NONE
+000102                                      (1/27)66 EXIT     DS    0H
+000102                                      (1/28)67          USING *,15
+LISTUSE TESTSPI1 ESD=0001 LOC=00000102 LEN=01000 REG=F OFF=00000 LAB=
+000102                                      (1/29)68          USING EPIE,1
+LISTUSE TESTSPI1 ESD=0001 LOC=00000102 LEN=01000 REG=F OFF=00000 LAB=
+LISTUSE EPIE     ESD=0002 LOC=00000000 LEN=01000 REG=1 OFF=00000 LAB=
+000102 58001004                000004       (1/30)69          L     0,EPIEPARM
+000106 5000104C                00004C       (1/31)70          ST    0,EPIEPSW+4
+00010A 07FE                                 (1/32)71          BR    14
+00010C                                      (1/33)72          IHAEPIE 
+000000                                      (6/21)73+EPIE     DSECT 
+000000                                      (6/22)74+EPIEEPIE DS    CL4   C'EPIE'
+000004                                      (6/23)75+EPIEPARM DS    A     A(PARAM PASSED AT ESPIE OR 0)
+000008                                      (6/24)76+         DS    16F   32 bit regs not used by z390 (see EPIEG64)
+000048                                      (6/25)77+EPIEPSW  DS    0XL8  (OLD PSW  (EC 24/31 BIT ONLY)
+000048                                      (6/26)78+EPIEEMK1 DS    X     PSW MASK
+000049                                      (6/27)79+EPIEMWP1 DS    X     PSW KEY AND MWP
+00004A                                      (6/28)80+EPIECCPM DS    X     PSW CONDITION CODE AND PGM MASK
+00004B                                      (6/29)81+         DS    X     RESERVED
+00004C                                      (6/30)82+EPIENXT1 DS    0F    PSW 31 BIT ADDR NEXT INSTRUCTION
+00004C                                      (6/31)83+EPIEAMF1 DS    X     PSW ADDRESS HIGH BYTE WITH AMODE BIT
+00004D                  00000080            (6/32)84+EPIEMOD1 EQU   X'80' PSW 31 BIT AMODE BIT
+00004D                                      (6/33)85+EPIEADD1 DS    XL3   PSW 24 BIT ADDRESSS OF NEXT INSTRUCTION
+000050                                      (6/34)86+EPIEINT  DS    0XL4  PROGRAM INTERRUPTION INFO
+000050                                      (6/35)87+EPIEIRSV DS    XL1   RESERVED
+000051                                      (6/36)88+EPIEILC1 DS    B     INSTRUCTION LENGTH BYTE
+000052                  00000006            (6/37)89+EPIEIL1  EQU   X'06' INSTRUCTION LENGTH MASK (2, 4, 6 LENGTH)
+000052                                      (6/38)90+EPIEINC1 DS    0CL2  INTERRUPTION CODE
+000052                  000099              (6/39)91+         ORG   EPIE+X'99'
+000099                                      (6/40)92+EPIEFLGS DS    XL1   EPIE OPTION FLAGS
+00009A                  00000040            (6/41)93+EPIEUP64 EQU   X'40' USE 64 BIT REGS INSTEAD OF 32 BIT
+00009A                                      (6/42)94+         DS    XL6   RESERVED
+0000A0                                      (6/43)95+EPIEG64   DS   0D
+0000A0                                      (6/44)96+EPIEG6400 DS   D
+0000A8                                      (6/45)97+EPIEG6401 DS   D
+0000B0                                      (6/46)98+EPIEG6402 DS   D
+0000B8                                      (6/47)99+EPIEG6403 DS   D
+0000C0                                     (6/48)100+EPIEG6404 DS   D
+0000C8                                     (6/49)101+EPIEG6405 DS   D
+0000D0                                     (6/50)102+EPIEG6406 DS   D
+0000D8                                     (6/51)103+EPIEG6407 DS   D
+0000E0                                     (6/52)104+EPIEG6408 DS   D
+0000E8                                     (6/53)105+EPIEG6409 DS   D
+0000F0                                     (6/54)106+EPIEG6410 DS   D
+0000F8                                     (6/55)107+EPIEG6411 DS   D
+000100                                     (6/56)108+EPIEG6412 DS   D
+000108                                     (6/57)109+EPIEG6413 DS   D
+000110                                     (6/58)110+EPIEG6414 DS   D
+000118                                     (6/59)111+EPIEG6415 DS   D
+000120                  00000120           (6/60)112+EPIELEN  EQU   *-EPIE
+000120                                     (1/34)114          END 
+000110 40000000         =B'01000000000000000000000000000000'
+
+Symbol Table Listing
+
+ SYM=EPIE     LOC=00000000 LEN=00000120 ESD=0002 TYPE=DST  XREF=73 68 91 112 
+ SYM=EPIEADD1 LOC=0000004D LEN=00000003 ESD=0002 TYPE=REL  XREF=85 
+ SYM=EPIEAMF1 LOC=0000004C LEN=00000001 ESD=0002 TYPE=REL  XREF=83 
+ SYM=EPIECCPM LOC=0000004A LEN=00000001 ESD=0002 TYPE=REL  XREF=80 
+ SYM=EPIEEMK1 LOC=00000048 LEN=00000001 ESD=0002 TYPE=REL  XREF=78 
+ SYM=EPIEEPIE LOC=00000000 LEN=00000004 ESD=0002 TYPE=REL  XREF=74 
+ SYM=EPIEFLGS LOC=00000099 LEN=00000001 ESD=0002 TYPE=REL  XREF=92 
+ SYM=EPIEG6400 LOC=000000A0 LEN=00000008 ESD=0002 TYPE=REL  XREF=96 
+ SYM=EPIEG6401 LOC=000000A8 LEN=00000008 ESD=0002 TYPE=REL  XREF=97 
+ SYM=EPIEG6402 LOC=000000B0 LEN=00000008 ESD=0002 TYPE=REL  XREF=98 
+ SYM=EPIEG6403 LOC=000000B8 LEN=00000008 ESD=0002 TYPE=REL  XREF=99 
+ SYM=EPIEG6404 LOC=000000C0 LEN=00000008 ESD=0002 TYPE=REL  XREF=100 
+ SYM=EPIEG6405 LOC=000000C8 LEN=00000008 ESD=0002 TYPE=REL  XREF=101 
+ SYM=EPIEG6406 LOC=000000D0 LEN=00000008 ESD=0002 TYPE=REL  XREF=102 
+ SYM=EPIEG6407 LOC=000000D8 LEN=00000008 ESD=0002 TYPE=REL  XREF=103 
+ SYM=EPIEG6408 LOC=000000E0 LEN=00000008 ESD=0002 TYPE=REL  XREF=104 
+ SYM=EPIEG6409 LOC=000000E8 LEN=00000008 ESD=0002 TYPE=REL  XREF=105 
+ SYM=EPIEG64  LOC=000000A0 LEN=00000008 ESD=0002 TYPE=REL  XREF=95 
+ SYM=EPIEG6410 LOC=000000F0 LEN=00000008 ESD=0002 TYPE=REL  XREF=106 
+ SYM=EPIEG6411 LOC=000000F8 LEN=00000008 ESD=0002 TYPE=REL  XREF=107 
+ SYM=EPIEG6412 LOC=00000100 LEN=00000008 ESD=0002 TYPE=REL  XREF=108 
+ SYM=EPIEG6413 LOC=00000108 LEN=00000008 ESD=0002 TYPE=REL  XREF=109 
+ SYM=EPIEG6414 LOC=00000110 LEN=00000008 ESD=0002 TYPE=REL  XREF=110 
+ SYM=EPIEG6415 LOC=00000118 LEN=00000008 ESD=0002 TYPE=REL  XREF=111 
+ SYM=EPIEIL1  LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=89 
+ SYM=EPIEILC1 LOC=00000051 LEN=00000001 ESD=0002 TYPE=REL  XREF=88 
+ SYM=EPIEINC1 LOC=00000052 LEN=00000002 ESD=0002 TYPE=REL  XREF=90 
+ SYM=EPIEINT  LOC=00000050 LEN=00000004 ESD=0002 TYPE=REL  XREF=86 
+ SYM=EPIEIRSV LOC=00000050 LEN=00000001 ESD=0002 TYPE=REL  XREF=87 
+ SYM=EPIELEN  LOC=00000120 LEN=00000001 ESD=0000 TYPE=ABS  XREF=112 
+ SYM=EPIEMOD1 LOC=00000080 LEN=00000001 ESD=0000 TYPE=ABS  XREF=84 
+ SYM=EPIEMWP1 LOC=00000049 LEN=00000001 ESD=0002 TYPE=REL  XREF=79 
+ SYM=EPIENXT1 LOC=0000004C LEN=00000004 ESD=0002 TYPE=REL  XREF=82 
+ SYM=EPIEPARM LOC=00000004 LEN=00000004 ESD=0002 TYPE=REL  XREF=75 69 
+ SYM=EPIEPSW  LOC=00000048 LEN=00000008 ESD=0002 TYPE=REL  XREF=77 70 
+ SYM=EPIEUP64 LOC=00000040 LEN=00000001 ESD=0000 TYPE=ABS  XREF=93 
+ SYM=EXIT     LOC=00000102 LEN=00000002 ESD=0001 TYPE=REL  XREF=66 41 
+ SYM=RESTART  LOC=000000AE LEN=00000002 ESD=0001 TYPE=REL  XREF=46 37 
+ SYM=TESTSPI1 LOC=00000000 LEN=00000118 ESD=0001 TYPE=CST  XREF=18 28 
+ SYM=WTO#0002_EOT LOC=00000095 LEN=00000001 ESD=0001 TYPE=REL  XREF=33 31 32 
+ SYM=WTO#0004_EOT LOC=000000D1 LEN=00000001 ESD=0001 TYPE=REL  XREF=49 47 48 
+ SYM=WTO#0005_EOT LOC=000000ED LEN=00000001 ESD=0001 TYPE=REL  XREF=55 53 54 
+
+Literal Table Listing
+
+ LIT=B'01000000000000000000000000000000' LOC=00000110 LEN=00000004 ESD=0001 POOL=0001 XREF=40 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSPI1  MZ390 ENDED RC= 0 IO=918

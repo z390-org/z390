@@ -1,0 +1,204 @@
+TESTSTA3  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSTA3
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) notiming stats 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000001A8 TYPE=CST NAME=TESTSTA3
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2007 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2007-06-10 DSH         Initial version                            *
+000000                                      (1/13)13 * 2007-06-10 DSH RPI-636 Test R15=0 for PERCOLATE in TESTSTA2.MLC   *
+000000                                      (1/14)14 * 2007-07-18 DSH RPI-659 Test RESTART R15=0 with new R0=NEW RESTART *
+000000                                      (1/15)15 *                        PSW                                        *
+000000                                      (1/16)16 * 2008-06-21 DSH RPI-845 Change ESTAD to IHAEPIE and remove ESTAPSW *
+000000                                      (1/17)17 *                        ref.                                       *
+000000                                      (1/18)18 * 2008-06-22 DSH RPI-845 Change ESTAE EXIT to use R1=SDWA,          *
+000000                                      (1/19)19 *                        R2=ESAEPARM                                *
+000000                                      (1/20)20 *********************************************************************
+000000                                      (1/22)21          TITLE 'TESTSTA3 - TEST ESTAE RESTART AND PERCOLATE'
+000000                                      (1/24)22 TESTSTA3 SUBENTRY 
+000000                                      (2/78)23+TESTSTA3 CSECT 
+000000 90ECD00C                            (2/168)24+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)25+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)26+         DC    18F'0'
+000050 E3C5E2E3E2E3C1F3                    (2/171)27+         DC    CL8'TESTSTA3'
+000058 F0F161F0F261F0F5                    (2/172)28+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)29+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)30+         ST    15,8(13)
+00006C 50DF0004                            (2/175)31+         ST    13,4(15)
+000070 18DF                                (2/176)32+         LR    13,15
+000072                                     (2/189)33+         USING TESTSTA3+8,13
+LISTUSE TESTSTA3 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/25)35          WTO   'TESTSTA3 TEST ESTAE RESTART AND PERCOLATE'
+000072 A7150019                0000A4       (3/49)37+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 002D0000E3C5E2E3                     (3/50)38+         DC    AL2(WTO#0002_EOT-*,0),C'TESTSTA3 TEST ESTAE RESTART AND PERCOLATE'
+0000A3                  000000A3            (3/51)40+WTO#0002_EOT     EQU *
+0000A4 0A23                                 (3/52)41+         SVC   35
+0000A6                                      (1/26)43          WTO   'TESTSTA3 SET  ESTAE EXIT'
+0000A6 A7150010                0000C6       (3/49)44+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+0000AA 001C0000E3C5E2E3                     (3/50)45+         DC    AL2(WTO#0003_EOT-*,0),C'TESTSTA3 SET  ESTAE EXIT'
+0000C6                  000000C6            (3/51)46+WTO#0003_EOT     EQU *
+0000C6 0A23                                 (3/52)47+         SVC   35
+0000C8                                      (1/27)49          ESTAE EXIT,PARAM=RESTART1
+0000C8 4100D120                000128       (4/36)50+        LA     0,EXIT
+0000CC 4110D0E6                0000EE       (4/43)51+        LA     1,RESTART1
+0000D0 0A3C                                 (4/54)52+        SVC    X'3C' ESTAE R0=EXIT, R0+=CT, R0-=OV,R1=PARAM OR 0
+0000D2                                      (1/28)54          WTO   'TESTSTA3 ABEND 1'
+0000D2 A715000C                0000EA       (3/49)55+         BRAS  1,*+(WTO#0005_EOT-*+1)/2*2
+0000D6 00140000E3C5E2E3                     (3/50)56+         DC    AL2(WTO#0005_EOT-*,0),C'TESTSTA3 ABEND 1'
+0000EA                  000000EA            (3/51)57+WTO#0005_EOT     EQU *
+0000EA 0A23                                 (3/52)58+         SVC   35
+0000EC 0001                                 (1/29)60 ABEND1   DC    X'0001' CAUSE 0C1
+0000EE 0520                                 (1/30)61 RESTART1 BALR  R2,0
+0000F0                                      (1/31)62          USING *,R2
+LISTUSE TESTSTA3 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSTA3 ESD=0001 LOC=000000F0 LEN=01000 REG=2 OFF=00000 LAB=
+0000F0                                      (1/32)63          WTO   'TESTSTA3 RESTART1'
+0000F0 A715000D                00010A       (3/49)64+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000F4 00150000E3C5E2E3                     (3/50)65+         DC    AL2(WTO#0006_EOT-*,0),C'TESTSTA3 RESTART1'
+000109                  00000109            (3/51)66+WTO#0006_EOT     EQU *
+00010A 0A23                                 (3/52)67+         SVC   35
+00010C                                      (1/33)69          WTO   'TESTSTA3 ABEND 2'
+00010C A715000C                000124       (3/49)70+         BRAS  1,*+(WTO#0007_EOT-*+1)/2*2
+000110 00140000E3C5E2E3                     (3/50)71+         DC    AL2(WTO#0007_EOT-*,0),C'TESTSTA3 ABEND 2'
+000124                  00000124            (3/51)72+WTO#0007_EOT     EQU *
+000124 0A23                                 (3/52)73+         SVC   35
+000126 0002                                 (1/34)75 ABEND2   DC    X'0002'
+000128                  00000128            (1/35)76 EXIT     EQU   *
+000128                                      (1/36)77          USING *,R15
+LISTUSE TESTSTA3 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSTA3 ESD=0001 LOC=000000F0 LEN=01000 REG=2 OFF=00000 LAB=
+LISTUSE TESTSTA3 ESD=0001 LOC=00000128 LEN=01000 REG=F OFF=00000 LAB=
+000128                                      (1/37)78          USING SDWA,R1
+LISTUSE TESTSTA3 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTSTA3 ESD=0001 LOC=000000F0 LEN=01000 REG=2 OFF=00000 LAB=
+LISTUSE TESTSTA3 ESD=0001 LOC=00000128 LEN=01000 REG=F OFF=00000 LAB=
+LISTUSE SDWA     ESD=0002 LOC=00000000 LEN=01000 REG=1 OFF=00000 LAB=
+000128 5830106C                00006C       (1/38)79          L     R3,SDWAEC1+4  USE SDWA EC1 PSW RPI 845
+00012C 95013001                             (1/39)80          CLI   1(R3),1
+000130 4770F044                00016C       (1/40)81          BNE   PERCOLATE
+000134                                      (1/41)82 *
+000134                                      (1/42)83 * RESTART ON FIRST ABEND IN TESTSTA3
+000134                                      (1/43)84 *
+000134                                      (1/44)85          WTO   'TESTSTA3 ESTAE EXIT REQUESTING RESTART'
+000134 A7150017                000162       (3/49)87+         BRAS  1,*+(WTO#0008_EOT-*+1)/2*2
+000138 002A0000E3C5E2E3                     (3/50)88+         DC    AL2(WTO#0008_EOT-*,0),C'TESTSTA3 ESTAE EXIT REQUESTING RESTART'
+000162                  00000162            (3/51)90+WTO#0008_EOT     EQU *
+000162 0A23                                 (3/52)91+         SVC   35
+000164 1802                                 (1/45)93          LR    R0,R2 SET R0 TO ESTAPARM ADDR
+000166 41F00004                             (1/46)94          LA    R15,4 REQUEST TASK RESTART AT (R0)
+00016A 07FE                                 (1/47)95          BR    R14
+00016C                  0000016C            (1/48)96 PERCOLATE EQU  *
+00016C                                      (1/49)97 *
+00016C                                      (1/50)98 * ON SECOND ABEND IN TESTSTA3
+00016C                                      (1/51)99 * PERCOLATE TO TESTSTA2 ESTAE EXIT
+00016C                                     (1/52)100 * WHICH REMOVES TESTSTA3 LINK ENTRY
+00016C                                     (1/53)101 *
+00016C                                     (1/54)102          WTO   'TESTSTA3 ESTAE EXIT REQUESTING PERCOLATE'
+00016C A7150018                00019C      (3/49)104+         BRAS  1,*+(WTO#0009_EOT-*+1)/2*2
+000170 002C0000E3C5E2E3                    (3/50)105+         DC    AL2(WTO#0009_EOT-*,0),C'TESTSTA3 ESTAE EXIT REQUESTING PERCOLATE'
+00019C                  0000019C           (3/51)107+WTO#0009_EOT     EQU *
+00019C 0A23                                (3/52)108+         SVC   35
+00019E 41F00000                            (1/55)110          LA    R15,0
+0001A2 07FE                                (1/56)111          BR    R14
+0001A4                                     (1/57)112          IHASDWA 
+000000                                     (5/28)113+SDWA     DSECT 
+000000                                     (5/29)114+SDWAPARM DS    A    ESTAE PARM ADDRESS
+000004                                     (5/30)115+SDWAABSS DS    0BL4 COMPLETION CODE
+000004                                     (5/31)116+SDWACMPF DS    B    COMPLETION CODE FLAGS
+000005                                     (5/32)117+SDWACMPC DS    BL3  COMPLETION CODE (FIRST 12 BITS SYS,LAST 12 USER)
+000008                  000068             (5/33)118+         ORG   SDWA+X'68'
+000068                                     (5/34)119+SDWAEC1  DS    XL8  EXTENDED CONTROL PSW AT ERROR
+000070                  000170             (5/35)120+         ORG   SDWA+X'170'
+000170                                     (5/36)121+SDWAXPAD DS    A    ADDR OF POINTERS EXTENSION SDWAPTRS
+000000                                     (5/37)122+SDWAPTRS DSECT 
+000000                  000018             (5/38)123+         ORG   SDWAPTRS+X'18'
+000018                                     (5/39)124+SDWAXEME DS    A    ADDR OF 64 BIT REGISTER INFO
+000000                                     (5/40)125+SDWARC4  DSECT 
+000000                                     (5/41)126+SDWAG64  DS    16XL8 16 - 64 BIT GPRS AT ERROR
+000080                                     (1/58)128          EQUREGS 
+000080                  00000000           (6/41)129+R0     EQU 0
+000080                  00000001           (6/41)130+R1     EQU 1
+000080                  00000002           (6/41)131+R2     EQU 2
+000080                  00000003           (6/41)132+R3     EQU 3
+000080                  00000004           (6/41)133+R4     EQU 4
+000080                  00000005           (6/41)134+R5     EQU 5
+000080                  00000006           (6/41)135+R6     EQU 6
+000080                  00000007           (6/41)136+R7     EQU 7
+000080                  00000008           (6/41)137+R8     EQU 8
+000080                  00000009           (6/41)138+R9     EQU 9
+000080                  0000000A           (6/41)139+R10    EQU 10
+000080                  0000000B           (6/41)140+R11    EQU 11
+000080                  0000000C           (6/41)141+R12    EQU 12
+000080                  0000000D           (6/41)142+R13    EQU 13
+000080                  0000000E           (6/41)143+R14    EQU 14
+000080                  0000000F           (6/41)144+R15    EQU 15
+000080                                     (1/59)146          END 
+
+Symbol Table Listing
+
+ SYM=ABEND1   LOC=000000EC LEN=00000002 ESD=0001 TYPE=REL  XREF=60 
+ SYM=ABEND2   LOC=00000126 LEN=00000002 ESD=0001 TYPE=REL  XREF=75 
+ SYM=EXIT     LOC=00000128 LEN=00000001 ESD=0001 TYPE=REL  XREF=76 50 
+ SYM=PERCOLATE LOC=0000016C LEN=00000001 ESD=0001 TYPE=REL  XREF=96 81 
+ SYM=R0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=129 93 
+ SYM=R10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=139 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=130 78 
+ SYM=R11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=140 
+ SYM=R12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=141 
+ SYM=R13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=142 
+ SYM=R14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=143 95 111 
+ SYM=R15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=144 77 94 110 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=131 61 62 93 
+ SYM=R3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=132 79 80 
+ SYM=R4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=133 
+ SYM=R5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=134 
+ SYM=R6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=135 
+ SYM=R7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=136 
+ SYM=R8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=137 
+ SYM=R9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=138 
+ SYM=RESTART1 LOC=000000EE LEN=00000002 ESD=0001 TYPE=REL  XREF=61 51 
+ SYM=SDWA     LOC=00000000 LEN=00000178 ESD=0002 TYPE=DST  XREF=113 78 118 120 
+ SYM=SDWAABSS LOC=00000004 LEN=00000004 ESD=0002 TYPE=REL  XREF=115 
+ SYM=SDWACMPC LOC=00000005 LEN=00000003 ESD=0002 TYPE=REL  XREF=117 
+ SYM=SDWACMPF LOC=00000004 LEN=00000001 ESD=0002 TYPE=REL  XREF=116 
+ SYM=SDWAEC1  LOC=00000068 LEN=00000008 ESD=0002 TYPE=REL  XREF=119 79 
+ SYM=SDWAG64  LOC=00000000 LEN=00000008 ESD=0004 TYPE=REL  XREF=126 
+ SYM=SDWAPARM LOC=00000000 LEN=00000004 ESD=0002 TYPE=REL  XREF=114 
+ SYM=SDWAPTRS LOC=00000000 LEN=00000020 ESD=0003 TYPE=DST  XREF=122 123 
+ SYM=SDWARC4  LOC=00000000 LEN=00000080 ESD=0004 TYPE=DST  XREF=125 
+ SYM=SDWAXEME LOC=00000018 LEN=00000004 ESD=0003 TYPE=REL  XREF=124 
+ SYM=SDWAXPAD LOC=00000170 LEN=00000004 ESD=0002 TYPE=REL  XREF=121 
+ SYM=TESTSTA3 LOC=00000000 LEN=000001A8 ESD=0001 TYPE=CST  XREF=23 33 
+ SYM=WTO#0002_EOT LOC=000000A3 LEN=00000001 ESD=0001 TYPE=REL  XREF=40 37 38 
+ SYM=WTO#0003_EOT LOC=000000C6 LEN=00000001 ESD=0001 TYPE=REL  XREF=46 44 45 
+ SYM=WTO#0005_EOT LOC=000000EA LEN=00000001 ESD=0001 TYPE=REL  XREF=57 55 56 
+ SYM=WTO#0006_EOT LOC=00000109 LEN=00000001 ESD=0001 TYPE=REL  XREF=66 64 65 
+ SYM=WTO#0007_EOT LOC=00000124 LEN=00000001 ESD=0001 TYPE=REL  XREF=72 70 71 
+ SYM=WTO#0008_EOT LOC=00000162 LEN=00000001 ESD=0001 TYPE=REL  XREF=90 87 88 
+ SYM=WTO#0009_EOT LOC=0000019C LEN=00000001 ESD=0001 TYPE=REL  XREF=107 104 105 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSTA3  MZ390 ENDED RC= 0 IO=740

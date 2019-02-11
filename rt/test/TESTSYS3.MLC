@@ -1,0 +1,48 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2012-05-06  DSH Initial version                                   *
+*********************************************************************
+
+         TITLE 'TEST RPI-1213 FIXES FOR SYSECT, SYSLOC, SYSSTYP'
+
+         MACRO
+         SECTTEST &LOC,&BASE,&TYPE
+         MNOTE 'SYSLOC=&SYSLOC SYSECT=&SYSECT SYSSTYP=&SYSSTYP' 
+         AIF ('&SYSLOC' NE '&LOC')
+             MNOTE 12,'SYSLOC ERROR'
+         AEND
+         AIF ('&SYSECT' NE '&BASE')
+             MNOTE 12,'SYSECT ERROR'
+         AEND
+         AIF ('&SYSSTYP' NE '&TYPE')
+             MONTE 12,'SYSSTYP ERROR'
+         AEND
+         MEND
+         SECTTEST
+REGS     DSECT
+         SECTTEST REGS,REGS,DSECT
+REGS2L   LOCTR
+         SECTTEST REGS2L,REGS,DSECT
+TEST     START 
+         SR   15,15
+         BR   14
+         SECTTEST TEST,TEST,CSECT
+TEST2    CSECT
+         DC   CL8'TEST2'
+         SECTTEST TEST2,TEST2,CSECT
+TEST2L   LOCTR
+         DC   CL8'TEST2L'
+         SECTTEST TEST2L,TEST2,CSECT
+TEST3    RSECT
+         DC   CL8'TEST3'
+         SECTTEST TEST3,TEST3,RSECT
+         END

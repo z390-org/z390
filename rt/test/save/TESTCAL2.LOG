@@ -1,0 +1,17 @@
+TESTCAL2  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTCAL2.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+TESTCAL2 TEST STATIC LINK CALLS WITH EXTRN AND ENTRY
+PARM=PARM1 MSG
+PARM=PARM1 MSG
+PARM=PARM2 MSG
+PARM=PARM1 MSG
+PARM=PARM2 MSG
+TESTCAL2 ENDED OK
+EZ390I total errors         = 0
+TESTCAL2  EZ390 ENDED RC= 0 IO=177 INS=94

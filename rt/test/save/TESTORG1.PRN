@@ -1,0 +1,147 @@
+TESTORG1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTORG1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  trace systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000050 TYPE=CST NAME=CHSERROR
+ ESD=0005 LOC=00000050 LEN=00009C60 TYPE=CST NAME=MESSAGES
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2010 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2008-11-10  DSH Initial version                                   *
+000000                                      (1/13)13 *********************************************************************
+000000                                      (1/15)14 CHSERROR TITLE 'Error Message handling'
+000000                                      (1/17)15          MACRO
+000000                                      (1/18)16 &MSG#    #ERROR &TEXT,&MSGLVL=0,&SEV=0
+000000                                      (1/19)17          GBLB  &MSGDEF(10000)
+000000                                      (1/20)18          LCLA  &#
+000000                                      (1/21)19          LCLC  &#C,&TEMP
+000000                                      (1/22)20          AIF   ('&TEXT' EQ 'HEADER').HEADER
+000000                                      (1/23)21          AIF   ('&TEXT' EQ 'DSECT').DSECT
+000000                                      (1/27)22 &TEMP    SETC  '&MSG#'(2,K'&MSG#-1)
+000000                                      (1/28)23 &T       SETC  T'&TEMP
+000000                                      (1/29)24          AIF   (T'&TEMP EQ 'N').GOOD#
+000000                                      (1/30)25          MNOTE 12,'&TEMP NOT NUMERIC'
+000000                                      (1/31)26          MEXIT
+000000                                      (1/32)27 .GOOD#   ANOP  ,
+000000                                      (1/37)28 &#       SETA  &TEMP
+000000                                      (1/38)29          AIF   (NOT &MSGDEF(1+&#)).NOTADUP
+000000                                      (1/39)30          MNOTE 12,'MSG NUMBER &TEMP ALREADY DEFINED!'
+000000                                      (1/40)31          MEXIT
+000000                                      (1/41)32 .NOTADUP ANOP  ,
+000000                                      (1/42)33 &#C      SETC  '000&TEMP'(K'&TEMP,4)
+000000                                      (1/43)34 &LAB#    SETC  'MSG&#C'
+000000                                      (1/44)35 &MSGDEF(1+&#) SETB 1
+000000                                      (1/45)36          ORG   MESSAGES+(4*&#)
+000000                                      (1/46)37          DC    A(&LAB#)
+000000                                      (1/47)38          ORG   ,
+000000                                      (1/48)39 &LAB#    DS    0C
+000000                                      (1/49)40          DC    AL2(&MSGLVL),AL2(&SEV),AL2(L'&LAB#.T)
+000000                                      (1/50)41 &LAB#.T  DC    C&TEXT
+000000                                      (1/51)42          MEXIT
+000000                                      (1/52)43 .HEADER  ANOP  ,
+000000                                      (1/53)44          DC    10000A(0)
+000000                                      (1/54)45          MEXIT
+000000                                      (1/55)46 .DSECT   ANOP  ,
+000000                                      (1/56)47 ERRENT   DSECT ,
+000000                                      (1/57)48 
+000000                                      (1/58)49          MEND
+000000                                      (1/59)50 CHSERROR RSECT 
+000000                                      (1/60)51          SAVE  (14,12)
+000000 90ECD00C                             (2/51)52+         STM   14,12,12+4*(14-14)(13)
+000004                                      (1/61)54 * CODE TO TEST DC A(MSGS) AFTER RPI 632
+000004                                      (1/62)55          USING CHSERROR,15
+LISTUSE CHSERROR ESD=0001 LOC=00000000 LEN=01000 REG=F OFF=00000 LAB=
+000004                                      (1/63)56          SNAP  ID=1
+000004 A5030001                            (3/126)57+         IILL  0,1                  RPI158
+000008 A5027C00                            (3/131)58+         IILH 0,31744               RPI158
+00000C 41100000                            (3/144)59+         LA    1,0
+000010 0A33                                (3/146)60+         SVC   51  SNAP DUMP R0=FLAGS,ID,R1=A(TEXT),R14-15=A(LOW,HIGH)
+000012 412F0000                             (1/64)62          LA    2,0(15)    R2=A(CHSERROR)
+000016 C22900009C90            009C90       (1/65)63          AFI   2,X'9C90'  R2=A(MESSAGES+X'9C90') ADDR MSG0000 FROM PRN
+00001C 5520F048                000048       (1/66)64          CL    2,=A(MSG0000)  VERIFY ADCON
+000020 47700001                             (1/67)65          BNE   1
+000024 412F0000                             (1/68)66          LA    2,0(15)    R2=A(CHSERROR)
+000028 C22900009CA0            009CA0       (1/69)67          AFI   2,X'9CA0'  R2=A(MESSAGES+X'9CA0') ADDR MSG9999 FROM PRN
+00002E 5520F04C                00004C       (1/70)68          CL    2,=A(MSG9999)
+000032 47700001                             (1/71)69          BNE   1
+000036 1BFF                                 (1/72)70          SR    15,15
+000038                                      (1/73)71          RETURN (14,12),RC=(15)
+000038 58ED000C                             (6/57)74+         L     14,12(13)
+00003C 980CD014                             (6/62)75+         LM    0,12,20(13)
+000040 07FE                                 (5/41)77+         BR    14
+000042                                      (1/74)80 CONSTANT LOCTR ,
+000000                                      (1/75)81 WORK     DSECT ,
+000000                                      (1/76)82          DS    18F
+000048                  00000048            (1/77)83 WORKLEN  EQU   *-WORK
+000000                                      (1/78)84 WORK24   DSECT ,
+000000                                      (1/79)85          DS    F
+000004                  00000004            (1/80)86 WORK24LEN EQU  *-WORK24
+000050                                      (1/81)87 MESSAGES RSECT ,
+000050                                      (1/82)88          #ERROR HEADER
+000050 0000000000000000                     (1/53)89+         DC    10000A(0)
+009C90                                      (1/83)91 M0        #ERROR '%1 started'
+009C90                  000050              (1/45)92+         ORG   MESSAGES+(4*0)
+000050 00009C90                             (1/46)93+         DC    A(MSG0000)
+000054                  009C90              (1/47)94+         ORG   ,
+009C90                                      (1/48)95+MSG0000  DS    0C
+009C90 00000000000A                         (1/49)96+         DC    AL2(0),AL2(0),AL2(L'MSG0000T)
+009C96 6CF140A2A38199A3                     (1/50)97+MSG0000T DC    C'%1 started'
+009CA0                                      (1/84)99 M9999     #ERROR '%1 ended'
+009CA0                  009C8C             (1/45)100+         ORG   MESSAGES+(4*9999)
+009C8C 00009CA0                            (1/46)101+         DC    A(MSG9999)
+009C90                  009CA0             (1/47)102+         ORG   ,
+009CA0                                     (1/48)103+MSG9999  DS    0C
+009CA0 000000000008                        (1/49)104+         DC    AL2(0),AL2(0),AL2(L'MSG9999T)
+009CA6 6CF1408595848584                    (1/50)105+MSG9999T DC    C'%1 ended'
+009CAE                                     (1/85)107          #ERROR DSECT
+000000                                     (1/56)108+ERRENT   DSECT ,
+000000                                     (1/86)110          END 
+000048 00009C90         =A(MSG0000)
+00004C 00009CA0         =A(MSG9999)
+Relocation Definitions
+ ESD=0005 LOC=00000000 LEN=4 SIGN=+ XESD=0005
+ ESD=0005 LOC=00009C3C LEN=4 SIGN=+ XESD=0005
+ ESD=0001 LOC=00000048 LEN=4 SIGN=+ XESD=0005
+ ESD=0001 LOC=0000004C LEN=4 SIGN=+ XESD=0005
+
+Symbol Table Listing
+
+ SYM=CHSERROR LOC=00000000 LEN=00000050 ESD=0001 TYPE=CST  XREF=50 55 
+ SYM=CONSTANT LOC=00000042 LEN=0000000E ESD=0001 TYPE=CST  XREF=80 
+ SYM=ERRENT   LOC=00000000 LEN=00000000 ESD=0006 TYPE=DST  XREF=108 
+ SYM=MESSAGES LOC=00000050 LEN=00009C60 ESD=0005 TYPE=CST  XREF=87 92 100 
+ SYM=MSG0000  LOC=00009C90 LEN=00000001 ESD=0005 TYPE=REL  XREF=95 64 93 110 
+ SYM=MSG0000T LOC=00009C96 LEN=0000000A ESD=0005 TYPE=REL  XREF=97 96 
+ SYM=MSG9999  LOC=00009CA0 LEN=00000001 ESD=0005 TYPE=REL  XREF=103 68 101 110 
+ SYM=MSG9999T LOC=00009CA6 LEN=00000008 ESD=0005 TYPE=REL  XREF=105 104 
+ SYM=WORK     LOC=00000000 LEN=00000048 ESD=0003 TYPE=DST  XREF=81 83 
+ SYM=WORK24   LOC=00000000 LEN=00000008 ESD=0004 TYPE=DST  XREF=84 86 
+ SYM=WORK24LEN LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=86 
+ SYM=WORKLEN  LOC=00000048 LEN=00000001 ESD=0000 TYPE=ABS  XREF=83 
+
+Literal Table Listing
+
+ LIT=A(MSG0000) LOC=00000048 LEN=00000004 ESD=0001 POOL=0001 XREF=64 
+ LIT=A(MSG9999) LOC=0000004C LEN=00000004 ESD=0001 POOL=0001 XREF=68 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTORG1  MZ390 ENDED RC= 0 IO=3265

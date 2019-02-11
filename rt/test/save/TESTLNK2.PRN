@@ -1,0 +1,52 @@
+TESTLNK2  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTLNK2
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) notiming stats 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000020 TYPE=CST NAME=TESTLNK2
+ ESD=0001 LOC=00000000 LEN=00000002 TYPE=ENT NAME=WTOLNK2
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30 DSH         Initial version                            *
+000000                                      (1/13)13 * 2007-11-09 DSH RPI-732 Test using TESTLNK2.LNK to build           *
+000000                                      (1/14)14 *                        TESTLNK2.390 including TESTLNK3, entry     *
+000000                                      (1/15)15 *                        TESTLNK3, and alias TESTLNK3               *
+000000                                      (1/16)16 * 2008-08-10 DSH RPI-893 Correct AL2(WTOEND,0) to AL2(WTOEND-*,0)   *
+000000                                      (1/17)17 *********************************************************************
+000000                                      (1/19)18          TITLE 'TESTLNK2 TEST USE OF TESTLNK2.LNK TO BUILD TESTLNK2'
+000000                                      (1/21)19 TESTLNK2 CSECT 
+000000                                      (1/22)20          ENTRY WTOLNK2
+000000 001BC8C5D3D3D640                     (1/23)21 WTOLNK2  DC   AL2(WTOEND-*),C'HELLO FROM TESTLNK3 ENTRY'
+00001B                  0000001B            (1/24)22 WTOEND   EQU  *
+00001B                                      (1/25)23          END 
+
+Symbol Table Listing
+
+ SYM=TESTLNK2 LOC=00000000 LEN=00000020 ESD=0001 TYPE=CST  XREF=19 
+ SYM=WTOEND   LOC=0000001B LEN=00000001 ESD=0001 TYPE=REL  XREF=22 21 
+ SYM=WTOLNK2  LOC=00000000 LEN=00000002 ESD=0001 TYPE=REL  XREF=21 20 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTLNK2  MZ390 ENDED RC= 0 IO=99

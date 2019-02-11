@@ -1,0 +1,66 @@
+TESTSPE3  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSPE3
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000008 TYPE=CST NAME=TESTSPE3
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2008 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2008-08-13 DSH         Initial version                            *
+000000                                      (1/13)13 * 2008-09-17 DSH RPI-911 Change ASELECT to ACASE and APM to ACALL   *
+000000                                      (1/14)14 * 2008-09-23 DSH RPI-911 New regression test for SPM's              *
+000000                                      (1/15)15 *********************************************************************
+000000                                      (1/17)16          TITLE 'TESTSPE3 - TEST STRUCTURED PROGRAMMING EXTENSIONS'
+000000                                      (1/19)17 * TEST ZSTRMAC2 ACASE EXTENSIONS FOR V1,V2,(V3,V4) V=N,C'?',X'??'
+000000                                      (1/28)18          MNOTE 'AWHEN I=0'
+000000                                      (1/32)19          MNOTE 'AWHEN I=1'
+000000                                      (1/36)20          MNOTE 'AWHEN I=3 (3,(5,7),9'
+000000                                      (1/36)21          MNOTE 'AWHEN I=5 (3,(5,7),9'
+000000                                      (1/36)22          MNOTE 'AWHEN I=6 (3,(5,7),9'
+000000                                      (1/36)23          MNOTE 'AWHEN I=7 (3,(5,7),9'
+000000                                      (1/36)24          MNOTE 'AWHEN I=9 (3,(5,7),9'
+000000                                      (1/40)25          MNOTE 'AWHEN I=193 EBCIDC CHAR A'
+000000                                      (1/44)26          MNOTE 'AWHEN I=241 EBCIDC CHAR 1,(2,4),5'
+000000                                      (1/44)27          MNOTE 'AWHEN I=242 EBCIDC CHAR 1,(2,4),5'
+000000                                      (1/44)28          MNOTE 'AWHEN I=243 EBCIDC CHAR 1,(2,4),5'
+000000                                      (1/44)29          MNOTE 'AWHEN I=244 EBCIDC CHAR 1,(2,4),5'
+000000                                      (1/44)30          MNOTE 'AWHEN I=245 EBCIDC CHAR 1,(2,4),5'
+000000                                      (1/48)31          MNOTE 'AWHEN I=250 EBCIDC HEX FA,(FB,FD),FE'
+000000                                      (1/48)32          MNOTE 'AWHEN I=251 EBCIDC HEX FA,(FB,FD),FE'
+000000                                      (1/48)33          MNOTE 'AWHEN I=252 EBCIDC HEX FA,(FB,FD),FE'
+000000                                      (1/48)34          MNOTE 'AWHEN I=253 EBCIDC HEX FA,(FB,FD),FE'
+000000                                      (1/48)35          MNOTE 'AWHEN I=254 EBCIDC HEX FA,(FB,FD),FE'
+000000                                      (1/52)36          MNOTE 'AWHEN I=255 EBCIDC HEX FF'
+000000                                     (1/103)37 TESTSPE3 CSECT 
+000000 1BFF                                (1/104)38          SR    15,15
+000002 07FE                                (1/105)39          BR    14
+000004                                     (1/106)40          END 
+
+Symbol Table Listing
+
+ SYM=TESTSPE3 LOC=00000000 LEN=00000008 ESD=0001 TYPE=CST  XREF=37 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSPE3  MZ390 ENDED RC= 0 IO=251

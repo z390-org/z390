@@ -1,0 +1,122 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH          Initial version                          *
+* 2006-03-22  DSH RPI-237  Test drop using with comments, multiple  *
+*                          labels                                   *
+* 2006-04-06  DSH RPI-274  Support DSECT dependent using            *
+* 2007-05-07  DSH RPI-609  Remove label on non-specific dependent   *
+*                          using                                    *
+* 2007-05-30  DSH RPI-629  Correct drop of previous unlabeled USING *
+* 2008-01-14  DSH RPI-776  Correct using to ignore comments with    *
+*                          commas                                   *
+* 2009-06-17  DSH RPI-1056 Test warning for duplicate ordinary      *
+*                          using ranges                             *
+*********************************************************************
+
+TESTUSE1 SUBENTRY
+         WTO   'TESTUSE1 TEST LABELD AND DEPENDANT USING'
+*
+* TEST S TYPE ADDRESS
+*
+         DC    X'4110',S(X)
+         CL    1,=A(X)
+         BNE   ERR
+*
+* TEST MULT REG USING AND RANGE LIMITS
+*
+         USING CST2,1,2       RPI 776 A,B,C TEST
+         CLC   =S(CST2+4095,CST2+4096),=X'1FFF2000'
+         BNE   ERR
+         USING (CST2+10,CST2+20),3
+         CLC   =S(CST2+10,CST2+21),=X'30001015'
+         BNE   ERR
+         B     SKPLIT
+         LTORG
+         DROP  1,2,3
+SKPLIT   DS    0H
+
+*
+* TEST UNLABELED DEPENDANT USING
+*
+         USING IHADCB,SYSUT1
+         CLC   DCBDDNAM,=CL8'SYSUT1'
+         BNE   ERR
+         CLC   DCBLRECL,=H'80'
+         BNE   ERR
+         USING IHADCB,SYSUT2
+         CLC   DCBDDNAM,=CL8'SYSUT2'
+         BNE   ERR
+         CLC   DCBLRECL,=H'120'
+         BNE   ERR
+         DROP
+         USING TESTUSE1+8,13
+*
+* TEST LABELED DEPENDANT USING
+*
+DCB1     USING IHADCB,SYSUT1
+DCB2     USING IHADCB,SYSUT2
+         CLC   DCB1.DCBDDNAM,=CL8'SYSUT1'
+         BNE   ERR
+         CLC   DCB1.DCBLRECL,=H'80'
+         BNE   ERR
+         CLC   DCB2.DCBDDNAM,=CL8'SYSUT2'
+         BNE   ERR
+         CLC   DCB2.DCBLRECL,=H'120'
+         BNE   ERR
+         DROP  DCB1,DCB2 TEST COMMENT FOR RPI 237
+* TEST DEPENDENT USING DSECT                    
+         LA    12,PRIVATE             * Point new savearea
+         USING SAVEAREA,12            * Address new savearea
+CHECK    USING PRIVATE,SAVEAREA        **!! for testing purposes
+         LA    1,CHECK.P1
+         CLI   0(1),X'EE'
+         BNE   ERR
+*
+* TEST DROPING PREV UNLABELED USING - RPI 629
+*
+         BALR  10,0
+         USING *,10
+         BALR  10,0
+L10      USING *,10
+         BALR  10,0
+         USING *,10
+         LA    1,*
+         LA    10,0(10) CLEAR HIGH BITS
+         CLR   1,10    VERIFY USE OF LAST USING VESUS PREV
+         BNE   ERR
+*
+* GENERATE 2 WARNINGS FOR HIGH/LOW DUPLICATE RANGE ORDINARY USINGS
+*   
+         DROP  10
+         LR    14,13
+         USING TESTUSE1+8,14
+         LA    1,WARN
+         DROP  14
+         LR   11,13
+         USING TESTUSE1+8,11
+         LA    1,WARN
+WARN     EQU   *
+         WTO   'TESTUSE1 ENDED OK'
+         SUBEXIT
+ERR      WTO   'TESTUSE1 ABORTING WITH ERROR'
+         SUBEXIT RC=16
+SYSUT1   DCB   DSORG=PS,RECFM=FB,LRECL=80,MACRF=GM,DDNAME=SYSUT1
+SYSUT2   DCB   DSORG=PS,RECFM=FB,LRECL=120,MACRF=PM,DDNAME=SYSUT2
+X        EQU   *
+PRIVATE  DC    X'FF'
+P1       DC    X'EE'
+SAVEAREA DSECT
+         DS    18F
+CST2     CSECT
+         DS    XL8192
+         DCBD
+         END

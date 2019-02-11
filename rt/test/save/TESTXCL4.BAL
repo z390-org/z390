@@ -1,0 +1,78 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2005-11-16 DSH RPI-95  Test XCTL                                  *
+* 2007-04-26 DSH RPI-598 Add additional CDE SNAPs to verify OK      *
+*********************************************************************
+         TITLE 'TESTXCL4 TEST TESTXCL2 XCTL TO TESTXCL4'
+*MCALL #=     1 LV= 1 TESTXCL4 SUBENTRY 
+TESTXCL4 CSECT 
+         STM   14,12,12(13)
+         BAL   15,104(15)
+         DC    18F'0'
+         DC    CL8'TESTXCL4'
+         DC    CL8'01/02/05'
+         DC    CL8'22.33'
+         ST    15,8(13)
+         ST    13,4(15)
+         LR    13,15
+         USING TESTXCL4+8,13
+*MEXIT #=     1 LV= 1 SUBENTRY
+*MCALL #=     2 LV= 1          WTO   'TESTXCL4 ENTERED'
+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+         DC    AL2(WTO#0002_EOT-*,0),C'TESTXCL4 ENTERED'
+WTO#0002_EOT     EQU *
+         SVC   35
+*MEXIT #=     2 LV= 1 WTO
+*MCALL #=     3 LV= 1          SNAP  ID=41,PDATA=CDE,TEXT='TESTXCL4 VERX
+               IFY TESTXCL4 CDE'
+         IILL  0,41                  RPI158
+         IILH 0,4096               RPI158
+         LA    1,=CL60'TESTXCL4 VERIFY TESTXCL4 CDE'
+         SVC   51  SNAP DUMP R0=FLAGS,ID,R1=A(TEXT),R14-15=A(LOW,HIGH)
+*MEXIT #=     3 LV= 1 SNAP
+*MCALL #=     4 LV= 1          GETMAIN R,LV=256
+         L    1,=A(256)  RPI 117
+         LA    0,B'00'
+         SVC   4 GMAIN R0=(X'02'=31B,X'01'=COND),R1=LEN OUT(R0=L,R1=A)
+*MEXIT #=     4 LV= 1 GETMAIN
+         XC    0(256,1),0(1) CLEAR IT
+         LA    2,256(1)
+*MCALL #=     5 LV= 1          SNAP  ID=42,PDATA=CDE,STORAGE=((1),(2)),X
+               TEXT='TESTXCL4 AREA'
+*MCALL #=     6 LV= 2          ZOPTLR 14,1
+         LR    14,1
+*MEXIT #=     6 LV= 2 ZOPTLR
+*MCALL #=     7 LV= 2          ZOPTLR 15,2
+         LR    15,2
+*MEXIT #=     7 LV= 2 ZOPTLR
+         IILL  0,42                  RPI158
+         IILH 0,36864               RPI158
+         LA    1,=CL60'TESTXCL4 AREA'
+         SVC   51  SNAP DUMP R0=FLAGS,ID,R1=A(TEXT),R14-15=A(LOW,HIGH)
+*MEXIT #=     5 LV= 1 SNAP
+*MCALL #=     8 LV= 1          WTO   'TESTXCL4 NOW RETURNING TO TESTXCLX
+               3 OR SYSTEM'
+         BRAS  1,*+(WTO#0008_EOT-*+1)/2*2
+         DC    AL2(WTO#0008_EOT-*,0),C'TESTXCL4 NOW RETURNING TO TESTXCX
+               L3 OR SYSTEM'
+WTO#0008_EOT     EQU *
+         SVC   35
+*MEXIT #=     8 LV= 1 WTO
+*MCALL #=     9 LV= 1          SUBEXIT 
+         LA    15,0
+         L     13,4(,13)
+         L     14,12(,13)
+         LM    2,12,28(13)
+         BR    14
+*MEXIT #=     9 LV= 1 SUBEXIT
+         END 

@@ -1,0 +1,51 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2006-01-09 DSH RPI-162 Test extensions LV=NNNK and LV=NNNM        *
+* 2007-01-22 DSH RPI-542 Correct GETMAIN output R1=ADDR             *
+* 2007-12-17 DSH RPI-758 Fix CLCL which was wrong and failed with   *
+*                        0C6                                        *
+*********************************************************************
+
+         TITLE 'TESTMEM2 TEST GETMAIN EXTENSIONS'
+
+TESTMEM2 RT1   MAIN
+         EQUREGS
+         RT1   START
+         GETMAIN R,LV=1K     GET 1K
+         LTR   R15,R15
+         RT1   CCE                 VERIFY R15 = 0
+         LR    R2,R1                                RPI-542
+         LR    R4,R2
+         L     R5,=A(1024)
+         SR    R0,R0
+         L     R1,=X'EE000000'
+         MVCL  R4,R0               FILL 1K WITH X'EE'
+         LR    R4,R2
+         L     R5,=A(1024)
+         CLCL  R4,R0               VERIFY FILL  RPI-758
+         RT1   CCE
+         GETMAIN R,LV=1M     GET 1M
+         LTR   R15,R15
+         RT1   CCE                 VERIFY R15 = 0
+         LR    R2,R1                              RPI-542
+         LR    R4,R2
+         L     R5,=A(1024*1024)
+         SR    R0,R0
+         L     R1,=X'EE000000'
+         MVCL  R4,R0               FILL 1M WITH X'EE'
+         LR    R4,R2
+         L     R5,=A(1024*1024)
+         CLCL  R4,R0               VERIFY FILL   RPI-758
+         RT1   CCE
+         RT1   END
+         END

@@ -1,0 +1,47 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-11-08 DSH          Initial version                           *
+* 2005-11-15 DSH RPI-92   Test non-zero memory addresses            *
+* 2006-09-11 DSH RPI-363  Change test to rt\test directory          *
+* 2007-02-07 DSH RPI-532  Change path case for Linux                *
+* 2007-04-26 DSH RPI-600  Correct duplicate ID= on SNAP             *
+* 2007-07-05 DSH RPI-642  Test TEXT=(REG) with NULL term support    *
+* 2009-04-18 DSH RPI-1017 Add MF=L/E tests                          *
+*********************************************************************
+
+TESTDMP4 SUBENTRY
+         WTO   'TESTDMP4 TEST SNAP DUMP OPTIONS'
+         SNAP  ID=1,TEXT='DEFAULT ALL CONTROL BLOCKS TO LOG'
+         OPEN  (SYSUT1)
+         SNAP  ID=2,PDATA=(GPR,DCB),TEXT='GPR REGS AND FILES'
+         SNAP  ID=3,PDATA=FPR,TEXT='FPR REGS'
+         SNAP  ID=4,STORAGE=(DATA1,DATA2),TEXT='LOW MEMORY'
+         LA    2,TEXT
+         SNAP  ID=5,TEXT=(2)
+         WTO   'TESTDMP4 ENDED OK'
+         SNAP  PDATA=PSW,ID=1,TEXT='TEST STD FORM'
+         SNAP  MF=(E,LIST2)
+         LA    3,LIST2
+         SNAP  MF=(E,(3))
+         SNAP  MF=(E,LIST2),PDATA=PSW,ID=3,TEXT='TEST LIST2 OVERRIDES',X
+               STORAGE=(LIST2,LIST4)
+         SNAP  MF=(E,LIST4)
+         SUBEXIT
+LIST2    SNAP  MF=L,PDATA=(PSW,REGS),ID=2,TEXT='LIST2'
+LIST4    SNAP  MF=L,PDATA=ALL,ID=4,STORAGE=(LIST2,LIST4),TEXT='LIST4'
+TEXT     DC    C'TEST TEXT=(2)',X'00' RPI 642
+SYSUT1   DCB   RECFM=FT,BLKSIZE=80,MACRF=GM,DSNAME=DSN1
+DSN1     DC    C'rt\test\TESTDMP4.TF1',X'00'
+DATA1    DC    C'MEMORY DUMP AREA'
+DATA2    EQU   *
+         DCBD
+         END

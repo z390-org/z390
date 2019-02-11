@@ -1,0 +1,15 @@
+TESTPRO1  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTPRO1.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  @rt\test\TESTPRO1.OPT=(profile(TESTPRO1) sysmac(rt\test+mac) syscpy(rt\test)) 
+  systerm(rt\test\RTTEST)
+TESTPRO1 TEST PROFILE(TESTPRO1.CPY)
+  1.  EXECUTE MACRO TESTPROS.MAC AT START
+  2.  EXECUTE MACRO TESTPOST.MAC AT TERMINATION
+TESTPRO1 ENDED OK
+EZ390I total errors         = 0
+TESTPRO1  EZ390 ENDED RC= 0 IO=160 INS=19

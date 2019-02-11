@@ -1,0 +1,86 @@
+TESTSQL1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSQL1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  sysmac(rt\test+mac) syscpy(rt\test) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000108 TYPE=CST NAME=TESTSQL1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2006 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2006-04-26  DSH Initial version                                   *
+000000                                      (1/13)13 * 2006-04-26  DSH RPI-293 Test EXEC SQL INCLUDE SUPPORT             *
+000000                                      (1/14)14 *********************************************************************
+000000                                      (1/15)15 *
+000000                                      (1/16)16 * mz390 parses space delimited EXEC SQL/CICS/DLI statements into
+000000                                      (1/17)17 * exec macro call statements with comma delimited parameters
+000000                                      (1/18)18 *
+000000                                      (1/19)19 * 1. EXEC SQL INCLUDE member - invokes call to macro named member
+000000                                      (1/20)20 *
+000000                                      (1/21)21 *********************************************************************
+000000                                      (1/23)22          TITLE 'TESTSQL1 - TEST EXEC SQL INCLUDE SUPPORT'
+000000                                      (1/25)23 TESTSQL1 SUBENTRY 
+000000                                      (2/78)24+TESTSQL1 CSECT 
+000000 90ECD00C                            (2/168)25+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)26+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)27+         DC    18F'0'
+000050 E3C5E2E3E2D8D3F1                    (2/171)28+         DC    CL8'TESTSQL1'
+000058 F0F161F0F261F0F5                    (2/172)29+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)30+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)31+         ST    15,8(13)
+00006C 50DF0004                            (2/175)32+         ST    13,4(15)
+000070 18DF                                (2/176)33+         LR    13,15
+000072                                     (2/189)34+         USING TESTSQL1+8,13
+LISTUSE TESTSQL1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/26)36          WTO   'TESTSQL1 - TEST EXEC SQL INCLUDE TESTSQL1'
+000072 A7150019                0000A4       (3/49)38+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 002D0000E3C5E2E3                     (3/50)39+         DC    AL2(WTO#0002_EOT-*,0),C'TESTSQL1 - TEST EXEC SQL INCLUDE TESTSQL1'
+0000A3                  000000A3            (3/51)41+WTO#0002_EOT     EQU *
+0000A4 0A23                                 (3/52)42+         SVC   35
+0000A6                                      (1/27)44  EXEC SQL,INCLUDE,TESTSQL1
+0000A6 A7150018                0000D6       (3/49)49+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000AA 002C0000E3C5E2E3                     (3/50)50+         DC    AL2(WTO#0006_EOT-*,0),C'TESTSQL1 INCLUDED CODE FROM TESTSQL1.MAC'
+0000D6                  000000D6            (3/51)52+WTO#0006_EOT     EQU *
+0000D6 0A23                                 (3/52)53+         SVC   35
+0000D8                                      (1/28)58          WTO   'TESTSQL1 ENDED OK'
+0000D8 A715000D                0000F2       (3/49)59+         BRAS  1,*+(WTO#0007_EOT-*+1)/2*2
+0000DC 00150000E3C5E2E3                     (3/50)60+         DC    AL2(WTO#0007_EOT-*,0),C'TESTSQL1 ENDED OK'
+0000F1                  000000F1            (3/51)61+WTO#0007_EOT     EQU *
+0000F2 0A23                                 (3/52)62+         SVC   35
+0000F4                                      (1/29)64          SUBEXIT 
+0000F4 41F00000                             (7/33)65+         LA    15,0
+0000F8 58D0D004                             (7/50)66+         L     13,4(,13)
+0000FC 58E0D00C                             (7/51)67+         L     14,12(,13)
+000100 982CD01C                             (7/52)68+         LM    2,12,28(13)
+000104 07FE                                 (7/53)69+         BR    14
+000106                                      (1/30)71          END 
+
+Symbol Table Listing
+
+ SYM=TESTSQL1 LOC=00000000 LEN=00000108 ESD=0001 TYPE=CST  XREF=24 34 
+ SYM=WTO#0002_EOT LOC=000000A3 LEN=00000001 ESD=0001 TYPE=REL  XREF=41 38 39 
+ SYM=WTO#0006_EOT LOC=000000D6 LEN=00000001 ESD=0001 TYPE=REL  XREF=52 49 50 
+ SYM=WTO#0007_EOT LOC=000000F1 LEN=00000001 ESD=0001 TYPE=REL  XREF=61 59 60 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSQL1  MZ390 ENDED RC= 0 IO=611

@@ -1,0 +1,138 @@
+TESTDMP5  EZ390 START
+TESTDMP5  EZ390 Copyright 2011 Automated Software Tools Corporation
+TESTDMP5  EZ390 Copyright 2013 Cat Herder Software, LLC
+TESTDMP5  EZ390 Copyright 2018 Joachim Bartz, Germany
+TESTDMP5  EZ390 z390 is licensed under GNU General Public License
+TESTDMP5  EZ390 program = rt\test\TESTDMP5.390
+TESTDMP5  EZ390 options = notiming stats dump ascii 
+  systerm(rt\test\RTTEST)
+TESTDMP5  EZ390 final_options=ALIGN
+TESTDMP5  EZ390 final_options=NOALLOW
+TESTDMP5  EZ390 final_options=NOAMODE24
+TESTDMP5  EZ390 final_options=AMODE31
+TESTDMP5  EZ390 final_options=ASCII
+TESTDMP5  EZ390 final_options=ASM
+TESTDMP5  EZ390 final_options=NOASSIST
+TESTDMP5  EZ390 final_options=AUTOLINK
+TESTDMP5  EZ390 final_options=NOBAL
+TESTDMP5  EZ390 final_options=NOBS2000
+TESTDMP5  EZ390 final_options=EDF
+TESTDMP5  EZ390 final_options=NOCICS
+TESTDMP5  EZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTDMP5  EZ390 final_options=COMMENT
+TESTDMP5  EZ390 final_options=CON
+TESTDMP5  EZ390 final_options=DUMP
+TESTDMP5  EZ390 final_options=EPILOG
+TESTDMP5  EZ390 final_options=NOERRSUM
+TESTDMP5  EZ390 final_options=EXTEND
+TESTDMP5  EZ390 final_options=FLOAT(DECIMAL)
+TESTDMP5  EZ390 final_options=NOGUAM
+TESTDMP5  EZ390 final_options=INIT
+TESTDMP5  EZ390 final_options=LIST
+TESTDMP5  EZ390 final_options=LISTCALL
+TESTDMP5  EZ390 final_options=LISTUSE
+TESTDMP5  EZ390 final_options=LOADHIGH
+TESTDMP5  EZ390 final_options=NOMCALL
+TESTDMP5  EZ390 final_options=NOMOD
+TESTDMP5  EZ390 final_options=OBJ
+TESTDMP5  EZ390 final_options=NOOBJHEX
+TESTDMP5  EZ390 final_options=PC
+TESTDMP5  EZ390 final_options=PCOPT
+TESTDMP5  EZ390 final_options=NOPDSMEM8
+TESTDMP5  EZ390 final_options=NOPRINTALL
+TESTDMP5  EZ390 final_options=PROLOG
+TESTDMP5  EZ390 final_options=PROTECT
+TESTDMP5  EZ390 final_options=R64
+TESTDMP5  EZ390 final_options=NOREFORMAT
+TESTDMP5  EZ390 final_options=NOREGS
+TESTDMP5  EZ390 final_options=RMODE24
+TESTDMP5  EZ390 final_options=NORMODE31
+TESTDMP5  EZ390 final_options=STATS
+TESTDMP5  EZ390 final_options=NOTEST
+TESTDMP5  EZ390 final_options=THREAD
+TESTDMP5  EZ390 final_options=NOTIME
+TESTDMP5  EZ390 final_options=NOTIMING
+TESTDMP5  EZ390 final_options=NOTRACE
+TESTDMP5  EZ390 final_options=NOTRACEA
+TESTDMP5  EZ390 final_options=NOTRACEALL
+TESTDMP5  EZ390 final_options=NOTRACEC
+TESTDMP5  EZ390 final_options=NOTRACEG
+TESTDMP5  EZ390 final_options=NOTRACEI
+TESTDMP5  EZ390 final_options=NOTRACEL
+TESTDMP5  EZ390 final_options=NOTRACEM
+TESTDMP5  EZ390 final_options=NOTRACEP
+TESTDMP5  EZ390 final_options=NOTRACEQ
+TESTDMP5  EZ390 final_options=NOTRACES
+TESTDMP5  EZ390 final_options=NOTRACET
+TESTDMP5  EZ390 final_options=NOTRACEV
+TESTDMP5  EZ390 final_options=TRAP
+TESTDMP5  EZ390 final_options=NOTRUNC
+TESTDMP5  EZ390 final_options=NOTS
+TESTDMP5  EZ390 final_options=VCB
+TESTDMP5  EZ390 final_options=WARN
+TESTDMP5  EZ390 final_options=XREF
+TESTDMP5  EZ390 final_options=ZSTRMAC
+TESTDMP5  EZ390 final_options=CHKMAC=0
+TESTDMP5  EZ390 final_options=CHKSRC=1
+TESTDMP5  EZ390 final_options=ERR=100
+TESTDMP5  EZ390 final_options=MAXCALL=50
+TESTDMP5  EZ390 final_options=MAXDISPLAY=80
+TESTDMP5  EZ390 final_options=MAXESD=1000
+TESTDMP5  EZ390 final_options=MAXFILE=1000
+TESTDMP5  EZ390 final_options=MAXGBL=100000
+TESTDMP5  EZ390 final_options=MAXHEIGHT=600
+TESTDMP5  EZ390 final_options=MAXLCL=100000
+TESTDMP5  EZ390 final_options=MAXLEN=80
+TESTDMP5  EZ390 final_options=MAXLINE=200000
+TESTDMP5  EZ390 final_options=MAXLOG=1000000
+TESTDMP5  EZ390 final_options=MAXPARM=10000
+TESTDMP5  EZ390 final_options=MAXPASS=2
+TESTDMP5  EZ390 final_options=MAXPC=50000
+TESTDMP5  EZ390 final_options=MAXQUE=1000
+TESTDMP5  EZ390 final_options=MAXRLD=10000
+TESTDMP5  EZ390 final_options=MAXSIZE=52428800
+TESTDMP5  EZ390 final_options=MAXSYM=50000
+TESTDMP5  EZ390 final_options=MAXWARN=4
+TESTDMP5  EZ390 final_options=MAXWIDTH=800
+TESTDMP5  EZ390 final_options=MEM=1
+TESTDMP5  EZ390 final_options=MINHEIGHT=150
+TESTDMP5  EZ390 final_options=MINWIDTH=150
+TESTDMP5  EZ390 final_options=MNOTE=0
+TESTDMP5  EZ390 final_options=PARM=
+TESTDMP5  EZ390 final_options=PROFILE=
+TESTDMP5  EZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTDMP5.STA
+TESTDMP5  EZ390 final_options=SYSPARM=
+TESTDMP5  EZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTDMP5  EZ390 final_options=TESTDD=
+TESTDMP5  EZ390 final_options=TIME=15
+TESTDMP5  EZ390 final_options=TRACE=
+TESTDMP5  EZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTDMP5  EZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTDMP5  EZ390 final_options=Z390COMMAND=cmd.exe
+TESTDMP5  EZ390 final_options=Z390EDITOR=notepad.exe
+TESTDMP5  EZ390 final_options=INSTALL=
+TESTDMP5  EZ390 final_options=IPL=
+TESTDMP5  EZ390 final_options=LOG=C:\Users\Achim\GitHub\z390\rt\test\TESTDMP5.LOG
+TESTDMP5  EZ390 final_options=SYS390=rt\test\+linklib
+TESTDMP5  EZ390 final_options=SYSBAL=rt\test\
+TESTDMP5  EZ390 final_options=SYSCPY=rt\test\
+TESTDMP5  EZ390 final_options=SYSDAT=rt\test\
+TESTDMP5  EZ390 final_options=SYSERR=rt\test\
+TESTDMP5  EZ390 final_options=SYSLOG=rt\test\
+TESTDMP5  EZ390 final_options=SYSLST=rt\test\
+TESTDMP5  EZ390 final_options=SYSMAC=rt\test\
+TESTDMP5  EZ390 final_options=SYSMLC=rt\test\
+TESTDMP5  EZ390 final_options=SYSPCH=rt\test\
+TESTDMP5  EZ390 final_options=SYSPRN=rt\test\
+TESTDMP5  EZ390 final_options=SYSOBJ=rt\test\
+TESTDMP5  EZ390 final_options=SYSOPT=rt\test\
+TESTDMP5  EZ390 final_options=SYSTRC=rt\test\
+TESTDMP5  EZ390 TCPIO operations      = 0
+TESTDMP5  EZ390 DCB operations        = 0
+TESTDMP5  EZ390 VSAM operations       = 0
+TESTDMP5  EZ390 Keys                  = 2467
+TESTDMP5  EZ390 Key searches          = 11
+TESTDMP5  EZ390 Key avg comps         = 1
+TESTDMP5  EZ390 Key max comps         = 2
+TESTDMP5  EZ390 total errors          = 1
+TESTDMP5  EZ390 ENDED RC=16 IO=232 INS=9

@@ -1,0 +1,12 @@
+TESTERR5  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTERR5.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+TESTERR5 TEST INVALID DCBDSNAM USING SYNAD EXIT
+TESTERR5 ABORTING DUE TO SYSUT SYNAD EXIT
+EZ390I total errors         = 0
+TESTERR5  EZ390 ENDED RC= 0 IO=180 INS=18

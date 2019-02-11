@@ -1,0 +1,170 @@
+TESTERR1  MZ390 START
+TESTERR1  MZ390 Copyright 2011 Automated Software Tools Corporation
+TESTERR1  MZ390 Copyright 2013 Cat Herder Software, LLC
+TESTERR1  MZ390 Copyright 2018 Joachim Bartz, Germany
+TESTERR1  MZ390 z390 is licensed under GNU General Public License
+TESTERR1  MZ390 program = rt\test\TESTERR1.MLC
+TESTERR1  MZ390 options = noasm bal notiming sysmac(mac) syscpy(mac) 
+  stats systerm(rt\test\RTTEST)
+TESTERR1  MZ390 final_options=ALIGN
+TESTERR1  MZ390 final_options=NOALLOW
+TESTERR1  MZ390 final_options=NOAMODE24
+TESTERR1  MZ390 final_options=AMODE31
+TESTERR1  MZ390 final_options=NOASCII
+TESTERR1  MZ390 final_options=NOASM
+TESTERR1  MZ390 final_options=NOASSIST
+TESTERR1  MZ390 final_options=AUTOLINK
+TESTERR1  MZ390 final_options=BAL
+TESTERR1  MZ390 final_options=NOBS2000
+TESTERR1  MZ390 final_options=EDF
+TESTERR1  MZ390 final_options=NOCICS
+TESTERR1  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTERR1  MZ390 final_options=COMMENT
+TESTERR1  MZ390 final_options=CON
+TESTERR1  MZ390 final_options=NODUMP
+TESTERR1  MZ390 final_options=EPILOG
+TESTERR1  MZ390 final_options=NOERRSUM
+TESTERR1  MZ390 final_options=EXTEND
+TESTERR1  MZ390 final_options=FLOAT(DECIMAL)
+TESTERR1  MZ390 final_options=NOGUAM
+TESTERR1  MZ390 final_options=INIT
+TESTERR1  MZ390 final_options=LIST
+TESTERR1  MZ390 final_options=LISTCALL
+TESTERR1  MZ390 final_options=LISTUSE
+TESTERR1  MZ390 final_options=LOADHIGH
+TESTERR1  MZ390 final_options=NOMCALL
+TESTERR1  MZ390 final_options=NOMOD
+TESTERR1  MZ390 final_options=OBJ
+TESTERR1  MZ390 final_options=NOOBJHEX
+TESTERR1  MZ390 final_options=NOPC
+TESTERR1  MZ390 final_options=PCOPT
+TESTERR1  MZ390 final_options=NOPDSMEM8
+TESTERR1  MZ390 final_options=NOPRINTALL
+TESTERR1  MZ390 final_options=PROLOG
+TESTERR1  MZ390 final_options=PROTECT
+TESTERR1  MZ390 final_options=R64
+TESTERR1  MZ390 final_options=NOREFORMAT
+TESTERR1  MZ390 final_options=NOREGS
+TESTERR1  MZ390 final_options=RMODE24
+TESTERR1  MZ390 final_options=NORMODE31
+TESTERR1  MZ390 final_options=STATS
+TESTERR1  MZ390 final_options=NOTEST
+TESTERR1  MZ390 final_options=THREAD
+TESTERR1  MZ390 final_options=NOTIME
+TESTERR1  MZ390 final_options=NOTIMING
+TESTERR1  MZ390 final_options=NOTRACE
+TESTERR1  MZ390 final_options=NOTRACEA
+TESTERR1  MZ390 final_options=NOTRACEALL
+TESTERR1  MZ390 final_options=NOTRACEC
+TESTERR1  MZ390 final_options=NOTRACEG
+TESTERR1  MZ390 final_options=NOTRACEI
+TESTERR1  MZ390 final_options=NOTRACEL
+TESTERR1  MZ390 final_options=NOTRACEM
+TESTERR1  MZ390 final_options=NOTRACEP
+TESTERR1  MZ390 final_options=NOTRACEQ
+TESTERR1  MZ390 final_options=NOTRACES
+TESTERR1  MZ390 final_options=NOTRACET
+TESTERR1  MZ390 final_options=NOTRACEV
+TESTERR1  MZ390 final_options=TRAP
+TESTERR1  MZ390 final_options=NOTRUNC
+TESTERR1  MZ390 final_options=NOTS
+TESTERR1  MZ390 final_options=VCB
+TESTERR1  MZ390 final_options=WARN
+TESTERR1  MZ390 final_options=XREF
+TESTERR1  MZ390 final_options=ZSTRMAC
+TESTERR1  MZ390 final_options=CHKMAC=0
+TESTERR1  MZ390 final_options=CHKSRC=1
+TESTERR1  MZ390 final_options=ERR=100
+TESTERR1  MZ390 final_options=MAXCALL=50
+TESTERR1  MZ390 final_options=MAXDISPLAY=80
+TESTERR1  MZ390 final_options=MAXESD=1000
+TESTERR1  MZ390 final_options=MAXFILE=1000
+TESTERR1  MZ390 final_options=MAXGBL=100000
+TESTERR1  MZ390 final_options=MAXHEIGHT=600
+TESTERR1  MZ390 final_options=MAXLCL=100000
+TESTERR1  MZ390 final_options=MAXLEN=80
+TESTERR1  MZ390 final_options=MAXLINE=200000
+TESTERR1  MZ390 final_options=MAXLOG=1000000
+TESTERR1  MZ390 final_options=MAXPARM=10000
+TESTERR1  MZ390 final_options=MAXPASS=2
+TESTERR1  MZ390 final_options=MAXPC=50000
+TESTERR1  MZ390 final_options=MAXQUE=1000
+TESTERR1  MZ390 final_options=MAXRLD=10000
+TESTERR1  MZ390 final_options=MAXSIZE=52428800
+TESTERR1  MZ390 final_options=MAXSYM=50000
+TESTERR1  MZ390 final_options=MAXWARN=4
+TESTERR1  MZ390 final_options=MAXWIDTH=800
+TESTERR1  MZ390 final_options=MEM=1
+TESTERR1  MZ390 final_options=MINHEIGHT=150
+TESTERR1  MZ390 final_options=MINWIDTH=150
+TESTERR1  MZ390 final_options=MNOTE=0
+TESTERR1  MZ390 final_options=PARM=
+TESTERR1  MZ390 final_options=PROFILE=
+TESTERR1  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTERR1.STA
+TESTERR1  MZ390 final_options=SYSPARM=
+TESTERR1  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTERR1  MZ390 final_options=TESTDD=
+TESTERR1  MZ390 final_options=TIME=15
+TESTERR1  MZ390 final_options=TRACE=
+TESTERR1  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTERR1  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTERR1  MZ390 final_options=Z390COMMAND=cmd.exe
+TESTERR1  MZ390 final_options=Z390EDITOR=notepad.exe
+TESTERR1  MZ390 final_options=INSTALL=
+TESTERR1  MZ390 final_options=IPL=
+TESTERR1  MZ390 final_options=LOG=
+TESTERR1  MZ390 final_options=SYS390=rt\test\+linklib
+TESTERR1  MZ390 final_options=SYSBAL=rt\test\
+TESTERR1  MZ390 final_options=SYSCPY=mac
+TESTERR1  MZ390 final_options=SYSDAT=rt\test\
+TESTERR1  MZ390 final_options=SYSERR=rt\test\
+TESTERR1  MZ390 final_options=SYSLOG=rt\test\
+TESTERR1  MZ390 final_options=SYSLST=rt\test\
+TESTERR1  MZ390 final_options=SYSMAC=mac
+TESTERR1  MZ390 final_options=SYSMLC=rt\test\
+TESTERR1  MZ390 final_options=SYSPCH=rt\test\
+TESTERR1  MZ390 final_options=SYSPRN=rt\test\
+TESTERR1  MZ390 final_options=SYSOBJ=rt\test\
+TESTERR1  MZ390 final_options=SYSOPT=rt\test\
+TESTERR1  MZ390 final_options=SYSTRC=rt\test\
+TESTERR1  MZ390 total MLC/MAC loaded  = 182
+TESTERR1  MZ390 total BAL output lines= 163
+TESTERR1  MZ390 total BAL instructions= 0
+TESTERR1  MZ390 total macros          = 5
+TESTERR1  MZ390 total macro loads     = 5
+TESTERR1  MZ390 total macro calls     = 3
+TESTERR1  MZ390 total AENTRY blocks   = 0
+TESTERR1  MZ390 total ACALL  calls    = 0
+TESTERR1  MZ390 total AIF    blocks   = 0
+TESTERR1  MZ390 total ACASE  blocks   = 0
+TESTERR1  MZ390 total AWHILE calls    = 0
+TESTERR1  MZ390 total AUNTIL blocks   = 0
+TESTERR1  MZ390 total global set names= 49
+TESTERR1  MZ390 tot global seta cells = 103
+TESTERR1  MZ390 tot global setb cells = 110
+TESTERR1  MZ390 tot global setc cells = 142
+TESTERR1  MZ390 max local pos parms   = 4
+TESTERR1  MZ390 max local key parms   = 1
+TESTERR1  MZ390 max local set names   = 31
+TESTERR1  MZ390 max local seta cells  = 223
+TESTERR1  MZ390 max local setb cells  = 210
+TESTERR1  MZ390 max local setc cells  = 220
+TESTERR1  MZ390 total array expansions= 9
+TESTERR1  MZ390 total Keys            = 1448
+TESTERR1  MZ390 Key searches          = 2174
+TESTERR1  MZ390 Key avg comps         = 0
+TESTERR1  MZ390 Key max comps         = 3
+TESTERR1  MZ390 total macro line exec = 163
+TESTERR1  MZ390 total pcode line exec = 0
+TESTERR1  MZ390 total pcode line gen. = 12
+TESTERR1  MZ390 total pcode line reuse= 0
+TESTERR1  MZ390 total pcode op   gen. = 54
+TESTERR1  MZ390 total pcode op   exec = 0
+TESTERR1  MZ390 total pcode gen  opt  = 13
+TESTERR1  MZ390 total pcode exec opt  = 0
+TESTERR1  MZ390 FID=  1 ERR=46 C:\Users\Achim\GitHub\z390\rt\test\TESTERR1.MLC
+TESTERR1  MZ390 total mnote warnings  = 2
+TESTERR1  MZ390 total mnote errors    = 0
+TESTERR1  MZ390 max   mnote level     = 4
+TESTERR1  MZ390 total mz390 errors    = 46
+TESTERR1  MZ390 ENDED RC=16 IO=597

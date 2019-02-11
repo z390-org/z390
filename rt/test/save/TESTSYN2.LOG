@@ -1,0 +1,14 @@
+TESTSYN2  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTSYN2.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  sysmac(mac+rt\test) systerm(rt\test\RTTEST)
+TESTSYN2 STARTED
+WTO FROM TESTSYN2 WITH P1=123
+WTO FROM TESTSYN2 WITH P1=ABC
+TESTSYN2 ENDED
+EZ390I total errors         = 0
+TESTSYN2  EZ390 ENDED RC= 0 IO=160 INS=20

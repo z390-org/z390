@@ -1,0 +1,12 @@
+TESTPRM4  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTPRM4.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  @TESTPRM4.OPT=("parm('a, b')" "sysparm(a, b)" trace) systerm(rt\test\RTTEST)
+TESTPRM4 TEST PARM(a, b) MAPPED TO JCL EXEC PARM=a, b
+TESTPRM4 ENDED OK
+EZ390I total errors         = 0
+TESTPRM4  EZ390 ENDED RC= 0 IO=158 INS=20

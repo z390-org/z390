@@ -1,0 +1,25 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2007-11-09 DSH RPI-732 Test using TESTLNK2.LNK to build           *
+*                        TESTLNK2.390 including TESTLNK3, entry     *
+*                        TESTLNK3, and alias TESTLNK3               *
+* 2008-08-10 DSH RPI-893 Correct AL2(WTOEND,0) to AL2(WTOEND-*,0)   *
+*********************************************************************
+
+         TITLE 'TESTLNK2 TEST USE OF TESTLNK2.LNK TO BUILD TESTLNK2'
+
+TESTLNK2 CSECT
+         ENTRY WTOLNK2
+WTOLNK2  DC   AL2(WTOEND-*),C'HELLO FROM TESTLNK3 ENTRY'
+WTOEND   EQU  *
+         END

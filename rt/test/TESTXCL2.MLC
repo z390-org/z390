@@ -1,0 +1,31 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2005-11-16 DSH RPI-95  Test XCTL                                  *
+* 2007-04-26 DSH RPI-598 Add additional CDE SNAPs to verify OK      *
+*********************************************************************
+
+         TITLE 'TESTXCL2 TEST TESTXCL2 XCTL TO TESTXCL3'
+
+TESTXCL2 SUBENTRY
+         WTO   'TESTXCL2 ENTERED'
+         SNAP  ID=21,PDATA=CDE,TEXT='TESTXCL2 VERIFY TESTXCL1+2 CDES'
+         GETMAIN R,LV=256
+         XC    0(256,1),0(1) CLEAR IT
+         LA    2,256(1)
+         SNAP  ID=22,PDATA=CDE,STORAGE=((1),(2)),TEXT='TESTXCL2 AREA'
+         WTO   'TESTXCL2 NOW XCTL TO TESTXCL3'
+         BALR  12,0         ESTABLISH TEMP BASE FOR XCTL USE
+         USING *,12
+         L     13,4(13)            RESTORE TESTXCL1 SAVE AREA POINTER
+         XCTL  (2,12),EP=TESTXCL3  RESTORE REGS,DEL XCL2, TRANS XCL3
+         END

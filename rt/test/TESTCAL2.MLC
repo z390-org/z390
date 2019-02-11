@@ -1,0 +1,45 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH          Initial version                           *
+* 2006-06-16 DSH RPI-322  Add test for call MF=L                    *
+* 2009-06-30 DSH RPI-1044 Make MYENT an entry replacing V(MYENT)    *
+*********************************************************************
+
+TESTCAL2 SUBENTRY
+         WTO 'TESTCAL2 TEST STATIC LINK CALLS WITH EXTRN AND ENTRY'
+         CALL MYSUB,(PARM1),VL         TEST CVT EXTRN TO CSECT
+         CALL MYENT,(PARM1,PARM2),VL   TEST CVT EXTRN TO LOCAL LABEL
+         LA   R1,MYLIST
+         CALL MYENT
+         WTO  'TESTCAL2 ENDED OK'
+         SUBEXIT
+MYLIST   CALL ,(PARM1,PARM2),VL,MF=L
+PARM1    DC   CL20'PARM1 MSG'
+PARM2    DC   CL20'PARM2 MSG'
+MYSUB    SUBENTRY
+MYENT    EQU  MYSUB
+         ENTRY MYENT  RPI-1044
+         LR   R2,R1
+LOOP     EQU  *
+         L    R3,0(R2)
+         MVC  DMSG,0(R3)
+         WTO  MF=(E,WTOMSG)
+         AHI  R2,4
+         LTR  R3,R3
+         BP   LOOP
+         SUBEXIT
+WTOMSG   DC   AL2(WTOEND-*,0)
+         DC   C'PARM='
+DMSG     DC   CL20' '
+WTOEND   EQU  *
+         EQUREGS
+         END

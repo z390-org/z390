@@ -1,0 +1,473 @@
+TESTIPL1  MZ390 START
+TESTIPL1  MZ390 Copyright 2011 Automated Software Tools Corporation
+TESTIPL1  MZ390 Copyright 2013 Cat Herder Software, LLC
+TESTIPL1  MZ390 Copyright 2018 Joachim Bartz, Germany
+TESTIPL1  MZ390 z390 is licensed under GNU General Public License
+TESTIPL1  MZ390 program = rt\test\TESTIPL1.MLC
+TESTIPL1  MZ390 options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+TESTIPL1  MZ390 final_options=ALIGN
+TESTIPL1  MZ390 final_options=NOALLOW
+TESTIPL1  MZ390 final_options=NOAMODE24
+TESTIPL1  MZ390 final_options=AMODE31
+TESTIPL1  MZ390 final_options=NOASCII
+TESTIPL1  MZ390 final_options=ASM
+TESTIPL1  MZ390 final_options=NOASSIST
+TESTIPL1  MZ390 final_options=AUTOLINK
+TESTIPL1  MZ390 final_options=BAL
+TESTIPL1  MZ390 final_options=NOBS2000
+TESTIPL1  MZ390 final_options=EDF
+TESTIPL1  MZ390 final_options=NOCICS
+TESTIPL1  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTIPL1  MZ390 final_options=COMMENT
+TESTIPL1  MZ390 final_options=CON
+TESTIPL1  MZ390 final_options=NODUMP
+TESTIPL1  MZ390 final_options=EPILOG
+TESTIPL1  MZ390 final_options=NOERRSUM
+TESTIPL1  MZ390 final_options=EXTEND
+TESTIPL1  MZ390 final_options=FLOAT(DECIMAL)
+TESTIPL1  MZ390 final_options=NOGUAM
+TESTIPL1  MZ390 final_options=INIT
+TESTIPL1  MZ390 final_options=LIST
+TESTIPL1  MZ390 final_options=LISTCALL
+TESTIPL1  MZ390 final_options=LISTUSE
+TESTIPL1  MZ390 final_options=LOADHIGH
+TESTIPL1  MZ390 final_options=NOMCALL
+TESTIPL1  MZ390 final_options=NOMOD
+TESTIPL1  MZ390 final_options=OBJ
+TESTIPL1  MZ390 final_options=NOOBJHEX
+TESTIPL1  MZ390 final_options=PC
+TESTIPL1  MZ390 final_options=PCOPT
+TESTIPL1  MZ390 final_options=NOPDSMEM8
+TESTIPL1  MZ390 final_options=NOPRINTALL
+TESTIPL1  MZ390 final_options=PROLOG
+TESTIPL1  MZ390 final_options=PROTECT
+TESTIPL1  MZ390 final_options=R64
+TESTIPL1  MZ390 final_options=NOREFORMAT
+TESTIPL1  MZ390 final_options=NOREGS
+TESTIPL1  MZ390 final_options=RMODE24
+TESTIPL1  MZ390 final_options=NORMODE31
+TESTIPL1  MZ390 final_options=STATS
+TESTIPL1  MZ390 final_options=NOTEST
+TESTIPL1  MZ390 final_options=THREAD
+TESTIPL1  MZ390 final_options=NOTIME
+TESTIPL1  MZ390 final_options=NOTIMING
+TESTIPL1  MZ390 final_options=NOTRACE
+TESTIPL1  MZ390 final_options=NOTRACEA
+TESTIPL1  MZ390 final_options=NOTRACEALL
+TESTIPL1  MZ390 final_options=NOTRACEC
+TESTIPL1  MZ390 final_options=NOTRACEG
+TESTIPL1  MZ390 final_options=NOTRACEI
+TESTIPL1  MZ390 final_options=NOTRACEL
+TESTIPL1  MZ390 final_options=NOTRACEM
+TESTIPL1  MZ390 final_options=NOTRACEP
+TESTIPL1  MZ390 final_options=NOTRACEQ
+TESTIPL1  MZ390 final_options=NOTRACES
+TESTIPL1  MZ390 final_options=NOTRACET
+TESTIPL1  MZ390 final_options=NOTRACEV
+TESTIPL1  MZ390 final_options=TRAP
+TESTIPL1  MZ390 final_options=NOTRUNC
+TESTIPL1  MZ390 final_options=NOTS
+TESTIPL1  MZ390 final_options=VCB
+TESTIPL1  MZ390 final_options=WARN
+TESTIPL1  MZ390 final_options=XREF
+TESTIPL1  MZ390 final_options=ZSTRMAC
+TESTIPL1  MZ390 final_options=CHKMAC=0
+TESTIPL1  MZ390 final_options=CHKSRC=1
+TESTIPL1  MZ390 final_options=ERR=100
+TESTIPL1  MZ390 final_options=MAXCALL=50
+TESTIPL1  MZ390 final_options=MAXDISPLAY=80
+TESTIPL1  MZ390 final_options=MAXESD=1000
+TESTIPL1  MZ390 final_options=MAXFILE=1000
+TESTIPL1  MZ390 final_options=MAXGBL=100000
+TESTIPL1  MZ390 final_options=MAXHEIGHT=600
+TESTIPL1  MZ390 final_options=MAXLCL=100000
+TESTIPL1  MZ390 final_options=MAXLEN=80
+TESTIPL1  MZ390 final_options=MAXLINE=200000
+TESTIPL1  MZ390 final_options=MAXLOG=1000000
+TESTIPL1  MZ390 final_options=MAXPARM=10000
+TESTIPL1  MZ390 final_options=MAXPASS=2
+TESTIPL1  MZ390 final_options=MAXPC=50000
+TESTIPL1  MZ390 final_options=MAXQUE=1000
+TESTIPL1  MZ390 final_options=MAXRLD=10000
+TESTIPL1  MZ390 final_options=MAXSIZE=52428800
+TESTIPL1  MZ390 final_options=MAXSYM=50000
+TESTIPL1  MZ390 final_options=MAXWARN=4
+TESTIPL1  MZ390 final_options=MAXWIDTH=800
+TESTIPL1  MZ390 final_options=MEM=1
+TESTIPL1  MZ390 final_options=MINHEIGHT=150
+TESTIPL1  MZ390 final_options=MINWIDTH=150
+TESTIPL1  MZ390 final_options=MNOTE=0
+TESTIPL1  MZ390 final_options=PARM=
+TESTIPL1  MZ390 final_options=PROFILE=
+TESTIPL1  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTIPL1.STA
+TESTIPL1  MZ390 final_options=SYSPARM=
+TESTIPL1  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTIPL1  MZ390 final_options=TESTDD=
+TESTIPL1  MZ390 final_options=TIME=15
+TESTIPL1  MZ390 final_options=TRACE=
+TESTIPL1  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTIPL1  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTIPL1  MZ390 final_options=Z390COMMAND=cmd.exe
+TESTIPL1  MZ390 final_options=Z390EDITOR=notepad.exe
+TESTIPL1  MZ390 final_options=INSTALL=
+TESTIPL1  MZ390 final_options=IPL=
+TESTIPL1  MZ390 final_options=LOG=
+TESTIPL1  MZ390 final_options=SYS390=rt\test\+linklib
+TESTIPL1  MZ390 final_options=SYSBAL=rt\test\
+TESTIPL1  MZ390 final_options=SYSCPY=C:\Users\Achim\GitHub\z390\mac+.
+TESTIPL1  MZ390 final_options=SYSDAT=rt\test\
+TESTIPL1  MZ390 final_options=SYSERR=rt\test\
+TESTIPL1  MZ390 final_options=SYSLOG=rt\test\
+TESTIPL1  MZ390 final_options=SYSLST=rt\test\
+TESTIPL1  MZ390 final_options=SYSMAC=C:\Users\Achim\GitHub\z390\mac+.
+TESTIPL1  MZ390 final_options=SYSMLC=rt\test\
+TESTIPL1  MZ390 final_options=SYSPCH=rt\test\
+TESTIPL1  MZ390 final_options=SYSPRN=rt\test\
+TESTIPL1  MZ390 final_options=SYSOBJ=rt\test\
+TESTIPL1  MZ390 final_options=SYSOPT=rt\test\
+TESTIPL1  MZ390 final_options=SYSTRC=rt\test\
+TESTIPL1  MZ390 total MLC/MAC loaded  = 329
+TESTIPL1  MZ390 total BAL output lines= 85
+TESTIPL1  MZ390 total BAL instructions= 19
+TESTIPL1  MZ390 total macros          = 7
+TESTIPL1  MZ390 total macro loads     = 7
+TESTIPL1  MZ390 total macro calls     = 7
+TESTIPL1  MZ390 total AENTRY blocks   = 0
+TESTIPL1  MZ390 total ACALL  calls    = 0
+TESTIPL1  MZ390 total AIF    blocks   = 4
+TESTIPL1  MZ390 total ACASE  blocks   = 0
+TESTIPL1  MZ390 total AWHILE calls    = 1
+TESTIPL1  MZ390 total AUNTIL blocks   = 0
+TESTIPL1  MZ390 total global set names= 61
+TESTIPL1  MZ390 tot global seta cells = 2
+TESTIPL1  MZ390 tot global setb cells = 77
+TESTIPL1  MZ390 tot global setc cells = 42
+TESTIPL1  MZ390 max local pos parms   = 3
+TESTIPL1  MZ390 max local key parms   = 11
+TESTIPL1  MZ390 max local set names   = 13
+TESTIPL1  MZ390 max local seta cells  = 5
+TESTIPL1  MZ390 max local setb cells  = 0
+TESTIPL1  MZ390 max local setc cells  = 25
+TESTIPL1  MZ390 total array expansions= 0
+TESTIPL1  MZ390 total Keys            = 1568
+TESTIPL1  MZ390 Key searches          = 2843
+TESTIPL1  MZ390 Key avg comps         = 0
+TESTIPL1  MZ390 Key max comps         = 3
+TESTIPL1  MZ390 total macro line exec = 263
+TESTIPL1  MZ390 total pcode line exec = 83
+TESTIPL1  MZ390 total pcode line gen. = 42
+TESTIPL1  MZ390 total pcode line reuse= 0
+TESTIPL1  MZ390 total pcode op   gen. = 190
+TESTIPL1  MZ390 total pcode op   exec = 493
+TESTIPL1  MZ390 total pcode gen  opt  = 78
+TESTIPL1  MZ390 total pcode exec opt  = 1
+TESTIPL1  MZ390 FID=  1 ERR= 0 C:\Users\Achim\GitHub\z390\rt\test\TESTIPL1.MLC
+TESTIPL1  MZ390 FID=  2 ERR= 0 C:\Users\Achim\GitHub\z390\mac\SUBENTRY.MAC
+TESTIPL1  MZ390 FID=  3 ERR= 0 C:\Users\Achim\GitHub\z390\mac\WTO.MAC
+TESTIPL1  MZ390 FID=  4 ERR= 0 C:\Users\Achim\GitHub\z390\mac\TIME.MAC
+TESTIPL1  MZ390 FID=  5 ERR= 0 C:\Users\Achim\GitHub\z390\mac\SUBEXIT.MAC
+TESTIPL1  MZ390 FID=  6 ERR= 0 C:\Users\Achim\GitHub\z390\mac\EQUREGS.MAC
+TESTIPL1  MZ390 FID=  7 ERR= 0 C:\Users\Achim\GitHub\z390\mac\CVTD.MAC
+TESTIPL1  MZ390 total mnote warnings  = 0
+TESTIPL1  MZ390 total mnote errors    = 0
+TESTIPL1  MZ390 max   mnote level     = 0
+TESTIPL1  MZ390 total mz390 errors    = 0
+TESTIPL1  AZ390 BAL lines             = 85
+TESTIPL1  AZ390 symbols               = 25
+TESTIPL1  AZ390 Literals              = 0
+TESTIPL1  AZ390 alloc passes          = 3
+TESTIPL1  AZ390 Keys                  = 1344
+TESTIPL1  AZ390 Key searches          = 1910
+TESTIPL1  AZ390 Key avg comps         = 0
+TESTIPL1  AZ390 Key max comps         = 2
+TESTIPL1  AZ390 ESD symbols           = 2
+TESTIPL1  AZ390 object bytes          = 208
+TESTIPL1  AZ390 object rlds           = 0
+TESTIPL1  AZ390 total mnote warnings  = 0
+TESTIPL1  AZ390 total mnote errors    = 0
+TESTIPL1  AZ390 max   mnote level     = 0
+TESTIPL1  AZ390 total mz390 errors    = 0
+TESTIPL1  AZ390 total az390 errors    = 0
+TESTIPL1  MZ390 ENDED RC= 0 IO=1713
+TESTIPL1  LZ390 START
+TESTIPL1  LZ390 Copyright 2011 Automated Software Tools Corporation
+TESTIPL1  LZ390 Copyright 2013 Cat Herder Software, LLC
+TESTIPL1  LZ390 Copyright 2018 Joachim Bartz, Germany
+TESTIPL1  LZ390 z390 is licensed under GNU General Public License
+TESTIPL1  LZ390 options = @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+TESTIPL1  LZ390 program = rt\test\TESTIPL1.OBJ
+TESTIPL1  LZ390 final_options=ALIGN
+TESTIPL1  LZ390 final_options=NOALLOW
+TESTIPL1  LZ390 final_options=NOAMODE24
+TESTIPL1  LZ390 final_options=AMODE31
+TESTIPL1  LZ390 final_options=NOASCII
+TESTIPL1  LZ390 final_options=ASM
+TESTIPL1  LZ390 final_options=NOASSIST
+TESTIPL1  LZ390 final_options=AUTOLINK
+TESTIPL1  LZ390 final_options=BAL
+TESTIPL1  LZ390 final_options=NOBS2000
+TESTIPL1  LZ390 final_options=EDF
+TESTIPL1  LZ390 final_options=NOCICS
+TESTIPL1  LZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTIPL1  LZ390 final_options=COMMENT
+TESTIPL1  LZ390 final_options=CON
+TESTIPL1  LZ390 final_options=NODUMP
+TESTIPL1  LZ390 final_options=EPILOG
+TESTIPL1  LZ390 final_options=NOERRSUM
+TESTIPL1  LZ390 final_options=EXTEND
+TESTIPL1  LZ390 final_options=FLOAT(DECIMAL)
+TESTIPL1  LZ390 final_options=NOGUAM
+TESTIPL1  LZ390 final_options=INIT
+TESTIPL1  LZ390 final_options=LIST
+TESTIPL1  LZ390 final_options=LISTCALL
+TESTIPL1  LZ390 final_options=LISTUSE
+TESTIPL1  LZ390 final_options=LOADHIGH
+TESTIPL1  LZ390 final_options=NOMCALL
+TESTIPL1  LZ390 final_options=NOMOD
+TESTIPL1  LZ390 final_options=OBJ
+TESTIPL1  LZ390 final_options=NOOBJHEX
+TESTIPL1  LZ390 final_options=PC
+TESTIPL1  LZ390 final_options=PCOPT
+TESTIPL1  LZ390 final_options=NOPDSMEM8
+TESTIPL1  LZ390 final_options=NOPRINTALL
+TESTIPL1  LZ390 final_options=PROLOG
+TESTIPL1  LZ390 final_options=PROTECT
+TESTIPL1  LZ390 final_options=R64
+TESTIPL1  LZ390 final_options=NOREFORMAT
+TESTIPL1  LZ390 final_options=NOREGS
+TESTIPL1  LZ390 final_options=RMODE24
+TESTIPL1  LZ390 final_options=NORMODE31
+TESTIPL1  LZ390 final_options=STATS
+TESTIPL1  LZ390 final_options=NOTEST
+TESTIPL1  LZ390 final_options=THREAD
+TESTIPL1  LZ390 final_options=NOTIME
+TESTIPL1  LZ390 final_options=NOTIMING
+TESTIPL1  LZ390 final_options=NOTRACE
+TESTIPL1  LZ390 final_options=NOTRACEA
+TESTIPL1  LZ390 final_options=NOTRACEALL
+TESTIPL1  LZ390 final_options=NOTRACEC
+TESTIPL1  LZ390 final_options=NOTRACEG
+TESTIPL1  LZ390 final_options=NOTRACEI
+TESTIPL1  LZ390 final_options=NOTRACEL
+TESTIPL1  LZ390 final_options=NOTRACEM
+TESTIPL1  LZ390 final_options=NOTRACEP
+TESTIPL1  LZ390 final_options=NOTRACEQ
+TESTIPL1  LZ390 final_options=NOTRACES
+TESTIPL1  LZ390 final_options=NOTRACET
+TESTIPL1  LZ390 final_options=NOTRACEV
+TESTIPL1  LZ390 final_options=TRAP
+TESTIPL1  LZ390 final_options=NOTRUNC
+TESTIPL1  LZ390 final_options=NOTS
+TESTIPL1  LZ390 final_options=VCB
+TESTIPL1  LZ390 final_options=WARN
+TESTIPL1  LZ390 final_options=XREF
+TESTIPL1  LZ390 final_options=ZSTRMAC
+TESTIPL1  LZ390 final_options=CHKMAC=0
+TESTIPL1  LZ390 final_options=CHKSRC=1
+TESTIPL1  LZ390 final_options=ERR=100
+TESTIPL1  LZ390 final_options=MAXCALL=50
+TESTIPL1  LZ390 final_options=MAXDISPLAY=80
+TESTIPL1  LZ390 final_options=MAXESD=1000
+TESTIPL1  LZ390 final_options=MAXFILE=1000
+TESTIPL1  LZ390 final_options=MAXGBL=100000
+TESTIPL1  LZ390 final_options=MAXHEIGHT=600
+TESTIPL1  LZ390 final_options=MAXLCL=100000
+TESTIPL1  LZ390 final_options=MAXLEN=80
+TESTIPL1  LZ390 final_options=MAXLINE=200000
+TESTIPL1  LZ390 final_options=MAXLOG=1000000
+TESTIPL1  LZ390 final_options=MAXPARM=10000
+TESTIPL1  LZ390 final_options=MAXPASS=2
+TESTIPL1  LZ390 final_options=MAXPC=50000
+TESTIPL1  LZ390 final_options=MAXQUE=1000
+TESTIPL1  LZ390 final_options=MAXRLD=10000
+TESTIPL1  LZ390 final_options=MAXSIZE=52428800
+TESTIPL1  LZ390 final_options=MAXSYM=50000
+TESTIPL1  LZ390 final_options=MAXWARN=4
+TESTIPL1  LZ390 final_options=MAXWIDTH=800
+TESTIPL1  LZ390 final_options=MEM=1
+TESTIPL1  LZ390 final_options=MINHEIGHT=150
+TESTIPL1  LZ390 final_options=MINWIDTH=150
+TESTIPL1  LZ390 final_options=MNOTE=0
+TESTIPL1  LZ390 final_options=PARM=
+TESTIPL1  LZ390 final_options=PROFILE=
+TESTIPL1  LZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTIPL1.STA
+TESTIPL1  LZ390 final_options=SYSPARM=
+TESTIPL1  LZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTIPL1  LZ390 final_options=TESTDD=
+TESTIPL1  LZ390 final_options=TIME=15
+TESTIPL1  LZ390 final_options=TRACE=
+TESTIPL1  LZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTIPL1  LZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTIPL1  LZ390 final_options=Z390COMMAND=cmd.exe
+TESTIPL1  LZ390 final_options=Z390EDITOR=notepad.exe
+TESTIPL1  LZ390 final_options=INSTALL=
+TESTIPL1  LZ390 final_options=IPL=
+TESTIPL1  LZ390 final_options=LOG=
+TESTIPL1  LZ390 final_options=SYS390=rt\test\+linklib
+TESTIPL1  LZ390 final_options=SYSBAL=rt\test\
+TESTIPL1  LZ390 final_options=SYSCPY=rt\test\
+TESTIPL1  LZ390 final_options=SYSDAT=rt\test\
+TESTIPL1  LZ390 final_options=SYSERR=rt\test\
+TESTIPL1  LZ390 final_options=SYSLOG=rt\test\
+TESTIPL1  LZ390 final_options=SYSLST=rt\test\
+TESTIPL1  LZ390 final_options=SYSMAC=rt\test\
+TESTIPL1  LZ390 final_options=SYSMLC=rt\test\
+TESTIPL1  LZ390 final_options=SYSPCH=rt\test\
+TESTIPL1  LZ390 final_options=SYSPRN=rt\test\
+TESTIPL1  LZ390 final_options=SYSOBJ=rt\test\
+TESTIPL1  LZ390 final_options=SYSOPT=rt\test\
+TESTIPL1  LZ390 final_options=SYSTRC=rt\test\
+TESTIPL1  LZ390 Stats total obj files = 1
+TESTIPL1  LZ390 Stats total esds      = 1
+TESTIPL1  LZ390 Stats total csects    = 1
+TESTIPL1  LZ390 Stats total entries   = 0
+TESTIPL1  LZ390 Stats missing wxtrn's = 0
+TESTIPL1  LZ390 Stats Keys            = 1
+TESTIPL1  LZ390 Stats Key searches    = 2
+TESTIPL1  LZ390 Stats Key avg comps   = 0
+TESTIPL1  LZ390 Stats Key max comps   = 1
+TESTIPL1  LZ390 Stats total obj byte  = 208
+TESTIPL1  LZ390 Stats total obj rlds  = 0
+TESTIPL1  LZ390 total errors          = 0
+TESTIPL1  LZ390 ENDED RC= 0 IO=193
+TESTIPL1  EZ390 START
+TESTIPL1  EZ390 Copyright 2011 Automated Software Tools Corporation
+TESTIPL1  EZ390 Copyright 2013 Cat Herder Software, LLC
+TESTIPL1  EZ390 Copyright 2018 Joachim Bartz, Germany
+TESTIPL1  EZ390 z390 is licensed under GNU General Public License
+TESTIPL1  EZ390 program = rt\test\TESTIPL1.390
+TESTIPL1  EZ390 options = @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+TESTIPL1  EZ390 final_options=ALIGN
+TESTIPL1  EZ390 final_options=NOALLOW
+TESTIPL1  EZ390 final_options=NOAMODE24
+TESTIPL1  EZ390 final_options=AMODE31
+TESTIPL1  EZ390 final_options=NOASCII
+TESTIPL1  EZ390 final_options=ASM
+TESTIPL1  EZ390 final_options=NOASSIST
+TESTIPL1  EZ390 final_options=AUTOLINK
+TESTIPL1  EZ390 final_options=BAL
+TESTIPL1  EZ390 final_options=NOBS2000
+TESTIPL1  EZ390 final_options=EDF
+TESTIPL1  EZ390 final_options=NOCICS
+TESTIPL1  EZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTIPL1  EZ390 final_options=COMMENT
+TESTIPL1  EZ390 final_options=CON
+TESTIPL1  EZ390 final_options=NODUMP
+TESTIPL1  EZ390 final_options=EPILOG
+TESTIPL1  EZ390 final_options=NOERRSUM
+TESTIPL1  EZ390 final_options=EXTEND
+TESTIPL1  EZ390 final_options=FLOAT(DECIMAL)
+TESTIPL1  EZ390 final_options=NOGUAM
+TESTIPL1  EZ390 final_options=INIT
+TESTIPL1  EZ390 final_options=LIST
+TESTIPL1  EZ390 final_options=LISTCALL
+TESTIPL1  EZ390 final_options=LISTUSE
+TESTIPL1  EZ390 final_options=LOADHIGH
+TESTIPL1  EZ390 final_options=NOMCALL
+TESTIPL1  EZ390 final_options=NOMOD
+TESTIPL1  EZ390 final_options=OBJ
+TESTIPL1  EZ390 final_options=NOOBJHEX
+TESTIPL1  EZ390 final_options=PC
+TESTIPL1  EZ390 final_options=PCOPT
+TESTIPL1  EZ390 final_options=NOPDSMEM8
+TESTIPL1  EZ390 final_options=NOPRINTALL
+TESTIPL1  EZ390 final_options=PROLOG
+TESTIPL1  EZ390 final_options=PROTECT
+TESTIPL1  EZ390 final_options=R64
+TESTIPL1  EZ390 final_options=NOREFORMAT
+TESTIPL1  EZ390 final_options=NOREGS
+TESTIPL1  EZ390 final_options=RMODE24
+TESTIPL1  EZ390 final_options=NORMODE31
+TESTIPL1  EZ390 final_options=STATS
+TESTIPL1  EZ390 final_options=NOTEST
+TESTIPL1  EZ390 final_options=THREAD
+TESTIPL1  EZ390 final_options=NOTIME
+TESTIPL1  EZ390 final_options=NOTIMING
+TESTIPL1  EZ390 final_options=NOTRACE
+TESTIPL1  EZ390 final_options=NOTRACEA
+TESTIPL1  EZ390 final_options=NOTRACEALL
+TESTIPL1  EZ390 final_options=NOTRACEC
+TESTIPL1  EZ390 final_options=NOTRACEG
+TESTIPL1  EZ390 final_options=NOTRACEI
+TESTIPL1  EZ390 final_options=NOTRACEL
+TESTIPL1  EZ390 final_options=NOTRACEM
+TESTIPL1  EZ390 final_options=NOTRACEP
+TESTIPL1  EZ390 final_options=NOTRACEQ
+TESTIPL1  EZ390 final_options=NOTRACES
+TESTIPL1  EZ390 final_options=NOTRACET
+TESTIPL1  EZ390 final_options=NOTRACEV
+TESTIPL1  EZ390 final_options=TRAP
+TESTIPL1  EZ390 final_options=NOTRUNC
+TESTIPL1  EZ390 final_options=NOTS
+TESTIPL1  EZ390 final_options=VCB
+TESTIPL1  EZ390 final_options=WARN
+TESTIPL1  EZ390 final_options=XREF
+TESTIPL1  EZ390 final_options=ZSTRMAC
+TESTIPL1  EZ390 final_options=CHKMAC=0
+TESTIPL1  EZ390 final_options=CHKSRC=1
+TESTIPL1  EZ390 final_options=ERR=100
+TESTIPL1  EZ390 final_options=MAXCALL=50
+TESTIPL1  EZ390 final_options=MAXDISPLAY=80
+TESTIPL1  EZ390 final_options=MAXESD=1000
+TESTIPL1  EZ390 final_options=MAXFILE=1000
+TESTIPL1  EZ390 final_options=MAXGBL=100000
+TESTIPL1  EZ390 final_options=MAXHEIGHT=600
+TESTIPL1  EZ390 final_options=MAXLCL=100000
+TESTIPL1  EZ390 final_options=MAXLEN=80
+TESTIPL1  EZ390 final_options=MAXLINE=200000
+TESTIPL1  EZ390 final_options=MAXLOG=1000000
+TESTIPL1  EZ390 final_options=MAXPARM=10000
+TESTIPL1  EZ390 final_options=MAXPASS=2
+TESTIPL1  EZ390 final_options=MAXPC=50000
+TESTIPL1  EZ390 final_options=MAXQUE=1000
+TESTIPL1  EZ390 final_options=MAXRLD=10000
+TESTIPL1  EZ390 final_options=MAXSIZE=52428800
+TESTIPL1  EZ390 final_options=MAXSYM=50000
+TESTIPL1  EZ390 final_options=MAXWARN=4
+TESTIPL1  EZ390 final_options=MAXWIDTH=800
+TESTIPL1  EZ390 final_options=MEM=1
+TESTIPL1  EZ390 final_options=MINHEIGHT=150
+TESTIPL1  EZ390 final_options=MINWIDTH=150
+TESTIPL1  EZ390 final_options=MNOTE=0
+TESTIPL1  EZ390 final_options=PARM=
+TESTIPL1  EZ390 final_options=PROFILE=
+TESTIPL1  EZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTIPL1.STA
+TESTIPL1  EZ390 final_options=SYSPARM=
+TESTIPL1  EZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTIPL1  EZ390 final_options=TESTDD=
+TESTIPL1  EZ390 final_options=TIME=15
+TESTIPL1  EZ390 final_options=TRACE=
+TESTIPL1  EZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTIPL1  EZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTIPL1  EZ390 final_options=Z390COMMAND=cmd.exe
+TESTIPL1  EZ390 final_options=Z390EDITOR=notepad.exe
+TESTIPL1  EZ390 final_options=INSTALL=
+TESTIPL1  EZ390 final_options=IPL=
+TESTIPL1  EZ390 final_options=LOG=C:\Users\Achim\GitHub\z390\rt\test\TESTIPL1.LOG
+TESTIPL1  EZ390 final_options=SYS390=rt\test\+linklib
+TESTIPL1  EZ390 final_options=SYSBAL=rt\test\
+TESTIPL1  EZ390 final_options=SYSCPY=rt\test\
+TESTIPL1  EZ390 final_options=SYSDAT=rt\test\
+TESTIPL1  EZ390 final_options=SYSERR=rt\test\
+TESTIPL1  EZ390 final_options=SYSLOG=rt\test\
+TESTIPL1  EZ390 final_options=SYSLST=rt\test\
+TESTIPL1  EZ390 final_options=SYSMAC=rt\test\
+TESTIPL1  EZ390 final_options=SYSMLC=rt\test\
+TESTIPL1  EZ390 final_options=SYSPCH=rt\test\
+TESTIPL1  EZ390 final_options=SYSPRN=rt\test\
+TESTIPL1  EZ390 final_options=SYSOBJ=rt\test\
+TESTIPL1  EZ390 final_options=SYSOPT=rt\test\
+TESTIPL1  EZ390 final_options=SYSTRC=rt\test\
+TESTIPL1  EZ390 TCPIO operations      = 0
+TESTIPL1  EZ390 DCB operations        = 0
+TESTIPL1  EZ390 VSAM operations       = 0
+TESTIPL1  EZ390 Keys                  = 2467
+TESTIPL1  EZ390 Key searches          = 2
+TESTIPL1  EZ390 Key avg comps         = 0
+TESTIPL1  EZ390 Key max comps         = 0
+TESTIPL1  EZ390 total errors          = 0
+TESTIPL1  EZ390 ENDED RC= 0 IO=158 INS=19

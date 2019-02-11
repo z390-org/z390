@@ -1,0 +1,15 @@
+TESTTIM1  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTTIM1.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+TESTIM1 RT1 STARTED
+ TIME = 22:33:44:56  DATE = 2005.002
+TESTTIM1 ENDED OK
+TESTIM1 RT1 TESTS COMPLETED =     26
+TESTIM1 RT1 ENDED OK
+EZ390I total errors         = 0
+TESTTIM1  EZ390 ENDED RC= 0 IO=161 INS=270

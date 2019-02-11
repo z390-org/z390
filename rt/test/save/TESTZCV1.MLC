@@ -1,0 +1,35 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-04-23 DSH         Initial version                            *
+* 2006-04-23 DSH RPI-286 Dump ZCVT fields starting at X'2000' after *
+*                        PSA                                        *
+*********************************************************************
+
+         TITLE 'TESTZCV1 - DUMP ZCVT PGM FIELDS'
+
+TESTZCV1 SUBENTRY
+         WTO   'TESTZCV1 STARTED'
+         L     R2,=A(ZCVT)
+         USING IHAZCVT,R2
+         MVC   DPGM,ZCVTUPGM
+         MVC   DIPL,ZCVTIPLP
+         WTO   MF=(E,WTOMSG)
+         WTO   'TESTZCV1 ENDED OK'
+         SUBEXIT
+         EQUREGS
+WTOMSG   DC    AL2(WTOEND-*,0),C' Z390 PGM='
+DPGM     DC    CL8' '
+         DC    C' IPL='
+DIPL     DC    CL8' '
+WTOEND   EQU   *
+         ZCVTD
+         END

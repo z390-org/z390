@@ -1,0 +1,90 @@
+TESTPRT1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTPRT1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000001A8 TYPE=CST NAME=TESTPRT1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH          Initial version                          *
+000000                                      (1/13)13 *********************************************************************
+000000                                      (1/15)14          PRINT NOGEN
+000000                                      (1/16)15 TESTPRT1 SUBENTRY 
+000072                                      (1/17)28          WTO   'TESTPRT1 TEST PUSH/POP PRINT'
+000098                                      (1/18)34          PRINT GEN
+000098                                      (1/19)35          WTO   'TEST PRINT GEN'
+000098 A715000B                0000AE       (3/49)36+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+00009C 00120000E3C5E2E3                     (3/50)37+         DC    AL2(WTO#0003_EOT-*,0),C'TEST PRINT GEN'
+0000AE                  000000AE            (3/51)38+WTO#0003_EOT     EQU *
+0000AE 0A23                                 (3/52)39+         SVC   35
+0000B0                                      (1/20)41          PUSH  PRINT
+0000C8                                      (1/23)49          PRINT ON,NOGEN
+0000C8                                      (1/24)50          WTO   'TEST PRINT ON,NOGEN'
+0000E6                                      (1/26)57          POP   PRINT
+0000E6                                      (1/27)58          WTO   'TEST BACK TO PRINT GEN AFTER POP'
+0000E6 A7150014                00010E       (3/49)59+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000EA 00240000E3C5E2E3                     (3/50)60+         DC    AL2(WTO#0006_EOT-*,0),C'TEST BACK TO PRINT GEN AFTER POP'
+00010E                  0000010E            (3/51)62+WTO#0006_EOT     EQU *
+00010E 0A23                                 (3/52)63+         SVC   35
+000110                                      (1/28)65          WTO   'TESTPRT1 ENDED OK'
+000110 A715000D                00012A       (3/49)66+         BRAS  1,*+(WTO#0007_EOT-*+1)/2*2
+000114 00150000E3C5E2E3                     (3/50)67+         DC    AL2(WTO#0007_EOT-*,0),C'TESTPRT1 ENDED OK'
+000129                  00000129            (3/51)68+WTO#0007_EOT     EQU *
+00012A 0A23                                 (3/52)69+         SVC   35
+00012C                                      (1/29)71          PRINT NOGEN
+00012C                                      (1/30)72          SUBEXIT 
+00013E 0001020304050607                     (1/31)79 DC1      DC    16AL1(*-DC1)
+00014E                                      (1/32)80          PRINT DATA
+00014E 0001020304050607                     (1/33)81 DC2      DC    16AL1(*-DC2)
+000156 08090A0B0C0D0E0F
+00015E                                      (1/34)82 DS1      DS    16AL1(*-DC2)
+00016E 4110D180                000188       (1/35)83 LC1      LA    1,=16AL1(*-LC1)
+000172 4110D190                000198       (1/36)84 LC2      LA    1,=16AL1(*-LC1)
+000176                                      (1/37)85          PRINT NODATA
+000176 28292A2B2C2D2E2F                     (1/38)86 DC4      DC    16AL1(*-DC2)
+000186                                      (1/39)87          END 
+000188 0001020304050607 =16AL1(*-LC1)
+000198 0405060708090A0B =16AL1(*-LC1)
+
+Symbol Table Listing
+
+ SYM=DC1      LOC=0000013E LEN=00000001 ESD=0001 TYPE=REL  XREF=79 
+ SYM=DC2      LOC=0000014E LEN=00000001 ESD=0001 TYPE=REL  XREF=81 82 86 
+ SYM=DC4      LOC=00000176 LEN=00000001 ESD=0001 TYPE=REL  XREF=86 
+ SYM=DS1      LOC=0000015E LEN=00000001 ESD=0001 TYPE=REL  XREF=82 
+ SYM=LC1      LOC=0000016E LEN=00000004 ESD=0001 TYPE=REL  XREF=83 84 87 
+ SYM=LC2      LOC=00000172 LEN=00000004 ESD=0001 TYPE=REL  XREF=84 
+ SYM=TESTPRT1 LOC=00000000 LEN=000001A8 ESD=0001 TYPE=CST  XREF=16 26 
+ SYM=WTO#0002_EOT LOC=00000096 LEN=00000001 ESD=0001 TYPE=REL  XREF=31 29 30 
+ SYM=WTO#0003_EOT LOC=000000AE LEN=00000001 ESD=0001 TYPE=REL  XREF=38 36 37 
+ SYM=WTO#0004_EOT LOC=000000C6 LEN=00000001 ESD=0001 TYPE=REL  XREF=46 44 45 
+ SYM=WTO#0005_EOT LOC=000000E3 LEN=00000001 ESD=0001 TYPE=REL  XREF=53 51 52 
+ SYM=WTO#0006_EOT LOC=0000010E LEN=00000001 ESD=0001 TYPE=REL  XREF=62 59 60 
+ SYM=WTO#0007_EOT LOC=00000129 LEN=00000001 ESD=0001 TYPE=REL  XREF=68 66 67 
+
+Literal Table Listing
+
+ LIT=16AL1(*-LC1) LOC=00000188 LEN=00000001 ESD=0001 POOL=0001 XREF=83 
+ LIT=16AL1(*-LC1) LOC=00000198 LEN=00000001 ESD=0001 POOL=0001 XREF=84 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTPRT1  MZ390 ENDED RC= 0 IO=600

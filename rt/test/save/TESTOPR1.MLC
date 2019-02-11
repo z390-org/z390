@@ -1,0 +1,268 @@
+*********************************************************************
+* Copyright 2006 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2006-08-08  DSH          Initial version                          *
+* 2006-08-09  DSH RPI-404  Test B2A C2A D2A DCLEN SLA SLL SRA SRL   *
+*                          X2A
+* 2006-08-09  DSH RPI-405  Test O'OPCODE                            *
+* 2006-08-27  DSH RPI-415  Correct ATTRA to valid code GR32         *
+* 2006-08-29  DSH RPI-421  Test duplication operator after .        *
+* 2006-10-22  DSH RPI-467  Test duplication operator after .        *
+* 2007-07-05  DSH RPI-646  Add test for index and find old/new      *
+*                          formats                                  *
+* 2008-04-19  DSH RPI-833  Add string quotes for HLASM compatibility*
+* 2008-07-30  DSH RPI-886  Correct function name DCEQUO to DEQUOTE  *
+* 2008-11-07  DSH RPI-938  Correct missing ending quote on MNOTE    *
+* 2008-11-09  DSH RPI-943  Use signed function to display negative  *
+*                          values                                   *
+* 2009-09-21  DSH RPI-1080 Correct test for DCLEN and DCVAL         *
+* 2010-01-10  DSH RPI-1101 Correct C2X length = 2 * CHAR            *
+* 2010-01-14  DSH RPI-1105 A2B > 32 CHAR 0/1'S                      *
+* 2011-01-25  DSH RPI-1139 Add quotes for UPPER/LOWER for NOALLOW   *
+*********************************************************************
+
+TESTOPR1 SUBENTRY
+         WTO   'TESTOPR1 TEST OPERATORS UPPER, LOWER, ETC.'
+         SUBEXIT
+SYM      EQU   1,2,C'3',C'PGMA',gr32
+.LOOP    ANOP
+&PASS    SETA  &PASS+1
+         AIF   (&PASS GE 3).ENDLOOP
+         MNOTE 'TESTOPR1 PASS &PASS'
+         MNOTE 'TESTING UPPER AND LOWER'
+&LC      SETC  'abc'
+         AIF   ('&LC' NE 'abc').LCERR 
+&UC      SETC  (UPPER '&LC')
+         AIF   ('&UC' NE 'ABC').UCERR
+&UC      SETC  'ABC'
+         AIF   ('&UC' NE 'ABC').UCERR
+&LC      SETC  (LOWER '&UC')
+         AIF   ('&LC' NE 'abc').LCERR
+         MNOTE 'TESTING ?2? PREFIX OPERATORS'
+&A2B     SETC  (A2B(4))
+         MNOTE 'A2B(4)=&A2B'                           RPI-1105
+         AIF   ('&A2B' NE '00000000000000000000000000000100').A2ERR
+&A2C     SETC  (A2C(241))
+         MNOTE 'A2C(241)=&A2C'
+         AIF   ('&A2C'(4,1) NE '1').A2ERR
+&A2D     SETC  (A2D(241))    
+         MNOTE 'A2D(241)=&A2D'
+         AIF   ('&A2D' NE '+241').A2ERR
+&A2D     SETC  (A2D(-241))    
+         MNOTE 'A2D(-241)=&A2D'
+         AIF   ('&A2D' NE '-241').A2ERR
+&A2X     SETC  (A2X(241))
+         MNOTE 'A2X(241)=&A2X'
+         AIF   ('&A2X' NE '000000F1').A2ERR
+&B2A     SETA  (B2A('100'))
+         MNOTE 'B2A(''100'')=&B2A'
+         AIF   ('&B2A' NE 4).B2ERR
+&B2C     SETC  (B2C('11110001'))
+         MNOTE 'B2C(''11110001'')=&B2C'
+         AIF   ('&B2C'(4,1) NE '1').B2ERR
+&B2D     SETC  (B2D('100'))
+         MNOTE 'B2D(''100'')=&B2D'
+         AIF   ('&B2D' NE 4).B2ERR
+&B2X     SETC  (B2X('11110001'))
+         MNOTE 'B2X(''11110001'')=&B2X'
+         AIF   ('&B2X' NE '000000F1').B2ERR
+&C2A     SETA  (C2A('1'))
+         MNOTE 'C2A(''1'')=&C2A'
+         AIF   ('&C2A' NE 241).C2ERR
+&C2B     SETC  (C2B('1'))
+         MNOTE 'C2B(''1'')=&C2B'
+         AIF   ('&C2B' NE '11110001').C2ERR
+&C2D     SETC  (C2D('1'))
+         MNOTE 'C2D(''1'')=&C2D'
+         AIF   ('&C2D' NE '241').C2ERR
+&C2X     SETC  (C2X('1'))
+         MNOTE 'C2X(''1'')=&C2X'
+         AIF   ('&C2X' NE 'F1').C2ERR         RPI-1101 FIX LEN = 2 * N
+&SIGNED  SETC  (SIGNED (D2A('-1')))
+         MNOTE 'D2A(''-1'')=&SIGNED'
+         AIF   ('&SIGNED' NE '-1').D2ERR
+&D2B     SETC  (D2B('241'))
+         MNOTE 'D2B(''1'')=&D2B'
+         AIF   ('&D2B' NE '11110001').D2ERR
+&D2C     SETC  (D2C('241'))
+         MNOTE 'D2C(''1'')=&D2C'
+         AIF   ('&D2C'(4,1) NE '1').D2ERR
+&D2X     SETC  (D2X('241'))
+         MNOTE 'D2X(''241'')=&D2X'
+         AIF   ('&D2X' NE '000000F1').D2ERR
+&X2A     SETA  (X2A('F1'))
+         MNOTE 'X2A(''F1'')=&X2A'
+         AIF   (&X2A NE 241).X2ERR
+&X2B     SETC  (X2B('1F'))
+         MNOTE 'X2B(''1F'')=&X2B'
+         AIF   ('&X2B' NE '00011111').X2ERR
+&X2C     SETC  (X2C('F1'))
+         MNOTE 'X2C(''F1'')=&X2C'
+         AIF   ('&X2C'(4,1) NE '1').X2ERR
+&X2D     SETC  (X2D('F1'))
+         MNOTE 'X2D(''F1'')=&X2D'
+         AIF   ('&X2D' NE '241').X2ERR
+         MNOTE 'TESTING DCLEN, DCVAL, DEQUOTE'
+&DCLSTR  SETC  '''''''''&&&&&&&&1'''''''''  ''&&1'' = 7  RPI-1080
+&DCLEN   SETA  (DCLEN('&DCLSTR'))
+         MNOTE 'DCLEN(&DCLSTR)=&DCLEN'
+         AIF   (&DCLEN NE 7).DCLERR                      RPI-1080
+&DCVSTR  SETC  '''''&&&&1'''''
+&DCVAL   SETC  (DCVAL('&DCVSTR'))
+         MNOTE 'DCVAL(&DCVSTR)=&DCVAL'
+         AIF   ('&DCVAL' NE '''&&1''').DCVERR  RPI 1080
+&DCESTR  SETC  '''ABC'''
+&DEQUOTE SETC  (DEQUOTE('&DCESTR'))
+         MNOTE 'DEQUOTE(&DCESTR)=&DEQUOTE'
+         AIF   ('&DEQUOTE' NE 'ABC').DCEERR
+         MNOTE 'TESTING ISBIN, ISDEC, ISHEX, ISSYM'
+&ISBIN   SETC  (ISBIN('100'))
+         MNOTE 'ISBIN(''100'')=&ISBIN'
+         AIF   ('&ISBIN' NE 1).ISERR
+&ISBIN   SETC  (ISBIN('123'))
+         MNOTE 'ISBIN(''123'')=&ISBIN'
+         AIF   ('&ISBIN' NE 0).ISERR
+&ISDEC   SETC  (ISDEC('123'))
+         MNOTE 'ISDEC(''123'')=&ISDEC'
+         AIF   ('&ISDEC' NE 1).ISERR
+&ISDEC   SETC  (ISDEC('F1'))
+         MNOTE 'ISDEC(''F1'')=&ISDEC'
+         AIF   ('&ISDEC' NE 0).ISERR
+&ISHEX   SETC  (ISHEX('F1'))
+         MNOTE 'ISHEX(''F1'')=&ISHEX'
+         AIF   ('&ISHEX' NE 1).ISERR
+&ISHEX   SETC  (ISHEX('FG'))
+         MNOTE 'ISHEX(''FG'')=&ISHEX'
+         AIF   ('&ISHEX' NE 0).ISERR
+&ISSYM   SETC  (ISSYM('AZ09@#$_'))
+         MNOTE 'ISSYM(''AZ09@#$_'')=&ISSYM'
+         AIF   ('&ISSYM' NE 1).ISERR
+&ISSYM   SETC  (ISSYM('AZ09@#$_**'))
+         MNOTE 'ISSYM(''AZ09@#$_**'')=&ISSYM'
+         AIF   ('&ISSYM' NE 0).ISERR
+         MNOTE 'TESTING SIGNED, SYSATTRA, SYSATTRP'
+&SIGNED  SETC  (SIGNED(-241))
+         MNOTE 'SIGNED(-241)=&SIGNED'
+         AIF   ('&SIGNED' NE '-241').SIGNERR
+&SYSATTRP SETC  (SYSATTRP('SYM'))
+         MNOTE 'SYSATTRP(SYM)=&SYSATTRP'
+         AIF   ('&SYSATTRP' NE 'PGMA').SYERR
+&SYSATTRA SETC  (SYSATTRA('SYM'))
+         MNOTE 'SYSATTRA(SYM)=&SYSATTRA'
+         AIF   ('&SYSATTRA' NE 'GR32').SYERR
+         MNOTE 'TESTING SLA, SLL, SRA, SRL'
+&SLA     SETA  (1 SLA 2)
+         MNOTE '1 SLA 2 = &SLA'
+         AIF   (&SLA NE 4).SLAERR
+&SLA     SETA  (X'7FFFFFFF' SLA 1) 
+&SIGNED  SETC  (SIGNED &SLA)                   RPI-943
+         MNOTE 'X''7FFFFFFF'' SLA 1 = &SIGNED'
+         AIF   (&SLA NE X'7FFFFFFE').SLAERR
+&SLL     SETA  (1 SLL 2)
+         MNOTE '1 SLL 2 = &SLL'
+         AIF   (&SLL NE 4).SLLERR
+&SLL     SETA  (X'7FFFFFFF' SLL 1)     
+&SIGNED  SETC  (SIGNED &SLL)                   RPI-943
+         MNOTE 'X''7FFFFFFF'' SLL 1 = &SIGNED'
+         AIF   (&SLL NE X'FFFFFFFE').SLLERR
+&SRA     SETA  (4 SRA 2)
+         MNOTE '4 SLA 2 = &SRA'
+         AIF   (&SRA NE 1).SRAERR
+&SRA     SETA  (X'FFFFFFFE' SRA 1)
+&SIGNED  SETC  (SIGNED &SRA)                   RPI-943
+         MNOTE 'X''FFFFFFFF'' SRA 1 = &SIGNED'
+         AIF   (&SRA NE X'FFFFFFFF').SRAERR
+&SRL     SETA  (4 SRL 2)
+         MNOTE '4 SRL 2 = &SRL'
+         AIF   (&SRL NE 1).SRLERR
+&SRL     SETA  (X'FFFFFFFE' SRL 1)
+&SIGNED  SETC  (SIGNED &SRL)                   RPI-943
+         MNOTE 'X''7FFFFFFF'' SRL 1 = &SIGNED'
+         AIF   (&SRL NE X'7FFFFFFF').SRLERR
+         MNOTE 'TESTING OPERATOR TYPES A,E,M,O,S,U'
+         AIF   (O'PUSH      NE 'A').OTERR  ASSEMBLER  CODE
+         AIF   (O'BER       NE 'E').OTERR  EXTENDED MNEMONIC CODE
+         AIF   (O'BE        NE 'E').OTERR  EXTENDED MNEMONIC CODE
+         AIF   (O'BER       NE 'E').OTERR  EXTENDED MNEMONIC CODE
+         AIF   (O'JE        NE 'E').OTERR  EXTENDED MNEMONIC CODE
+         AIF   (O'SUBENTRY  NE 'M').OTERR  LOADED MACRO
+         AIF   (O'SRNM      NE 'O').OTERR  MACHIVE CODE
+         AIF   (O'BCR       NE 'O').OTERR  MACHIVE CODE
+         AIF   (O'BC        NE 'O').OTERR  MACHIVE CODE
+         AIF   (O'BRC       NE 'O').OTERR  MACHIVE CODE
+         AIF   (O'SAVE      NE 'S').OTERR  LIBRARY MACRO FOUND
+         AIF   (O'XXXXX     NE 'U').OTERR  UNDEFINED RPI 406 WAS SRNMT
+         MNOTE 'TESTING STRING DUPLICATION IN EXPRESSION'
+         AIF   ('A'.(2)'B' NE 'ABB').DUPERR
+&A       SETC  'A'
+         AIF   ('&A'.(2)'B' NE 'ABB').DUPERR
+         AIF   ('A'.(2)'B' NE 'ABB').DUPERR
+         MNOTE 'TEST FIND'
+&IB      SETC  FIND('ABC','B')
+         AIF   ('&IB' NE 2).FINDERR
+&IB      SETC  ('ABC' FIND 'XB')
+         AIF   ('&IB' NE 2).FINDERR
+&IB      SETC  FIND('ABC' 'CB')
+         AIF   ('&IB' NE 2).FINDERR
+         MNOTE 'TEST INDEX'
+&IB      SETC  INDEX('ABXBC','BC')
+         AIF   ('&IB' NE 4).INDEXERR
+&IB      SETC  ('ABXBC' INDEX 'BC')
+         AIF   ('&IB' NE 4).INDEXERR
+&IB      SETC  INDEX('ABXBC' 'BC')
+         AIF   ('&IB' NE 4).INDEXERR
+         AGO   .LOOP
+.ENDLOOP ANOP
+         MNOTE 'TESTOPR1 ENDED OK'
+         AGO   .EXIT
+.LCERR   MNOTE 12,'LOWER CASE TEST ERROR'
+         AGO   .EXIT
+.UCERR   MNOTE 12,'UPPER CASE TEST ERROR'
+         AGO   .EXIT
+.A2ERR   MNOTE 12,'A2 OPERATOR ERROR'
+         AGO   .EXIT
+.B2ERR   MNOTE 12,'B2 OPERATOR ERROR'
+         AGO   .EXIT
+.C2ERR   MNOTE 12,'C2 OPERATOR ERROR'
+         AGO   .EXIT
+.D2ERR   MNOTE 12,'D2 OPERATOR ERROR'
+         AGO   .EXIT
+.X2ERR   MNOTE 12,'X2 OPERATOR ERROR'
+         AGO   .EXIT
+.DCLERR  MNOTE 12,'DCLEN OPERATOR ERROR'
+         AGO   .EXIT
+.DCVERR  MNOTE 12,'DCVAL OPERATOR ERROR'
+         AGO   .EXIT
+.DCEERR  MNOTE 12,'DCEQUOTE OPERATOR ERROR'
+         AGO   .EXIT
+.ISERR   MNOTE 12,'IS??? OPERATOR ERROR'
+         AGO   .EXIT
+.SIGNERR MNOTE 12,'SIGNED OPERATOR ERROR'
+         AGO   .EXIT
+.SYERR   MNOTE 12,'SYSATTR A/P OPERATOR ERROR'
+         AGO   .EXIT
+.SLAERR  MNOTE 12,'SLA OPERATOR ERROR'
+         AGO   .EXIT
+.SLLERR  MNOTE 12,'SLL OPERATOR ERROR'
+         AGO   .EXIT
+.SRAERR  MNOTE 12,'SRA OPERATOR ERROR'
+         AGO   .EXIT
+.SRLERR  MNOTE 12,'SRL OPERATOR ERROR'
+         AGO   .EXIT
+.OTERR   MNOTE 12,'OPERATION TYPE TEST ERROR'
+         AGO   .EXIT
+.DUPERR  MNOTE 12,'DUPLICATION TYPE TEST ERROR'
+         AGO   .EXIT
+.INDEXERR MNOTE 'INDEX ERROR'
+         AGO   .EXIT
+.FINDERR MNOTE 'FIND ERROR'
+.EXIT    ANOP
+         END

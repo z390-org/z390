@@ -1,0 +1,186 @@
+TESTERRA  MZ390 START
+TESTERRA  MZ390 Copyright 2011 Automated Software Tools Corporation
+TESTERRA  MZ390 Copyright 2013 Cat Herder Software, LLC
+TESTERRA  MZ390 Copyright 2018 Joachim Bartz, Germany
+TESTERRA  MZ390 z390 is licensed under GNU General Public License
+TESTERRA  MZ390 program = rt\test\TESTERRA.MLC
+TESTERRA  MZ390 options = bal notiming sysmac(mac) syscpy(mac) stats 
+  chkmac(2) systerm(rt\test\RTTEST)
+TESTERRA  MZ390 final_options=ALIGN
+TESTERRA  MZ390 final_options=NOALLOW
+TESTERRA  MZ390 final_options=NOAMODE24
+TESTERRA  MZ390 final_options=AMODE31
+TESTERRA  MZ390 final_options=NOASCII
+TESTERRA  MZ390 final_options=ASM
+TESTERRA  MZ390 final_options=NOASSIST
+TESTERRA  MZ390 final_options=AUTOLINK
+TESTERRA  MZ390 final_options=BAL
+TESTERRA  MZ390 final_options=NOBS2000
+TESTERRA  MZ390 final_options=EDF
+TESTERRA  MZ390 final_options=NOCICS
+TESTERRA  MZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTERRA  MZ390 final_options=COMMENT
+TESTERRA  MZ390 final_options=CON
+TESTERRA  MZ390 final_options=NODUMP
+TESTERRA  MZ390 final_options=EPILOG
+TESTERRA  MZ390 final_options=NOERRSUM
+TESTERRA  MZ390 final_options=EXTEND
+TESTERRA  MZ390 final_options=FLOAT(DECIMAL)
+TESTERRA  MZ390 final_options=NOGUAM
+TESTERRA  MZ390 final_options=INIT
+TESTERRA  MZ390 final_options=LIST
+TESTERRA  MZ390 final_options=LISTCALL
+TESTERRA  MZ390 final_options=LISTUSE
+TESTERRA  MZ390 final_options=LOADHIGH
+TESTERRA  MZ390 final_options=NOMCALL
+TESTERRA  MZ390 final_options=NOMOD
+TESTERRA  MZ390 final_options=OBJ
+TESTERRA  MZ390 final_options=NOOBJHEX
+TESTERRA  MZ390 final_options=PC
+TESTERRA  MZ390 final_options=PCOPT
+TESTERRA  MZ390 final_options=NOPDSMEM8
+TESTERRA  MZ390 final_options=NOPRINTALL
+TESTERRA  MZ390 final_options=PROLOG
+TESTERRA  MZ390 final_options=PROTECT
+TESTERRA  MZ390 final_options=R64
+TESTERRA  MZ390 final_options=NOREFORMAT
+TESTERRA  MZ390 final_options=NOREGS
+TESTERRA  MZ390 final_options=RMODE24
+TESTERRA  MZ390 final_options=NORMODE31
+TESTERRA  MZ390 final_options=STATS
+TESTERRA  MZ390 final_options=NOTEST
+TESTERRA  MZ390 final_options=THREAD
+TESTERRA  MZ390 final_options=NOTIME
+TESTERRA  MZ390 final_options=NOTIMING
+TESTERRA  MZ390 final_options=NOTRACE
+TESTERRA  MZ390 final_options=NOTRACEA
+TESTERRA  MZ390 final_options=NOTRACEALL
+TESTERRA  MZ390 final_options=NOTRACEC
+TESTERRA  MZ390 final_options=NOTRACEG
+TESTERRA  MZ390 final_options=NOTRACEI
+TESTERRA  MZ390 final_options=NOTRACEL
+TESTERRA  MZ390 final_options=NOTRACEM
+TESTERRA  MZ390 final_options=NOTRACEP
+TESTERRA  MZ390 final_options=NOTRACEQ
+TESTERRA  MZ390 final_options=NOTRACES
+TESTERRA  MZ390 final_options=NOTRACET
+TESTERRA  MZ390 final_options=NOTRACEV
+TESTERRA  MZ390 final_options=TRAP
+TESTERRA  MZ390 final_options=NOTRUNC
+TESTERRA  MZ390 final_options=NOTS
+TESTERRA  MZ390 final_options=VCB
+TESTERRA  MZ390 final_options=WARN
+TESTERRA  MZ390 final_options=XREF
+TESTERRA  MZ390 final_options=ZSTRMAC
+TESTERRA  MZ390 final_options=CHKMAC=2
+TESTERRA  MZ390 final_options=CHKSRC=1
+TESTERRA  MZ390 final_options=ERR=100
+TESTERRA  MZ390 final_options=MAXCALL=50
+TESTERRA  MZ390 final_options=MAXDISPLAY=80
+TESTERRA  MZ390 final_options=MAXESD=1000
+TESTERRA  MZ390 final_options=MAXFILE=1000
+TESTERRA  MZ390 final_options=MAXGBL=100000
+TESTERRA  MZ390 final_options=MAXHEIGHT=600
+TESTERRA  MZ390 final_options=MAXLCL=100000
+TESTERRA  MZ390 final_options=MAXLEN=80
+TESTERRA  MZ390 final_options=MAXLINE=200000
+TESTERRA  MZ390 final_options=MAXLOG=1000000
+TESTERRA  MZ390 final_options=MAXPARM=10000
+TESTERRA  MZ390 final_options=MAXPASS=2
+TESTERRA  MZ390 final_options=MAXPC=50000
+TESTERRA  MZ390 final_options=MAXQUE=1000
+TESTERRA  MZ390 final_options=MAXRLD=10000
+TESTERRA  MZ390 final_options=MAXSIZE=52428800
+TESTERRA  MZ390 final_options=MAXSYM=50000
+TESTERRA  MZ390 final_options=MAXWARN=4
+TESTERRA  MZ390 final_options=MAXWIDTH=800
+TESTERRA  MZ390 final_options=MEM=1
+TESTERRA  MZ390 final_options=MINHEIGHT=150
+TESTERRA  MZ390 final_options=MINWIDTH=150
+TESTERRA  MZ390 final_options=MNOTE=0
+TESTERRA  MZ390 final_options=PARM=
+TESTERRA  MZ390 final_options=PROFILE=
+TESTERRA  MZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTERRA.STA
+TESTERRA  MZ390 final_options=SYSPARM=
+TESTERRA  MZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTERRA  MZ390 final_options=TESTDD=
+TESTERRA  MZ390 final_options=TIME=15
+TESTERRA  MZ390 final_options=TRACE=
+TESTERRA  MZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTERRA  MZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTERRA  MZ390 final_options=Z390COMMAND=cmd.exe
+TESTERRA  MZ390 final_options=Z390EDITOR=notepad.exe
+TESTERRA  MZ390 final_options=INSTALL=
+TESTERRA  MZ390 final_options=IPL=
+TESTERRA  MZ390 final_options=LOG=
+TESTERRA  MZ390 final_options=SYS390=rt\test\+linklib
+TESTERRA  MZ390 final_options=SYSBAL=rt\test\
+TESTERRA  MZ390 final_options=SYSCPY=mac
+TESTERRA  MZ390 final_options=SYSDAT=rt\test\
+TESTERRA  MZ390 final_options=SYSERR=rt\test\
+TESTERRA  MZ390 final_options=SYSLOG=rt\test\
+TESTERRA  MZ390 final_options=SYSLST=rt\test\
+TESTERRA  MZ390 final_options=SYSMAC=mac
+TESTERRA  MZ390 final_options=SYSMLC=rt\test\
+TESTERRA  MZ390 final_options=SYSPCH=rt\test\
+TESTERRA  MZ390 final_options=SYSPRN=rt\test\
+TESTERRA  MZ390 final_options=SYSOBJ=rt\test\
+TESTERRA  MZ390 final_options=SYSOPT=rt\test\
+TESTERRA  MZ390 final_options=SYSTRC=rt\test\
+TESTERRA  MZ390 total MLC/MAC loaded  = 48
+TESTERRA  MZ390 total BAL output lines= 44
+TESTERRA  MZ390 total BAL instructions= 4
+TESTERRA  MZ390 total macros          = 2
+TESTERRA  MZ390 total macro loads     = 2
+TESTERRA  MZ390 total macro calls     = 0
+TESTERRA  MZ390 total AENTRY blocks   = 0
+TESTERRA  MZ390 total ACALL  calls    = 0
+TESTERRA  MZ390 total AIF    blocks   = 0
+TESTERRA  MZ390 total ACASE  blocks   = 0
+TESTERRA  MZ390 total AWHILE calls    = 0
+TESTERRA  MZ390 total AUNTIL blocks   = 0
+TESTERRA  MZ390 total global set names= 46
+TESTERRA  MZ390 tot global seta cells = 0
+TESTERRA  MZ390 tot global setb cells = 7
+TESTERRA  MZ390 tot global setc cells = 39
+TESTERRA  MZ390 max local pos parms   = 0
+TESTERRA  MZ390 max local key parms   = 0
+TESTERRA  MZ390 max local set names   = 5
+TESTERRA  MZ390 max local seta cells  = 1
+TESTERRA  MZ390 max local setb cells  = 0
+TESTERRA  MZ390 max local setc cells  = 4
+TESTERRA  MZ390 total array expansions= 0
+TESTERRA  MZ390 total Keys            = 1388
+TESTERRA  MZ390 Key searches          = 1441
+TESTERRA  MZ390 Key avg comps         = 0
+TESTERRA  MZ390 Key max comps         = 3
+TESTERRA  MZ390 total macro line exec = 32
+TESTERRA  MZ390 total pcode line exec = 0
+TESTERRA  MZ390 total pcode line gen. = 0
+TESTERRA  MZ390 total pcode line reuse= 0
+TESTERRA  MZ390 total pcode op   gen. = 0
+TESTERRA  MZ390 total pcode op   exec = 0
+TESTERRA  MZ390 total pcode gen  opt  = 0
+TESTERRA  MZ390 total pcode exec opt  = 0
+TESTERRA  MZ390 FID=  1 ERR= 3 C:\Users\Achim\GitHub\z390\rt\test\TESTERRA.MLC
+TESTERRA  MZ390 total mnote warnings  = 6
+TESTERRA  MZ390 total mnote errors    = 0
+TESTERRA  MZ390 max   mnote level     = 4
+TESTERRA  MZ390 total mz390 errors    = 3
+TESTERRA  AZ390 BAL lines             = 43
+TESTERRA  AZ390 symbols               = 1
+TESTERRA  AZ390 Literals              = 0
+TESTERRA  AZ390 alloc passes          = 1
+TESTERRA  AZ390 Keys                  = 1320
+TESTERRA  AZ390 Key searches          = 1394
+TESTERRA  AZ390 Key avg comps         = 0
+TESTERRA  AZ390 Key max comps         = 2
+TESTERRA  AZ390 ESD symbols           = 1
+TESTERRA  AZ390 object bytes          = 0
+TESTERRA  AZ390 object rlds           = 0
+TESTERRA  AZ390 total mnote warnings  = 6
+TESTERRA  AZ390 total mnote errors    = 0
+TESTERRA  AZ390 max   mnote level     = 4
+TESTERRA  AZ390 total mz390 errors    = 3
+TESTERRA  AZ390 total az390 errors    = 1
+TESTERRA  MZ390 ENDED RC=16 IO=336

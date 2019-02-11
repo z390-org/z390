@@ -1,0 +1,226 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH          Initial version                          *
+* 2005-12-08  DSH RPI-119  Add tests for multiple value sets        *
+* 2006-03-20  DSH RPI-242  Add test for LCLC and GBLC init error    *
+* 2006-08-07  DSH RPI-401  Test expansion via multiple store values *
+* 2006-09-08  DSH RPI-435  Test dynamic alloc of local arrays       *
+* 2006-09-21  DSH RPI-445  Test dynamic array expansion copy and    *
+*                          extend                                   *
+* 2006-09-21  DSH RPI-446  Test NOT D'SYMBOL                        *
+* 2006-09-21  DSH RPI-456  Test duplication operator within         *
+*                          expression                               *
+* 2007-02-15  DSH RPI-559  Test &VAR(N'&VAR)                        *
+* 2008-04-22  DSH RPI-833  Add string quotes for HLASM compatibility*
+* 2008-04-24  DSH RPI-839  Test skipping elements in mult SET STORE *
+* 2008-11-08  DSH RPI-938  Remove single quote from MNOTE text      *
+* 2010-01-14  DSH RPI-1105 SETB returns 0 or 1 vs 0-255             *
+* 2011-04-08  DSH RPI-1139 Fix dup GBL/LCL                          *
+*********************************************************************
+
+TESTSET1 SUBENTRY
+         WTO   'TESTSET1 - TEST SUBSCRIPTED VARIABLES'
+*
+* TEST SETA
+*
+         LCLA  &A(10),&B(10)
+&A(1)    SETA  1
+&A(2)    SETA  2
+&B(1)    SETA  1
+&B(2)    SETA  2
+         MNOTE 'A(1)=&A(1) A(2)=&A(2)'
+         MNOTE 'B(1)=&B(1) B(2)=&B(2)'
+         AIF   (&A(1) NE &B(1)).ERR
+         AIF   (&A(2) EQ &B(1)).ERR
+*
+* TEST SETB
+*
+         LCLB  &C(10),&D(10)
+&C(1)    SETB  0
+&C(2)    SETB  1
+&D(1)    SETB  0
+&D(2)    SETB  1
+         MNOTE 'C(1)=&C(1) C(2)=&C(2)'
+         MNOTE 'D(1)=&D(1) D(2)=&D(2)'
+         AIF   (&C(1) NE &D(1)).ERR
+         AIF   (&C(2) EQ &D(1)).ERR
+*
+* TEST SETC
+*
+         LCLC  &T1(2),&T2(2)
+&T1(1)   SETC  'A'
+&T2(2)   SETC  '&T1(1).B'
+&TEXT    SETC  'X'
+&TEXT    SETC  '&TEXT.&T2(2).C'
+         MNOTE 'T1(1)=&T1(1). T2(2)=&T2(2).'
+         MNOTE 'TEXT=Z&TEXT.Z'
+         AIF   ('&TEXT' NE 'XABC').ERR
+.*
+.*  test lower case var and opcode
+.*
+&N       seta  1
+         aif   (&n eq 1).ok
+         mnote 12,'n ne 1 error'
+         b     1
+.OK      anop
+&n1      seta  1
+         aif   (&N1 eq 1).OK1
+         mnote 12,'n ne 1 error'
+         b     1
+.ok1     anop
+*
+* test upper and lower case ordinary symbols
+*
+         b     ok2
+         wto   'LC label error'
+OK2      equ   *
+         b     OK3
+         wto   'LC label error'
+ok3      equ   *
+*
+* TEST MULT VALUE SETS
+*
+         LCLA  &LA(3)
+         LCLB  &LB(3)
+         LCLC  &LC(3)
+         GBLA  &GA(3)
+         GBLB  &GB(3)
+         GBLC  &GC(3)
+&LA(2)   SETA  2,3
+         AIF   (&LA(2) NE 2 OR &LA(3) NE 3).ERR
+&LB(2)   SETB  2,3
+         AIF   (&LB(2) NE 1 OR &LB(3) NE 1).ERR          RPI 1105
+&LC(2)   SETC  '2','3'
+         AIF   ('&LC(2)' NE '2' OR '&LC(3)' NE '3').ERR           
+&GA(2)   SETA  2,3
+         AIF   (&GA(2) NE 2 OR &GA(3) NE 3).ERR
+&GB(2)   SETB  2,3
+         AIF   (&GB(2) NE 1 OR &GB(3) NE 1).ERR          RPI 1105
+&GC(2)   SETC  '2','3'
+         AIF   ('&GC(2)' NE '2' OR '&GC(3)' NE '3').ERR
+* TEST UNARY +- IN PARENS
+&X       SETA  -1
+         AIF   (&X NE -1).ERR
+&X       SETA  --1
+         AIF   (&X NE 1).ERR
+&X       SETA  -1*-1
+         AIF   (&X NE 1).ERR
+&X       SETA  -1*(-1+2)
+         AIF   (&X NE -1).ERR
+&X       SETA  +1
+         AIF   (&X NE 1).ERR
+&X       SETA  +1*+1
+         AIF   (&X NE 1).ERR
+&X       SETA  +1*(+1+2)
+         AIF   (&X NE 3).ERR
+* TEST LCLC AND GBLC INIT ERROR
+         LCLC  &TEST_LCLC(100)
+         AIF   ('&TEST_LCLC(100)' NE '').ERR
+         GBLC  &TEST_GBLC(100)
+         AIF   ('&TEST_GBLC(100)' NE '').ERR
+* TEST EXPANSION VIA MULT. STORE
+         LCLA  &EA(1)
+         LCLB  &EB(1)
+         LCLC  &EC(1)
+         LCLA  &EGA(1)
+         LCLB  &EGB(1)
+         LCLC  &EGC(1)
+&EA(1)   SETA  1,2,3
+         AIF   (&EA(3) NE 3).ERR
+&EB(1)   SETB  1,2,3
+         AIF   (&EB(3) NE 1).ERR          RPI 1105
+&EC(1)   SETC  '1','2','3'
+         AIF   ('&EC(3)' NE '3').ERR
+&EGA(1)   SETA  1,2,3
+         AIF   (&EGA(3) NE 3).ERR
+&EGB(1)   SETB  1,2,3
+         AIF   (&EGB(3) NE 1).ERR         RPI 1105
+&EGC(1)   SETC  '1','2','3'
+         AIF   ('&EGC(3)' NE '3').ERR
+* TEST ALLOC OF SUBSCRIPTED ARRAY WITHOUT DECLARATION
+&DX(3)   SETB  1
+         AIF   (&DX(3) EQ 1 AND &DX(8) EQ 0).DXOK
+         MNOTE 8,'DX(3) ALLOC FAILED'
+         AGO   .EXIT
+.DXOK    ANOP
+         MNOTE 'DX(3)=&DX(3) DX(8)=&DX(8) OK'
+* TEST EXPANSION COPY AND EXTEND RPI 445
+&DY(1)   SETA  1                                      ALLOC 100 
+&DI      SETA  3
+&DY(&DI) SETA  3             
+&DY(800) SETA  800                                    EXPAND TO 800
+         AIF   (&DY(3) EQ 3 AND &DY(800) EQ 800).DYOK CHK EXPAND COPY
+         MNOTE 8,'DY(3) ALLOC FAILED'
+         AGO   .EXIT
+.DYOK    ANOP
+         MNOTE 'DY(3)=&DY(3) DY(800)=&DY(800) OK'
+* TEST SUBSTRING * AND NOT D' OPERATION RPI 446
+&Y       SETC  '1234567'
+&YL6     SETC  '&Y'(K'&Y-5,*)
+         MNOTE 'YL6=&YL6'
+&VALUE   SETC  'TESTSET1'
+         AIF   (NOT D'&VALUE).NOTD             
+         MNOTE '&VALUE DEFINED OK'
+         AGO   .ENDNOT
+.NOTD    ANOP
+         MNOTE '&VALUE NOT DEFINED'
+.ENDNOT  ANOP
+* TEST DUPLICATION OPERATOR WITHIN EXPRESSION RPI 456
+&DUPXY   SETC  (2)'X'.(2)'Y'
+         MNOTE '2X2Y=&DUPXY'
+* TEXT &VAR(N'&VAR)
+&VAR(1)  SETA  1,2,3
+&LASTVAR SETA  &VAR(N'&VAR)        RPI 938 REMOVE SQ FROM MNOTE TEXT
+         MNOTE 'VAR(3)=3=&LASTVAR'
+         AIF   (&VAR(N'&VAR) NE 3).ERR
+* TEST SKIPPING ELEMENTS AND PC CODE RPI 839
+.LOOP    ANOP
+&I       SETA  &I+1
+&MAA      SETA  0     COMMENT
+&MCC      SETC  'C'   COMMENT
+.* RPI 1139 DUP         LCLA  &MA(10)
+&MA(1)    SETA  1,,3
+         MNOTE 'MA(1)=&MA(1)'
+         MNOTE 'MA(2)=&MA(2)'
+         MNOTE 'MA(3)=&MA(3)'
+&MA(4)    SETA  4,5,6
+         MNOTE 'MA(4)=&MA(4)'
+         MNOTE 'MA(5)=&MA(5)'
+         MNOTE 'MA(6)=&MA(6)'
+.* RPI 1139 DUP         LCLB  &MB(10)
+&MB(1)    SETB  1,,3
+         MNOTE 'MB(1)=&MB(1)'
+         MNOTE 'MB(2)=&MB(2)'
+         MNOTE 'MB(3)=&MB(3)'
+&MB(4)    SETB  4,5,6
+         MNOTE 'MB(4)=&MB(4)'
+         MNOTE 'MB(5)=&MB(5)'
+         MNOTE 'MB(6)=&MB(6)'
+.* RPI 1139 DUP         LCLC  &MC(10)
+&MC(1)    SETC  '1',,'3'
+         MNOTE 'MC(1)=&MC(1)'
+         MNOTE 'MC(2)=&MC(2)'
+         MNOTE 'MC(3)=&MC(3)'
+&MC(4)    SETC  '4','5','6'
+         MNOTE 'MC(4)=&MC(4)'
+         MNOTE 'MC(5)=&MC(5)'
+         MNOTE 'MC(6)=&MC(6)'
+         AIF   (&I LT 2).LOOP
+*
+* END OF TESTS
+*
+         WTO   'TESTSET1 ENDED OK'
+         SUBEXIT
+         AGO   .EXIT
+.ERR     MNOTE 12,'TESTSET1 ERROR - ABORTING'
+.EXIT    ANOP
+         END

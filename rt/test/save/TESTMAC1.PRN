@@ -1,0 +1,215 @@
+TESTMAC1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTMAC1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000000F0 TYPE=CST NAME=TESTMAC1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH          Initial version                          *
+000000                                      (1/13)13 * 2006-03-21  DSH RPI-253  Add test for macro labels starting       *
+000000                                      (1/14)14 *                          with ._                                  *
+000000                                      (1/15)15 * 2006-03-21  DSH RPI-257  Add test for * as second operand         *
+000000                                      (1/16)16 * 2006-04-07  DSH RPI-274  Add test for 'c''...''' sdt within       *
+000000                                      (1/17)17 *                          strings                                  *
+000000                                      (1/18)18 * 2006-07-03  DSH RPI-336  Add test for D' operator                 *
+000000                                      (1/19)19 * 2006-07-03  DSH RPI-338  Add test for 'c''...''' sdt within       *
+000000                                      (1/20)20 *                          strings                                  *
+000000                                      (1/21)21 * 2006-07-03  DSH RPI-340  Test T' for EQU with 3rd operand plus    *
+000000                                      (1/22)22 *                          mult. types                              *
+000000                                      (1/23)23 * 2006-07-03  DSH RPI-353  Test prefix operator followed by (...)   *
+000000                                      (1/24)24 * 2006-07-08  DSH RPI-359  Test keyword parm with mixed case        *
+000000                                      (1/25)25 * 2006-08-30  DSH RPI-422  Test padded setc compare with high low   *
+000000                                      (1/26)26 *                          chars                                    *
+000000                                      (1/27)27 * 2006-09-21  DSH RPI-447  Test N'&PARM(&VAR)                       *
+000000                                      (1/28)28 * 2007-06-10  DSH RPI-633  Test macro label parameters              *
+000000                                      (1/29)29 * 2007-08-22  DSH RPI-673  Test &var in macro inline prototype name *
+000000                                      (1/30)30 *                          field                                    *
+000000                                      (1/31)31 * 2008-11-07  DSH RPI-938  Double quotes in MNOTE text to avoid     *
+000000                                      (1/32)32 *                          syntax errors                            *
+000000                                      (1/33)33 * 2001-01-25  DSH RPI-1139 Add quotes for DOUBLE for NOALLOW        *
+000000                                      (1/34)34 *********************************************************************
+000000                                      (1/36)35 TESTMAC1 SUBENTRY 
+000000                                      (2/78)36+TESTMAC1 CSECT 
+000000 90ECD00C                            (2/168)37+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)38+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)39+         DC    18F'0'
+000050 E3C5E2E3D4C1C3F1                    (2/171)40+         DC    CL8'TESTMAC1'
+000058 F0F161F0F261F0F5                    (2/172)41+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)42+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)43+         ST    15,8(13)
+00006C 50DF0004                            (2/175)44+         ST    13,4(15)
+000070 18DF                                (2/176)45+         LR    13,15
+000072                                     (2/189)46+         USING TESTMAC1+8,13
+LISTUSE TESTMAC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/37)48          WTO   'TESTMAC1 TEST SUBSTRINGS, '''' (DOUBLE QUOTES), AND &&'
+000072 A715001E                0000AE       (3/49)50+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00370000E3C5E2E3                     (3/50)51+         DC    AL2(WTO#0002_EOT-*,0),C'TESTMAC1 TEST SUBSTRINGS, '''' (DOUBLE QUOTES), AND &&'
+0000AD                  000000AD            (3/51)53+WTO#0002_EOT     EQU *
+0000AE 0A23                                 (3/52)54+         SVC   35
+0000B0                                      (1/38)56          SUBEXIT 
+0000B0 41F00000                             (4/33)57+         LA    15,0
+0000B4 58D0D004                             (4/50)58+         L     13,4(,13)
+0000B8 58E0D00C                             (4/51)59+         L     14,12(,13)
+0000BC 982CD01C                             (4/52)60+         LM    2,12,28(13)
+0000C0 07FE                                 (4/53)61+         BR    14
+0000C2 C1C2C37EC1C2C3                       (1/41)63          DC    C'ABC=ABC'
+0000C9 C17EC1                               (1/43)64          DC    C'A=A'
+0000CC C2C37EC2C3                           (1/45)65          DC    C'BC=BC'
+0000D1                                      (1/47)66          MNOTE '&TWOAMP=&&'
+0000D1 E3E6D6C1D4D77E50                     (1/48)67          DC    C'TWOAMP=&&'
+0000D9                                      (1/50)68          MNOTE '&DQ='''
+0000D9 C4D87E7D                             (1/51)69          DC    C'DQ='''
+0000DD C1C2C1C2F1F1                         (1/52)70          DC     C'A',C'B',CL2'ABC',(2)C'1' TEST COMMENT, MULT FLD,
+0000E3 C1C2C1C2F1F1                         (1/53)71          DC     c'A',c'B',cl2'ABC',(2)c'1' EXPLICIT LEN, DUP FIELD, LC
+0000E9                                      (1/54)72          MACRO
+0000E9                                      (1/55)73          TESTF  &A,&B
+0000E9                                      (1/56)74 &I       SETA  ('&A' FIND '&B')   RPI-1139
+0000E9                                      (1/57)75 &DA      SETC  (DOUBLE '&A')      RPI-1139
+0000E9                                      (1/58)76 &DB      SETC  (DOUBLE '&B')      RPI-1139
+0000E9                                      (1/59)77          MNOTE '&A FIND &B = &I'
+0000E9                                      (1/60)78          MEND
+0000E9                                      (1/61)79          TESTF ABC,A
+0000E9                                      (1/59)80+         MNOTE 'ABC FIND A = 1'
+0000E9                                      (1/62)82          TESTF ABC,B
+0000E9                                      (1/59)83+         MNOTE 'ABC FIND B = 2'
+0000E9                                      (1/63)85          TESTF ABC,C
+0000E9                                      (1/59)86+         MNOTE 'ABC FIND C = 3'
+0000E9                                      (1/64)88          TESTF ABC,DCB
+0000E9                                      (1/59)89+         MNOTE 'ABC FIND DCB = 2'
+0000E9                                      (1/65)91          TESTF ABC,X
+0000E9                                      (1/59)92+         MNOTE 'ABC FIND X = 0'
+0000E9                                      (1/66)94          TESTF X,
+0000E9                                      (1/59)95+         MNOTE 'X FIND  = 0'
+0000E9                                      (1/67)97          TESTF ,X
+0000E9                                      (1/59)98+         MNOTE ' FIND X = 0'
+0000E9                                     (1/68)100          MACRO
+0000E9                                     (1/69)101          TESTI  &A,&B
+0000E9                                     (1/70)102 &I       SETA  ('&A' INDEX '&B') RPI-1139
+0000E9                                     (1/71)103 &DA      SETC  (DOUBLE '&A')     RPI-1139
+0000E9                                     (1/72)104 &DB      SETC  (DOUBLE '&B')     RPI-1139
+0000E9                                     (1/73)105          MNOTE '&A INDEX &B = &I'
+0000E9                                     (1/74)106          MEND
+0000E9                                     (1/75)107          TESTI ABC,ABC
+0000E9                                     (1/73)108+         MNOTE 'ABC INDEX ABC = 1'
+0000E9                                     (1/76)110          TESTI ABC,AB
+0000E9                                     (1/73)111+         MNOTE 'ABC INDEX AB = 1'
+0000E9                                     (1/77)113          TESTI ABC,BC
+0000E9                                     (1/73)114+         MNOTE 'ABC INDEX BC = 2'
+0000E9                                     (1/78)116          TESTI ABC,ABCD
+0000E9                                     (1/73)117+         MNOTE 'ABC INDEX ABCD = 0'
+0000E9                                     (1/79)119          TESTI ABC,
+0000E9                                     (1/73)120+         MNOTE 'ABC INDEX  = 0'
+0000E9                                     (1/80)122          TESTI ,ABC
+0000E9                                     (1/73)123+         MNOTE ' INDEX ABC = 0'
+0000E9                                     (1/81)125 * TEST MACRO LABELS STARTING WITH ._
+0000E9                                     (1/86)126          MNOTE 'BRANCH TO ._OK IS OK'
+0000E9                                     (1/87)127 * TEST * AS SECOND OPERAND
+0000E9                                     (1/89)128          MNOTE 'BC=BC'
+0000E9                                     (1/90)129 * TEST SDT WITHIN STRING
+0000E9                                     (1/92)130          MNOTE 'SDT=C''X'''
+0000E9                                     (1/93)131 * TEST DUPLICATION OF STRING OPERATOR (...)'...'
+0000E9                                     (1/96)132          MNOTE 'LBL=XXXX'
+0000E9                                     (1/97)133 * TEST D' OPERATOR
+0000E9                                    (1/101)134          MNOTE 'X NOT DEFINED OK'
+0000E9                  00000001          (1/102)135 X        EQU   1
+0000E9                                    (1/105)136          MNOTE 'X DEFINED OK'
+0000E9                                    (1/106)137 * TEST T' FOR EQU WITH THIRD OPERAND
+0000E9                  00000080          (1/107)138 X2       EQU   X'80',X'80',C'b'
+0000E9                                    (1/109)139          MNOTE 'TX2=b'
+0000E9                                    (1/110)140          MACRO
+0000E9                                    (1/111)141          TESTTM
+0000E9                                    (1/112)142          MEND
+0000E9                                    (1/113)143 TM       TESTTM 
+0000E9                                    (1/115)145          MNOTE 'TTM=M'
+0000E9                  00000001          (1/116)146 X3       EQU    1,2,C'X'
+0000E9                  00000001          (1/117)147 Y3       EQU    X3
+0000E9                                    (1/119)148          MNOTE 'T'Y3=U'
+0000E9                                    (1/120)149 * TEST PREFIX OPERATOR FOLLOWED BY (..)
+0000E9 C1C2C3                             (1/122)150          DC    C'ABC'
+0000EC                                    (1/123)151 * TEST MACRO WITH MIXED CASE KEYWORD
+0000EC                                    (1/124)152          MACRO
+0000EC                                    (1/125)153          TESTMC &ARmode=X
+0000EC                                    (1/126)154          MNOTE 'TESTMC ARmode=&ARMODE'
+0000EC                                    (1/127)155          MEND
+0000EC                                    (1/128)156          TESTMC 
+0000EC                                    (1/126)157+         MNOTE 'TESTMC ARmode=X'
+0000EC                                    (1/129)159          TESTMC ARMODE=Y
+0000EC                                    (1/126)160+         MNOTE 'TESTMC ARmode=Y'
+0000EC                                    (1/130)162 * TEST PADDED SETC COMPARE WITH HIGH LOC CHARS
+0000EC                                    (1/133)163          MNOTE 'A LT A1 AND A1 GT A OK'
+0000EC                                    (1/137)164 * TEST N'&PARM(&VAR)
+0000EC                                    (1/138)165          MACRO
+0000EC                                    (1/139)166          TESTNPV &P1,&P2,&P3
+0000EC                                    (1/140)167 &NPV     SETA    N'&P2(&P3)
+0000EC                                    (1/141)168          AIF     (&P1 NE &NPV).NPVERR
+0000EC                                    (1/142)169          MNOTE   'NPV &P1 EQ &NPV OK'
+0000EC                                    (1/143)170          MEXIT
+0000EC                                    (1/144)171 .NPVERR  MNOTE   'NPV ERROR &P1 VS &NPV'
+0000EC                                    (1/145)172          MEND
+0000EC                                    (1/146)173          TESTNPV 1,A,1
+0000EC                                    (1/142)174+         MNOTE 'NPV 1 EQ 1 OK'
+0000EC                                    (1/147)176          TESTNPV 3,(A,(B,C,D)),2
+0000EC                                    (1/142)177+         MNOTE 'NPV 3 EQ 3 OK'
+0000EC                                    (1/148)179 * TEST MACRO LABEL PARAMETERS FOR RPI-633
+0000EC                                    (1/149)180          MACRO
+0000EC                                    (1/150)181 &N       TESTL
+0000EC                                    (1/151)182 &DN      SETC  (DOUBLE '&N')    RPI-938 RPI-1139
+0000EC                                    (1/152)183 &TN      SETC  T'&N
+0000EC                                    (1/153)184          MNOTE 'N=&DN TN=&TN'
+0000EC                                    (1/154)185          MEND
+0000EC                                    (1/155)186 A+B      TESTL 
+0000EC                                    (1/153)187+         MNOTE 'N=A+B TN=U'
+0000EC                                    (1/156)189 A        TESTL 
+0000EC                                    (1/153)190+         MNOTE 'N=A TN=M'
+0000EC                                    (1/157)192 1        TESTL 
+0000EC                                    (1/153)193+         MNOTE 'N=1 TN=N'
+0000EC                                    (1/158)195 1(2)     TESTL 
+0000EC                                    (1/153)196+         MNOTE 'N=1(2) TN=U'
+0000EC                                    (1/159)198 'A'      TESTL 
+0000EC                                    (1/153)199+         MNOTE 'N=''A'' TN=M'
+0000EC                                    (1/160)201 TESTPC1  TESTL 
+0000EC                                    (1/153)202+         MNOTE 'N=TESTPC1 TN=M'
+0000EC                                    (1/161)204 * TEST VAR NAME FIELD IN INLINE MACRO PROTOTYPE
+0000EC                                    (1/163)205       MACRO
+0000EC                                    (1/164)206 &N    &NAME &TEXT
+0000EC                                    (1/165)207 &DQTEXT SETC '&TEXT'(2,K'&TEXT-2)
+0000EC                                    (1/166)208 &N    MNOTE '&DQTEXT'
+0000EC                                    (1/167)209       MEND
+0000EC                                    (1/168)210 A     TESTN 'TEST NAME SUBSTITUTION'
+0000EC                                    (1/166)211+         MNOTE 'TEST NAME SUBSTITUTION'
+0000EC                                    (1/169)213       END 
+
+Symbol Table Listing
+
+ SYM=TESTMAC1 LOC=00000000 LEN=000000F0 ESD=0001 TYPE=CST  XREF=36 46 
+ SYM=WTO#0002_EOT LOC=000000AD LEN=00000001 ESD=0001 TYPE=REL  XREF=53 50 51 
+ SYM=X        LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=135 
+ SYM=X2       LOC=00000080 LEN=00000080 ESD=0000 TYPE=ABS  XREF=138 
+ SYM=X3       LOC=00000001 LEN=00000002 ESD=0000 TYPE=ABS  XREF=146 147 
+ SYM=Y3       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=147 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTMAC1  MZ390 ENDED RC= 0 IO=1004

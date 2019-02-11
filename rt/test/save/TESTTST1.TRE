@@ -1,0 +1,355 @@
+TESTTST1  EZ390 START
+test enter command or h for help
+test cmd: * this is a test input file for testtst1.mlc when executed via ez390
+test cmd: * with option test(sysut1) where sysut1 environment variable is set
+test cmd: * to point to this file.
+test cmd: *
+test cmd: * h - help command summary
+test cmd: h
+z390 test command help summary (Visit www.z390.org for more information)
+  addr=sdt    set memory value  (ie 1r?=x'80' changes mem at (r1) 31 bit
+  reg=sdt     set register value (ie 15r=8 changes reg 15 to 8)
+  A addr      add/remove address stop (ie A FF348. or A *+4 etc.)
+  B=addr      set base for rel addr (ie B=15r% sets base to (r15) 24 bit
+  D           display DCB file status, DDNAME, and DSNAME information
+  E           toggle EBCDIC/ASCII mode for dumping storage etc.
+  F nn        display specified floating point registers else all F0-FF
+  G nn/adr/op exec n instr. or to hex addr or until next break without trace
+  J addr      jump to new addr and trace instruction
+  L reg       list contents of register (ie l 1r dumps register 1
+  L addr len  list contents of memory area (ie l 10. 4 dumps cvt addr
+  M           display memory total allocated and free
+  P           display program information from CDE
+  R nn        display specified general purpose register else all R0-RF
+  S           clear all breaks
+  S reg??sdt  set break on register change
+  S addr??sdt set break on memory change
+  T nn/adr/op exec n instr. or to hex addr or until next break with trace
+  Z or Q      Z to zoom to normal end or Q to quit now
+* addr = [hex.|*|dec|nnr%(24)|nnr?(31)][+-addr]
+* reg  = nnr where nn = 0-15
+* sdt  = self defining term (b'01',c'ab',f'1',h'2',x'ff')
+* ??   = break compare operator (=,!=,<,<=,>,>=)
+test cmd: * next the memory area starting at 300. is set to expected values
+test cmd: * and then list memory is used to verify the area.  Also the
+test cmd: * program verifies that area when executed.  This also tests the
+test cmd: * different self defining terms supported.
+test cmd: 300.=F'255'
+ 00000300 *000000FF                           * *...?            *
+test cmd: l 300. 4
+ 00000300 *000000FF                           * *...?            *
+test cmd: 5r=12.
+R5=0000000000000012
+test cmd: l 5r% 4
+ 00000012 *20000000                           * *?...            *
+test cmd: 5r=FF000300.
+R5=FFFFFFFFFFFFFFFF
+test cmd: l 5r% 4
+test error invalid address
+test cmd: 4r=80000300.
+R4=FFFFFFFFFFFFFFFF
+test cmd: l 4r? 4
+test error invalid address
+test cmd: b=300.
+ 00000300 *000000FF 00000000 00000000 00000000* *...?............*
+test cmd: +4.=H'50'
+ 00000304 *0032                               * *..              *
+test cmd: l +4 2
+ 00000304 *0032                               * *..              *
+test cmd: +6.=B'1001'
+ 00000306 *09                                 * *?               *
+test cmd: l +6 1
+ 00000306 *09                                 * *?               *
+test cmd: b=308.
+ 00000308 *00000000 00000000 00000000 00000000* *................*
+test cmd: -1=C'HELLO'
+ 00000307 *C8C5D3D3 D6                        * *HELLO           *
+test cmd: l -1 5
+ 00000307 *C8C5D3D3 D6                        * *HELLO           *
+test cmd: +4=X'ABCDEF'
+ 0000030C *ABCDEF                             * *¿òÕ             *
+test cmd: l +4 3
+ 0000030C *ABCDEF                             * *¿òÕ             *
+test cmd: * next set and verify register 4 expected value
+test cmd: 4R=F'123'
+R4=000000000000007B
+test cmd: l 4r
+R4=000000000000007B
+test cmd: * list command with no operands lists all registers and current psw instruction
+test cmd: l
+ R0-R3 F4F4F4F4800FFDC0 F4F4F4F400002300 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4
+ R4-R7 000000000000007B FFFFFFFFFFFFFFFF F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4
+ R8-RB F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4
+ RC-RF F4F4F4F4F4F4F4F4 F4F4F4F400002100 F4F4F4F400002018 F4F4F4F4800FFDC0
+ 800FFDC0 0 90ECD00C     STM   RE=00002018 RC=F4F4F4F4 S2(0000210C)=00000000
+test cmd: * go exec 1 instruction without trace
+test cmd: g 1
+ 800FFDC4 0 45FF0068     BAL   RF=800FFDC0 S2(000FFE28)=50FD0008 ST   
+test cmd: * go exec 2 instruction with trace
+test cmd: t 2
+ 800FFDC4 0 45FF0068     BAL   RF=800FFDC0 S2(000FFE28)=50FD0008 ST   
+ 800FFE28 0 50FD0008     ST    RF=800FFDC8 S2(00002108)=00000000
+ 800FFE2C 0 50DF0004     ST    RD=00002100 S2(000FFDCC)=00000000
+test cmd: * go trace instructions until next lr instruction found
+test cmd: t lr
+ 800FFE2C 0 50DF0004     ST    RD=00002100 S2(000FFDCC)=00000000
+test break on t lr
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: * set reg 5 and then test setting break on register.  Since the break
+test cmd: * conditions are met, the break on message appears after each set
+test cmd: 5r=2 
+R5=0000000000000002
+test cmd: s 5r=2 
+R5=0000000000000002
+test break on s 5r=2 
+R5=0000000000000002
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: s 5r>1
+R5=0000000000000002
+test break on s 5r>1
+R5=0000000000000002
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: s 5r<3
+R5=0000000000000002
+test break on s 5r<3
+R5=0000000000000002
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: s 5r>=2 
+R5=0000000000000002
+test break on s 5r>=2 
+R5=0000000000000002
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: s 5r>=1 
+R5=0000000000000002
+test break on s 5r>=1 
+R5=0000000000000002
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: s 5r<=3
+R5=0000000000000002
+test break on s 5r<=3
+R5=0000000000000002
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: s 5r<=2
+R5=0000000000000002
+test break on s 5r<=2
+R5=0000000000000002
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: s 5r!=1
+R5=0000000000000002
+test break on s 5r!=1
+R5=0000000000000002
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: * change current psw
+test cmd: j *+2
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: j *-2
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test cmd: * list memory area at current psw
+test cmd: l * 32
+ 000FFE30 *18DFA715 000E0018 0000E3C5 E2E3E3E2* *.ÿx.......TESTTS*
+ 000FFE40 *E3F140D9 E3F140E2 E3C1D9E3 C5C40A23* *T1 RT1 STARTED??*
+test cmd: * go stops after 1 instruction due to register break being on
+test cmd: t
+ 800FFE30 0 18DF         LR    RD=00002100 RF=800FFDC8
+test break on s 5r!=1
+R5=0000000000000002
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: * turn off all breaks
+test cmd: s
+test breaks off
+test cmd: * set memory and then test setting breaks on memory.  Since the break
+test cmd: * conditions are met, the break on message appears after each set
+test cmd: 0.=x'b'
+ 00000000 *0B                                 * *.               *
+test cmd: s 0.=x'b'
+ 00000000 *0B                                 * *.               *
+test break on s 0.=x'b'
+ 00000000 *0B                                 * *.               *
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: s 0.!=x'a'
+ 00000000 *0B                                 * *.               *
+test break on s 0.!=x'a'
+ 00000000 *0B                                 * *.               *
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: s 0.>x'a'
+ 00000000 *0B                                 * *.               *
+test break on s 0.>x'a'
+ 00000000 *0B                                 * *.               *
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: s 0.<x'c'
+ 00000000 *0B                                 * *.               *
+test break on s 0.<x'c'
+ 00000000 *0B                                 * *.               *
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: s 0.<=x'c'
+ 00000000 *0B                                 * *.               *
+test break on s 0.<=x'c'
+ 00000000 *0B                                 * *.               *
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: s 0.<=x'b'
+ 00000000 *0B                                 * *.               *
+test break on s 0.<=x'b'
+ 00000000 *0B                                 * *.               *
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: s 0.>=x'a'
+ 00000000 *0B                                 * *.               *
+test break on s 0.>=x'a'
+ 00000000 *0B                                 * *.               *
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: s 0.>=x'b'
+ 00000000 *0B                                 * *.               *
+test break on s 0.>=x'b'
+ 00000000 *0B                                 * *.               *
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: * test c'...' sdt with embedded double quotes
+test cmd: 400.=c'a''b'
+ 00000400 *817D82                             * *a'b             *
+test cmd: s 400.=c'a''b'
+ 00000400 *817D82                             * *a'b             *
+test break on s 400.=c'a''b'
+ 00000400 *817D82                             * *a'b             *
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+test cmd: l 400. 40.
+ 00000400 *817D8200 00000000 00000000 00000000* *a'b.............*
+ 00000410 *00000000 00000000 00000000 00000000* *................*
+ ........
+ 00000430 *00000000 00000000 00000000 00000000* *................*
+test cmd: * reset reg and memory breaks
+test cmd: s
+test breaks off
+test cmd: * trace to CGXR instruction
+test cmd: t cgxr
+ 800FFE32 0 A715000E     BRAS  R1=00002300 S2(000FFE4E)=0A23 SVC  
+ 800FFE4E 0 0A23         SVC   I1=23 WTO R1=ADDR(AL2(LEN),AL2(FLAGS),C'MSG')
+TESTTST1 RT1 STARTED
+ 800FFE50 0 C0F400000088 BRUL  S2(000FFF60)=A715001E BRAS 
+ 800FFF60 0 A715001E     BRAS  R1=800FFE36 S2(000FFF9C)=0A23 SVC  
+ 800FFF9C 0 0A23         SVC   I1=23 WTO R1=ADDR(AL2(LEN),AL2(FLAGS),C'MSG')
+TESTTST1 VERIFY MEMORY AND REG CHANGES BY TEST CMDS
+ 800FFF9E 0 5830D1E8     L     R3=F4F4F4F4 S2(000FFFB0)=00000300
+ 800FFFA2 0 D50E3000D188 CLC   S1(00000300)=000000FF003209C8C5D3D3D6ABCDEF S2(000FFF50)=000000FF003209C8C5D3D3D6ABCDEF='...?..?HELLO¿òÕ'
+ 800FFFA8 0 4DB0D13E     BAS   RB=F4F4F4F4 S2(000FFF06)=4770D08E
+ 800FFF06 0 4770D08E     BNE   S2(000FFE56)=92E3D137 MVI  
+ 800FFF0A 0 FA20D10AD10D AP    S1(000FFED2)=00000C S2(000FFED5)=1C
+ 800FFF10 2 07FB         BR    RB(800FFFAC)=47F0B008 B    
+ 800FFFAC 2 47F0B008     B     S2(000FFFB4)=5540B014 CL   
+ 800FFFB4 2 5540B014     CL    R4=0000007B S2(000FFFC0)=0000007B
+ 800FFFB8 0 4DB0D13E     BAS   RB=800FFFAC S2(000FFF06)=4770D08E
+ 800FFF06 0 4770D08E     BNE   S2(000FFE56)=92E3D137 MVI  
+ 800FFF0A 0 FA20D10AD10D AP    S1(000FFED2)=00001C S2(000FFED5)=1C
+ 800FFF10 2 07FB         BR    RB(800FFFBC)=47F0B008 B    
+ 800FFFBC 2 47F0B008     B     S2(000FFFC4)=41C0B018 LA   
+ 800FFFC4 2 41C0B018     LA    RC=F4F4F4F4 S2(000FFFD4)
+ 800FFFC8 2 41F0B02C     LA    RF=00000000 S2(000FFFE8)
+ 800FFFCC 2 688F0000     LD    F8=F4F4F4F4F4F4F4F4 S2(000FFFE8)=4110000000000000
+ 800FFFD0 2 68AF0008     LD    FA=F4F4F4F4F4F4F4F4 S2(000FFFF0)=3300000000000000
+test break on t cgxr
+ 800FFFD4 2 B3CA0078     CGXR  R7=F4F4F4F4F4F4F4F4 M3=0 F8=4110000000000000
+test cmd: h
+z390 test command help summary (Visit www.z390.org for more information)
+  addr=sdt    set memory value  (ie 1r?=x'80' changes mem at (r1) 31 bit
+  reg=sdt     set register value (ie 15r=8 changes reg 15 to 8)
+  A addr      add/remove address stop (ie A FF348. or A *+4 etc.)
+  B=addr      set base for rel addr (ie B=15r% sets base to (r15) 24 bit
+  D           display DCB file status, DDNAME, and DSNAME information
+  E           toggle EBCDIC/ASCII mode for dumping storage etc.
+  F nn        display specified floating point registers else all F0-FF
+  G nn/adr/op exec n instr. or to hex addr or until next break without trace
+  J addr      jump to new addr and trace instruction
+  L reg       list contents of register (ie l 1r dumps register 1
+  L addr len  list contents of memory area (ie l 10. 4 dumps cvt addr
+  M           display memory total allocated and free
+  P           display program information from CDE
+  R nn        display specified general purpose register else all R0-RF
+  S           clear all breaks
+  S reg??sdt  set break on register change
+  S addr??sdt set break on memory change
+  T nn/adr/op exec n instr. or to hex addr or until next break with trace
+  Z or Q      Z to zoom to normal end or Q to quit now
+* addr = [hex.|*|dec|nnr%(24)|nnr?(31)][+-addr]
+* reg  = nnr where nn = 0-15
+* sdt  = self defining term (b'01',c'ab',f'1',h'2',x'ff')
+* ??   = break compare operator (=,!=,<,<=,>,>=)
+test cmd: *
+test cmd: * test 0c1 return to test
+test cmd: j 500.
+ 80000500 2 0000         ?????
+test cmd: t 1
+ 80000500 2 0000         ?????
+EZ390E error  11 ABEND PSW=07052600 80000500 0000         ????? ABEND S0C1
+ R0-R3 F4F4F4F4800FFDC0 F4F4F4F4800FFF64 F4F4F4F4F4F4F4F4 F4F4F4F400000300
+ R4-R7 000000000000007B 0000000000000002 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4
+ R8-RB F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4800FFFBC
+ RC-RF F4F4F4F4000FFFD4 F4F4F4F4800FFDC8 F4F4F4F400002018 F4F4F4F4000FFFE8
+test cmd: * test D, F, M, P, R information displays
+test cmd: D
+ TIOT NO DCB ENTRIES FOUND
+test cmd: F
+ F0-F3 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4
+ F4-F7 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4
+ F8-FB 4110000000000000 F4F4F4F4F4F4F4F4 3300000000000000 F4F4F4F4F4F4F4F4
+ FC-FF F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4
+test cmd: M
+ MEM TOTAL=1MB  ALLOC=616  FREE=1047960
+test cmd: P
+ CDE  PGM=TESTTST1.390 ENT=800FFDC0 LOC=800FFDC0 LEN=00000240 USE=01
+test cmd: R
+ R0-R3 F4F4F4F4800FFDC0 F4F4F4F4800FFF64 F4F4F4F4F4F4F4F4 F4F4F4F400000300
+ R4-R7 000000000000007B 0000000000000002 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4
+ R8-RB F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4800FFFBC
+ RC-RF F4F4F4F4000FFFD4 F4F4F4F4800FFDC8 F4F4F4F400002018 F4F4F4F4000FFFE8
+test cmd: * test multiple addr 
+test cmd: 300.+1+2=x'303'
+ 00000303 *0303                               * *..              *
+test cmd: +1+2=x'fff'
+ 0000030B *0FFF                               * *.?              *
+test cmd: *+1+2=x'ee'
+ 00000503 *EE                                 * *Ó               *
+test cmd: l 300.+1+2 2
+ 00000303 *0303                               * *..              *
+test cmd: l +1+2 2
+ 0000030B *0FFF                               * *.?              *
+test cmd: l *+1+2 1
+ 00000503 *EE                                 * *Ó               *
+test cmd: j 300.+1+2
+ 80000303 2 0303         ?????
+test cmd: t 1
+ 80000303 2 0303         ?????
+EZ390E error  11 ABEND PSW=07052600 80000303 0303         ????? ABEND S0C1
+ R0-R3 F4F4F4F4800FFDC0 F4F4F4F4800FFF64 F4F4F4F4F4F4F4F4 F4F4F4F400000300
+ R4-R7 000000000000007B 0000000000000002 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4
+ R8-RB F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4F4F4F4F4 F4F4F4F4800FFFBC
+ RC-RF F4F4F4F4000FFFD4 F4F4F4F4800FFDC8 F4F4F4F400002018 F4F4F4F4000FFFE8
+test cmd: * test indirect expressions
+test cmd: l 1r?
+ 000FFF64 *00370000 E3C5E2E3 E3E2E3F1 40E5C5D9* *....TESTTST1 VER*
+ 000FFF74 *C9C6E840 D4C5D4D6 D9E840C1 D5C440D9* *IFY MEMORY AND R*
+test cmd: l 1r%
+ 000FFF64 *00370000 E3C5E2E3 E3E2E3F1 40E5C5D9* *....TESTTST1 VER*
+ 000FFF74 *C9C6E840 D4C5D4D6 D9E840C1 D5C440D9* *IFY MEMORY AND R*
+test cmd: l 22fc.+4?
+ 00002304 *00000000 00000000 00000000 00000000* *................*
+ 00002314 *00000000 00000000 00000000 00000000* *................*
+test cmd: l 22fc.+4%
+ 00002304 *00000000 00000000 00000000 00000000* *................*
+ 00002314 *00000000 00000000 00000000 00000000* *................*
+test cmd: * return to cgxr instr in r12 and trace to wto svc
+test cmd: j 12r%
+ 800FFFD4 2 B3CA0078     CGXR  R7=F4F4F4F4F4F4F4F4 M3=0 F8=4110000000000000
+test cmd: t svc
+ 800FFFD4 2 B3CA0078     CGXR  R7=F4F4F4F4F4F4F4F4 M3=0 F8=4110000000000000
+ 800FFFD8 2 5570B03C     CL    R7=00000001 S2(000FFFF8)=00000001
+ 800FFFDC 0 4DB0D13E     BAS   RB=800FFFBC S2(000FFF06)=4770D08E
+ 800FFF06 0 4770D08E     BNE   S2(000FFE56)=92E3D137 MVI  
+ 800FFF0A 0 FA20D10AD10D AP    S1(000FFED2)=00002C S2(000FFED5)=1C
+ 800FFF10 2 07FB         BR    RB(800FFFE0)=47F0B01C B    
+ 800FFFE0 2 47F0B01C     B     S2(000FFFFC)=47F0D0B8 B    
+ 800FFFFC 2 47F0D0B8     B     S2(000FFE80)=D205D131D138 MVC  
+ 800FFE80 2 D205D131D138 MVC   S1(000FFEF9)=40E9E9E9E9E9 S2(000FFF00)=402020202020=' ?????'
+ 800FFE86 2 DE05D131D10A ED    S1(000FFEF9)=402020202020 S2(000FFED2)=00003C1C0029='.....?'
+ 800FFE8C 2 4110D10E     LA    R1=800FFF64 S2(000FFED6)
+test break on t svc
+ 800FFE90 2 0A23         SVC   I1=23 WTO R1=ADDR(AL2(LEN),AL2(FLAGS),C'MSG')
+test cmd: * zoom to end of normal execution
+test cmd: z
+TESTTST1  EZ390 ENDED RC= 0 IO=272 INS=51

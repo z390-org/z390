@@ -1,0 +1,72 @@
+TESTSPE1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSPE1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  stats systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000008 TYPE=CST NAME=TESTSPE1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2008 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2008-08-13 DSH         Initial version                            *
+000000                                      (1/13)13 * 2008-09-17 DSH RPI-911 Change ASELECT to ACASE and APM to ACALL   *
+000000                                      (1/14)14 * 2008-09-23 DSH RPI-911 New regression test for SPM's              *
+000000                                      (1/15)15 *********************************************************************
+000000                                      (1/17)16          TITLE 'TESTSPE1 - TEST STRUCTURED PROGRAMMING EXTENSIONS'
+000000                                      (1/19)17 * TEST ZSTRMAC SPE'S FOR CONDITIONAL MACRO CODE VIA MZ390 OR TRANSLATOR
+000000                                      (1/23)18          MNOTE 'AIF TRUE I=1'
+000000                                      (1/34)19          MNOTE 'AELSEIF TRUE I=2'
+000000                                      (1/60)20          MNOTE 'AUNTIL 1-5 I=1'
+000000                                      (1/60)21          MNOTE 'AUNTIL 1-5 I=2'
+000000                                      (1/60)22          MNOTE 'AUNTIL 1-5 I=3'
+000000                                      (1/63)23          MNOTE 'EXITING AUNTIL IF I=3'
+000000                                      (1/76)24          MNOTE 'AWHILE 1-5 I=1'
+000000                                      (1/76)25          MNOTE 'AWHILE 1-5 I=2'
+000000                                      (1/76)26          MNOTE 'AWHILE 1-5 I=3'
+000000                                      (1/76)27          MNOTE 'AWHILE 1-5 I=4'
+000000                                      (1/76)28          MNOTE 'AWHILE 1-5 I=5'
+000000                                     (1/156)29          MNOTE 'COUNT=1'
+000000                                     (1/156)30          MNOTE 'COUNT=2'
+000000                                     (1/140)31          MNOTE 'AELSE I=0'
+000000                                      (1/97)32          MNOTE 'AWHEN I=1'
+000000                                     (1/101)33          MNOTE 'AWHEN I=2'
+000000                                     (1/122)34          MNOTE 'AELSE J=0'
+000000                                     (1/110)35          MNOTE 'AWHEN J=1'
+000000                                     (1/114)36          MNOTE 'AWHEN J=2'
+000000                                     (1/118)37          MNOTE 'AWHEN J=3'
+000000                                     (1/122)38          MNOTE 'AELSE J=4'
+000000                                     (1/136)39          MNOTE 'AWHEN I=3'
+000000                                     (1/140)40          MNOTE 'AELSE I=4'
+000000                                     (1/151)41 * PERFORMED ROUTINES
+000000                                     (1/160)42 * ASM PGM
+000000                                     (1/161)43 TESTSPE1 CSECT 
+000000 1BFF                                (1/162)44          SR    15,15
+000002 07FE                                (1/163)45          BR    14
+000004                                     (1/164)46          END 
+
+Symbol Table Listing
+
+ SYM=TESTSPE1 LOC=00000000 LEN=00000008 ESD=0001 TYPE=CST  XREF=43 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSPE1  MZ390 ENDED RC= 0 IO=325

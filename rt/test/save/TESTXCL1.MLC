@@ -1,0 +1,39 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2005-11-16 DSH RPI-95  Test XCTL                                  *
+* 2007-04-26 DSH RPI-598 Add additional CDE SNAPs to verify OK and  *
+*                        REPEAT                                     *
+*********************************************************************
+
+         TITLE 'TESTXCL1 TEST LINK TO TESTXCL2, XCTL TO TESTXCL3'
+
+TESTXCL1 SUBENTRY
+         WTO   'TESTXCL1 STARTING'
+         SNAP  ID=11,PDATA=CDE,TEXT='TESTXCL1 VERIFY TESTXCL1 CDE'
+         WTO   'TESTXCL1 NOW LINKING TO TESTXCL2'
+         LINK  EP=TESTXCL2
+         WTO   'TESTXCL1 NOW BACK FROM TESTXCL4'
+         SNAP  ID=12,PDATA=CDE,TEXT='TESTXCL1 VERIFY TESTXCL1+3 CDES'
+         WTO   'TESTXCL1 REPEAT TEST'
+         SNAP  ID=13,PDATA=CDE,TEXT='TESTXCL1 VERIFY TESTXCL1 CDE'
+         WTO   'TESTXCL1 NOW LINKING TO TESTXCL2'
+         LINK  EP=TESTXCL2
+         WTO   'TESTXCL1 NOW BACK FROM TESTXCL4'
+         SNAP  ID=14,PDATA=CDE,TEXT='TESTXCL1 VERIFY TESTXCL1+3 CDES'
+         WTO   'TESTXCL1 NOW XCTL TO TESTXCL4'
+         BALR  12,0         ESTABLISH TEMP BASE FOR XCTL USE
+         USING *,12
+         L     13,4(13)            RESTORE TESTXCL1 SAVE AREA POINTER
+         XCTL  (2,12),EP=TESTXCL4  RESTORE REGS,DEL XCL1, TRANS XCL4
+*        SUBEXIT
+         END

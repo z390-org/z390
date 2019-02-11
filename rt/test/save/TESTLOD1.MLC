@@ -1,0 +1,109 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2005-11-16 DSH RPI-I89 Add test of link and load DSNAME and       *
+*                        DDNAME options                             *
+* 2006-09-11 DSH RPI-363 Change from test to rt\test directory      *
+* 2007-02-07 DSH RPI-532 Correct path case for Linux                *
+* 2008-10-24 DSH RPI-921 Test ERRET= EXIT option and load ZSTRMAC   *
+*                        update                                     *
+*********************************************************************
+
+         TITLE 'TESTLOD1 TEST LOAD DDNAME AND DSNAME OPTIONS'
+
+TESTLOD1 RT1  MAIN
+         EQUREGS
+DSNFSUB1 DC   C'rt\test\TESTSUB1.390',X'00'    NULL TERM DSNAME FILE
+DSNDSUB1 DC   C'rt\test',X'00'                 NULL TERM DSNAME DIR
+DSNFDEMO DC   C'"demo\DEMO.390"'            ".." FILE
+DSNDDEMO DC   C'"demo"'                     ".." DIR
+DSNMDEMO DC   C'"rt\test;demo"'             ".." MULT DIR LIST
+PGMNAME  DC   CL8'TESTSUB1'
+ABORT    WTO  'TESTLOD1 ABORTING DUE TO ERROR'
+         ABEND 111,DUMP
+         RT1  START
+         LOAD EP=TESTSUB1
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R15,R0
+         BALR R14,R15
+         DELETE EP=TESTSUB1
+         LTR  R15,R15
+         BNZ  ABORT
+         MVC  PGMNAME,=CL8'TESTSUB1'
+         LOAD EPLOC=PGMNAME
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R15,R0
+         BALR R14,R15
+         DELETE EP=TESTSUB1
+         LTR  R15,R15
+         BNZ  ABORT
+         LOAD EP=TESTSUBX,DSNAME=DSNFSUB1  FILE NAME OVERRIDES EP
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R15,R0
+         BALR R14,R15
+         DELETE EP=TESTSUB1
+         LTR  R15,R15
+         BNZ  ABORT
+         LOAD EP=TESTSUB1,DSNAME=DSNDSUB1  DIR
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R15,R0
+         BALR R14,R15
+         DELETE EP=TESTSUB1
+         LTR  R15,R15
+         BNZ  ABORT
+         LOAD EP=XXXX,DSNAME=DSNFDEMO      FILE NAME OVERRIDES EP
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R15,R0
+         BALR R14,R15
+         DELETE EP=DEMO
+         LTR  R15,R15
+         BNZ  ABORT
+         LOAD EP=DEMO,DSNAME=DSNDDEMO      DIR
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R15,R0
+         BALR R14,R15
+         DELETE EP=DEMO
+         LTR  R15,R15
+         BNZ  ABORT
+         LOAD EP=DEMO,DSNAME=DSNMDEMO      MULT DIR LIST (DEMO IN 2ND)
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R15,R0
+         BALR R14,R15
+         DELETE EP=DEMO
+         LTR  R15,R15
+         BNZ  ABORT
+         LOAD EP=XXXX,DDNAME=DDTODEMO
+         LTR  R15,R15
+         BNZ  ABORT
+         LR   R15,R0
+         BALR R14,R15
+         DELETE EP=DEMO
+         LTR  R15,R15
+         BNZ  ABORT
+* RPI 921 TEST ERRET EXIT
+         LOAD  EP=JUNK1,ERRET=FAIL1
+         B     ABORT
+FAIL1    DS    0H
+         LA    3,FAIL2
+         LOAD  EP=JUNK2,ERRET=(3)
+         B     ABORT
+FAIL2    DS    0H
+         WTO  'TESTLOD1 ERRET TESTS OK'
+         RT1  END
+         END

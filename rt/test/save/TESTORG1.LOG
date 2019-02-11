@@ -1,0 +1,11 @@
+TESTORG1  EZ390 START
+EZ390I Copyright 2011 Automated Software Tools Corporation
+EZ390I Copyright 2013 Cat Herder Software, LLC
+EZ390I Copyright 2018 Joachim Bartz, Germany
+EZ390I z390 is licensed under GNU General Public License
+EZ390I program = rt\test\TESTORG1.390
+EZ390I options = @rt\Options.opt=(bal notiming stats) trace 
+  systerm(rt\test\RTTEST)
+SNAP DUMP ID=1
+EZ390I total errors         = 0
+TESTORG1  EZ390 ENDED RC= 0 IO=165 INS=18

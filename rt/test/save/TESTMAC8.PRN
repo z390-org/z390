@@ -1,0 +1,143 @@
+TESTMAC8  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTMAC8
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  sysmac(rt\test+mac) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000000D8 TYPE=CST NAME=TESTMAC8
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH         Initial version                           *
+000000                                      (1/13)13 * 2006-03-28  DSH RPI-266 Create TESTMAC8.MLC and TESTMAC8.MAC test *
+000000                                      (1/14)14 *                         inlines                                   *
+000000                                      (1/15)15 * 2006-04-09  DSH RPI-274 Test .EXIT on nested MENDS/END            *
+000000                                      (1/16)16 *********************************************************************
+000000                                      (1/18)17 TESTMAC8 SUBENTRY 
+000000                                      (2/78)18+TESTMAC8 CSECT 
+000000 90ECD00C                            (2/168)19+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)20+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)21+         DC    18F'0'
+000050 E3C5E2E3D4C1C3F8                    (2/171)22+         DC    CL8'TESTMAC8'
+000058 F0F161F0F261F0F5                    (2/172)23+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)24+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)25+         ST    15,8(13)
+00006C 50DF0004                            (2/175)26+         ST    13,4(15)
+000070 18DF                                (2/176)27+         LR    13,15
+000072                                     (2/189)28+         USING TESTMAC8+8,13
+LISTUSE TESTMAC8 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/19)30          WTO   'TESTMAC8 - TEST INLINE MACROS WITHIN MACROS'
+000072 A715001A                0000A6       (3/49)32+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 002F0000E3C5E2E3                     (3/50)33+         DC    AL2(WTO#0002_EOT-*,0),C'TESTMAC8 - TEST INLINE MACROS WITHIN MACROS'
+0000A5                  000000A5            (3/51)35+WTO#0002_EOT     EQU *
+0000A6 0A23                                 (3/52)36+         SVC   35
+0000A8                                      (1/20)38          MACRO
+0000A8                                      (1/21)39 &L       ILM1  &P,&K=
+0000A8                                      (1/22)40 .LOOP    ANOP
+0000A8                                      (1/23)41 &A       SETA  &A+1
+0000A8                                      (1/24)42          AIF   (&A LT 3).LOOP
+0000A8                                      (1/25)43          MNOTE 'ILM1 L=&L P=&P K=&K A=&A'
+0000A8                                      (1/26)44          MACRO
+0000A8                                      (1/27)45 &L       ILM2  &P,&K=
+0000A8                                      (1/28)46 .LOOP    ANOP
+0000A8                                      (1/29)47 &A       SETA  &A+1
+0000A8                                      (1/30)48          AIF   (&A LT 3).LOOP
+0000A8                                      (1/31)49          MNOTE 'ILM2 L=&L P=&P K=&K A=&A'
+0000A8                                      (1/32)50          MNOTE 'TEST .EXIT FOR ILM2'
+0000A8                                      (1/33)51          AGO   .EXIT
+0000A8                                      (1/34)52 .EXIT    MEND
+0000A8                                      (1/35)53 L2       ILM2  P2,K=K2
+0000A8                                      (1/36)54          MNOTE 'TEST .EXIT FOR ILM1'
+0000A8                                      (1/37)55          AGO   .EXIT
+0000A8                                      (1/38)56 .EXIT    MEND
+0000A8                                      (1/39)57 L1       ILM1  P1,K=K1
+0000A8                                      (1/25)58+         MNOTE 'ILM1 L=L1 P=P1 K=K1 A=3'
+0000A8                                      (1/26)59+         MACRO
+0000A8                                      (1/27)60+&L       ILM2  &P,&K=
+0000A8                                      (1/28)61+.LOOP    ANOP
+0000A8                                      (1/29)62+&A       SETA  &A+1
+0000A8                                      (1/30)63+         AIF   (&A LT 3).LOOP
+0000A8                                      (1/31)64+         MNOTE 'ILM2 L=&L P=&P K=&K A=&A'
+0000A8                                      (1/32)65+         MNOTE 'TEST .EXIT FOR ILM2'
+0000A8                                      (1/33)66+         AGO   .EXIT
+0000A8                                      (1/34)67+.EXIT    MEND
+0000A8                                      (1/31)69+         MNOTE 'ILM2 L=L2 P=P2 K=K2 A=3'
+0000A8                                      (1/32)70+         MNOTE 'TEST .EXIT FOR ILM2'
+0000A8                                      (1/36)72+         MNOTE 'TEST .EXIT FOR ILM1'
+0000A8                                      (1/40)74 L3       TESTMAC8 P3,K=K3 TEST EXTERNAL MACRO WITH INLINE MACROS
+0000A8                                      (4/23)76+         MNOTE 'TESTMAC8 L=L3 P=P3 K=K3 A=3'
+0000A8                                      (4/24)77+         MACRO
+0000A8                                      (4/25)78+&L       ILM4  &P,&K=
+0000A8                                      (4/26)79+.LOOP    ANOP
+0000A8                                      (4/27)80+&A       SETA  &A+1
+0000A8                                      (4/28)81+         AIF   (&A LT 3).LOOP
+0000A8                                      (4/29)82+         MNOTE 'ILM4 L=&L P=&P K=&K A=&A'
+0000A8                                      (4/30)83+         MACRO
+0000A8                                      (4/31)84+&L       ILM5  &P,&K=
+0000A8                                      (4/32)85+.LOOP    ANOP
+0000A8                                      (4/33)86+&A       SETA  &A+1
+0000A8                                      (4/34)87+         AIF   (&A LT 3).LOOP
+0000A8                                      (4/35)88+         MNOTE 'ILM5 L=&L P=&P K=&K A=&A'
+0000A8                                      (4/36)89+         MNOTE 'TEST .EXIT FOR TESTMAC8 ILM5'
+0000A8                                      (4/37)90+         AGO   .EXIT
+0000A8                                      (4/38)91+.EXIT    MEND
+0000A8                                      (4/39)92+L5       ILM5  P5,K=K5
+0000A8                                      (4/40)93+         MNOTE 'TEST .EXIT FOR TESTMAC8 ILM4'
+0000A8                                      (4/41)94+         AGO   .EXIT
+0000A8                                      (4/42)95+.EXIT    MEND
+0000A8                                      (4/29)97+         MNOTE 'ILM4 L=L4 P=P4 K=K4 A=3'
+0000A8                                      (4/30)98+         MACRO
+0000A8                                      (4/31)99+&L       ILM5  &P,&K=
+0000A8                                     (4/32)100+.LOOP    ANOP
+0000A8                                     (4/33)101+&A       SETA  &A+1
+0000A8                                     (4/34)102+         AIF   (&A LT 3).LOOP
+0000A8                                     (4/35)103+         MNOTE 'ILM5 L=&L P=&P K=&K A=&A'
+0000A8                                     (4/36)104+         MNOTE 'TEST .EXIT FOR TESTMAC8 ILM5'
+0000A8                                     (4/37)105+         AGO   .EXIT
+0000A8                                     (4/38)106+.EXIT    MEND
+0000A8                                     (4/35)108+         MNOTE 'ILM5 L=L5 P=P5 K=K5 A=3'
+0000A8                                     (4/36)109+         MNOTE 'TEST .EXIT FOR TESTMAC8 ILM5'
+0000A8                                     (4/40)111+         MNOTE 'TEST .EXIT FOR TESTMAC8 ILM4'
+0000A8                                     (4/44)113+         MNOTE 'TEST .EXIT FOR TESTMAC8 MACRO'
+0000A8                                     (1/41)115          WTO   'TESTMAC8 ENDED OK'
+0000A8 A715000D                0000C2      (3/49)116+         BRAS  1,*+(WTO#0008_EOT-*+1)/2*2
+0000AC 00150000E3C5E2E3                    (3/50)117+         DC    AL2(WTO#0008_EOT-*,0),C'TESTMAC8 ENDED OK'
+0000C1                  000000C1           (3/51)118+WTO#0008_EOT     EQU *
+0000C2 0A23                                (3/52)119+         SVC   35
+0000C4                                     (1/42)121          SUBEXIT 
+0000C4 41F00000                            (5/33)122+         LA    15,0
+0000C8 58D0D004                            (5/50)123+         L     13,4(,13)
+0000CC 58E0D00C                            (5/51)124+         L     14,12(,13)
+0000D0 982CD01C                            (5/52)125+         LM    2,12,28(13)
+0000D4 07FE                                (5/53)126+         BR    14
+0000D6                                     (1/43)128          MNOTE 'TEST .EXIT FOR MLC ON END'
+0000D6                                     (1/44)129          END 
+
+Symbol Table Listing
+
+ SYM=TESTMAC8 LOC=00000000 LEN=000000D8 ESD=0001 TYPE=CST  XREF=18 28 
+ SYM=WTO#0002_EOT LOC=000000A5 LEN=00000001 ESD=0001 TYPE=REL  XREF=35 32 33 
+ SYM=WTO#0008_EOT LOC=000000C1 LEN=00000001 ESD=0001 TYPE=REL  XREF=118 116 117 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTMAC8  MZ390 ENDED RC= 0 IO=744

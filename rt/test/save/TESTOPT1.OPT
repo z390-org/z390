@@ -1,0 +1,5 @@
+* TESTOPT1.MLC options file invoked via rt\test\TESTOPT1 @TESTOPT1
+*
+@TESTOPTA NOTIMING  * Include options from TESTOPTA.OPT file and set NOTIMING.
+TRACE @TESTOPTB     * Turn on TRACE and INCLUDE TESTOPTB.OPT file options.
+@TESTOPTC           * Test all options SET/RESET options.

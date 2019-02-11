@@ -1,0 +1,374 @@
+TESTLOD1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTLOD1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000003A8 TYPE=CST NAME=TESTLOD1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30 DSH         Initial version                            *
+000000                                      (1/13)13 * 2005-11-16 DSH RPI-I89 Add test of link and load DSNAME and       *
+000000                                      (1/14)14 *                        DDNAME options                             *
+000000                                      (1/15)15 * 2006-09-11 DSH RPI-363 Change from test to rt\test directory      *
+000000                                      (1/16)16 * 2007-02-07 DSH RPI-532 Correct path case for Linux                *
+000000                                      (1/17)17 * 2008-10-24 DSH RPI-921 Test ERRET= EXIT option and load ZSTRMAC   *
+000000                                      (1/18)18 *                        update                                     *
+000000                                      (1/19)19 *********************************************************************
+000000                                      (1/21)20          TITLE 'TESTLOD1 TEST LOAD DDNAME AND DSNAME OPTIONS'
+000000                                      (1/23)21 TESTLOD1 RT1  MAIN
+000000                                      (3/78)23+TESTLOD1 CSECT 
+000000 90ECD00C                            (3/168)24+         STM   14,12,12(13)
+000004 45FF0068                            (3/169)25+         BAL   15,104(15)
+000008 0000000000000000                    (3/170)26+         DC    18F'0'
+000050 E3C5E2E3D3D6C4F1                    (3/171)27+         DC    CL8'TESTLOD1'
+000058 F0F161F0F261F0F5                    (3/172)28+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (3/173)29+         DC    CL8'22.33'
+000068 50FD0008                            (3/174)30+         ST    15,8(13)
+00006C 50DF0004                            (3/175)31+         ST    13,4(15)
+000070 18DF                                (3/176)32+         LR    13,15
+000072                                     (3/189)33+         USING TESTLOD1+8,13
+LISTUSE TESTLOD1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072 A715000E                00008E       (4/49)36+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+000076 00180000E3C5E2E3                     (4/50)37+         DC    AL2(WTO#0003_EOT-*,0),C'TESTLOD1 RT1 STARTED'
+00008E                  0000008E            (4/51)38+WTO#0003_EOT     EQU *
+00008E 0A23                                 (4/52)39+         SVC   35
+000090 C0F4000000BC            000208       (2/66)41+         BRCL    15,RT1_START
+000096                                      (2/67)42+RT1_ABORT DS 0H
+000096 92E3D137                00013F       (2/68)43+         MVI   RT1_ABORTED,C'T'
+00009A A7150012                0000BE       (4/49)45+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+00009E 00200000E3C5E2E3                     (4/50)46+         DC    AL2(WTO#0004_EOT-*,0),C'TESTLOD1 RT1 TESTING ABORTED'
+0000BE                  000000BE            (4/51)47+WTO#0004_EOT     EQU *
+0000BE 0A23                                 (4/52)48+         SVC   35
+0000C0                                      (2/70)50+RT1_END  DS    0H
+0000C0 D205D131D138     000139 000140       (2/71)51+         MVC   RT1_DTOT,=X'402020202020'
+0000C6 DE05D131D10A     000139 000112       (2/72)52+         ED    RT1_DTOT,RT1_TOT
+0000CC 4110D10E                000116       (4/61)54+         LA    1,RT1_WTO1
+0000D0 0A23                                 (4/66)55+         SVC   35
+0000D2 95E3D137                00013F       (2/74)57+         CLI   RT1_ABORTED,C'T'
+0000D6 4780D104                00010C       (2/75)58+         BE    RT1_DUMP
+0000DA A715000F                0000F8       (4/49)60+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000DE 00190000E3C5E2E3                     (4/50)61+         DC    AL2(WTO#0006_EOT-*,0),C'TESTLOD1 RT1 ENDED OK'
+0000F7                  000000F7            (4/51)62+WTO#0006_EOT     EQU *
+0000F8 0A23                                 (4/52)63+         SVC   35
+0000FA 41F00000                             (5/33)66+         LA    15,0
+0000FE 58D0D004                             (5/50)67+         L     13,4(,13)
+000102 58E0D00C                             (5/51)68+         L     14,12(,13)
+000106 982CD01C                             (5/52)69+         LM    2,12,28(13)
+00010A 07FE                                 (5/53)70+         BR    14
+00010C                                      (2/78)72+RT1_DUMP DS    0H
+00010C 41100065                             (6/39)74+         LA   1,101
+000110 0A0D                                 (6/47)75+         SVC  13 ABEND R1=COMP CODE AND HIGH BIT = DUMP PGM STORAGE
+000112                  0000000B            (2/80)77+RT1_LINK EQU   11
+000112                  00000112            (2/81)78+RT1_DATA EQU   *
+000112 00000C                               (2/82)79+RT1_TOT  DC    PL3'0' TOTAL RT1 TESTS COMPLETED
+000115 1C                                   (2/83)80+RT1_ONE  DC    P'1'
+000116 00290000E3C5E2E3                     (2/84)81+RT1_WTO1 DC    AL2(RT1_WTO_END-*,0),C'TESTLOD1 RT1 TESTS COMPLETED = '
+000139 40E9E9E9E9E9                         (2/85)82+RT1_DTOT DC    CL6' ZZZZZ'
+00013F                  0000013F            (2/86)83+RT1_WTO_END EQU *
+00013F C6                                   (2/87)84+RT1_ABORTED DC C'F'
+000140                                      (2/88)85+         LTORG 
+000140 402020202020     =X'402020202020'
+000146                                      (2/89)86+RT1_TEST_CC0  DS    0H
+000146 4770D08E                000096       (2/90)87+         BNE   RT1_ABORT
+00014A                                      (2/91)88+RT1_OK   DS    0H
+00014A FA20D10AD10D     000112 000115       (2/92)89+         AP    RT1_TOT,RT1_ONE
+000150 07FB                                 (2/93)90+         BR    RT1_LINK
+000152                                      (2/94)91+RT1_TEST_CC1  DS    0H
+000152 47B0D08E                000096       (2/95)92+         BNL   RT1_ABORT
+000156 FA20D10AD10D     000112 000115       (2/96)93+         AP    RT1_TOT,RT1_ONE
+00015C 07FB                                 (2/97)94+         BR    RT1_LINK
+00015E                                      (2/98)95+RT1_TEST_CC2  DS    0H
+00015E 47D0D08E                000096       (2/99)96+         BNH   RT1_ABORT
+000162 FA20D10AD10D     000112 000115      (2/100)97+         AP    RT1_TOT,RT1_ONE
+000168 07FB                                (2/101)98+         BR    RT1_LINK
+00016A                                     (2/102)99+RT1_TEST_CC3  DS    0H
+00016A 47E0D08E                000096     (2/103)100+         BNO   RT1_ABORT
+00016E FA20D10AD10D     000112 000115     (2/104)101+         AP    RT1_TOT,RT1_ONE
+000174 07FB                               (2/105)102+         BR    RT1_LINK
+000176                                    (2/106)103+RT1_TEST_CCGE  DS    0H
+000176 4740D08E                000096     (2/107)104+         BL    RT1_ABORT
+00017A FA20D10AD10D     000112 000115     (2/108)105+         AP    RT1_TOT,RT1_ONE
+000180 07FB                               (2/109)106+         BR    RT1_LINK
+000182                                    (2/110)107+RT1_TEST_CCLE  DS    0H
+000182 4720D08E                000096     (2/111)108+         BH    RT1_ABORT
+000186 FA20D10AD10D     000112 000115     (2/112)109+         AP    RT1_TOT,RT1_ONE
+00018C 07FB                               (2/113)110+         BR    RT1_LINK
+00018E                                     (1/24)112          EQUREGS 
+00018E                  00000000           (7/41)113+R0     EQU 0
+00018E                  00000001           (7/41)114+R1     EQU 1
+00018E                  00000002           (7/41)115+R2     EQU 2
+00018E                  00000003           (7/41)116+R3     EQU 3
+00018E                  00000004           (7/41)117+R4     EQU 4
+00018E                  00000005           (7/41)118+R5     EQU 5
+00018E                  00000006           (7/41)119+R6     EQU 6
+00018E                  00000007           (7/41)120+R7     EQU 7
+00018E                  00000008           (7/41)121+R8     EQU 8
+00018E                  00000009           (7/41)122+R9     EQU 9
+00018E                  0000000A           (7/41)123+R10    EQU 10
+00018E                  0000000B           (7/41)124+R11    EQU 11
+00018E                  0000000C           (7/41)125+R12    EQU 12
+00018E                  0000000D           (7/41)126+R13    EQU 13
+00018E                  0000000E           (7/41)127+R14    EQU 14
+00018E                  0000000F           (7/41)128+R15    EQU 15
+00018E 99A3E0A385A2A3E0                    (1/25)130 DSNFSUB1 DC   C'rt\test\TESTSUB1.390',X'00'    NULL TERM DSNAME FILE
+0001A3 99A3E0A385A2A300                    (1/26)131 DSNDSUB1 DC   C'rt\test',X'00'                 NULL TERM DSNAME DIR
+0001AB 7F84859496E0C4C5                    (1/27)132 DSNFDEMO DC   C'"demo\DEMO.390"'            ".." FILE
+0001BA 7F848594967F                        (1/28)133 DSNDDEMO DC   C'"demo"'                     ".." DIR
+0001C0 7F99A3E0A385A2A3                    (1/29)134 DSNMDEMO DC   C'"rt\test;demo"'             ".." MULT DIR LIST
+0001CE E3C5E2E3E2E4C2F1                    (1/30)135 PGMNAME  DC   CL8'TESTSUB1'
+0001D6                                     (1/31)136 ABORT    WTO  'TESTLOD1 ABORTING DUE TO ERROR'
+0001D6                                     (4/35)137+ABORT    DS    0H
+0001D6 A7150013                0001FC      (4/49)138+         BRAS  1,*+(WTO#0010_EOT-*+1)/2*2
+0001DA 00220000E3C5E2E3                    (4/50)139+         DC    AL2(WTO#0010_EOT-*,0),C'TESTLOD1 ABORTING DUE TO ERROR'
+0001FC                  000001FC           (4/51)140+WTO#0010_EOT     EQU *
+0001FC 0A23                                (4/52)141+         SVC   35
+0001FE                                     (1/32)143          ABEND 111,DUMP
+0001FE 4110006F                            (6/39)144+         LA   1,111
+000202 A51A8000                            (6/45)145+         OILH 1,X'8000'
+000206 0A0D                                (6/47)146+         SVC  13 ABEND R1=COMP CODE AND HIGH BIT = DUMP PGM STORAGE
+000208                                     (1/33)148          RT1  START
+000208                                    (2/116)149+RT1_START DS  0H
+000208                                     (1/34)151          LOAD EP=TESTSUB1
+000208 4100D368                000370      (8/74)152+         LA    0,=CL8'TESTSUB1'
+00020C 1BFF                                (8/95)153+         SR    15,15 USE DEFAULT SYS390 SEARCH
+00020E 0A08                               (8/125)154+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+000210 12FF                                (1/35)156          LTR  R15,R15
+000212 4770D1CE                0001D6      (1/36)157          BNZ  ABORT
+000216 18F0                                (1/37)158          LR   R15,R0
+000218 05EF                                (1/38)159          BALR R14,R15
+00021A                                     (1/39)160          DELETE EP=TESTSUB1
+00021A 4100D368                000370     (10/51)163+         LA    0,=CL8'TESTSUB1'
+00021E 1BFF                               (10/97)164+         SR    15,15 USE DEFAULT SYS390 SEARCH
+000220 0A09                               (10/99)165+         SVC   9 DELETE R0=A(NAME) R15=DSNAME/DDNAME ADDR OR 0
+000222 12FF                                (1/40)168          LTR  R15,R15
+000224 4770D1CE                0001D6      (1/41)169          BNZ  ABORT
+000228 D207D1C6D368     0001CE 000370      (1/42)170          MVC  PGMNAME,=CL8'TESTSUB1'
+00022E                                     (1/43)171          LOAD EPLOC=PGMNAME
+00022E 4100D1C6                0001CE      (8/83)172+         LA    0,PGMNAME
+000232 1BFF                                (8/95)173+         SR    15,15 USE DEFAULT SYS390 SEARCH
+000234 0A08                               (8/125)174+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+000236 12FF                                (1/44)176          LTR  R15,R15
+000238 4770D1CE                0001D6      (1/45)177          BNZ  ABORT
+00023C 18F0                                (1/46)178          LR   R15,R0
+00023E 05EF                                (1/47)179          BALR R14,R15
+000240                                     (1/48)180          DELETE EP=TESTSUB1
+000240 4100D368                000370     (10/51)183+         LA    0,=CL8'TESTSUB1'
+000244 1BFF                               (10/97)184+         SR    15,15 USE DEFAULT SYS390 SEARCH
+000246 0A09                               (10/99)185+         SVC   9 DELETE R0=A(NAME) R15=DSNAME/DDNAME ADDR OR 0
+000248 12FF                                (1/49)188          LTR  R15,R15
+00024A 4770D1CE                0001D6      (1/50)189          BNZ  ABORT
+00024E                                     (1/51)190          LOAD EP=TESTSUBX,DSNAME=DSNFSUB1  FILE NAME OVERRIDES EP
+00024E 4100D370                000378      (8/74)192+         LA    0,=CL8'TESTSUBX'
+000252 41F0D186                00018E     (8/116)193+         LA    15,DSNFSUB1
+000256 0A08                               (8/125)194+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+000258 12FF                                (1/52)196          LTR  R15,R15
+00025A 4770D1CE                0001D6      (1/53)197          BNZ  ABORT
+00025E 18F0                                (1/54)198          LR   R15,R0
+000260 05EF                                (1/55)199          BALR R14,R15
+000262                                     (1/56)200          DELETE EP=TESTSUB1
+000262 4100D368                000370     (10/51)203+         LA    0,=CL8'TESTSUB1'
+000266 1BFF                               (10/97)204+         SR    15,15 USE DEFAULT SYS390 SEARCH
+000268 0A09                               (10/99)205+         SVC   9 DELETE R0=A(NAME) R15=DSNAME/DDNAME ADDR OR 0
+00026A 12FF                                (1/57)208          LTR  R15,R15
+00026C 4770D1CE                0001D6      (1/58)209          BNZ  ABORT
+000270                                     (1/59)210          LOAD EP=TESTSUB1,DSNAME=DSNDSUB1  DIR
+000270 4100D368                000370      (8/74)211+         LA    0,=CL8'TESTSUB1'
+000274 41F0D19B                0001A3     (8/116)212+         LA    15,DSNDSUB1
+000278 0A08                               (8/125)213+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+00027A 12FF                                (1/60)215          LTR  R15,R15
+00027C 4770D1CE                0001D6      (1/61)216          BNZ  ABORT
+000280 18F0                                (1/62)217          LR   R15,R0
+000282 05EF                                (1/63)218          BALR R14,R15
+000284                                     (1/64)219          DELETE EP=TESTSUB1
+000284 4100D368                000370     (10/51)222+         LA    0,=CL8'TESTSUB1'
+000288 1BFF                               (10/97)223+         SR    15,15 USE DEFAULT SYS390 SEARCH
+00028A 0A09                               (10/99)224+         SVC   9 DELETE R0=A(NAME) R15=DSNAME/DDNAME ADDR OR 0
+00028C 12FF                                (1/65)227          LTR  R15,R15
+00028E 4770D1CE                0001D6      (1/66)228          BNZ  ABORT
+000292                                     (1/67)229          LOAD EP=XXXX,DSNAME=DSNFDEMO      FILE NAME OVERRIDES EP
+000292 4100D378                000380      (8/74)231+         LA    0,=CL8'XXXX'
+000296 41F0D1A3                0001AB     (8/116)232+         LA    15,DSNFDEMO
+00029A 0A08                               (8/125)233+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+00029C 12FF                                (1/68)235          LTR  R15,R15
+00029E 4770D1CE                0001D6      (1/69)236          BNZ  ABORT
+0002A2 18F0                                (1/70)237          LR   R15,R0
+0002A4 05EF                                (1/71)238          BALR R14,R15
+0002A6                                     (1/72)239          DELETE EP=DEMO
+0002A6 4100D380                000388     (10/51)242+         LA    0,=CL8'DEMO'
+0002AA 1BFF                               (10/97)243+         SR    15,15 USE DEFAULT SYS390 SEARCH
+0002AC 0A09                               (10/99)244+         SVC   9 DELETE R0=A(NAME) R15=DSNAME/DDNAME ADDR OR 0
+0002AE 12FF                                (1/73)247          LTR  R15,R15
+0002B0 4770D1CE                0001D6      (1/74)248          BNZ  ABORT
+0002B4                                     (1/75)249          LOAD EP=DEMO,DSNAME=DSNDDEMO      DIR
+0002B4 4100D380                000388      (8/74)250+         LA    0,=CL8'DEMO'
+0002B8 41F0D1B2                0001BA     (8/116)251+         LA    15,DSNDDEMO
+0002BC 0A08                               (8/125)252+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+0002BE 12FF                                (1/76)254          LTR  R15,R15
+0002C0 4770D1CE                0001D6      (1/77)255          BNZ  ABORT
+0002C4 18F0                                (1/78)256          LR   R15,R0
+0002C6 05EF                                (1/79)257          BALR R14,R15
+0002C8                                     (1/80)258          DELETE EP=DEMO
+0002C8 4100D380                000388     (10/51)261+         LA    0,=CL8'DEMO'
+0002CC 1BFF                               (10/97)262+         SR    15,15 USE DEFAULT SYS390 SEARCH
+0002CE 0A09                               (10/99)263+         SVC   9 DELETE R0=A(NAME) R15=DSNAME/DDNAME ADDR OR 0
+0002D0 12FF                                (1/81)266          LTR  R15,R15
+0002D2 4770D1CE                0001D6      (1/82)267          BNZ  ABORT
+0002D6                                     (1/83)268          LOAD EP=DEMO,DSNAME=DSNMDEMO      MULT DIR LIST (DEMO IN 2ND)
+0002D6 4100D380                000388      (8/74)270+         LA    0,=CL8'DEMO'
+0002DA 41F0D1B8                0001C0     (8/116)271+         LA    15,DSNMDEMO
+0002DE 0A08                               (8/125)272+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+0002E0 12FF                                (1/84)274          LTR  R15,R15
+0002E2 4770D1CE                0001D6      (1/85)275          BNZ  ABORT
+0002E6 18F0                                (1/86)276          LR   R15,R0
+0002E8 05EF                                (1/87)277          BALR R14,R15
+0002EA                                     (1/88)278          DELETE EP=DEMO
+0002EA 4100D380                000388     (10/51)281+         LA    0,=CL8'DEMO'
+0002EE 1BFF                               (10/97)282+         SR    15,15 USE DEFAULT SYS390 SEARCH
+0002F0 0A09                               (10/99)283+         SVC   9 DELETE R0=A(NAME) R15=DSNAME/DDNAME ADDR OR 0
+0002F2 12FF                                (1/89)286          LTR  R15,R15
+0002F4 4770D1CE                0001D6      (1/90)287          BNZ  ABORT
+0002F8                                     (1/91)288          LOAD EP=XXXX,DDNAME=DDTODEMO
+0002F8 4100D378                000380      (8/74)289+         LA    0,=CL8'XXXX'
+0002FC 41F0D388                000390     (8/105)290+         LA    15,=CL8'DDTODEMO'
+000300 A5FA8000                           (8/107)291+         OILH  15,X'8000' DD VS DSN
+000304 0A08                               (8/125)292+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+000306 12FF                                (1/92)294          LTR  R15,R15
+000308 4770D1CE                0001D6      (1/93)295          BNZ  ABORT
+00030C 18F0                                (1/94)296          LR   R15,R0
+00030E 05EF                                (1/95)297          BALR R14,R15
+000310                                     (1/96)298          DELETE EP=DEMO
+000310 4100D380                000388     (10/51)301+         LA    0,=CL8'DEMO'
+000314 1BFF                               (10/97)302+         SR    15,15 USE DEFAULT SYS390 SEARCH
+000316 0A09                               (10/99)303+         SVC   9 DELETE R0=A(NAME) R15=DSNAME/DDNAME ADDR OR 0
+000318 12FF                                (1/97)306          LTR  R15,R15
+00031A 4770D1CE                0001D6      (1/98)307          BNZ  ABORT
+00031E                                     (1/99)308 * RPI 921 TEST ERRET EXIT
+00031E                                    (1/100)309          LOAD  EP=JUNK1,ERRET=FAIL1
+00031E 4100D390                000398      (8/74)310+         LA    0,=CL8'JUNK1'
+000322 1BFF                                (8/95)311+         SR    15,15 USE DEFAULT SYS390 SEARCH
+000324 0A08                               (8/125)312+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+000326 12FF                               (8/134)313+         LTR   15,15
+000328 4770D328                000330     (8/138)314+         BNZ   FAIL1
+00032C 47F0D1CE                0001D6     (1/101)316          B     ABORT
+000330                                    (1/102)317 FAIL1    DS    0H
+000330 4130D33C                000344     (1/103)318          LA    3,FAIL2
+000334                                    (1/104)319          LOAD  EP=JUNK2,ERRET=(3)
+000334 4100D398                0003A0      (8/74)320+         LA    0,=CL8'JUNK2'
+000338 1BFF                                (8/95)321+         SR    15,15 USE DEFAULT SYS390 SEARCH
+00033A 0A08                               (8/125)322+         SVC   8 LOAD R0=A(NAME) R15=DDNAME/DSNAME ADDR OR 0
+00033C 12FF                               (8/134)323+         LTR   15,15
+00033E 0773                               (8/136)324+         BNZR  3
+000340 47F0D1CE                0001D6     (1/105)326          B     ABORT
+000344                                    (1/106)327 FAIL2    DS    0H
+000344                                    (1/107)328          WTO  'TESTLOD1 ERRET TESTS OK'
+000344 A7150010                000364      (4/49)329+         BRAS  1,*+(WTO#0039_EOT-*+1)/2*2
+000348 001B0000E3C5E2E3                    (4/50)330+         DC    AL2(WTO#0039_EOT-*,0),C'TESTLOD1 ERRET TESTS OK'
+000363                  00000363           (4/51)331+WTO#0039_EOT     EQU *
+000364 0A23                                (4/52)332+         SVC   35
+000366                                    (1/108)334          RT1  END
+000366 47F0D0B8                0000C0     (2/174)335+         B      RT1_END
+00036A                                    (1/109)337          END 
+000370 E3C5E2E3E2E4C2F1 =CL8'TESTSUB1'
+000378 E3C5E2E3E2E4C2E7 =CL8'TESTSUBX'
+000380 E7E7E7E740404040 =CL8'XXXX'
+000388 C4C5D4D640404040 =CL8'DEMO'
+000390 C4C4E3D6C4C5D4D6 =CL8'DDTODEMO'
+000398 D1E4D5D2F1404040 =CL8'JUNK1'
+0003A0 D1E4D5D2F2404040 =CL8'JUNK2'
+
+Symbol Table Listing
+
+ SYM=ABORT    LOC=000001D6 LEN=00000002 ESD=0001 TYPE=REL  XREF=137 157 169 177 189 
+  197 209 216 228 236 248 255 267 275 287 295 307 316 326 
+ SYM=DSNDDEMO LOC=000001BA LEN=00000006 ESD=0001 TYPE=REL  XREF=133 251 
+ SYM=DSNDSUB1 LOC=000001A3 LEN=00000007 ESD=0001 TYPE=REL  XREF=131 212 
+ SYM=DSNFDEMO LOC=000001AB LEN=0000000F ESD=0001 TYPE=REL  XREF=132 232 
+ SYM=DSNFSUB1 LOC=0000018E LEN=00000014 ESD=0001 TYPE=REL  XREF=130 193 
+ SYM=DSNMDEMO LOC=000001C0 LEN=0000000E ESD=0001 TYPE=REL  XREF=134 271 
+ SYM=FAIL1    LOC=00000330 LEN=00000002 ESD=0001 TYPE=REL  XREF=317 314 
+ SYM=FAIL2    LOC=00000344 LEN=00000002 ESD=0001 TYPE=REL  XREF=327 318 
+ SYM=PGMNAME  LOC=000001CE LEN=00000008 ESD=0001 TYPE=REL  XREF=135 170 172 
+ SYM=R0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=113 158 178 198 217 
+  237 256 276 296 
+ SYM=R10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=123 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=114 
+ SYM=R11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=124 
+ SYM=R12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=125 
+ SYM=R13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=126 
+ SYM=R14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=127 159 179 199 218 
+  238 257 277 297 
+ SYM=R15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=128 156 158 159 168 
+  176 178 179 188 196 198 199 208 215 217 218 227 235 237 238 247 254 256 257 266 
+  274 276 277 286 294 296 297 306 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=115 
+ SYM=R3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=116 
+ SYM=R4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=117 
+ SYM=R5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=118 
+ SYM=R6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=119 
+ SYM=R7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=120 
+ SYM=R8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=121 
+ SYM=R9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=122 
+ SYM=RT1_ABORT LOC=00000096 LEN=00000002 ESD=0001 TYPE=REL  XREF=42 87 92 96 100 
+  104 108 
+ SYM=RT1_ABORTED LOC=0000013F LEN=00000001 ESD=0001 TYPE=REL  XREF=84 43 57 
+ SYM=RT1_DATA LOC=00000112 LEN=00000001 ESD=0001 TYPE=REL  XREF=78 
+ SYM=RT1_DTOT LOC=00000139 LEN=00000006 ESD=0001 TYPE=REL  XREF=82 51 52 
+ SYM=RT1_DUMP LOC=0000010C LEN=00000002 ESD=0001 TYPE=REL  XREF=72 58 
+ SYM=RT1_END  LOC=000000C0 LEN=00000002 ESD=0001 TYPE=REL  XREF=50 335 
+ SYM=RT1_LINK LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=77 90 94 98 102 106 
+  110 
+ SYM=RT1_OK   LOC=0000014A LEN=00000002 ESD=0001 TYPE=REL  XREF=88 
+ SYM=RT1_ONE  LOC=00000115 LEN=00000001 ESD=0001 TYPE=REL  XREF=80 89 93 97 101 105 
+  109 
+ SYM=RT1_START LOC=00000208 LEN=00000002 ESD=0001 TYPE=REL  XREF=149 41 
+ SYM=RT1_TEST_CC0 LOC=00000146 LEN=00000002 ESD=0001 TYPE=REL  XREF=86 
+ SYM=RT1_TEST_CC1 LOC=00000152 LEN=00000002 ESD=0001 TYPE=REL  XREF=91 
+ SYM=RT1_TEST_CC2 LOC=0000015E LEN=00000002 ESD=0001 TYPE=REL  XREF=95 
+ SYM=RT1_TEST_CC3 LOC=0000016A LEN=00000002 ESD=0001 TYPE=REL  XREF=99 
+ SYM=RT1_TEST_CCGE LOC=00000176 LEN=00000002 ESD=0001 TYPE=REL  XREF=103 
+ SYM=RT1_TEST_CCLE LOC=00000182 LEN=00000002 ESD=0001 TYPE=REL  XREF=107 
+ SYM=RT1_TOT  LOC=00000112 LEN=00000003 ESD=0001 TYPE=REL  XREF=79 52 89 93 97 101 
+  105 109 
+ SYM=RT1_WTO1 LOC=00000116 LEN=00000002 ESD=0001 TYPE=REL  XREF=81 54 
+ SYM=RT1_WTO_END LOC=0000013F LEN=00000001 ESD=0001 TYPE=REL  XREF=83 81 
+ SYM=TESTLOD1 LOC=00000000 LEN=000003A8 ESD=0001 TYPE=CST  XREF=23 33 
+ SYM=WTO#0003_EOT LOC=0000008E LEN=00000001 ESD=0001 TYPE=REL  XREF=38 36 37 
+ SYM=WTO#0004_EOT LOC=000000BE LEN=00000001 ESD=0001 TYPE=REL  XREF=47 45 46 
+ SYM=WTO#0006_EOT LOC=000000F7 LEN=00000001 ESD=0001 TYPE=REL  XREF=62 60 61 
+ SYM=WTO#0010_EOT LOC=000001FC LEN=00000001 ESD=0001 TYPE=REL  XREF=140 138 139 
+ SYM=WTO#0039_EOT LOC=00000363 LEN=00000001 ESD=0001 TYPE=REL  XREF=331 329 330 
+
+Literal Table Listing
+
+ LIT=CL8'DDTODEMO' LOC=00000390 LEN=00000008 ESD=0001 POOL=0002 XREF=290 
+ LIT=CL8'DEMO' LOC=00000388 LEN=00000008 ESD=0001 POOL=0002 XREF=242 250 261 270 
+  281 301 
+ LIT=CL8'JUNK1' LOC=00000398 LEN=00000008 ESD=0001 POOL=0002 XREF=310 
+ LIT=CL8'JUNK2' LOC=000003A0 LEN=00000008 ESD=0001 POOL=0002 XREF=320 
+ LIT=CL8'TESTSUB1' LOC=00000370 LEN=00000008 ESD=0001 POOL=0002 XREF=152 163 170 
+  183 203 211 222 
+ LIT=CL8'TESTSUBX' LOC=00000378 LEN=00000008 ESD=0001 POOL=0002 XREF=192 
+ LIT=CL8'XXXX' LOC=00000380 LEN=00000008 ESD=0001 POOL=0002 XREF=231 289 
+ LIT=X'402020202020' LOC=00000140 LEN=00000006 ESD=0001 POOL=0001 XREF=51 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTLOD1  MZ390 ENDED RC= 0 IO=1774

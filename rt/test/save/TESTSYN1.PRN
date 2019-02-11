@@ -1,0 +1,99 @@
+TESTSYN1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTSYN1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=000000E8 TYPE=CST NAME=TESTSYN1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * This source code is part of z390 assembler/emulator package       *
+000000                                        (1/4)4 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/5)5 * Author - Don Higgins                                              *
+000000                                        (1/6)6 * Date   - 09/30/05                                                 *
+000000                                        (1/7)7 *********************************************************************
+000000                                        (1/8)8 * 2006-04-07 RPI-274 Test variable substitution on OPSYN            *
+000000                                        (1/9)9 *********************************************************************
+000000                                      (1/11)10 TESTSYN1 SUBENTRY 
+000000                                      (2/78)11+TESTSYN1 CSECT 
+000000 90ECD00C                            (2/168)12+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)13+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)14+         DC    18F'0'
+000050 E3C5E2E3E2E8D5F1                    (2/171)15+         DC    CL8'TESTSYN1'
+000058 F0F161F0F261F0F5                    (2/172)16+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)17+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)18+         ST    15,8(13)
+00006C 50DF0004                            (2/175)19+         ST    13,4(15)
+000070 18DF                                (2/176)20+         LR    13,15
+000072                                     (2/189)21+         USING TESTSYN1+8,13
+LISTUSE TESTSYN1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/12)23          WTO   'TESTSYN1 STARTED'
+000072 A715000C                00008A       (3/49)24+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00140000E3C5E2E3                     (3/50)25+         DC    AL2(WTO#0002_EOT-*,0),C'TESTSYN1 STARTED'
+00008A                  0000008A            (3/51)26+WTO#0002_EOT     EQU *
+00008A 0A23                                 (3/52)27+         SVC   35
+00008C                                      (1/13)29 * REPLACE LR X'18' WITH SR X'1B'
+00008C 1812                                 (1/14)30 LR       LR    1,2
+00008E                                      (1/15)31 LR       OPSYN SR
+00008E 1B12                                 (1/16)32 SR       LR    1,2
+000090 9518D084                00008C       (1/17)33          CLI   LR,X'18'
+000094 4770D0D4                0000DC       (1/18)34          BNE   ERR
+000098 951BD086                00008E       (1/19)35          CLI   SR,X'1B'
+00009C 4770D0D4                0000DC       (1/20)36          BNE   ERR
+0000A0                                      (1/21)37 * CREATE NEW OPCODE SUBR = SR
+0000A0                                      (1/22)38 SUBR     OPSYN SR
+0000A0 1B12                                 (1/23)39 SUBR     SUBR  1,2
+0000A2 951BD098                0000A0       (1/24)40          CLI   SUBR,X'1B'
+0000A6 4770D0D4                0000DC       (1/25)41          BNE   ERR
+0000AA                                      (1/26)42          MACRO
+0000AA                                      (1/27)43          NEWOP &OLD,&NEW
+0000AA                                      (1/28)44 &NEW     OPSYN &OLD
+0000AA                                      (1/29)45 &OLD     OPSYN ,
+0000AA                                      (1/30)46          MEND
+0000AA                                      (1/31)47          NEWOP AR,ADDREG
+0000AA                                      (1/28)48+ADDREG     OPSYN AR
+0000AA                                      (1/29)49+AR     OPSYN ,
+0000AA 1A12                                 (1/32)51          ADDREG 1,2
+0000AC 1B34                                 (1/33)52          LR     3,4
+0000AE                                      (1/34)53          WTO   'TESTSYN1 ENDED OK'
+0000AE A715000D                0000C8       (3/49)54+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+0000B2 00150000E3C5E2E3                     (3/50)55+         DC    AL2(WTO#0004_EOT-*,0),C'TESTSYN1 ENDED OK'
+0000C7                  000000C7            (3/51)56+WTO#0004_EOT     EQU *
+0000C8 0A23                                 (3/52)57+         SVC   35
+0000CA                                      (1/35)59          SUBEXIT 
+0000CA 41F00000                             (4/33)60+         LA    15,0
+0000CE 58D0D004                             (4/50)61+         L     13,4(,13)
+0000D2 58E0D00C                             (4/51)62+         L     14,12(,13)
+0000D6 982CD01C                             (4/52)63+         LM    2,12,28(13)
+0000DA 07FE                                 (4/53)64+         BR    14
+0000DC                                      (1/36)66 ERR      ABEND 111,DUMP
+0000DC                                      (5/25)67+ERR      DS    0H
+0000DC 4110006F                             (5/39)68+         LA   1,111
+0000E0 A51A8000                             (5/45)69+         OILH 1,X'8000'
+0000E4 0A0D                                 (5/47)70+         SVC  13 ABEND R1=COMP CODE AND HIGH BIT = DUMP PGM STORAGE
+0000E6                                      (1/37)72          END 
+
+Symbol Table Listing
+
+ SYM=ERR      LOC=000000DC LEN=00000002 ESD=0001 TYPE=REL  XREF=67 34 36 41 
+ SYM=LR       LOC=0000008C LEN=00000002 ESD=0001 TYPE=REL  XREF=30 33 
+ SYM=SR       LOC=0000008E LEN=00000002 ESD=0001 TYPE=REL  XREF=32 35 
+ SYM=SUBR     LOC=000000A0 LEN=00000002 ESD=0001 TYPE=REL  XREF=39 40 
+ SYM=TESTSYN1 LOC=00000000 LEN=000000E8 ESD=0001 TYPE=CST  XREF=11 21 
+ SYM=WTO#0002_EOT LOC=0000008A LEN=00000001 ESD=0001 TYPE=REL  XREF=26 24 25 
+ SYM=WTO#0004_EOT LOC=000000C7 LEN=00000001 ESD=0001 TYPE=REL  XREF=56 54 55 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTSYN1  MZ390 ENDED RC= 0 IO=629

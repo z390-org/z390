@@ -1,0 +1,143 @@
+TESTDMP4  EZ390 START
+TESTDMP4  EZ390 Copyright 2011 Automated Software Tools Corporation
+TESTDMP4  EZ390 Copyright 2013 Cat Herder Software, LLC
+TESTDMP4  EZ390 Copyright 2018 Joachim Bartz, Germany
+TESTDMP4  EZ390 z390 is licensed under GNU General Public License
+TESTDMP4  EZ390 program = rt\test\TESTDMP4.390
+TESTDMP4  EZ390 options = notiming stats systerm(rt\test\RTTEST)
+TESTDMP4  EZ390 final_options=ALIGN
+TESTDMP4  EZ390 final_options=NOALLOW
+TESTDMP4  EZ390 final_options=NOAMODE24
+TESTDMP4  EZ390 final_options=AMODE31
+TESTDMP4  EZ390 final_options=NOASCII
+TESTDMP4  EZ390 final_options=ASM
+TESTDMP4  EZ390 final_options=NOASSIST
+TESTDMP4  EZ390 final_options=AUTOLINK
+TESTDMP4  EZ390 final_options=NOBAL
+TESTDMP4  EZ390 final_options=NOBS2000
+TESTDMP4  EZ390 final_options=EDF
+TESTDMP4  EZ390 final_options=NOCICS
+TESTDMP4  EZ390 final_options=CODEPAGE(ISO-8859-1+IBM1047)
+TESTDMP4  EZ390 final_options=COMMENT
+TESTDMP4  EZ390 final_options=CON
+TESTDMP4  EZ390 final_options=NODUMP
+TESTDMP4  EZ390 final_options=EPILOG
+TESTDMP4  EZ390 final_options=NOERRSUM
+TESTDMP4  EZ390 final_options=EXTEND
+TESTDMP4  EZ390 final_options=FLOAT(DECIMAL)
+TESTDMP4  EZ390 final_options=NOGUAM
+TESTDMP4  EZ390 final_options=INIT
+TESTDMP4  EZ390 final_options=LIST
+TESTDMP4  EZ390 final_options=LISTCALL
+TESTDMP4  EZ390 final_options=LISTUSE
+TESTDMP4  EZ390 final_options=LOADHIGH
+TESTDMP4  EZ390 final_options=NOMCALL
+TESTDMP4  EZ390 final_options=NOMOD
+TESTDMP4  EZ390 final_options=OBJ
+TESTDMP4  EZ390 final_options=NOOBJHEX
+TESTDMP4  EZ390 final_options=PC
+TESTDMP4  EZ390 final_options=PCOPT
+TESTDMP4  EZ390 final_options=NOPDSMEM8
+TESTDMP4  EZ390 final_options=NOPRINTALL
+TESTDMP4  EZ390 final_options=PROLOG
+TESTDMP4  EZ390 final_options=PROTECT
+TESTDMP4  EZ390 final_options=R64
+TESTDMP4  EZ390 final_options=NOREFORMAT
+TESTDMP4  EZ390 final_options=NOREGS
+TESTDMP4  EZ390 final_options=RMODE24
+TESTDMP4  EZ390 final_options=NORMODE31
+TESTDMP4  EZ390 final_options=STATS
+TESTDMP4  EZ390 final_options=NOTEST
+TESTDMP4  EZ390 final_options=THREAD
+TESTDMP4  EZ390 final_options=NOTIME
+TESTDMP4  EZ390 final_options=NOTIMING
+TESTDMP4  EZ390 final_options=NOTRACE
+TESTDMP4  EZ390 final_options=NOTRACEA
+TESTDMP4  EZ390 final_options=NOTRACEALL
+TESTDMP4  EZ390 final_options=NOTRACEC
+TESTDMP4  EZ390 final_options=NOTRACEG
+TESTDMP4  EZ390 final_options=NOTRACEI
+TESTDMP4  EZ390 final_options=NOTRACEL
+TESTDMP4  EZ390 final_options=NOTRACEM
+TESTDMP4  EZ390 final_options=NOTRACEP
+TESTDMP4  EZ390 final_options=NOTRACEQ
+TESTDMP4  EZ390 final_options=NOTRACES
+TESTDMP4  EZ390 final_options=NOTRACET
+TESTDMP4  EZ390 final_options=NOTRACEV
+TESTDMP4  EZ390 final_options=TRAP
+TESTDMP4  EZ390 final_options=NOTRUNC
+TESTDMP4  EZ390 final_options=NOTS
+TESTDMP4  EZ390 final_options=VCB
+TESTDMP4  EZ390 final_options=WARN
+TESTDMP4  EZ390 final_options=XREF
+TESTDMP4  EZ390 final_options=ZSTRMAC
+TESTDMP4  EZ390 final_options=CHKMAC=0
+TESTDMP4  EZ390 final_options=CHKSRC=1
+TESTDMP4  EZ390 final_options=ERR=100
+TESTDMP4  EZ390 final_options=MAXCALL=50
+TESTDMP4  EZ390 final_options=MAXDISPLAY=80
+TESTDMP4  EZ390 final_options=MAXESD=1000
+TESTDMP4  EZ390 final_options=MAXFILE=1000
+TESTDMP4  EZ390 final_options=MAXGBL=100000
+TESTDMP4  EZ390 final_options=MAXHEIGHT=600
+TESTDMP4  EZ390 final_options=MAXLCL=100000
+TESTDMP4  EZ390 final_options=MAXLEN=80
+TESTDMP4  EZ390 final_options=MAXLINE=200000
+TESTDMP4  EZ390 final_options=MAXLOG=1000000
+TESTDMP4  EZ390 final_options=MAXPARM=10000
+TESTDMP4  EZ390 final_options=MAXPASS=2
+TESTDMP4  EZ390 final_options=MAXPC=50000
+TESTDMP4  EZ390 final_options=MAXQUE=1000
+TESTDMP4  EZ390 final_options=MAXRLD=10000
+TESTDMP4  EZ390 final_options=MAXSIZE=52428800
+TESTDMP4  EZ390 final_options=MAXSYM=50000
+TESTDMP4  EZ390 final_options=MAXWARN=4
+TESTDMP4  EZ390 final_options=MAXWIDTH=800
+TESTDMP4  EZ390 final_options=MEM=1
+TESTDMP4  EZ390 final_options=MINHEIGHT=150
+TESTDMP4  EZ390 final_options=MINWIDTH=150
+TESTDMP4  EZ390 final_options=MNOTE=0
+TESTDMP4  EZ390 final_options=PARM=
+TESTDMP4  EZ390 final_options=PROFILE=
+TESTDMP4  EZ390 final_options=STATS=C:\Users\Achim\GitHub\z390\rt\test\TESTDMP4.STA
+TESTDMP4  EZ390 final_options=SYSPARM=
+TESTDMP4  EZ390 final_options=SYSTERM=C:\Users\Achim\GitHub\z390\rt\test\RTTEST.ERR
+TESTDMP4  EZ390 final_options=TESTDD=
+TESTDMP4  EZ390 final_options=TIME=15
+TESTDMP4  EZ390 final_options=TRACE=
+TESTDMP4  EZ390 final_options=Z390ACROBAT=cmd.exe /c Start
+TESTDMP4  EZ390 final_options=Z390BROWSER=cmd.exe /c Start
+TESTDMP4  EZ390 final_options=Z390COMMAND=cmd.exe
+TESTDMP4  EZ390 final_options=Z390EDITOR=notepad.exe
+TESTDMP4  EZ390 final_options=INSTALL=
+TESTDMP4  EZ390 final_options=IPL=
+TESTDMP4  EZ390 final_options=LOG=C:\Users\Achim\GitHub\z390\rt\test\TESTDMP4.LOG
+TESTDMP4  EZ390 final_options=SYS390=rt\test\+linklib
+TESTDMP4  EZ390 final_options=SYSBAL=rt\test\
+TESTDMP4  EZ390 final_options=SYSCPY=rt\test\
+TESTDMP4  EZ390 final_options=SYSDAT=rt\test\
+TESTDMP4  EZ390 final_options=SYSERR=rt\test\
+TESTDMP4  EZ390 final_options=SYSLOG=rt\test\
+TESTDMP4  EZ390 final_options=SYSLST=rt\test\
+TESTDMP4  EZ390 final_options=SYSMAC=rt\test\
+TESTDMP4  EZ390 final_options=SYSMLC=rt\test\
+TESTDMP4  EZ390 final_options=SYSPCH=rt\test\
+TESTDMP4  EZ390 final_options=SYSPRN=rt\test\
+TESTDMP4  EZ390 final_options=SYSOBJ=rt\test\
+TESTDMP4  EZ390 final_options=SYSOPT=rt\test\
+TESTDMP4  EZ390 final_options=SYSTRC=rt\test\
+TESTDMP4  EZ390 TCPIO operations      = 0
+TESTDMP4  EZ390 DCB operations        = 1
+TESTDMP4  EZ390 DCB open              = 1
+TESTDMP4  EZ390 DCB close             = 0
+TESTDMP4  EZ390 DCB get               = 0
+TESTDMP4  EZ390 DCB put               = 0
+TESTDMP4  EZ390 DCB read              = 0
+TESTDMP4  EZ390 DCB write             = 0
+TESTDMP4  EZ390 VSAM operations       = 0
+TESTDMP4  EZ390 Keys                  = 2467
+TESTDMP4  EZ390 Key searches          = 2
+TESTDMP4  EZ390 Key avg comps         = 0
+TESTDMP4  EZ390 Key max comps         = 0
+TESTDMP4  EZ390 total errors          = 0
+TESTDMP4  EZ390 ENDED RC= 0 IO=717 INS=61

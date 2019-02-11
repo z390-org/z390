@@ -1,0 +1,53 @@
+*********************************************************************
+* Copyright 2006 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2006-05-01 DSH         Initial version                            *
+* 2006-05-01 DSH RPI-305 Test ESTAE EXIT with parameter and RESTART *
+* 2006-09-18 DSH RPI-305 Test REPEAT usage                          *
+* 2006-11-10 DSH RPI-475 Test ESTAE EXIT,CT,PARAM=RESTART           *
+* 2007-06-10 DSH RPI-636 Require R15=4 for restart, R15=0 for       *
+*                        percolate                                  *
+* 2007-07-18 DSH RPI-659 Test RESTART with R15=4 and R0=RESTART PSW *
+* 2008-06-22 DSH RPI-845 Change ESTAE EXIT to use R1=SDWA,          *
+*                        R2=ESAEPARM                                *
+*********************************************************************
+
+         TITLE 'TESTSTA1 - TEST ESTAE'
+
+TESTSTA1 SUBENTRY
+         WTO   'TESTSTA1 TEST ESTAE STARTED'
+         ESTAE EXIT,PARAM=RESTART
+         DC    X'0000' CAUSE 0C1
+RESTART  DS    0H
+         AP    COUNT,=P'1'
+         CP    COUNT,=P'1'
+         BE    RESTART2
+         BH    RESTART3
+RESTART1 WTO   'TESTSTA1 RESTART1 SUCCESSFUL'
+         DC    X'0000' CAUSE 0C1
+RESTART2 WTO   'TESTSTA1 RESTART2 SUCCESSFUL'
+         ESTAE EXIT,CT,PARAM=RESTART
+         DC    X'0000' CAUSE 0C1
+RESTART3 WTO   'TESTSTA1 RESTART3 SUCCESSFUL'
+         WTO   'TESTSTA1 ENDED OK'
+         SUBEXIT
+         LTORG
+         DROP
+EXIT     DS    0H
+         USING *,R15
+         USING SDWA,R1        SYSTEM DIAGNOSTIC WORK AREA 
+         LR    R0,R2          SET RESTART ADDRESS TO ESTAPARM ADDR
+         LA    R15,4          REQUEST RESTART CURRENT TASK AT (R0)
+         BR    R14
+COUNT    DC    P'0'
+         IHASDWA
+         EQUREGS
+         END

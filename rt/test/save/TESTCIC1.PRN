@@ -1,0 +1,1098 @@
+TESTCIC1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTCIC1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000818 TYPE=CST NAME=TESTCIC1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2007 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2007-05-31 DSH          Initial version                           *
+000000                                      (1/13)13 * 2007-05-31 DSH RPI-501  Test LITERAL-ABS expression               *
+000000                                      (1/14)14 * 2007-07-20 DSH RPI-662  Test additional ITEMERR and QIDERR for    *
+000000                                      (1/15)15 *                         DFHRESP                                   *
+000000                                      (1/16)16 * 2007-08-25 DSH RPI-687  Test additional CICS VSAM DFHRESP codes   *
+000000                                      (1/17)17 * 2007-08-25 DSH RPI-690  Correct NOTEND to NOTFND                  *
+000000                                      (1/18)18 * 2007-10-30 DSH RPI-729  Add DFHRESP ILLOGIC=F'21'                 *
+000000                                      (1/19)19 * 2007-12-06 DSH RPI-751  Add DFHRESP EXPIRED=F'31'                 *
+000000                                      (1/20)20 * 2008-04-28 DSH RPI-841  Add DFHRESP MAPFAIL,INVMPSZ,OVERFLOW      *
+000000                                      (1/21)21 * 2008-09-19 DSH RPI-905  Add DFHRESP DSIDERR=F'12'                 *
+000000                                      (1/22)22 * 2008-10-27 DSH RPI-928  Add DFHRESP TERMIDER, TRANSIDERR, IOERR,  *
+000000                                      (1/23)23 *                         ENDDATA, ENVDEFERR                        *
+000000                                      (1/24)24 * 2008-11-18 DSH RPI-951  Add DFHRESP ENQBUSY=F'55'                 *
+000000                                      (1/25)25 * 2009-06-14 DSH RPI-1057 Add DFHRESP(SUPPRESSED)=F'72' and         *
+000000                                      (1/26)26 *                         END=F'83'                                 *
+000000                                      (1/27)27 * 2009-09-02 DSH RPI-1079 Add DFHRESP(NOTALLOC)=F'61'               *
+000000                                      (1/28)28 *********************************************************************
+000000                                      (1/30)29          TITLE 'TESTCIC1 - TEST CICS DFHRESP LITERALS'
+000000                                      (1/32)30 TESTCIC1 RT1   MAIN
+000000                                      (3/78)32+TESTCIC1 CSECT 
+000000 90ECD00C                            (3/168)33+         STM   14,12,12(13)
+000004 45FF0068                            (3/169)34+         BAL   15,104(15)
+000008 0000000000000000                    (3/170)35+         DC    18F'0'
+000050 E3C5E2E3C3C9C3F1                    (3/171)36+         DC    CL8'TESTCIC1'
+000058 F0F161F0F261F0F5                    (3/172)37+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (3/173)38+         DC    CL8'22.33'
+000068 50FD0008                            (3/174)39+         ST    15,8(13)
+00006C 50DF0004                            (3/175)40+         ST    13,4(15)
+000070 18DF                                (3/176)41+         LR    13,15
+000072                                     (3/189)42+         USING TESTCIC1+8,13
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072 A715000E                00008E       (4/49)45+         BRAS  1,*+(WTO#0003_EOT-*+1)/2*2
+000076 00180000E3C5E2E3                     (4/50)46+         DC    AL2(WTO#0003_EOT-*,0),C'TESTCIC1 RT1 STARTED'
+00008E                  0000008E            (4/51)47+WTO#0003_EOT     EQU *
+00008E 0A23                                 (4/52)48+         SVC   35
+000090 C0F400000082            000194       (2/66)50+         BRCL    15,RT1_START
+000096                                      (2/67)51+RT1_ABORT DS 0H
+000096 92E3D137                00013F       (2/68)52+         MVI   RT1_ABORTED,C'T'
+00009A A7150012                0000BE       (4/49)54+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+00009E 00200000E3C5E2E3                     (4/50)55+         DC    AL2(WTO#0004_EOT-*,0),C'TESTCIC1 RT1 TESTING ABORTED'
+0000BE                  000000BE            (4/51)56+WTO#0004_EOT     EQU *
+0000BE 0A23                                 (4/52)57+         SVC   35
+0000C0                                      (2/70)59+RT1_END  DS    0H
+0000C0 D205D131D138     000139 000140       (2/71)60+         MVC   RT1_DTOT,=X'402020202020'
+0000C6 DE05D131D10A     000139 000112       (2/72)61+         ED    RT1_DTOT,RT1_TOT
+0000CC 4110D10E                000116       (4/61)63+         LA    1,RT1_WTO1
+0000D0 0A23                                 (4/66)64+         SVC   35
+0000D2 95E3D137                00013F       (2/74)66+         CLI   RT1_ABORTED,C'T'
+0000D6 4780D104                00010C       (2/75)67+         BE    RT1_DUMP
+0000DA A715000F                0000F8       (4/49)69+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000DE 00190000E3C5E2E3                     (4/50)70+         DC    AL2(WTO#0006_EOT-*,0),C'TESTCIC1 RT1 ENDED OK'
+0000F7                  000000F7            (4/51)71+WTO#0006_EOT     EQU *
+0000F8 0A23                                 (4/52)72+         SVC   35
+0000FA 41F00000                             (5/33)75+         LA    15,0
+0000FE 58D0D004                             (5/50)76+         L     13,4(,13)
+000102 58E0D00C                             (5/51)77+         L     14,12(,13)
+000106 982CD01C                             (5/52)78+         LM    2,12,28(13)
+00010A 07FE                                 (5/53)79+         BR    14
+00010C                                      (2/78)81+RT1_DUMP DS    0H
+00010C 41100065                             (6/39)83+         LA   1,101
+000110 0A0D                                 (6/47)84+         SVC  13 ABEND R1=COMP CODE AND HIGH BIT = DUMP PGM STORAGE
+000112                  0000000B            (2/80)86+RT1_LINK EQU   11
+000112                  00000112            (2/81)87+RT1_DATA EQU   *
+000112 00000C                               (2/82)88+RT1_TOT  DC    PL3'0' TOTAL RT1 TESTS COMPLETED
+000115 1C                                   (2/83)89+RT1_ONE  DC    P'1'
+000116 00290000E3C5E2E3                     (2/84)90+RT1_WTO1 DC    AL2(RT1_WTO_END-*,0),C'TESTCIC1 RT1 TESTS COMPLETED = '
+000139 40E9E9E9E9E9                         (2/85)91+RT1_DTOT DC    CL6' ZZZZZ'
+00013F                  0000013F            (2/86)92+RT1_WTO_END EQU *
+00013F C6                                   (2/87)93+RT1_ABORTED DC C'F'
+000140                                      (2/88)94+         LTORG 
+000140 402020202020     =X'402020202020'
+000146                                      (2/89)95+RT1_TEST_CC0  DS    0H
+000146 4770D08E                000096       (2/90)96+         BNE   RT1_ABORT
+00014A                                      (2/91)97+RT1_OK   DS    0H
+00014A FA20D10AD10D     000112 000115       (2/92)98+         AP    RT1_TOT,RT1_ONE
+000150 07FB                                 (2/93)99+         BR    RT1_LINK
+000152                                     (2/94)100+RT1_TEST_CC1  DS    0H
+000152 47B0D08E                000096      (2/95)101+         BNL   RT1_ABORT
+000156 FA20D10AD10D     000112 000115      (2/96)102+         AP    RT1_TOT,RT1_ONE
+00015C 07FB                                (2/97)103+         BR    RT1_LINK
+00015E                                     (2/98)104+RT1_TEST_CC2  DS    0H
+00015E 47D0D08E                000096      (2/99)105+         BNH   RT1_ABORT
+000162 FA20D10AD10D     000112 000115     (2/100)106+         AP    RT1_TOT,RT1_ONE
+000168 07FB                               (2/101)107+         BR    RT1_LINK
+00016A                                    (2/102)108+RT1_TEST_CC3  DS    0H
+00016A 47E0D08E                000096     (2/103)109+         BNO   RT1_ABORT
+00016E FA20D10AD10D     000112 000115     (2/104)110+         AP    RT1_TOT,RT1_ONE
+000174 07FB                               (2/105)111+         BR    RT1_LINK
+000176                                    (2/106)112+RT1_TEST_CCGE  DS    0H
+000176 4740D08E                000096     (2/107)113+         BL    RT1_ABORT
+00017A FA20D10AD10D     000112 000115     (2/108)114+         AP    RT1_TOT,RT1_ONE
+000180 07FB                               (2/109)115+         BR    RT1_LINK
+000182                                    (2/110)116+RT1_TEST_CCLE  DS    0H
+000182 4720D08E                000096     (2/111)117+         BH    RT1_ABORT
+000186 FA20D10AD10D     000112 000115     (2/112)118+         AP    RT1_TOT,RT1_ONE
+00018C 07FB                               (2/113)119+         BR    RT1_LINK
+00018E                                     (1/33)121          EQUREGS 
+00018E                  00000000           (7/41)122+R0     EQU 0
+00018E                  00000001           (7/41)123+R1     EQU 1
+00018E                  00000002           (7/41)124+R2     EQU 2
+00018E                  00000003           (7/41)125+R3     EQU 3
+00018E                  00000004           (7/41)126+R4     EQU 4
+00018E                  00000005           (7/41)127+R5     EQU 5
+00018E                  00000006           (7/41)128+R6     EQU 6
+00018E                  00000007           (7/41)129+R7     EQU 7
+00018E                  00000008           (7/41)130+R8     EQU 8
+00018E                  00000009           (7/41)131+R9     EQU 9
+00018E                  0000000A           (7/41)132+R10    EQU 10
+00018E                  0000000B           (7/41)133+R11    EQU 11
+00018E                  0000000C           (7/41)134+R12    EQU 12
+00018E                  0000000D           (7/41)135+R13    EQU 13
+00018E                  0000000E           (7/41)136+R14    EQU 14
+00018E                  0000000F           (7/41)137+R15    EQU 15
+000190                                     (1/34)139 X        DS    F
+000194                                     (1/35)140          RT1   START
+000194                                    (2/116)141+RT1_START DS  0H
+000194 D203D188D258     000190 000260      (1/36)143          MVC   X,DFHRESP(NORMAL)
+00019A D203D188D258     000190 000260      (1/37)144          MVC   X,DFHRESP(NORMAL)     X   TEST COMMENTS
+0001A0 D203D188D25C     000190 000264      (1/38)145          MVC   X,DFHRESP(ERROR)
+0001A6 D203D188D260     000190 000268      (1/39)146          MVC   X,DFHRESP(TERMIDERR)     RPI-928
+0001AC D203D188D264     000190 00026C      (1/40)147          MVC   X,DFHRESP(FILENOTFOUND)  RPI-687
+0001B2 D203D188D264     000190 00026C      (1/41)148          MVC   X,DFHRESP(DSIDERR)       RPI-905
+0001B8 D203D188D268     000190 000270      (1/42)149          MVC   X,DFHRESP(NOTFND)        RPI-687 RPI-690
+0001BE D203D188D26C     000190 000274      (1/43)150          MVC   X,DFHRESP(DUPREC)        RPI-687
+0001C4 D203D188D270     000190 000278      (1/44)151          MVC   X,DFHRESP(DUPKEY)        RPI-687
+0001CA D203D188D274     000190 00027C      (1/45)152          MVC   X,DFHRESP(INVREQ)
+0001D0 D203D188D278     000190 000280      (1/46)153          MVC   X,DFHRESP(IOERR)         RPI-928
+0001D6 D203D188D27C     000190 000284      (1/47)154          MVC   X,DFHRESP(NOSPACE)       RPI-687
+0001DC D203D188D280     000190 000288      (1/48)155          MVC   X,DFHRESP(NOTOPEN)       RPI-687
+0001E2 D203D188D284     000190 00028C      (1/49)156          MVC   X,DFHRESP(ENDFILE)       RPI-687
+0001E8 D203D188D288     000190 000290      (1/50)157          MVC   X,DFHRESP(LENGERR)
+0001EE D203D188D28C     000190 000294      (1/51)158          MVC   X,DFHRESP(PGMIDERR)
+0001F4 D203D188D290     000190 000298      (1/52)159          MVC   X,DFHRESP(TRANSIDERR)    RPI-928
+0001FA D203D188D294     000190 00029C      (1/53)160          MVC   X,DFHRESP(ENDDATA)       RPI-928
+000200 D203D188D298     000190 0002A0      (1/54)161          MVC   X,DFHRESP(ITEMERR)       RPI-662
+000206 D203D188D29C     000190 0002A4      (1/55)162          MVC   X,DFHRESP(QIDERR)        RPI-662
+00020C D203D188D2A0     000190 0002A8      (1/56)163          MVC   X,DFHRESP(ENVDEFERR)     RPI-928
+000212 D203D188D2A4     000190 0002AC      (1/57)164          MVC   X,DFHRESP(EXPIRED)       RPI-751
+000218 D203D188D2A8     000190 0002B0      (1/58)165          MVC   X,DFHRESP(MAPFAIL)       RPI-841
+00021E D203D188D2AC     000190 0002B4      (1/59)166          MVC   X,DFHRESP(INVMPSZ)       RPI-841
+000224 D203D188D2B0     000190 0002B8      (1/60)167          MVC   X,DFHRESP(OVERFLOW)      RPI-841
+00022A D203D188D2B4     000190 0002BC      (1/61)168          MVC   X,DFHRESP(ENQBUSY)       RPI-951
+000230 D203D188D2B8     000190 0002C0      (1/62)169          MVC   X,DFHRESP(DISABLED)      RPI-687
+000236 D203D188D2BC     000190 0002C4      (1/63)170          MVC   X,DFHRESP(ILLOGIC)       RPI-729
+00023C D203D188D2C0     000190 0002C8      (1/64)171          MVC   X,DFHRESP(NOTALLOC)      RPI-1079
+000242 D203D188D2C4     000190 0002CC      (1/65)172          MVC   X,DFHRESP(SUPPRESSED)    RPI-1057
+000248 D203D188D2C8     000190 0002D0      (1/66)173          MVC   X,DFHRESP(END)           RPI-1057
+00024E D503D258D258     000260 000260      (1/67)174          CLC   =F'0',DFHRESP(NORMAL)
+000254                                     (1/68)175          RT1   CCE
+000254                                     (2/38)176+         DS    0H
+000254 4DB0D13E                000146     (2/120)177+RT1_TEST1        BAS   RT1_LINK,RT1_TEST_CC0
+000258                                    (2/121)178+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000258 LEN=01000 REG=B OFF=00000 LAB=
+000258 47F0B07C                0002D4     (2/122)179+         B     RT1_CCE1
+00025C                                    (2/123)180+         LTORG 
+000260 00000000         =F'0'
+000264 00000001         =F'1'
+000268 0000000B         =F'11'
+00026C 0000000C         =F'12'
+000270 0000000D         =F'13'
+000274 0000000E         =F'14'
+000278 0000000F         =F'15'
+00027C 00000010         =F'16'
+000280 00000011         =F'17'
+000284 00000012         =F'18'
+000288 00000013         =F'19'
+00028C 00000014         =F'20'
+000290 00000016         =F'22'
+000294 0000001B         =F'27'
+000298 0000001C         =F'28'
+00029C 0000001D         =F'29'
+0002A0 0000001A         =F'26'
+0002A4 0000002C         =F'44'
+0002A8 00000038         =F'56'
+0002AC 0000001F         =F'31'
+0002B0 00000024         =F'36'
+0002B4 00000026         =F'38'
+0002B8 00000028         =F'40'
+0002BC 00000037         =F'55'
+0002C0 00000054         =F'84'
+0002C4 00000015         =F'21'
+0002C8 0000003D         =F'61'
+0002CC 00000048         =F'72'
+0002D0 00000053         =F'83'
+0002D4                                    (2/124)181+RT1_CCE1        DS 0H
+0002D4 D503B090B090     0002E8 0002E8      (1/69)183          CLC   =F'1',DFHRESP(ERROR)
+0002DA                                     (1/70)184          RT1   CCE
+0002DA                                     (2/38)185+         DS    0H
+0002DA 4DB0D13E                000146     (2/120)186+RT1_TEST2        BAS   RT1_LINK,RT1_TEST_CC0
+0002DE                                    (2/121)187+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000002DE LEN=01000 REG=B OFF=00000 LAB=
+0002DE 47F0B00E                0002EC     (2/122)188+         B     RT1_CCE2
+0002E2                                    (2/123)189+         LTORG 
+0002E8 00000001         =F'1'
+0002EC                                    (2/124)190+RT1_CCE2        DS 0H
+0002EC D503B022B022     000300 000300      (1/71)192          CLC   =F'11',DFHRESP(TERMIDERR)    RPI-928
+0002F2                                     (1/72)193          RT1   CCE
+0002F2                                     (2/38)194+         DS    0H
+0002F2 4DB0D13E                000146     (2/120)195+RT1_TEST3        BAS   RT1_LINK,RT1_TEST_CC0
+0002F6                                    (2/121)196+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000002F6 LEN=01000 REG=B OFF=00000 LAB=
+0002F6 47F0B00E                000304     (2/122)197+         B     RT1_CCE3
+0002FA                                    (2/123)198+         LTORG 
+000300 0000000B         =F'11'
+000304                                    (2/124)199+RT1_CCE3        DS 0H
+000304 D503B022B022     000318 000318      (1/73)201          CLC   =F'12',DFHRESP(FILENOTFOUND) RPI-687
+00030A                                     (1/74)202          RT1   CCE
+00030A                                     (2/38)203+         DS    0H
+00030A 4DB0D13E                000146     (2/120)204+RT1_TEST4        BAS   RT1_LINK,RT1_TEST_CC0
+00030E                                    (2/121)205+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000030E LEN=01000 REG=B OFF=00000 LAB=
+00030E 47F0B00E                00031C     (2/122)206+         B     RT1_CCE4
+000312                                    (2/123)207+         LTORG 
+000318 0000000C         =F'12'
+00031C                                    (2/124)208+RT1_CCE4        DS 0H
+00031C D503B022B022     000330 000330      (1/75)210          CLC   =F'12',DFHRESP(DSIDERR)      RPI-905
+000322                                     (1/76)211          RT1   CCE
+000322                                     (2/38)212+         DS    0H
+000322 4DB0D13E                000146     (2/120)213+RT1_TEST5        BAS   RT1_LINK,RT1_TEST_CC0
+000326                                    (2/121)214+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000326 LEN=01000 REG=B OFF=00000 LAB=
+000326 47F0B00E                000334     (2/122)215+         B     RT1_CCE5
+00032A                                    (2/123)216+         LTORG 
+000330 0000000C         =F'12'
+000334                                    (2/124)217+RT1_CCE5        DS 0H
+000334 D503B022B022     000348 000348      (1/77)219          CLC   =F'13',DFHRESP(NOTFND)       RPI-687 RPI-690
+00033A                                     (1/78)220          RT1   CCE
+00033A                                     (2/38)221+         DS    0H
+00033A 4DB0D13E                000146     (2/120)222+RT1_TEST6        BAS   RT1_LINK,RT1_TEST_CC0
+00033E                                    (2/121)223+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000033E LEN=01000 REG=B OFF=00000 LAB=
+00033E 47F0B00E                00034C     (2/122)224+         B     RT1_CCE6
+000342                                    (2/123)225+         LTORG 
+000348 0000000D         =F'13'
+00034C                                    (2/124)226+RT1_CCE6        DS 0H
+00034C D503B022B022     000360 000360      (1/79)228          CLC   =F'14',DFHRESP(DUPREC)       RPI-687
+000352                                     (1/80)229          RT1   CCE
+000352                                     (2/38)230+         DS    0H
+000352 4DB0D13E                000146     (2/120)231+RT1_TEST7        BAS   RT1_LINK,RT1_TEST_CC0
+000356                                    (2/121)232+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000356 LEN=01000 REG=B OFF=00000 LAB=
+000356 47F0B00E                000364     (2/122)233+         B     RT1_CCE7
+00035A                                    (2/123)234+         LTORG 
+000360 0000000E         =F'14'
+000364                                    (2/124)235+RT1_CCE7        DS 0H
+000364 D503B022B022     000378 000378      (1/81)237          CLC   =F'15',DFHRESP(DUPKEY)       RPI-687
+00036A                                     (1/82)238          RT1   CCE
+00036A                                     (2/38)239+         DS    0H
+00036A 4DB0D13E                000146     (2/120)240+RT1_TEST8        BAS   RT1_LINK,RT1_TEST_CC0
+00036E                                    (2/121)241+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000036E LEN=01000 REG=B OFF=00000 LAB=
+00036E 47F0B00E                00037C     (2/122)242+         B     RT1_CCE8
+000372                                    (2/123)243+         LTORG 
+000378 0000000F         =F'15'
+00037C                                    (2/124)244+RT1_CCE8        DS 0H
+00037C D503B022B022     000390 000390      (1/83)246          CLC   =F'16',DFHRESP(INVREQ)
+000382                                     (1/84)247          RT1   CCE
+000382                                     (2/38)248+         DS    0H
+000382 4DB0D13E                000146     (2/120)249+RT1_TEST9        BAS   RT1_LINK,RT1_TEST_CC0
+000386                                    (2/121)250+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000386 LEN=01000 REG=B OFF=00000 LAB=
+000386 47F0B00E                000394     (2/122)251+         B     RT1_CCE9
+00038A                                    (2/123)252+         LTORG 
+000390 00000010         =F'16'
+000394                                    (2/124)253+RT1_CCE9        DS 0H
+000394 D503B022B022     0003A8 0003A8      (1/85)255          CLC   =F'17',DFHRESP(IOERR)        RPI-928
+00039A                                     (1/86)256          RT1   CCE
+00039A                                     (2/38)257+         DS    0H
+00039A 4DB0D13E                000146     (2/120)258+RT1_TEST10       BAS   RT1_LINK,RT1_TEST_CC0
+00039E                                    (2/121)259+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000039E LEN=01000 REG=B OFF=00000 LAB=
+00039E 47F0B00E                0003AC     (2/122)260+         B     RT1_CCE10
+0003A2                                    (2/123)261+         LTORG 
+0003A8 00000011         =F'17'
+0003AC                                    (2/124)262+RT1_CCE10       DS 0H
+0003AC D503B022B022     0003C0 0003C0      (1/87)264          CLC   =F'18',DFHRESP(NOSPACE)      RPI-687
+0003B2                                     (1/88)265          RT1   CCE
+0003B2                                     (2/38)266+         DS    0H
+0003B2 4DB0D13E                000146     (2/120)267+RT1_TEST11       BAS   RT1_LINK,RT1_TEST_CC0
+0003B6                                    (2/121)268+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000003B6 LEN=01000 REG=B OFF=00000 LAB=
+0003B6 47F0B00E                0003C4     (2/122)269+         B     RT1_CCE11
+0003BA                                    (2/123)270+         LTORG 
+0003C0 00000012         =F'18'
+0003C4                                    (2/124)271+RT1_CCE11       DS 0H
+0003C4 D503B022B022     0003D8 0003D8      (1/89)273          CLC   =F'19',DFHRESP(NOTOPEN)      RPI-687
+0003CA                                     (1/90)274          RT1   CCE
+0003CA                                     (2/38)275+         DS    0H
+0003CA 4DB0D13E                000146     (2/120)276+RT1_TEST12       BAS   RT1_LINK,RT1_TEST_CC0
+0003CE                                    (2/121)277+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000003CE LEN=01000 REG=B OFF=00000 LAB=
+0003CE 47F0B00E                0003DC     (2/122)278+         B     RT1_CCE12
+0003D2                                    (2/123)279+         LTORG 
+0003D8 00000013         =F'19'
+0003DC                                    (2/124)280+RT1_CCE12       DS 0H
+0003DC D503B022B022     0003F0 0003F0      (1/91)282          CLC   =F'20',DFHRESP(ENDFILE)      RPI-687
+0003E2                                     (1/92)283          RT1   CCE
+0003E2                                     (2/38)284+         DS    0H
+0003E2 4DB0D13E                000146     (2/120)285+RT1_TEST13       BAS   RT1_LINK,RT1_TEST_CC0
+0003E6                                    (2/121)286+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000003E6 LEN=01000 REG=B OFF=00000 LAB=
+0003E6 47F0B00E                0003F4     (2/122)287+         B     RT1_CCE13
+0003EA                                    (2/123)288+         LTORG 
+0003F0 00000014         =F'20'
+0003F4                                    (2/124)289+RT1_CCE13       DS 0H
+0003F4 D503B022B022     000408 000408      (1/93)291          CLC   =F'21',DFHRESP(ILLOGIC)      RPI-729
+0003FA                                     (1/94)292          RT1   CCE
+0003FA                                     (2/38)293+         DS    0H
+0003FA 4DB0D13E                000146     (2/120)294+RT1_TEST14       BAS   RT1_LINK,RT1_TEST_CC0
+0003FE                                    (2/121)295+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000003FE LEN=01000 REG=B OFF=00000 LAB=
+0003FE 47F0B00E                00040C     (2/122)296+         B     RT1_CCE14
+000402                                    (2/123)297+         LTORG 
+000408 00000015         =F'21'
+00040C                                    (2/124)298+RT1_CCE14       DS 0H
+00040C D503B022B022     000420 000420      (1/95)300          CLC   =F'22',DFHRESP(LENGERR)
+000412                                     (1/96)301          RT1   CCE
+000412                                     (2/38)302+         DS    0H
+000412 4DB0D13E                000146     (2/120)303+RT1_TEST15       BAS   RT1_LINK,RT1_TEST_CC0
+000416                                    (2/121)304+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000416 LEN=01000 REG=B OFF=00000 LAB=
+000416 47F0B00E                000424     (2/122)305+         B     RT1_CCE15
+00041A                                    (2/123)306+         LTORG 
+000420 00000016         =F'22'
+000424                                    (2/124)307+RT1_CCE15       DS 0H
+000424 D503B022B022     000438 000438      (1/97)309          CLC   =F'26',DFHRESP(ITEMERR)   RPI-662
+00042A                                     (1/98)310          RT1   CCE
+00042A                                     (2/38)311+         DS    0H
+00042A 4DB0D13E                000146     (2/120)312+RT1_TEST16       BAS   RT1_LINK,RT1_TEST_CC0
+00042E                                    (2/121)313+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000042E LEN=01000 REG=B OFF=00000 LAB=
+00042E 47F0B00E                00043C     (2/122)314+         B     RT1_CCE16
+000432                                    (2/123)315+         LTORG 
+000438 0000001A         =F'26'
+00043C                                    (2/124)316+RT1_CCE16       DS 0H
+00043C D503B022B022     000450 000450      (1/99)318          CLC   =F'27',DFHRESP(PGMIDERR)
+000442                                    (1/100)319          RT1   CCE
+000442                                     (2/38)320+         DS    0H
+000442 4DB0D13E                000146     (2/120)321+RT1_TEST17       BAS   RT1_LINK,RT1_TEST_CC0
+000446                                    (2/121)322+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000446 LEN=01000 REG=B OFF=00000 LAB=
+000446 47F0B00E                000454     (2/122)323+         B     RT1_CCE17
+00044A                                    (2/123)324+         LTORG 
+000450 0000001B         =F'27'
+000454                                    (2/124)325+RT1_CCE17       DS 0H
+000454 D503B022B022     000468 000468     (1/101)327          CLC   =F'28',DFHRESP(TRANSIDERR) RPI-928
+00045A                                    (1/102)328          RT1   CCE
+00045A                                     (2/38)329+         DS    0H
+00045A 4DB0D13E                000146     (2/120)330+RT1_TEST18       BAS   RT1_LINK,RT1_TEST_CC0
+00045E                                    (2/121)331+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000045E LEN=01000 REG=B OFF=00000 LAB=
+00045E 47F0B00E                00046C     (2/122)332+         B     RT1_CCE18
+000462                                    (2/123)333+         LTORG 
+000468 0000001C         =F'28'
+00046C                                    (2/124)334+RT1_CCE18       DS 0H
+00046C D503B022B022     000480 000480     (1/103)336          CLC   =F'29',DFHRESP(ENDDATA)   RPI-928
+000472                                    (1/104)337          RT1   CCE
+000472                                     (2/38)338+         DS    0H
+000472 4DB0D13E                000146     (2/120)339+RT1_TEST19       BAS   RT1_LINK,RT1_TEST_CC0
+000476                                    (2/121)340+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000476 LEN=01000 REG=B OFF=00000 LAB=
+000476 47F0B00E                000484     (2/122)341+         B     RT1_CCE19
+00047A                                    (2/123)342+         LTORG 
+000480 0000001D         =F'29'
+000484                                    (2/124)343+RT1_CCE19       DS 0H
+000484 D503B022B022     000498 000498     (1/105)345          CLC   =F'31',DFHRESP(EXPIRED)   RPI-751
+00048A                                    (1/106)346          RT1   CCE
+00048A                                     (2/38)347+         DS    0H
+00048A 4DB0D13E                000146     (2/120)348+RT1_TEST20       BAS   RT1_LINK,RT1_TEST_CC0
+00048E                                    (2/121)349+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000048E LEN=01000 REG=B OFF=00000 LAB=
+00048E 47F0B00E                00049C     (2/122)350+         B     RT1_CCE20
+000492                                    (2/123)351+         LTORG 
+000498 0000001F         =F'31'
+00049C                                    (2/124)352+RT1_CCE20       DS 0H
+00049C D503B022B022     0004B0 0004B0     (1/107)354          CLC   =F'36',DFHRESP(MAPFAIL)   RPI-841
+0004A2                                    (1/108)355          RT1   CCE
+0004A2                                     (2/38)356+         DS    0H
+0004A2 4DB0D13E                000146     (2/120)357+RT1_TEST21       BAS   RT1_LINK,RT1_TEST_CC0
+0004A6                                    (2/121)358+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000004A6 LEN=01000 REG=B OFF=00000 LAB=
+0004A6 47F0B00E                0004B4     (2/122)359+         B     RT1_CCE21
+0004AA                                    (2/123)360+         LTORG 
+0004B0 00000024         =F'36'
+0004B4                                    (2/124)361+RT1_CCE21       DS 0H
+0004B4 D503B022B022     0004C8 0004C8     (1/109)363          CLC   =F'38',DFHRESP(INVMPSZ)   RPI-841
+0004BA                                    (1/110)364          RT1   CCE
+0004BA                                     (2/38)365+         DS    0H
+0004BA 4DB0D13E                000146     (2/120)366+RT1_TEST22       BAS   RT1_LINK,RT1_TEST_CC0
+0004BE                                    (2/121)367+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000004BE LEN=01000 REG=B OFF=00000 LAB=
+0004BE 47F0B00E                0004CC     (2/122)368+         B     RT1_CCE22
+0004C2                                    (2/123)369+         LTORG 
+0004C8 00000026         =F'38'
+0004CC                                    (2/124)370+RT1_CCE22       DS 0H
+0004CC D503B022B022     0004E0 0004E0     (1/111)372          CLC   =F'40',DFHRESP(OVERFLOW)  RPI-841
+0004D2                                    (1/112)373          RT1   CCE
+0004D2                                     (2/38)374+         DS    0H
+0004D2 4DB0D13E                000146     (2/120)375+RT1_TEST23       BAS   RT1_LINK,RT1_TEST_CC0
+0004D6                                    (2/121)376+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000004D6 LEN=01000 REG=B OFF=00000 LAB=
+0004D6 47F0B00E                0004E4     (2/122)377+         B     RT1_CCE23
+0004DA                                    (2/123)378+         LTORG 
+0004E0 00000028         =F'40'
+0004E4                                    (2/124)379+RT1_CCE23       DS 0H
+0004E4 D503B022B022     0004F8 0004F8     (1/113)381          CLC   =F'44',DFHRESP(QIDERR)    RPI-662
+0004EA                                    (1/114)382          RT1   CCE
+0004EA                                     (2/38)383+         DS    0H
+0004EA 4DB0D13E                000146     (2/120)384+RT1_TEST24       BAS   RT1_LINK,RT1_TEST_CC0
+0004EE                                    (2/121)385+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000004EE LEN=01000 REG=B OFF=00000 LAB=
+0004EE 47F0B00E                0004FC     (2/122)386+         B     RT1_CCE24
+0004F2                                    (2/123)387+         LTORG 
+0004F8 0000002C         =F'44'
+0004FC                                    (2/124)388+RT1_CCE24       DS 0H
+0004FC D503B022B022     000510 000510     (1/115)390          CLC   =F'55',DFHRESP(ENQBUSY)   RPI-951
+000502                                    (1/116)391          RT1   CCE
+000502                                     (2/38)392+         DS    0H
+000502 4DB0D13E                000146     (2/120)393+RT1_TEST25       BAS   RT1_LINK,RT1_TEST_CC0
+000506                                    (2/121)394+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000506 LEN=01000 REG=B OFF=00000 LAB=
+000506 47F0B00E                000514     (2/122)395+         B     RT1_CCE25
+00050A                                    (2/123)396+         LTORG 
+000510 00000037         =F'55'
+000514                                    (2/124)397+RT1_CCE25       DS 0H
+000514 D503B022B022     000528 000528     (1/117)399          CLC   =F'56',DFHRESP(ENVDEFERR) RPI-928
+00051A                                    (1/118)400          RT1   CCE
+00051A                                     (2/38)401+         DS    0H
+00051A 4DB0D13E                000146     (2/120)402+RT1_TEST26       BAS   RT1_LINK,RT1_TEST_CC0
+00051E                                    (2/121)403+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000051E LEN=01000 REG=B OFF=00000 LAB=
+00051E 47F0B00E                00052C     (2/122)404+         B     RT1_CCE26
+000522                                    (2/123)405+         LTORG 
+000528 00000038         =F'56'
+00052C                                    (2/124)406+RT1_CCE26       DS 0H
+00052C D503B022B022     000540 000540     (1/119)408          CLC   =F'61',DFHRESP(NOTALLOC)  RPI-1079
+000532 D503B026B026     000544 000544     (1/120)409          CLC   =F'84',DFHRESP(DISABLED)  RPI-687
+000538                                    (1/121)410          RT1   CCE
+000538                                     (2/38)411+         DS    0H
+000538 4DB0D13E                000146     (2/120)412+RT1_TEST27       BAS   RT1_LINK,RT1_TEST_CC0
+00053C                                    (2/121)413+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000053C LEN=01000 REG=B OFF=00000 LAB=
+00053C 47F0B00C                000548     (2/122)414+         B     RT1_CCE27
+000540                                    (2/123)415+         LTORG 
+000540 0000003D         =F'61'
+000544 00000054         =F'84'
+000548                                    (2/124)416+RT1_CCE27       DS 0H
+000548                                    (1/122)418          RT1   CCE,=F'0',DFHRESP(NORMAL)
+000548                                     (2/38)419+         DS    0H
+000548 D503B01CB01C     000558 000558      (2/49)420+         CLC   =F'0',DFHRESP(NORMAL)
+00054E 4DB0D13E                000146     (2/120)421+RT1_TEST28       BAS   RT1_LINK,RT1_TEST_CC0
+000552                                    (2/121)422+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000552 LEN=01000 REG=B OFF=00000 LAB=
+000552 47F0B00A                00055C     (2/122)423+         B     RT1_CCE28
+000556                                    (2/123)424+         LTORG 
+000558 00000000         =F'0'
+00055C                                    (2/124)425+RT1_CCE28       DS 0H
+00055C                                    (1/123)427          RT1   CCE,=F'1',DFHRESP(ERROR)
+00055C                                     (2/38)428+         DS    0H
+00055C D503B01EB01E     000570 000570      (2/49)429+         CLC   =F'1',DFHRESP(ERROR)
+000562 4DB0D13E                000146     (2/120)430+RT1_TEST29       BAS   RT1_LINK,RT1_TEST_CC0
+000566                                    (2/121)431+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000566 LEN=01000 REG=B OFF=00000 LAB=
+000566 47F0B00E                000574     (2/122)432+         B     RT1_CCE29
+00056A                                    (2/123)433+         LTORG 
+000570 00000001         =F'1'
+000574                                    (2/124)434+RT1_CCE29       DS 0H
+000574                                    (1/124)436          RT1   CCE,=F'11',DFHRESP(TERMIDERR)    RPI-928
+000574                                     (2/38)438+         DS    0H
+000574 D503B022B022     000588 000588      (2/49)439+         CLC   =F'11',DFHRESP(TERMIDERR)
+00057A 4DB0D13E                000146     (2/120)440+RT1_TEST30       BAS   RT1_LINK,RT1_TEST_CC0
+00057E                                    (2/121)441+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000057E LEN=01000 REG=B OFF=00000 LAB=
+00057E 47F0B00E                00058C     (2/122)442+         B     RT1_CCE30
+000582                                    (2/123)443+         LTORG 
+000588 0000000B         =F'11'
+00058C                                    (2/124)444+RT1_CCE30       DS 0H
+00058C                                    (1/125)446          RT1   CCE,=F'12',DFHRESP(FILENOTFOUND) RPI-687
+00058C                                     (2/38)448+         DS    0H
+00058C D503B022B022     0005A0 0005A0      (2/49)449+         CLC   =F'12',DFHRESP(FILENOTFOUND)
+000592 4DB0D13E                000146     (2/120)450+RT1_TEST31       BAS   RT1_LINK,RT1_TEST_CC0
+000596                                    (2/121)451+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000596 LEN=01000 REG=B OFF=00000 LAB=
+000596 47F0B00E                0005A4     (2/122)452+         B     RT1_CCE31
+00059A                                    (2/123)453+         LTORG 
+0005A0 0000000C         =F'12'
+0005A4                                    (2/124)454+RT1_CCE31       DS 0H
+0005A4                                    (1/126)456          RT1   CCE,=F'12',DFHRESP(DSIDERR)      RPI-905
+0005A4                                     (2/38)458+         DS    0H
+0005A4 D503B022B022     0005B8 0005B8      (2/49)459+         CLC   =F'12',DFHRESP(DSIDERR)
+0005AA 4DB0D13E                000146     (2/120)460+RT1_TEST32       BAS   RT1_LINK,RT1_TEST_CC0
+0005AE                                    (2/121)461+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000005AE LEN=01000 REG=B OFF=00000 LAB=
+0005AE 47F0B00E                0005BC     (2/122)462+         B     RT1_CCE32
+0005B2                                    (2/123)463+         LTORG 
+0005B8 0000000C         =F'12'
+0005BC                                    (2/124)464+RT1_CCE32       DS 0H
+0005BC                                    (1/127)466          RT1   CCE,=F'13',DFHRESP(NOTFND)       RPI-687 RPI-690
+0005BC                                     (2/38)468+         DS    0H
+0005BC D503B022B022     0005D0 0005D0      (2/49)469+         CLC   =F'13',DFHRESP(NOTFND)
+0005C2 4DB0D13E                000146     (2/120)470+RT1_TEST33       BAS   RT1_LINK,RT1_TEST_CC0
+0005C6                                    (2/121)471+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000005C6 LEN=01000 REG=B OFF=00000 LAB=
+0005C6 47F0B00E                0005D4     (2/122)472+         B     RT1_CCE33
+0005CA                                    (2/123)473+         LTORG 
+0005D0 0000000D         =F'13'
+0005D4                                    (2/124)474+RT1_CCE33       DS 0H
+0005D4                                    (1/128)476          RT1   CCE,=F'14',DFHRESP(DUPREC)       RPI-687
+0005D4                                     (2/38)478+         DS    0H
+0005D4 D503B022B022     0005E8 0005E8      (2/49)479+         CLC   =F'14',DFHRESP(DUPREC)
+0005DA 4DB0D13E                000146     (2/120)480+RT1_TEST34       BAS   RT1_LINK,RT1_TEST_CC0
+0005DE                                    (2/121)481+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000005DE LEN=01000 REG=B OFF=00000 LAB=
+0005DE 47F0B00E                0005EC     (2/122)482+         B     RT1_CCE34
+0005E2                                    (2/123)483+         LTORG 
+0005E8 0000000E         =F'14'
+0005EC                                    (2/124)484+RT1_CCE34       DS 0H
+0005EC                                    (1/129)486          RT1   CCE,=F'15',DFHRESP(DUPKEY)       RPI-687
+0005EC                                     (2/38)488+         DS    0H
+0005EC D503B022B022     000600 000600      (2/49)489+         CLC   =F'15',DFHRESP(DUPKEY)
+0005F2 4DB0D13E                000146     (2/120)490+RT1_TEST35       BAS   RT1_LINK,RT1_TEST_CC0
+0005F6                                    (2/121)491+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000005F6 LEN=01000 REG=B OFF=00000 LAB=
+0005F6 47F0B00E                000604     (2/122)492+         B     RT1_CCE35
+0005FA                                    (2/123)493+         LTORG 
+000600 0000000F         =F'15'
+000604                                    (2/124)494+RT1_CCE35       DS 0H
+000604                                    (1/130)496          RT1   CCE,=F'16',DFHRESP(INVREQ)
+000604                                     (2/38)497+         DS    0H
+000604 D503B022B022     000618 000618      (2/49)498+         CLC   =F'16',DFHRESP(INVREQ)
+00060A 4DB0D13E                000146     (2/120)499+RT1_TEST36       BAS   RT1_LINK,RT1_TEST_CC0
+00060E                                    (2/121)500+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000060E LEN=01000 REG=B OFF=00000 LAB=
+00060E 47F0B00E                00061C     (2/122)501+         B     RT1_CCE36
+000612                                    (2/123)502+         LTORG 
+000618 00000010         =F'16'
+00061C                                    (2/124)503+RT1_CCE36       DS 0H
+00061C                                    (1/131)505          RT1   CCE,=F'17',DFHRESP(IOERR)        RPI-928
+00061C                                     (2/38)507+         DS    0H
+00061C D503B022B022     000630 000630      (2/49)508+         CLC   =F'17',DFHRESP(IOERR)
+000622 4DB0D13E                000146     (2/120)509+RT1_TEST37       BAS   RT1_LINK,RT1_TEST_CC0
+000626                                    (2/121)510+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000626 LEN=01000 REG=B OFF=00000 LAB=
+000626 47F0B00E                000634     (2/122)511+         B     RT1_CCE37
+00062A                                    (2/123)512+         LTORG 
+000630 00000011         =F'17'
+000634                                    (2/124)513+RT1_CCE37       DS 0H
+000634                                    (1/132)515          RT1   CCE,=F'18',DFHRESP(NOSPACE)      RPI-687
+000634                                     (2/38)517+         DS    0H
+000634 D503B022B022     000648 000648      (2/49)518+         CLC   =F'18',DFHRESP(NOSPACE)
+00063A 4DB0D13E                000146     (2/120)519+RT1_TEST38       BAS   RT1_LINK,RT1_TEST_CC0
+00063E                                    (2/121)520+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000063E LEN=01000 REG=B OFF=00000 LAB=
+00063E 47F0B00E                00064C     (2/122)521+         B     RT1_CCE38
+000642                                    (2/123)522+         LTORG 
+000648 00000012         =F'18'
+00064C                                    (2/124)523+RT1_CCE38       DS 0H
+00064C                                    (1/133)525          RT1   CCE,=F'19',DFHRESP(NOTOPEN)      RPI-687
+00064C                                     (2/38)527+         DS    0H
+00064C D503B022B022     000660 000660      (2/49)528+         CLC   =F'19',DFHRESP(NOTOPEN)
+000652 4DB0D13E                000146     (2/120)529+RT1_TEST39       BAS   RT1_LINK,RT1_TEST_CC0
+000656                                    (2/121)530+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000656 LEN=01000 REG=B OFF=00000 LAB=
+000656 47F0B00E                000664     (2/122)531+         B     RT1_CCE39
+00065A                                    (2/123)532+         LTORG 
+000660 00000013         =F'19'
+000664                                    (2/124)533+RT1_CCE39       DS 0H
+000664                                    (1/134)535          RT1   CCE,=F'20',DFHRESP(ENDFILE)      RPI-687
+000664                                     (2/38)537+         DS    0H
+000664 D503B022B022     000678 000678      (2/49)538+         CLC   =F'20',DFHRESP(ENDFILE)
+00066A 4DB0D13E                000146     (2/120)539+RT1_TEST40       BAS   RT1_LINK,RT1_TEST_CC0
+00066E                                    (2/121)540+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000066E LEN=01000 REG=B OFF=00000 LAB=
+00066E 47F0B00E                00067C     (2/122)541+         B     RT1_CCE40
+000672                                    (2/123)542+         LTORG 
+000678 00000014         =F'20'
+00067C                                    (2/124)543+RT1_CCE40       DS 0H
+00067C                                    (1/135)545          RT1   CCE,=F'21',DFHRESP(ILLOGIC)      RPI-729
+00067C                                     (2/38)547+         DS    0H
+00067C D503B022B022     000690 000690      (2/49)548+         CLC   =F'21',DFHRESP(ILLOGIC)
+000682 4DB0D13E                000146     (2/120)549+RT1_TEST41       BAS   RT1_LINK,RT1_TEST_CC0
+000686                                    (2/121)550+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000686 LEN=01000 REG=B OFF=00000 LAB=
+000686 47F0B00E                000694     (2/122)551+         B     RT1_CCE41
+00068A                                    (2/123)552+         LTORG 
+000690 00000015         =F'21'
+000694                                    (2/124)553+RT1_CCE41       DS 0H
+000694                                    (1/136)555          RT1   CCE,=F'22',DFHRESP(LENGERR)
+000694                                     (2/38)556+         DS    0H
+000694 D503B022B022     0006A8 0006A8      (2/49)557+         CLC   =F'22',DFHRESP(LENGERR)
+00069A 4DB0D13E                000146     (2/120)558+RT1_TEST42       BAS   RT1_LINK,RT1_TEST_CC0
+00069E                                    (2/121)559+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000069E LEN=01000 REG=B OFF=00000 LAB=
+00069E 47F0B00E                0006AC     (2/122)560+         B     RT1_CCE42
+0006A2                                    (2/123)561+         LTORG 
+0006A8 00000016         =F'22'
+0006AC                                    (2/124)562+RT1_CCE42       DS 0H
+0006AC                                    (1/137)564          RT1   CCE,=F'26',DFHRESP(ITEMERR)      RPI-662
+0006AC                                     (2/38)566+         DS    0H
+0006AC D503B022B022     0006C0 0006C0      (2/49)567+         CLC   =F'26',DFHRESP(ITEMERR)
+0006B2 4DB0D13E                000146     (2/120)568+RT1_TEST43       BAS   RT1_LINK,RT1_TEST_CC0
+0006B6                                    (2/121)569+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000006B6 LEN=01000 REG=B OFF=00000 LAB=
+0006B6 47F0B00E                0006C4     (2/122)570+         B     RT1_CCE43
+0006BA                                    (2/123)571+         LTORG 
+0006C0 0000001A         =F'26'
+0006C4                                    (2/124)572+RT1_CCE43       DS 0H
+0006C4                                    (1/138)574          RT1   CCE,=F'27',DFHRESP(PGMIDERR)
+0006C4                                     (2/38)575+         DS    0H
+0006C4 D503B022B022     0006D8 0006D8      (2/49)576+         CLC   =F'27',DFHRESP(PGMIDERR)
+0006CA 4DB0D13E                000146     (2/120)577+RT1_TEST44       BAS   RT1_LINK,RT1_TEST_CC0
+0006CE                                    (2/121)578+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000006CE LEN=01000 REG=B OFF=00000 LAB=
+0006CE 47F0B00E                0006DC     (2/122)579+         B     RT1_CCE44
+0006D2                                    (2/123)580+         LTORG 
+0006D8 0000001B         =F'27'
+0006DC                                    (2/124)581+RT1_CCE44       DS 0H
+0006DC                                    (1/139)583          RT1   CCE,=F'28',DFHRESP(TRANSIDERR)   RPI-928
+0006DC                                     (2/38)585+         DS    0H
+0006DC D503B022B022     0006F0 0006F0      (2/49)586+         CLC   =F'28',DFHRESP(TRANSIDERR)
+0006E2 4DB0D13E                000146     (2/120)587+RT1_TEST45       BAS   RT1_LINK,RT1_TEST_CC0
+0006E6                                    (2/121)588+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000006E6 LEN=01000 REG=B OFF=00000 LAB=
+0006E6 47F0B00E                0006F4     (2/122)589+         B     RT1_CCE45
+0006EA                                    (2/123)590+         LTORG 
+0006F0 0000001C         =F'28'
+0006F4                                    (2/124)591+RT1_CCE45       DS 0H
+0006F4                                    (1/140)593          RT1   CCE,=F'29',DFHRESP(ENDDATA)      RPI-928
+0006F4                                     (2/38)595+         DS    0H
+0006F4 D503B022B022     000708 000708      (2/49)596+         CLC   =F'29',DFHRESP(ENDDATA)
+0006FA 4DB0D13E                000146     (2/120)597+RT1_TEST46       BAS   RT1_LINK,RT1_TEST_CC0
+0006FE                                    (2/121)598+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000006FE LEN=01000 REG=B OFF=00000 LAB=
+0006FE 47F0B00E                00070C     (2/122)599+         B     RT1_CCE46
+000702                                    (2/123)600+         LTORG 
+000708 0000001D         =F'29'
+00070C                                    (2/124)601+RT1_CCE46       DS 0H
+00070C                                    (1/141)603          RT1   CCE,=F'31',DFHRESP(EXPIRED)      RPI-751
+00070C                                     (2/38)605+         DS    0H
+00070C D503B022B022     000720 000720      (2/49)606+         CLC   =F'31',DFHRESP(EXPIRED)
+000712 4DB0D13E                000146     (2/120)607+RT1_TEST47       BAS   RT1_LINK,RT1_TEST_CC0
+000716                                    (2/121)608+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000716 LEN=01000 REG=B OFF=00000 LAB=
+000716 47F0B00E                000724     (2/122)609+         B     RT1_CCE47
+00071A                                    (2/123)610+         LTORG 
+000720 0000001F         =F'31'
+000724                                    (2/124)611+RT1_CCE47       DS 0H
+000724                                    (1/142)613          RT1   CCE,=F'36',DFHRESP(MAPFAIL)      RPI-841
+000724                                     (2/38)615+         DS    0H
+000724 D503B022B022     000738 000738      (2/49)616+         CLC   =F'36',DFHRESP(MAPFAIL)
+00072A 4DB0D13E                000146     (2/120)617+RT1_TEST48       BAS   RT1_LINK,RT1_TEST_CC0
+00072E                                    (2/121)618+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000072E LEN=01000 REG=B OFF=00000 LAB=
+00072E 47F0B00E                00073C     (2/122)619+         B     RT1_CCE48
+000732                                    (2/123)620+         LTORG 
+000738 00000024         =F'36'
+00073C                                    (2/124)621+RT1_CCE48       DS 0H
+00073C                                    (1/143)623          RT1   CCE,=F'38',DFHRESP(INVMPSZ)      RPI-841
+00073C                                     (2/38)625+         DS    0H
+00073C D503B022B022     000750 000750      (2/49)626+         CLC   =F'38',DFHRESP(INVMPSZ)
+000742 4DB0D13E                000146     (2/120)627+RT1_TEST49       BAS   RT1_LINK,RT1_TEST_CC0
+000746                                    (2/121)628+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000746 LEN=01000 REG=B OFF=00000 LAB=
+000746 47F0B00E                000754     (2/122)629+         B     RT1_CCE49
+00074A                                    (2/123)630+         LTORG 
+000750 00000026         =F'38'
+000754                                    (2/124)631+RT1_CCE49       DS 0H
+000754                                    (1/144)633          RT1   CCE,=F'40',DFHRESP(OVERFLOW)     RPI-841
+000754                                     (2/38)635+         DS    0H
+000754 D503B022B022     000768 000768      (2/49)636+         CLC   =F'40',DFHRESP(OVERFLOW)
+00075A 4DB0D13E                000146     (2/120)637+RT1_TEST50       BAS   RT1_LINK,RT1_TEST_CC0
+00075E                                    (2/121)638+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000075E LEN=01000 REG=B OFF=00000 LAB=
+00075E 47F0B00E                00076C     (2/122)639+         B     RT1_CCE50
+000762                                    (2/123)640+         LTORG 
+000768 00000028         =F'40'
+00076C                                    (2/124)641+RT1_CCE50       DS 0H
+00076C                                    (1/145)643          RT1   CCE,=F'44',DFHRESP(QIDERR)       RPI-662
+00076C                                     (2/38)645+         DS    0H
+00076C D503B022B022     000780 000780      (2/49)646+         CLC   =F'44',DFHRESP(QIDERR)
+000772 4DB0D13E                000146     (2/120)647+RT1_TEST51       BAS   RT1_LINK,RT1_TEST_CC0
+000776                                    (2/121)648+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000776 LEN=01000 REG=B OFF=00000 LAB=
+000776 47F0B00E                000784     (2/122)649+         B     RT1_CCE51
+00077A                                    (2/123)650+         LTORG 
+000780 0000002C         =F'44'
+000784                                    (2/124)651+RT1_CCE51       DS 0H
+000784                                    (1/146)653          RT1   CCE,=F'55',DFHRESP(ENQBUSY)      RPI-951
+000784                                     (2/38)655+         DS    0H
+000784 D503B022B022     000798 000798      (2/49)656+         CLC   =F'55',DFHRESP(ENQBUSY)
+00078A 4DB0D13E                000146     (2/120)657+RT1_TEST52       BAS   RT1_LINK,RT1_TEST_CC0
+00078E                                    (2/121)658+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=0000078E LEN=01000 REG=B OFF=00000 LAB=
+00078E 47F0B00E                00079C     (2/122)659+         B     RT1_CCE52
+000792                                    (2/123)660+         LTORG 
+000798 00000037         =F'55'
+00079C                                    (2/124)661+RT1_CCE52       DS 0H
+00079C                                    (1/147)663          RT1   CCE,=F'56',DFHRESP(ENVDEFERR)    RPI-928
+00079C                                     (2/38)665+         DS    0H
+00079C D503B022B022     0007B0 0007B0      (2/49)666+         CLC   =F'56',DFHRESP(ENVDEFERR)
+0007A2 4DB0D13E                000146     (2/120)667+RT1_TEST53       BAS   RT1_LINK,RT1_TEST_CC0
+0007A6                                    (2/121)668+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000007A6 LEN=01000 REG=B OFF=00000 LAB=
+0007A6 47F0B00E                0007B4     (2/122)669+         B     RT1_CCE53
+0007AA                                    (2/123)670+         LTORG 
+0007B0 00000038         =F'56'
+0007B4                                    (2/124)671+RT1_CCE53       DS 0H
+0007B4                                    (1/148)673          RT1   CCE,=F'61',DFHRESP(NOTALLOC)     RPI-1079
+0007B4                                     (2/38)675+         DS    0H
+0007B4 D503B022B022     0007C8 0007C8      (2/49)676+         CLC   =F'61',DFHRESP(NOTALLOC)
+0007BA 4DB0D13E                000146     (2/120)677+RT1_TEST54       BAS   RT1_LINK,RT1_TEST_CC0
+0007BE                                    (2/121)678+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000007BE LEN=01000 REG=B OFF=00000 LAB=
+0007BE 47F0B00E                0007CC     (2/122)679+         B     RT1_CCE54
+0007C2                                    (2/123)680+         LTORG 
+0007C8 0000003D         =F'61'
+0007CC                                    (2/124)681+RT1_CCE54       DS 0H
+0007CC                                    (1/149)683          RT1   CCE,=F'72',DFHRESP(SUPPRESSED)   RPI-1057
+0007CC                                     (2/38)685+         DS    0H
+0007CC D503B022B022     0007E0 0007E0      (2/49)686+         CLC   =F'72',DFHRESP(SUPPRESSED)
+0007D2 4DB0D13E                000146     (2/120)687+RT1_TEST55       BAS   RT1_LINK,RT1_TEST_CC0
+0007D6                                    (2/121)688+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000007D6 LEN=01000 REG=B OFF=00000 LAB=
+0007D6 47F0B00E                0007E4     (2/122)689+         B     RT1_CCE55
+0007DA                                    (2/123)690+         LTORG 
+0007E0 00000048         =F'72'
+0007E4                                    (2/124)691+RT1_CCE55       DS 0H
+0007E4                                    (1/150)693          RT1   CCE,=F'83',DFHRESP(END)          RPI-1057
+0007E4                                     (2/38)695+         DS    0H
+0007E4 D503B022B022     0007F8 0007F8      (2/49)696+         CLC   =F'83',DFHRESP(END)
+0007EA 4DB0D13E                000146     (2/120)697+RT1_TEST56       BAS   RT1_LINK,RT1_TEST_CC0
+0007EE                                    (2/121)698+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=000007EE LEN=01000 REG=B OFF=00000 LAB=
+0007EE 47F0B00E                0007FC     (2/122)699+         B     RT1_CCE56
+0007F2                                    (2/123)700+         LTORG 
+0007F8 00000053         =F'83'
+0007FC                                    (2/124)701+RT1_CCE56       DS 0H
+0007FC                                    (1/151)703          RT1   CCE,=F'84',DFHRESP(DISABLED)     RPI-687
+0007FC                                     (2/38)705+         DS    0H
+0007FC D503B022B022     000810 000810      (2/49)706+         CLC   =F'84',DFHRESP(DISABLED)
+000802 4DB0D13E                000146     (2/120)707+RT1_TEST57       BAS   RT1_LINK,RT1_TEST_CC0
+000806                                    (2/121)708+         USING *,RT1_LINK
+LISTUSE TESTCIC1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTCIC1 ESD=0001 LOC=00000806 LEN=01000 REG=B OFF=00000 LAB=
+000806 47F0B00E                000814     (2/122)709+         B     RT1_CCE57
+00080A                                    (2/123)710+         LTORG 
+000810 00000054         =F'84'
+000814                                    (2/124)711+RT1_CCE57       DS 0H
+000814                                    (1/152)713          RT1   END
+000814 47F0D0B8                0000C0     (2/174)714+         B      RT1_END
+000818                                    (1/153)716          END 
+
+Symbol Table Listing
+
+ SYM=R0       LOC=00000000 LEN=00000001 ESD=0000 TYPE=ABS  XREF=122 
+ SYM=R10      LOC=0000000A LEN=00000001 ESD=0000 TYPE=ABS  XREF=132 
+ SYM=R1       LOC=00000001 LEN=00000001 ESD=0000 TYPE=ABS  XREF=123 
+ SYM=R11      LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=133 
+ SYM=R12      LOC=0000000C LEN=00000001 ESD=0000 TYPE=ABS  XREF=134 
+ SYM=R13      LOC=0000000D LEN=00000001 ESD=0000 TYPE=ABS  XREF=135 
+ SYM=R14      LOC=0000000E LEN=00000001 ESD=0000 TYPE=ABS  XREF=136 
+ SYM=R15      LOC=0000000F LEN=00000001 ESD=0000 TYPE=ABS  XREF=137 
+ SYM=R2       LOC=00000002 LEN=00000001 ESD=0000 TYPE=ABS  XREF=124 
+ SYM=R3       LOC=00000003 LEN=00000001 ESD=0000 TYPE=ABS  XREF=125 
+ SYM=R4       LOC=00000004 LEN=00000001 ESD=0000 TYPE=ABS  XREF=126 
+ SYM=R5       LOC=00000005 LEN=00000001 ESD=0000 TYPE=ABS  XREF=127 
+ SYM=R6       LOC=00000006 LEN=00000001 ESD=0000 TYPE=ABS  XREF=128 
+ SYM=R7       LOC=00000007 LEN=00000001 ESD=0000 TYPE=ABS  XREF=129 
+ SYM=R8       LOC=00000008 LEN=00000001 ESD=0000 TYPE=ABS  XREF=130 
+ SYM=R9       LOC=00000009 LEN=00000001 ESD=0000 TYPE=ABS  XREF=131 
+ SYM=RT1_ABORT LOC=00000096 LEN=00000002 ESD=0001 TYPE=REL  XREF=51 96 101 105 109 
+  113 117 
+ SYM=RT1_ABORTED LOC=0000013F LEN=00000001 ESD=0001 TYPE=REL  XREF=93 52 66 
+ SYM=RT1_CCE10 LOC=000003AC LEN=00000002 ESD=0001 TYPE=REL  XREF=262 260 
+ SYM=RT1_CCE1 LOC=000002D4 LEN=00000002 ESD=0001 TYPE=REL  XREF=181 179 
+ SYM=RT1_CCE11 LOC=000003C4 LEN=00000002 ESD=0001 TYPE=REL  XREF=271 269 
+ SYM=RT1_CCE12 LOC=000003DC LEN=00000002 ESD=0001 TYPE=REL  XREF=280 278 
+ SYM=RT1_CCE13 LOC=000003F4 LEN=00000002 ESD=0001 TYPE=REL  XREF=289 287 
+ SYM=RT1_CCE14 LOC=0000040C LEN=00000002 ESD=0001 TYPE=REL  XREF=298 296 
+ SYM=RT1_CCE15 LOC=00000424 LEN=00000002 ESD=0001 TYPE=REL  XREF=307 305 
+ SYM=RT1_CCE16 LOC=0000043C LEN=00000002 ESD=0001 TYPE=REL  XREF=316 314 
+ SYM=RT1_CCE17 LOC=00000454 LEN=00000002 ESD=0001 TYPE=REL  XREF=325 323 
+ SYM=RT1_CCE18 LOC=0000046C LEN=00000002 ESD=0001 TYPE=REL  XREF=334 332 
+ SYM=RT1_CCE19 LOC=00000484 LEN=00000002 ESD=0001 TYPE=REL  XREF=343 341 
+ SYM=RT1_CCE20 LOC=0000049C LEN=00000002 ESD=0001 TYPE=REL  XREF=352 350 
+ SYM=RT1_CCE2 LOC=000002EC LEN=00000002 ESD=0001 TYPE=REL  XREF=190 188 
+ SYM=RT1_CCE21 LOC=000004B4 LEN=00000002 ESD=0001 TYPE=REL  XREF=361 359 
+ SYM=RT1_CCE22 LOC=000004CC LEN=00000002 ESD=0001 TYPE=REL  XREF=370 368 
+ SYM=RT1_CCE23 LOC=000004E4 LEN=00000002 ESD=0001 TYPE=REL  XREF=379 377 
+ SYM=RT1_CCE24 LOC=000004FC LEN=00000002 ESD=0001 TYPE=REL  XREF=388 386 
+ SYM=RT1_CCE25 LOC=00000514 LEN=00000002 ESD=0001 TYPE=REL  XREF=397 395 
+ SYM=RT1_CCE26 LOC=0000052C LEN=00000002 ESD=0001 TYPE=REL  XREF=406 404 
+ SYM=RT1_CCE27 LOC=00000548 LEN=00000002 ESD=0001 TYPE=REL  XREF=416 414 
+ SYM=RT1_CCE28 LOC=0000055C LEN=00000002 ESD=0001 TYPE=REL  XREF=425 423 
+ SYM=RT1_CCE29 LOC=00000574 LEN=00000002 ESD=0001 TYPE=REL  XREF=434 432 
+ SYM=RT1_CCE30 LOC=0000058C LEN=00000002 ESD=0001 TYPE=REL  XREF=444 442 
+ SYM=RT1_CCE3 LOC=00000304 LEN=00000002 ESD=0001 TYPE=REL  XREF=199 197 
+ SYM=RT1_CCE31 LOC=000005A4 LEN=00000002 ESD=0001 TYPE=REL  XREF=454 452 
+ SYM=RT1_CCE32 LOC=000005BC LEN=00000002 ESD=0001 TYPE=REL  XREF=464 462 
+ SYM=RT1_CCE33 LOC=000005D4 LEN=00000002 ESD=0001 TYPE=REL  XREF=474 472 
+ SYM=RT1_CCE34 LOC=000005EC LEN=00000002 ESD=0001 TYPE=REL  XREF=484 482 
+ SYM=RT1_CCE35 LOC=00000604 LEN=00000002 ESD=0001 TYPE=REL  XREF=494 492 
+ SYM=RT1_CCE36 LOC=0000061C LEN=00000002 ESD=0001 TYPE=REL  XREF=503 501 
+ SYM=RT1_CCE37 LOC=00000634 LEN=00000002 ESD=0001 TYPE=REL  XREF=513 511 
+ SYM=RT1_CCE38 LOC=0000064C LEN=00000002 ESD=0001 TYPE=REL  XREF=523 521 
+ SYM=RT1_CCE39 LOC=00000664 LEN=00000002 ESD=0001 TYPE=REL  XREF=533 531 
+ SYM=RT1_CCE40 LOC=0000067C LEN=00000002 ESD=0001 TYPE=REL  XREF=543 541 
+ SYM=RT1_CCE4 LOC=0000031C LEN=00000002 ESD=0001 TYPE=REL  XREF=208 206 
+ SYM=RT1_CCE41 LOC=00000694 LEN=00000002 ESD=0001 TYPE=REL  XREF=553 551 
+ SYM=RT1_CCE42 LOC=000006AC LEN=00000002 ESD=0001 TYPE=REL  XREF=562 560 
+ SYM=RT1_CCE43 LOC=000006C4 LEN=00000002 ESD=0001 TYPE=REL  XREF=572 570 
+ SYM=RT1_CCE44 LOC=000006DC LEN=00000002 ESD=0001 TYPE=REL  XREF=581 579 
+ SYM=RT1_CCE45 LOC=000006F4 LEN=00000002 ESD=0001 TYPE=REL  XREF=591 589 
+ SYM=RT1_CCE46 LOC=0000070C LEN=00000002 ESD=0001 TYPE=REL  XREF=601 599 
+ SYM=RT1_CCE47 LOC=00000724 LEN=00000002 ESD=0001 TYPE=REL  XREF=611 609 
+ SYM=RT1_CCE48 LOC=0000073C LEN=00000002 ESD=0001 TYPE=REL  XREF=621 619 
+ SYM=RT1_CCE49 LOC=00000754 LEN=00000002 ESD=0001 TYPE=REL  XREF=631 629 
+ SYM=RT1_CCE50 LOC=0000076C LEN=00000002 ESD=0001 TYPE=REL  XREF=641 639 
+ SYM=RT1_CCE5 LOC=00000334 LEN=00000002 ESD=0001 TYPE=REL  XREF=217 215 
+ SYM=RT1_CCE51 LOC=00000784 LEN=00000002 ESD=0001 TYPE=REL  XREF=651 649 
+ SYM=RT1_CCE52 LOC=0000079C LEN=00000002 ESD=0001 TYPE=REL  XREF=661 659 
+ SYM=RT1_CCE53 LOC=000007B4 LEN=00000002 ESD=0001 TYPE=REL  XREF=671 669 
+ SYM=RT1_CCE54 LOC=000007CC LEN=00000002 ESD=0001 TYPE=REL  XREF=681 679 
+ SYM=RT1_CCE55 LOC=000007E4 LEN=00000002 ESD=0001 TYPE=REL  XREF=691 689 
+ SYM=RT1_CCE56 LOC=000007FC LEN=00000002 ESD=0001 TYPE=REL  XREF=701 699 
+ SYM=RT1_CCE57 LOC=00000814 LEN=00000002 ESD=0001 TYPE=REL  XREF=711 709 
+ SYM=RT1_CCE6 LOC=0000034C LEN=00000002 ESD=0001 TYPE=REL  XREF=226 224 
+ SYM=RT1_CCE7 LOC=00000364 LEN=00000002 ESD=0001 TYPE=REL  XREF=235 233 
+ SYM=RT1_CCE8 LOC=0000037C LEN=00000002 ESD=0001 TYPE=REL  XREF=244 242 
+ SYM=RT1_CCE9 LOC=00000394 LEN=00000002 ESD=0001 TYPE=REL  XREF=253 251 
+ SYM=RT1_DATA LOC=00000112 LEN=00000001 ESD=0001 TYPE=REL  XREF=87 
+ SYM=RT1_DTOT LOC=00000139 LEN=00000006 ESD=0001 TYPE=REL  XREF=91 60 61 
+ SYM=RT1_DUMP LOC=0000010C LEN=00000002 ESD=0001 TYPE=REL  XREF=81 67 
+ SYM=RT1_END  LOC=000000C0 LEN=00000002 ESD=0001 TYPE=REL  XREF=59 714 
+ SYM=RT1_LINK LOC=0000000B LEN=00000001 ESD=0000 TYPE=ABS  XREF=86 99 103 107 111 
+  115 119 177 178 186 187 195 196 204 205 213 214 222 223 231 232 240 241 249 250 
+  258 259 267 268 276 277 285 286 294 295 303 304 312 313 321 322 330 331 339 340 
+  348 349 357 358 366 367 375 376 384 385 393 394 402 403 412 413 421 422 430 431 
+  440 441 450 451 460 461 470 471 480 481 490 491 499 500 509 510 519 520 529 530 
+  539 540 549 550 558 559 568 569 577 578 587 588 597 598 607 608 617 618 627 628 
+  637 638 647 648 657 658 667 668 677 678 687 688 697 698 707 708 
+ SYM=RT1_OK   LOC=0000014A LEN=00000002 ESD=0001 TYPE=REL  XREF=97 
+ SYM=RT1_ONE  LOC=00000115 LEN=00000001 ESD=0001 TYPE=REL  XREF=89 98 102 106 110 
+  114 118 
+ SYM=RT1_START LOC=00000194 LEN=00000002 ESD=0001 TYPE=REL  XREF=141 50 
+ SYM=RT1_TEST10 LOC=0000039A LEN=00000004 ESD=0001 TYPE=REL  XREF=258 
+ SYM=RT1_TEST1 LOC=00000254 LEN=00000004 ESD=0001 TYPE=REL  XREF=177 
+ SYM=RT1_TEST11 LOC=000003B2 LEN=00000004 ESD=0001 TYPE=REL  XREF=267 
+ SYM=RT1_TEST12 LOC=000003CA LEN=00000004 ESD=0001 TYPE=REL  XREF=276 
+ SYM=RT1_TEST13 LOC=000003E2 LEN=00000004 ESD=0001 TYPE=REL  XREF=285 
+ SYM=RT1_TEST14 LOC=000003FA LEN=00000004 ESD=0001 TYPE=REL  XREF=294 
+ SYM=RT1_TEST15 LOC=00000412 LEN=00000004 ESD=0001 TYPE=REL  XREF=303 
+ SYM=RT1_TEST16 LOC=0000042A LEN=00000004 ESD=0001 TYPE=REL  XREF=312 
+ SYM=RT1_TEST17 LOC=00000442 LEN=00000004 ESD=0001 TYPE=REL  XREF=321 
+ SYM=RT1_TEST18 LOC=0000045A LEN=00000004 ESD=0001 TYPE=REL  XREF=330 
+ SYM=RT1_TEST19 LOC=00000472 LEN=00000004 ESD=0001 TYPE=REL  XREF=339 
+ SYM=RT1_TEST20 LOC=0000048A LEN=00000004 ESD=0001 TYPE=REL  XREF=348 
+ SYM=RT1_TEST2 LOC=000002DA LEN=00000004 ESD=0001 TYPE=REL  XREF=186 
+ SYM=RT1_TEST21 LOC=000004A2 LEN=00000004 ESD=0001 TYPE=REL  XREF=357 
+ SYM=RT1_TEST22 LOC=000004BA LEN=00000004 ESD=0001 TYPE=REL  XREF=366 
+ SYM=RT1_TEST23 LOC=000004D2 LEN=00000004 ESD=0001 TYPE=REL  XREF=375 
+ SYM=RT1_TEST24 LOC=000004EA LEN=00000004 ESD=0001 TYPE=REL  XREF=384 
+ SYM=RT1_TEST25 LOC=00000502 LEN=00000004 ESD=0001 TYPE=REL  XREF=393 
+ SYM=RT1_TEST26 LOC=0000051A LEN=00000004 ESD=0001 TYPE=REL  XREF=402 
+ SYM=RT1_TEST27 LOC=00000538 LEN=00000004 ESD=0001 TYPE=REL  XREF=412 
+ SYM=RT1_TEST28 LOC=0000054E LEN=00000004 ESD=0001 TYPE=REL  XREF=421 
+ SYM=RT1_TEST29 LOC=00000562 LEN=00000004 ESD=0001 TYPE=REL  XREF=430 
+ SYM=RT1_TEST30 LOC=0000057A LEN=00000004 ESD=0001 TYPE=REL  XREF=440 
+ SYM=RT1_TEST3 LOC=000002F2 LEN=00000004 ESD=0001 TYPE=REL  XREF=195 
+ SYM=RT1_TEST31 LOC=00000592 LEN=00000004 ESD=0001 TYPE=REL  XREF=450 
+ SYM=RT1_TEST32 LOC=000005AA LEN=00000004 ESD=0001 TYPE=REL  XREF=460 
+ SYM=RT1_TEST33 LOC=000005C2 LEN=00000004 ESD=0001 TYPE=REL  XREF=470 
+ SYM=RT1_TEST34 LOC=000005DA LEN=00000004 ESD=0001 TYPE=REL  XREF=480 
+ SYM=RT1_TEST35 LOC=000005F2 LEN=00000004 ESD=0001 TYPE=REL  XREF=490 
+ SYM=RT1_TEST36 LOC=0000060A LEN=00000004 ESD=0001 TYPE=REL  XREF=499 
+ SYM=RT1_TEST37 LOC=00000622 LEN=00000004 ESD=0001 TYPE=REL  XREF=509 
+ SYM=RT1_TEST38 LOC=0000063A LEN=00000004 ESD=0001 TYPE=REL  XREF=519 
+ SYM=RT1_TEST39 LOC=00000652 LEN=00000004 ESD=0001 TYPE=REL  XREF=529 
+ SYM=RT1_TEST40 LOC=0000066A LEN=00000004 ESD=0001 TYPE=REL  XREF=539 
+ SYM=RT1_TEST4 LOC=0000030A LEN=00000004 ESD=0001 TYPE=REL  XREF=204 
+ SYM=RT1_TEST41 LOC=00000682 LEN=00000004 ESD=0001 TYPE=REL  XREF=549 
+ SYM=RT1_TEST42 LOC=0000069A LEN=00000004 ESD=0001 TYPE=REL  XREF=558 
+ SYM=RT1_TEST43 LOC=000006B2 LEN=00000004 ESD=0001 TYPE=REL  XREF=568 
+ SYM=RT1_TEST44 LOC=000006CA LEN=00000004 ESD=0001 TYPE=REL  XREF=577 
+ SYM=RT1_TEST45 LOC=000006E2 LEN=00000004 ESD=0001 TYPE=REL  XREF=587 
+ SYM=RT1_TEST46 LOC=000006FA LEN=00000004 ESD=0001 TYPE=REL  XREF=597 
+ SYM=RT1_TEST47 LOC=00000712 LEN=00000004 ESD=0001 TYPE=REL  XREF=607 
+ SYM=RT1_TEST48 LOC=0000072A LEN=00000004 ESD=0001 TYPE=REL  XREF=617 
+ SYM=RT1_TEST49 LOC=00000742 LEN=00000004 ESD=0001 TYPE=REL  XREF=627 
+ SYM=RT1_TEST50 LOC=0000075A LEN=00000004 ESD=0001 TYPE=REL  XREF=637 
+ SYM=RT1_TEST5 LOC=00000322 LEN=00000004 ESD=0001 TYPE=REL  XREF=213 
+ SYM=RT1_TEST51 LOC=00000772 LEN=00000004 ESD=0001 TYPE=REL  XREF=647 
+ SYM=RT1_TEST52 LOC=0000078A LEN=00000004 ESD=0001 TYPE=REL  XREF=657 
+ SYM=RT1_TEST53 LOC=000007A2 LEN=00000004 ESD=0001 TYPE=REL  XREF=667 
+ SYM=RT1_TEST54 LOC=000007BA LEN=00000004 ESD=0001 TYPE=REL  XREF=677 
+ SYM=RT1_TEST55 LOC=000007D2 LEN=00000004 ESD=0001 TYPE=REL  XREF=687 
+ SYM=RT1_TEST56 LOC=000007EA LEN=00000004 ESD=0001 TYPE=REL  XREF=697 
+ SYM=RT1_TEST57 LOC=00000802 LEN=00000004 ESD=0001 TYPE=REL  XREF=707 
+ SYM=RT1_TEST6 LOC=0000033A LEN=00000004 ESD=0001 TYPE=REL  XREF=222 
+ SYM=RT1_TEST7 LOC=00000352 LEN=00000004 ESD=0001 TYPE=REL  XREF=231 
+ SYM=RT1_TEST8 LOC=0000036A LEN=00000004 ESD=0001 TYPE=REL  XREF=240 
+ SYM=RT1_TEST9 LOC=00000382 LEN=00000004 ESD=0001 TYPE=REL  XREF=249 
+ SYM=RT1_TEST_CC0 LOC=00000146 LEN=00000002 ESD=0001 TYPE=REL  XREF=95 177 186 195 
+  204 213 222 231 240 249 258 267 276 285 294 303 312 321 330 339 348 357 366 375 
+  384 393 402 412 421 430 440 450 460 470 480 490 499 509 519 529 539 549 558 568 
+  577 587 597 607 617 627 637 647 657 667 677 687 697 707 
+ SYM=RT1_TEST_CC1 LOC=00000152 LEN=00000002 ESD=0001 TYPE=REL  XREF=100 
+ SYM=RT1_TEST_CC2 LOC=0000015E LEN=00000002 ESD=0001 TYPE=REL  XREF=104 
+ SYM=RT1_TEST_CC3 LOC=0000016A LEN=00000002 ESD=0001 TYPE=REL  XREF=108 
+ SYM=RT1_TEST_CCGE LOC=00000176 LEN=00000002 ESD=0001 TYPE=REL  XREF=112 
+ SYM=RT1_TEST_CCLE LOC=00000182 LEN=00000002 ESD=0001 TYPE=REL  XREF=116 
+ SYM=RT1_TOT  LOC=00000112 LEN=00000003 ESD=0001 TYPE=REL  XREF=88 61 98 102 106 
+  110 114 118 
+ SYM=RT1_WTO1 LOC=00000116 LEN=00000002 ESD=0001 TYPE=REL  XREF=90 63 
+ SYM=RT1_WTO_END LOC=0000013F LEN=00000001 ESD=0001 TYPE=REL  XREF=92 90 
+ SYM=TESTCIC1 LOC=00000000 LEN=00000818 ESD=0001 TYPE=CST  XREF=32 42 
+ SYM=WTO#0003_EOT LOC=0000008E LEN=00000001 ESD=0001 TYPE=REL  XREF=47 45 46 
+ SYM=WTO#0004_EOT LOC=000000BE LEN=00000001 ESD=0001 TYPE=REL  XREF=56 54 55 
+ SYM=WTO#0006_EOT LOC=000000F7 LEN=00000001 ESD=0001 TYPE=REL  XREF=71 69 70 
+ SYM=X        LOC=00000190 LEN=00000004 ESD=0001 TYPE=REL  XREF=139 143 144 145 146 
+  147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 
+  167 168 169 170 171 172 173 
+
+Literal Table Listing
+
+ LIT=F'0'     LOC=00000260 LEN=00000004 ESD=0001 POOL=0002 XREF=143 144 174 
+ LIT=F'0'     LOC=00000558 LEN=00000004 ESD=0001 POOL=001D XREF=420 
+ LIT=F'1'     LOC=00000264 LEN=00000004 ESD=0001 POOL=0002 XREF=145 
+ LIT=F'1'     LOC=000002E8 LEN=00000004 ESD=0001 POOL=0003 XREF=183 
+ LIT=F'1'     LOC=00000570 LEN=00000004 ESD=0001 POOL=001E XREF=429 
+ LIT=F'11'    LOC=00000268 LEN=00000004 ESD=0001 POOL=0002 XREF=146 
+ LIT=F'11'    LOC=00000300 LEN=00000004 ESD=0001 POOL=0004 XREF=192 
+ LIT=F'11'    LOC=00000588 LEN=00000004 ESD=0001 POOL=001F XREF=439 
+ LIT=F'12'    LOC=0000026C LEN=00000004 ESD=0001 POOL=0002 XREF=147 148 
+ LIT=F'12'    LOC=00000318 LEN=00000004 ESD=0001 POOL=0005 XREF=201 
+ LIT=F'12'    LOC=00000330 LEN=00000004 ESD=0001 POOL=0006 XREF=210 
+ LIT=F'12'    LOC=000005A0 LEN=00000004 ESD=0001 POOL=0020 XREF=449 
+ LIT=F'12'    LOC=000005B8 LEN=00000004 ESD=0001 POOL=0021 XREF=459 
+ LIT=F'13'    LOC=00000270 LEN=00000004 ESD=0001 POOL=0002 XREF=149 
+ LIT=F'13'    LOC=00000348 LEN=00000004 ESD=0001 POOL=0007 XREF=219 
+ LIT=F'13'    LOC=000005D0 LEN=00000004 ESD=0001 POOL=0022 XREF=469 
+ LIT=F'14'    LOC=00000274 LEN=00000004 ESD=0001 POOL=0002 XREF=150 
+ LIT=F'14'    LOC=00000360 LEN=00000004 ESD=0001 POOL=0008 XREF=228 
+ LIT=F'14'    LOC=000005E8 LEN=00000004 ESD=0001 POOL=0023 XREF=479 
+ LIT=F'15'    LOC=00000278 LEN=00000004 ESD=0001 POOL=0002 XREF=151 
+ LIT=F'15'    LOC=00000378 LEN=00000004 ESD=0001 POOL=0009 XREF=237 
+ LIT=F'15'    LOC=00000600 LEN=00000004 ESD=0001 POOL=0024 XREF=489 
+ LIT=F'16'    LOC=0000027C LEN=00000004 ESD=0001 POOL=0002 XREF=152 
+ LIT=F'16'    LOC=00000390 LEN=00000004 ESD=0001 POOL=000A XREF=246 
+ LIT=F'16'    LOC=00000618 LEN=00000004 ESD=0001 POOL=0025 XREF=498 
+ LIT=F'17'    LOC=00000280 LEN=00000004 ESD=0001 POOL=0002 XREF=153 
+ LIT=F'17'    LOC=000003A8 LEN=00000004 ESD=0001 POOL=000B XREF=255 
+ LIT=F'17'    LOC=00000630 LEN=00000004 ESD=0001 POOL=0026 XREF=508 
+ LIT=F'18'    LOC=00000284 LEN=00000004 ESD=0001 POOL=0002 XREF=154 
+ LIT=F'18'    LOC=000003C0 LEN=00000004 ESD=0001 POOL=000C XREF=264 
+ LIT=F'18'    LOC=00000648 LEN=00000004 ESD=0001 POOL=0027 XREF=518 
+ LIT=F'19'    LOC=00000288 LEN=00000004 ESD=0001 POOL=0002 XREF=155 
+ LIT=F'19'    LOC=000003D8 LEN=00000004 ESD=0001 POOL=000D XREF=273 
+ LIT=F'19'    LOC=00000660 LEN=00000004 ESD=0001 POOL=0028 XREF=528 
+ LIT=F'20'    LOC=0000028C LEN=00000004 ESD=0001 POOL=0002 XREF=156 
+ LIT=F'20'    LOC=000003F0 LEN=00000004 ESD=0001 POOL=000E XREF=282 
+ LIT=F'20'    LOC=00000678 LEN=00000004 ESD=0001 POOL=0029 XREF=538 
+ LIT=F'21'    LOC=000002C4 LEN=00000004 ESD=0001 POOL=0002 XREF=170 
+ LIT=F'21'    LOC=00000408 LEN=00000004 ESD=0001 POOL=000F XREF=291 
+ LIT=F'21'    LOC=00000690 LEN=00000004 ESD=0001 POOL=002A XREF=548 
+ LIT=F'22'    LOC=00000290 LEN=00000004 ESD=0001 POOL=0002 XREF=157 
+ LIT=F'22'    LOC=00000420 LEN=00000004 ESD=0001 POOL=0010 XREF=300 
+ LIT=F'22'    LOC=000006A8 LEN=00000004 ESD=0001 POOL=002B XREF=557 
+ LIT=F'26'    LOC=000002A0 LEN=00000004 ESD=0001 POOL=0002 XREF=161 
+ LIT=F'26'    LOC=00000438 LEN=00000004 ESD=0001 POOL=0011 XREF=309 
+ LIT=F'26'    LOC=000006C0 LEN=00000004 ESD=0001 POOL=002C XREF=567 
+ LIT=F'27'    LOC=00000294 LEN=00000004 ESD=0001 POOL=0002 XREF=158 
+ LIT=F'27'    LOC=00000450 LEN=00000004 ESD=0001 POOL=0012 XREF=318 
+ LIT=F'27'    LOC=000006D8 LEN=00000004 ESD=0001 POOL=002D XREF=576 
+ LIT=F'28'    LOC=00000298 LEN=00000004 ESD=0001 POOL=0002 XREF=159 
+ LIT=F'28'    LOC=00000468 LEN=00000004 ESD=0001 POOL=0013 XREF=327 
+ LIT=F'28'    LOC=000006F0 LEN=00000004 ESD=0001 POOL=002E XREF=586 
+ LIT=F'29'    LOC=0000029C LEN=00000004 ESD=0001 POOL=0002 XREF=160 
+ LIT=F'29'    LOC=00000480 LEN=00000004 ESD=0001 POOL=0014 XREF=336 
+ LIT=F'29'    LOC=00000708 LEN=00000004 ESD=0001 POOL=002F XREF=596 
+ LIT=F'31'    LOC=000002AC LEN=00000004 ESD=0001 POOL=0002 XREF=164 
+ LIT=F'31'    LOC=00000498 LEN=00000004 ESD=0001 POOL=0015 XREF=345 
+ LIT=F'31'    LOC=00000720 LEN=00000004 ESD=0001 POOL=0030 XREF=606 
+ LIT=F'36'    LOC=000002B0 LEN=00000004 ESD=0001 POOL=0002 XREF=165 
+ LIT=F'36'    LOC=000004B0 LEN=00000004 ESD=0001 POOL=0016 XREF=354 
+ LIT=F'36'    LOC=00000738 LEN=00000004 ESD=0001 POOL=0031 XREF=616 
+ LIT=F'38'    LOC=000002B4 LEN=00000004 ESD=0001 POOL=0002 XREF=166 
+ LIT=F'38'    LOC=000004C8 LEN=00000004 ESD=0001 POOL=0017 XREF=363 
+ LIT=F'38'    LOC=00000750 LEN=00000004 ESD=0001 POOL=0032 XREF=626 
+ LIT=F'40'    LOC=000002B8 LEN=00000004 ESD=0001 POOL=0002 XREF=167 
+ LIT=F'40'    LOC=000004E0 LEN=00000004 ESD=0001 POOL=0018 XREF=372 
+ LIT=F'40'    LOC=00000768 LEN=00000004 ESD=0001 POOL=0033 XREF=636 
+ LIT=F'44'    LOC=000002A4 LEN=00000004 ESD=0001 POOL=0002 XREF=162 
+ LIT=F'44'    LOC=000004F8 LEN=00000004 ESD=0001 POOL=0019 XREF=381 
+ LIT=F'44'    LOC=00000780 LEN=00000004 ESD=0001 POOL=0034 XREF=646 
+ LIT=F'55'    LOC=000002BC LEN=00000004 ESD=0001 POOL=0002 XREF=168 
+ LIT=F'55'    LOC=00000510 LEN=00000004 ESD=0001 POOL=001A XREF=390 
+ LIT=F'55'    LOC=00000798 LEN=00000004 ESD=0001 POOL=0035 XREF=656 
+ LIT=F'56'    LOC=000002A8 LEN=00000004 ESD=0001 POOL=0002 XREF=163 
+ LIT=F'56'    LOC=00000528 LEN=00000004 ESD=0001 POOL=001B XREF=399 
+ LIT=F'56'    LOC=000007B0 LEN=00000004 ESD=0001 POOL=0036 XREF=666 
+ LIT=F'61'    LOC=000002C8 LEN=00000004 ESD=0001 POOL=0002 XREF=171 
+ LIT=F'61'    LOC=00000540 LEN=00000004 ESD=0001 POOL=001C XREF=408 
+ LIT=F'61'    LOC=000007C8 LEN=00000004 ESD=0001 POOL=0037 XREF=676 
+ LIT=F'72'    LOC=000002CC LEN=00000004 ESD=0001 POOL=0002 XREF=172 
+ LIT=F'72'    LOC=000007E0 LEN=00000004 ESD=0001 POOL=0038 XREF=686 
+ LIT=F'83'    LOC=000002D0 LEN=00000004 ESD=0001 POOL=0002 XREF=173 
+ LIT=F'83'    LOC=000007F8 LEN=00000004 ESD=0001 POOL=0039 XREF=696 
+ LIT=F'84'    LOC=000002C0 LEN=00000004 ESD=0001 POOL=0002 XREF=169 
+ LIT=F'84'    LOC=00000544 LEN=00000004 ESD=0001 POOL=001C XREF=409 
+ LIT=F'84'    LOC=00000810 LEN=00000004 ESD=0001 POOL=003A XREF=706 
+ LIT=X'402020202020' LOC=00000140 LEN=00000006 ESD=0001 POOL=0001 XREF=60 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTCIC1  MZ390 ENDED RC= 0 IO=2755

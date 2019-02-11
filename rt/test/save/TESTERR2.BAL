@@ -1,0 +1,157 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30  DSH         Initial version                           *
+* 2005-11-08 DSH RPI-74  Test relative offset errors                *
+* 2005-11-08 DSH RPI-85  Test MIN/MAX DC F and H limit errors11     *
+* 2006-01-06 DSH RPI-157 And 159 operand error checking             *
+* 2006-03-16 DSH RPI-238 MNOTE error if level > 4                   *
+* 2006-03-21 DSH RPI-253 Issue error for invalid labels such as _^A *
+* 2006-03-22 DSH RPI-260 Test expression parsing errors             *
+* 2006-07-06 DSH RPI-356 Test error for instruction CVD with no     *
+*                        arguments                                  *
+* 2006-07-19 DSH RPI-375 Test error when labeled using prefix on    *
+*                        sdt etc.                                   *
+* 2006-11-09 DSH RPI-488 Test error on branch label defined only    *
+*                        as macro                                   *
+* 2006-11-10 DSH RPI-473 Test error messages from CALL macro        *
+* 2007-02-22 DSH RPI-553 Add tests for duplicate symbols            *
+* 2007-05-07 DSH RPI-609 DC without data, comment                   *
+* 2007-06-10 DSH RPI-637 Test missing close ) on explicit           *
+*                        off(len,base) arg                          *
+* 2007-11-29 DSH RPI-745 Allow comments without comma on PR         *
+* 2007-12-07 DSH RPI-749 Test X EQU X and =CL(FWDLEN)' ' errors     *
+*********************************************************************
+         TITLE 'TESTERR2 - TEST AZ390 ERRORS'
+TESTERR2 CSECT 
+         USING *,15
+* BLANK, LABEL ONLY, INVALID CHAR FOR LABEL, OPER
+LABEL          
+;              
+;       ; 
+* UNDEFINED OPCODE FOR AZ390
+        JUNK 
+* INVALID PARMS
+*MCALL #=     1 LV= 1         WTO  'HELLO
+         BRAS  1,*+(WTO#0001_EOT-*+1)/2*2
+         DC    AL2(WTO#0001_EOT-*,0),C'HELLO
+WTO#0001_EOT     EQU *
+         SVC   35
+*MEXIT #=     1 LV= 1 WTO
+*MCALL #=     2 LV= 1         WTO  HELLO'
+         MNOTE 8,'WTO TEXT OPTION NOT SUPPORTED'
+*MEXIT #=     2 LV= 1 WTO
+*MCALL #=     3 LV= 1         WTO  MF=(E,X
+         LA    1,X
+         SVC   35
+*MEXIT #=     3 LV= 1 WTO
+* TEST ERROR ON INVALID RELATIVE ADDRESSES
+        BRL  TESTERR2+1
+        BRCL 15,TESTERR2+1
+        LARL 15,TESTERR2+1
+TOOFAR  EQU  TESTERR2+X'100000'
+        BRL  TOOFAR
+* TEST MIN MAX FOR DC F AND H
+         DC    H'32767'         OK
+         DC    H'32768'         BAD
+         DC    H'-32768'        OK
+         DC    H'-32769'        BAD
+         DC    FL1'127'         OK
+         DC    FL1'128'         BAD
+         DC    FL1'-128'        OK
+         DC    FL1'-129'        BAD
+         DC    FL2'32767'     OK
+         DC    FL2'32768'     BAD
+         DC    FL2'-32768'    OK
+         DC    FL2'-32769'    BAD
+         DC    FL3'8388607'   OK
+         DC    FL3'8388608'   BAD
+         DC    FL3'-8388608'  OK
+         DC    FL3'-8388609'  BAD
+* CHECK TOO MANY PARMS
+         OI    Y,3(1)
+         LR    1,2,3
+         L     1,2,3
+         MVC   Y,2,3
+         AP    Y,=P'1',3
+* CHECK LITERAL IN EXPRESSION
+         OI    Y,=X'FF'
+Y        DC    X'00'
+* TEST MNOTE ERROR LEVELS
+         MNOTE 4,'TEST MNOTE 1'
+         MNOTE 8,'TEST MNOTE 2'
+* TEST INVALID LABEL
+_A       DS    0H OK
+_^A      DS    0H NOT OK
+* TEST EXPRESSION PARSING ERRORS
+EXP1     EQU   1+
+EXP2     EQU   1//
+* TEST INSTRUCTION WITH NO ARGS CAUSING TRAP
+         CVD 
+* TEST LABELLED USING PREFIX ON SDT CAUSED BY TYPEING . VS ,
+R1       EQU   1
+R2       EQU   2
+         LR    R1.R2
+* TEST LABEL ONLY DEFINED AS MACRO LABEL
+         B     MYMAC
+         MACRO
+         TEST
+         MEND
+*MCALL #=     4 LV= 1 MYMAC    TEST 
+*MEXIT #=     4 LV= 1 TEST
+* TEST CALL MACRO MNOTE ERRORS
+*MCALL #=     5 LV= 1 EXEC2    CALL  SUBR,,VL,MF=(E,LIST)
+*MCALL #=     6 LV= 2 EXEC2    ZCALL SUBR,,VL,ID=,LINKINST=BALR,MF=(E,LX
+               IST)
+         CNOP  0,4
+EXEC2    DS    0F
+         MNOTE 12,'CALL VL INVALID WHEN NO PARMS'
+*MEXIT #=     6 LV= 2 ZCALL
+*MEXIT #=     5 LV= 1 CALL
+*MCALL #=     7 LV= 1 EXEC3    CALL  SUBR,,,MF=E
+*MCALL #=     8 LV= 2 EXEC3    ZCALL SUBR,,,ID=,LINKINST=BALR,MF=E
+         CNOP  0,4
+EXEC3    DS    0F
+         MNOTE 12,'CALL EXEC FORM MISSING LIST ADDR'
+*MEXIT #=     8 LV= 2 ZCALL
+*MEXIT #=     7 LV= 1 CALL
+*MCALL #=     9 LV= 1 STD      CALL  SUBR,,VL,MF=S
+*MCALL #=    10 LV= 2 STD      ZCALL SUBR,,VL,ID=,LINKINST=BALR,MF=S
+         CNOP  0,4
+STD      DS    0F
+         MNOTE 12,'CALL VL INVALID WHEN NO PARMS'
+*MEXIT #=    10 LV= 2 ZCALL
+*MEXIT #=     9 LV= 1 CALL
+*MCALL #=    11 LV= 1 LIST     CALL  ,(0,0),MF=L
+*MCALL #=    12 LV= 2 LIST     ZCALL ,(0,0),,ID=,LINKINST=BALR,MF=L
+         CNOP  0,4
+LIST     DS    0F
+         DC    A(0,0)
+*MEXIT #=    12 LV= 2 ZCALL
+*MEXIT #=    11 LV= 1 CALL
+* TEST DUPLICATE LABELS
+TESTERR2 DSECT     BAD
+TESTERR2 DS    0H  BAD
+EQU1     EQU   1
+EQU1     EQU   2   BAD
+* TEST DC NO DATA, COMMENT * AFTER 1, E type comma before comments
+         DC    CL3
+ * BAD COMMENT
+         PR    GOOD COMMENT
+* TEST EQU CIRCULAR ERROR AND LITERAL MOD FORWARD REF ERRORS RPI-739
+X749     EQU   X749              CIRCULAR EQU ERROR
+         LA    0,=CL(FWDLEN)' '  LIT MOD FORWARD REF ERROR
+FWDLEN   EQU   1
+* TEST MISSING CLOSE ) ON EXPLICIT ARGS
+         CLI   1(2,3      BAD
+         L     1,2(3,4    BAD
+         CLC   1(2,3,4(5) BAD
+         END 

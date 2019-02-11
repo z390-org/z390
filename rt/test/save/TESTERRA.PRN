@@ -1,0 +1,72 @@
+TESTERRA  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTERRA
+AZ390I options = bal notiming sysmac(mac) syscpy(mac) stats 
+  chkmac(2) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000008 TYPE=CST NAME=TESTERR1
+Assembler Listing
+000000                                       (1/51)1          MNOTE 4,'Macro OPEN CODE undefined .UNDEFINED1 at    (1/41) '
+000000                                       (1/51)2          MNOTE 4,'Macro OPEN CODE undefined .UNDEFINED2 at    (1/42) '
+000000                                       (1/51)3          MNOTE 4,'Macro OPEN CODE undefined .X11 at    (1/45) '
+000000                                       (1/51)4          MNOTE 4,'Macro OPEN CODE undefined .X12 at    (1/46) '
+000000                                        (1/1)5 *********************************************************************
+000000                                        (1/2)6 * Copyright 2009 Automated Software Tools Corporation               *
+000000                                        (1/3)7 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)8 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)9 *                                                                   *
+000000                                       (1/6)10 * This source code is part of z390 assembler/emulator package.      *
+000000                                       (1/7)11 *                                                                   *
+000000                                       (1/8)12 * The z390 package is distributed under GNU general public license  *
+000000                                       (1/9)13 *                                                                   *
+000000                                      (1/10)14 * Author - Don Higgins                                              *
+000000                                      (1/11)15 *********************************************************************
+000000                                      (1/12)16 * 2009-06-15 DSH          Initial version                           *
+000000                                      (1/13)17 * 2009-06-15 DSH RPI-1053 Move invalid ASCII test and missing macro *
+000000                                      (1/14)18 *                         warn from TESTERR1 and specify ASM and    *
+000000                                      (1/15)19 *                         CHKMAC(2).                                *
+000000                                      (1/16)20 *********************************************************************
+000000                                      (1/18)21          TITLE 'TESTERRA TEST INVALID ASCII,missing labels CHKMAC(2)'
+000000                                      (1/20)22 TESTERR1 CSECT 
+000000                                      (1/21)23          USING *,15
+LISTUSE TESTERR1 ESD=0001 LOC=00000000 LEN=01000 REG=F OFF=00000 LAB=
+000000                                      (1/22)24 * RPI-744 Test non-ascii character string error
+000000                                      (1/23)25          DC   C'e…'  MULTI-KEY VALUES 101 AND 201
+000002                                      (1/24)26 **********************************************************
+000002                                      (1/25)27 * ADD DUPLICATE AND MISSING MACRO ERRORS IN OPEN CODE
+000002                                      (1/26)28 *
+000002                                      (1/27)29 * THIS MUST BE LAST TEST WITH FAILING AGO IN OPEN CODE
+000002                                      (1/28)30 *
+000002                                      (1/29)31 **********************************************************
+000002                                      (1/30)32          MACRO
+000002                                      (1/31)33          TESTLAB
+000002                                      (1/32)34 .LAB1    ANOP
+000002                                      (1/33)35 .LAB2    ANOP
+000002                                      (1/34)36 .LAB1    ANOP
+000002                                      (1/34)37 * MZ390E error 111       (1/34)34 TESTLAB duplicate .LAB1 at 32
+000002                                      (1/35)38          AGO    .UNDEFINED1
+000002                                      (1/36)39          AIF    (1 EQ 1).UNDEFINED2
+000002                                      (1/37)40          MEND
+000002                                      (1/37)41          MNOTE 4,'Macro TESTLAB undefined .UNDEFINED1 at    (1/35) '
+000002                                      (1/37)42          MNOTE 4,'Macro TESTLAB undefined .UNDEFINED2 at    (1/36) '
+000002                                      (1/41)43 * MZ390E abort 16 file=1 line=41 OPEN CODE undefined .UNDEFINED1
+AZ390E error 165       (1/41)43   * MZ390E abort 16 file=1 line=41 OPEN CODE undefined .UNDEFINED1
+AZ390I Input truncated due to mz390 abort.
+
+Symbol Table Listing
+
+ SYM=TESTERR1 LOC=00000000 LEN=00000008 ESD=0001 TYPE=CST  XREF=22 
+
+Literal Table Listing
+
+ 
+AZ390I FID=  1 ERR=   4 C:\Users\Achim\GitHub\z390\rt\test\TESTERRA.MLC
+AZ390I total mnote warnings = 6
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 4
+AZ390I total mz390 errors   = 3
+AZ390I total az390 errors   = 1
+TESTERRA  MZ390 ENDED RC=12 IO=92

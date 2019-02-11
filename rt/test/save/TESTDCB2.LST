@@ -1,0 +1,13 @@
+TESTDCB2  LZ390 START
+LZ390I Copyright 2011 Automated Software Tools Corporation
+LZ390I Copyright 2013 Cat Herder Software, LLC
+LZ390I Copyright 2018 Joachim Bartz, Germany
+LZ390I z390 is licensed under GNU General Public License
+LZ390I options = bal notiming stats systerm(rt\test\RTTEST)
+LZ390I program = rt\test\TESTDCB2.OBJ
+LZ390I ESD=TESTDCB2 LOC=00000000 LEN=00000328
+LZ390I INCLUDE = rt\test\TESTDCB2.OBJ
+LZ390I RLD LOC=000001C0 FLD=000001C8 EXT=00000000
+LZ390I RLD LOC=000001C8 FLD=00000114 EXT=00000000
+LZ390I total errors         = 0
+TESTDCB2  LZ390 ENDED RC= 0 IO=327

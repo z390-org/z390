@@ -1,0 +1,57 @@
+*********************************************************************
+* Copyright 2006 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2006-09-11 DSH         Initial version                            *
+* 2006-09-11 DSH RPI-363 Change from test to rt\test directory      *
+* 2007-02-02 DSH RPI-532 Remove Windows prompt and fix path case    *
+*                        for Linux                                  *
+* 2007-10-30 DSH RPI-731 Add CMDLOG=NO to allow parent task to read *
+*                        output                                     *
+*********************************************************************
+
+         TITLE 'TESTCMD1 TEST USE OF SVC 34 COMMAND PROCESSOR'
+
+TESTCMD1 SUBENTRY
+         COPY  ASMMSP
+         WTO   'TESTCMD1 TEST USE OF SVC 34 COMMAND PROCESSOR'
+         CMDPROC START,CMDLOG=NO  RPI-731
+         CMDPROC WRITE,=C'"rt\test\TESTCMD1.BAT"'  RPI-532
+         LA    R4,50
+CMDLOOP  EQU   *
+         AHI   R4,-1
+         BZ    ERROR
+         CMDPROC READ,MSG
+         CHI   R15,4
+         BE    CMDLOOP
+         CHI   R15,8
+         BE    CMDEND
+         WTO   MF=(E,WTOCMD)
+         LA    R1,MSG
+         LA    R2,MSG+70
+         DO    UNTIL=(CR,R1,GE,R2)
+               IF (CLC,0(7,R1),EQ,=C'REM END')
+                  B CMDEND
+               ENDIF
+               AHI R1,1
+         ENDDO
+         B     CMDLOOP
+CMDEND   EQU   *
+         CMDPROC STOP
+         WTO   'TESTSVC1 ENDING OK'
+         SUBEXIT
+ERROR    WTO   'TESTCMD1 COMMAND ERROR'
+         SUBEXIT RC=16
+WTOCMD   DC    AL2(WTOEND-*,0)
+         DC    C'MSG FROM CMD='
+MSG      DC    CL80' '
+WTOEND   EQU   *
+         EQUREGS
+         END

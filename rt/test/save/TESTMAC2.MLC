@@ -1,0 +1,99 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2005-11-02 DSH RPI-60  Add multiple logical operator tests for    *
+*                        AND OR NOT                                 *
+* 2006-04-07 DSH RPI-274 Add test for                               *
+*                        AIF ('A' EQ 'B' AND ('C' EQ 'D')).ERR      *
+* 2006-05-13 DSH RPI-314 Add AIFB and AGOB alias tests              *
+* 2006-05-14 DSH RPI-315 Add AIF alternate format and computed ago  *
+* 2008-01-31 DSH RPI-803 Test repeated execution of AGO             *
+* 2008-04-22 DSH RPI-833 Add string quotes for HLASM compatibility  *
+*********************************************************************
+
+TESTMAC2 SUBENTRY
+         WTO   'TESTMAC2 - TEST CONDITIONAL COMPARES'
+         MACRO
+&N       TEST  &P1
+         MNOTE 'N=&N P1=&P1'
+         AIF   ('&N' NE '&P1').SKIP
+         MNOTE '&N EQ &P1'
+         MEXIT
+.SKIP    ANOP
+         MNOTE '&N NE &P1'
+         MEND
+A        TEST  P1
+B        TEST  P2
+XYZ      TEST  XYZ
+         AIF   (1 EQ 0 OR 1 EQ 1).OK1
+         AGO   .ERR
+.OK1     ANOP
+         MNOTE 'OK1'
+         AIF   (1 EQ 1 AND 1 EQ 0).ERR
+         AIF   (NOT 1 EQ 0).OK2
+         AGO   .ERR
+.OK2     ANOP
+         MNOTE 'OK2'
+         AIF   (1 EQ 0 OR NOT 1 EQ 0).OK3
+         AGO   .ERR
+.OK3     ANOP
+         MNOTE 'OK3'
+* TEST AGO AND AIF LABELS WITHOUT ANOP
+&I       SETA  3
+.TEST    AIF   (&I EQ 0).TESTEND
+&I       SETA  &I-1
+         AGO   .TEST
+.TESTEND WTO   'TESTEND I=&I'
+* TEST COMPLEX AIF
+         MACRO
+         TEST  &MF=I,&SF=I
+         AIF   ('&MF' EQ 'L' OR('&SF' EQ 'L' AND '&MF(1)' EQ 'E')).ERR
+         MNOTE 'AIF NO BRANCH OK - MF=&MF SF=&SF'
+         AGO   .SKPERR
+.ERR     MNOTE 12,'AIF BRANCDED TO ERR'
+         SUBEXIT RC=12
+.SKPERR   ANOP
+         MEND
+         TEST
+* TEST AIFB AND AGOB
+         AIFB  (1 EQ 0).ERR
+         AIFB  (1 EQ 1).AIFBOK
+         AGOB  .ERR
+.AIFBOK  ANOP
+         AGOB  .AGOBOK
+         AGO   .ERR
+.AGOBOK  ANOP
+* TEST ALTERNATE AIF FORMAT COMPOUND TESTS
+         AIF   ('A' EQ 'B').TOK1,                                      X
+               ('C' EQ 'C').TOK2
+         MNOTE 'AIF FAILED'
+.TOK1    MNOTE 'TOK1'
+.TOK2    MNOTE 'TOK2'
+* TEST COMPUTED AGO
+&I       SETA  0
+.T1      AGO   (&I).T11,.T12,.T13
+         MNOTE 'AGO NO BRANCH'
+         AGO    .E1
+.T11     MNOTE '.T11'
+         AGO   .E1
+.T12     MNOTE '.T12'
+         AGO   .E1
+.T13     MNOTE '.T13'
+.E1      ANOP
+&i       SETA  &I+1
+         AIF   (&I LE 4).T1
+         WTO   'TESTMAC2 ENDED OK'
+         SUBEXIT
+         AGO   .EXIT
+.ERR     MNOTE 12,'TESTMAC2 ERROR OCCURRED'
+.EXIT    ANOP
+         END

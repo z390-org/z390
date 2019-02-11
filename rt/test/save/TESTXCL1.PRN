@@ -1,0 +1,148 @@
+TESTXCL1  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTXCL1
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000260 TYPE=CST NAME=TESTXCL1
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30 DSH         Initial version                            *
+000000                                      (1/13)13 * 2005-11-16 DSH RPI-95  Test XCTL                                  *
+000000                                      (1/14)14 * 2007-04-26 DSH RPI-598 Add additional CDE SNAPs to verify OK and  *
+000000                                      (1/15)15 *                        REPEAT                                     *
+000000                                      (1/16)16 *********************************************************************
+000000                                      (1/18)17          TITLE 'TESTXCL1 TEST LINK TO TESTXCL2, XCTL TO TESTXCL3'
+000000                                      (1/20)18 TESTXCL1 SUBENTRY 
+000000                                      (2/78)19+TESTXCL1 CSECT 
+000000 90ECD00C                            (2/168)20+         STM   14,12,12(13)
+000004 45FF0068                            (2/169)21+         BAL   15,104(15)
+000008 0000000000000000                    (2/170)22+         DC    18F'0'
+000050 E3C5E2E3E7C3D3F1                    (2/171)23+         DC    CL8'TESTXCL1'
+000058 F0F161F0F261F0F5                    (2/172)24+         DC    CL8'01/02/05'
+000060 F2F24BF3F3404040                    (2/173)25+         DC    CL8'22.33'
+000068 50FD0008                            (2/174)26+         ST    15,8(13)
+00006C 50DF0004                            (2/175)27+         ST    13,4(15)
+000070 18DF                                (2/176)28+         LR    13,15
+000072                                     (2/189)29+         USING TESTXCL1+8,13
+LISTUSE TESTXCL1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+000072                                      (1/21)31          WTO   'TESTXCL1 STARTING'
+000072 A715000D                00008C       (3/49)32+         BRAS  1,*+(WTO#0002_EOT-*+1)/2*2
+000076 00150000E3C5E2E3                     (3/50)33+         DC    AL2(WTO#0002_EOT-*,0),C'TESTXCL1 STARTING'
+00008B                  0000008B            (3/51)34+WTO#0002_EOT     EQU *
+00008C 0A23                                 (3/52)35+         SVC   35
+00008E                                      (1/22)37          SNAP  ID=11,PDATA=CDE,TEXT='TESTXCL1 VERIFY TESTXCL1 CDE'
+00008E A503000B                            (4/126)39+         IILL  0,11                  RPI158
+000092 A5021000                            (4/131)40+         IILH 0,4096               RPI158
+000096 4110D1E0                0001E8      (4/138)41+         LA    1,=CL60'TESTXCL1 VERIFY TESTXCL1 CDE'
+00009A 0A33                                (4/146)42+         SVC   51  SNAP DUMP R0=FLAGS,ID,R1=A(TEXT),R14-15=A(LOW,HIGH)
+00009C                                      (1/23)44          WTO   'TESTXCL1 NOW LINKING TO TESTXCL2'
+00009C A7150014                0000C4       (3/49)45+         BRAS  1,*+(WTO#0004_EOT-*+1)/2*2
+0000A0 00240000E3C5E2E3                     (3/50)46+         DC    AL2(WTO#0004_EOT-*,0),C'TESTXCL1 NOW LINKING TO TESTXCL2'
+0000C4                  000000C4            (3/51)48+WTO#0004_EOT     EQU *
+0000C4 0A23                                 (3/52)49+         SVC   35
+0000C6                                      (1/24)51          LINK  EP=TESTXCL2
+0000C6 4100D1D0                0001D8       (5/85)52+         LA    0,=CL8'TESTXCL2'
+0000CA 1BFF                                (5/130)53+         SR    15,15 USE DEFAULT SYS390 SEARCH
+0000CC 0A06                                (5/132)54+         SVC    6 LINK R0=A(PGM) R1-PARMS R15=DDNAME/DSNAME ADDR OR 0
+0000CE                                      (1/25)56          WTO   'TESTXCL1 NOW BACK FROM TESTXCL4'
+0000CE A7150014                0000F6       (3/49)57+         BRAS  1,*+(WTO#0006_EOT-*+1)/2*2
+0000D2 00230000E3C5E2E3                     (3/50)58+         DC    AL2(WTO#0006_EOT-*,0),C'TESTXCL1 NOW BACK FROM TESTXCL4'
+0000F5                  000000F5            (3/51)59+WTO#0006_EOT     EQU *
+0000F6 0A23                                 (3/52)60+         SVC   35
+0000F8                                      (1/26)62          SNAP  ID=12,PDATA=CDE,TEXT='TESTXCL1 VERIFY TESTXCL1+3 CDES'
+0000F8 A503000C                            (4/126)64+         IILL  0,12                  RPI158
+0000FC A5021000                            (4/131)65+         IILH 0,4096               RPI158
+000100 4110D21C                000224      (4/138)66+         LA    1,=CL60'TESTXCL1 VERIFY TESTXCL1+3 CDES'
+000104 0A33                                (4/146)67+         SVC   51  SNAP DUMP R0=FLAGS,ID,R1=A(TEXT),R14-15=A(LOW,HIGH)
+000106                                      (1/27)69          WTO   'TESTXCL1 REPEAT TEST'
+000106 A715000E                000122       (3/49)70+         BRAS  1,*+(WTO#0008_EOT-*+1)/2*2
+00010A 00180000E3C5E2E3                     (3/50)71+         DC    AL2(WTO#0008_EOT-*,0),C'TESTXCL1 REPEAT TEST'
+000122                  00000122            (3/51)72+WTO#0008_EOT     EQU *
+000122 0A23                                 (3/52)73+         SVC   35
+000124                                      (1/28)75          SNAP  ID=13,PDATA=CDE,TEXT='TESTXCL1 VERIFY TESTXCL1 CDE'
+000124 A503000D                            (4/126)77+         IILL  0,13                  RPI158
+000128 A5021000                            (4/131)78+         IILH 0,4096               RPI158
+00012C 4110D1E0                0001E8      (4/138)79+         LA    1,=CL60'TESTXCL1 VERIFY TESTXCL1 CDE'
+000130 0A33                                (4/146)80+         SVC   51  SNAP DUMP R0=FLAGS,ID,R1=A(TEXT),R14-15=A(LOW,HIGH)
+000132                                      (1/29)82          WTO   'TESTXCL1 NOW LINKING TO TESTXCL2'
+000132 A7150014                00015A       (3/49)83+         BRAS  1,*+(WTO#0010_EOT-*+1)/2*2
+000136 00240000E3C5E2E3                     (3/50)84+         DC    AL2(WTO#0010_EOT-*,0),C'TESTXCL1 NOW LINKING TO TESTXCL2'
+00015A                  0000015A            (3/51)86+WTO#0010_EOT     EQU *
+00015A 0A23                                 (3/52)87+         SVC   35
+00015C                                      (1/30)89          LINK  EP=TESTXCL2
+00015C 4100D1D0                0001D8       (5/85)90+         LA    0,=CL8'TESTXCL2'
+000160 1BFF                                (5/130)91+         SR    15,15 USE DEFAULT SYS390 SEARCH
+000162 0A06                                (5/132)92+         SVC    6 LINK R0=A(PGM) R1-PARMS R15=DDNAME/DSNAME ADDR OR 0
+000164                                      (1/31)94          WTO   'TESTXCL1 NOW BACK FROM TESTXCL4'
+000164 A7150014                00018C       (3/49)95+         BRAS  1,*+(WTO#0012_EOT-*+1)/2*2
+000168 00230000E3C5E2E3                     (3/50)96+         DC    AL2(WTO#0012_EOT-*,0),C'TESTXCL1 NOW BACK FROM TESTXCL4'
+00018B                  0000018B            (3/51)97+WTO#0012_EOT     EQU *
+00018C 0A23                                 (3/52)98+         SVC   35
+00018E                                     (1/32)100          SNAP  ID=14,PDATA=CDE,TEXT='TESTXCL1 VERIFY TESTXCL1+3 CDES'
+00018E A503000E                           (4/126)102+         IILL  0,14                  RPI158
+000192 A5021000                           (4/131)103+         IILH 0,4096               RPI158
+000196 4110D21C                000224     (4/138)104+         LA    1,=CL60'TESTXCL1 VERIFY TESTXCL1+3 CDES'
+00019A 0A33                               (4/146)105+         SVC   51  SNAP DUMP R0=FLAGS,ID,R1=A(TEXT),R14-15=A(LOW,HIGH)
+00019C                                     (1/33)107          WTO   'TESTXCL1 NOW XCTL TO TESTXCL4'
+00019C A7150013                0001C2      (3/49)108+         BRAS  1,*+(WTO#0014_EOT-*+1)/2*2
+0001A0 00210000E3C5E2E3                    (3/50)109+         DC    AL2(WTO#0014_EOT-*,0),C'TESTXCL1 NOW XCTL TO TESTXCL4'
+0001C1                  000001C1           (3/51)110+WTO#0014_EOT     EQU *
+0001C2 0A23                                (3/52)111+         SVC   35
+0001C4 05C0                                (1/34)113          BALR  12,0         ESTABLISH TEMP BASE FOR XCTL USE
+0001C6                                     (1/35)114          USING *,12
+LISTUSE TESTXCL1 ESD=0001 LOC=00000008 LEN=01000 REG=D OFF=00000 LAB=
+LISTUSE TESTXCL1 ESD=0001 LOC=000001C6 LEN=01000 REG=C OFF=00000 LAB=
+0001C6 58DD0004                            (1/36)115          L     13,4(13)            RESTORE TESTXCL1 SAVE AREA POINTER
+0001CA                                     (1/37)116          XCTL  (2,12),EP=TESTXCL4  RESTORE REGS,DEL XCL1, TRANS XCL4
+0001CA 4100C01A                0001E0      (6/74)118+         LA    0,=CL8'TESTXCL4'
+0001CE 1BFF                               (6/118)119+         SR    15,15 USE DEFAULT SYS390 SEARCH
+0001D0 982CD01C                            (7/50)121+         LM    2,12,20+4*2(13)
+0001D4 0A07                               (6/129)123+         SVC    7 XCTL R0=A(PGM) R1-PARMS R15=DDNAME/DSNAME ADDR OR 0
+0001D6                                     (1/38)125 *        SUBEXIT
+0001D6                                     (1/39)126          END 
+0001D8 E3C5E2E3E7C3D3F2 =CL8'TESTXCL2'
+0001E0 E3C5E2E3E7C3D3F4 =CL8'TESTXCL4'
+0001E8 E3C5E2E3E7C3D3F1 =CL60'TESTXCL1 VERIFY TESTXCL1 CDE'
+000224 E3C5E2E3E7C3D3F1 =CL60'TESTXCL1 VERIFY TESTXCL1+3 CDES'
+
+Symbol Table Listing
+
+ SYM=TESTXCL1 LOC=00000000 LEN=00000260 ESD=0001 TYPE=CST  XREF=19 29 
+ SYM=WTO#0002_EOT LOC=0000008B LEN=00000001 ESD=0001 TYPE=REL  XREF=34 32 33 
+ SYM=WTO#0004_EOT LOC=000000C4 LEN=00000001 ESD=0001 TYPE=REL  XREF=48 45 46 
+ SYM=WTO#0006_EOT LOC=000000F5 LEN=00000001 ESD=0001 TYPE=REL  XREF=59 57 58 
+ SYM=WTO#0008_EOT LOC=00000122 LEN=00000001 ESD=0001 TYPE=REL  XREF=72 70 71 
+ SYM=WTO#0010_EOT LOC=0000015A LEN=00000001 ESD=0001 TYPE=REL  XREF=86 83 84 
+ SYM=WTO#0012_EOT LOC=0000018B LEN=00000001 ESD=0001 TYPE=REL  XREF=97 95 96 
+ SYM=WTO#0014_EOT LOC=000001C1 LEN=00000001 ESD=0001 TYPE=REL  XREF=110 108 109 
+
+Literal Table Listing
+
+ LIT=CL60'TESTXCL1 VERIFY TESTXCL1 CDE' LOC=000001E8 LEN=0000003C ESD=0001 POOL=0001 XREF=41 
+  79 
+ LIT=CL60'TESTXCL1 VERIFY TESTXCL1+3 CDES' LOC=00000224 LEN=0000003C ESD=0001 POOL=0001 XREF=66 
+  104 
+ LIT=CL8'TESTXCL2' LOC=000001D8 LEN=00000008 ESD=0001 POOL=0001 XREF=52 90 
+ LIT=CL8'TESTXCL4' LOC=000001E0 LEN=00000008 ESD=0001 POOL=0001 XREF=118 
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTXCL1  MZ390 ENDED RC= 0 IO=1203

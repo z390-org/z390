@@ -1,0 +1,28 @@
+*********************************************************************
+* Copyright 2012 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2012-03-08 DSH         Initial version                            *
+*********************************************************************
+
+      TITLE    'TESTLNK5 TEST ENTRY TEST2 VIA TESTLNK5.LKD ENTRY TEST2'
+
+TEST1 SUBENTRY
+      WTO      'TEST1 ENTERED'
+      SUBEXIT
+TEST2 SUBENTRY
+      WTO      'TEST2 ENTERED'
+      SUBEXIT
+TEST3 BALR 12,0
+      USING *,12
+      WTO      'TEST3 ENTERED'
+      SR  15,15
+      BR  14
+      END TEST3

@@ -1,0 +1,43 @@
+*********************************************************************
+* Copyright 2005 Automated Software Tools Corporation               *
+* Copyright 2013 Cat Herder Software, LLC                           *
+* Copyright 2018 Joachim Bartz, Germany                             *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* Author - Don Higgins                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2006-11-10 DSH RPI-473 Correct call macro bugs and test options   *
+*********************************************************************
+
+TESTCAL1 SUBENTRY
+         WTO   'TESTCAL1 TEST LOCAL STATIC LINKED CALL WITH PARMS'
+         CALL  MYSUB,(PARM1),VL
+         CALL  MYSUB,(PARM1,PARM2),VL
+         LA    R4,PARM2
+         CALL  MYSUB,(PARM1,(R4)),VL,MF=(E,LIST)
+         CALL  MYSUB,MF=(E,LIST)
+         WTO  'TESTCAL1 ENDED OK'
+         SUBEXIT
+PARM1    DC   CL20'PARM1 MSG'
+PARM2    DC   CL20'PARM2 MSG'
+LIST     CALL  ,(PARM1,PARM2),VL,MF=L
+MYSUB    SUBENTRY
+         LR   R2,R1
+LOOP     EQU  *
+         L    R3,0(R2)
+         MVC  DMSG,0(R3)
+         WTO  MF=(E,WTOMSG)
+         AHI  R2,4
+         LTR  R3,R3
+         BP   LOOP
+         SUBEXIT
+WTOMSG   DC   AL2(WTOEND-*,0)
+         DC   C'PARM='
+DMSG     DC   CL20' '
+WTOEND   EQU  *
+         EQUREGS
+         END

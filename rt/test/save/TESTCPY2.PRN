@@ -1,0 +1,64 @@
+TESTCPY2  MZ390 START
+AZ390I Copyright 2011 Automated Software Tools Corporation
+AZ390I Copyright 2013 Cat Herder Software, LLC
+AZ390I Copyright 2018 Joachim Bartz, Germany
+AZ390I z390 is licensed under GNU General Public License
+AZ390I program = rt\test\TESTCPY2
+AZ390I options = sysmac(C:\Users\Achim\GitHub\z390\mac+.) 
+  syscpy(C:\Users\Achim\GitHub\z390\mac+.) @rt\Options.opt=(bal notiming stats) 
+  bal syscpy(mac+rt\test) systerm(rt\test\RTTEST)
+External Symbol Definitions
+ ESD=0001 LOC=00000000 LEN=00000158 TYPE=CST NAME=TESTCPY2
+Assembler Listing
+000000                                        (1/1)1 *********************************************************************
+000000                                        (1/2)2 * Copyright 2005 Automated Software Tools Corporation               *
+000000                                        (1/3)3 * Copyright 2013 Cat Herder Software, LLC                           *
+000000                                        (1/4)4 * Copyright 2018 Joachim Bartz, Germany                             *
+000000                                        (1/5)5 *                                                                   *
+000000                                        (1/6)6 * This source code is part of z390 assembler/emulator package.      *
+000000                                        (1/7)7 *                                                                   *
+000000                                        (1/8)8 * The z390 package is distributed under GNU general public license  *
+000000                                        (1/9)9 *                                                                   *
+000000                                      (1/10)10 * Author - Don Higgins                                              *
+000000                                      (1/11)11 *********************************************************************
+000000                                      (1/12)12 * 2005-09-30  DSH         Initial version                           *
+000000                                      (1/13)13 * 2007-02-19  DSH RPI-549 Ignore comments after COPY file name      *
+000000                                      (1/14)14 *********************************************************************
+000000                                      (1/16)15          PRINT NOGEN
+000000                                      (1/17)16 TESTCPY2 SUBENTRY 
+000072                                      (1/18)29          WTO   'TESTCPY1 TEST NESTED COPY SUPPORT'
+00009E                                      (1/19)37          COPY  TESTCP11 TEST COMMENTS AFTER FILE NAME
+00009E                                       (2/1)38= WTO 'TESTCP11 STARTING'
+0000BA                                       (2/2)44= COPY TESTCP21
+0000BA                                       (3/1)45= WTO 'TESTCP21 STARTING'
+0000D6                                       (2/3)51= COPY TESTCP22
+0000D6                                       (4/1)52= WTO 'TESTCP22 STARTING'
+0000F2                                      (1/20)58          COPY  TESTCP12
+0000F2                                       (5/1)59= WTO 'TESTCP12 STARTING'
+00010E                                       (5/2)65= COPY TESTCP21
+00010E                                       (3/1)66= WTO 'TESTCP21 STARTING'
+00012A                                       (5/3)72= COPY TESTCP22
+00012A                                       (4/1)73= WTO 'TESTCP22 STARTING'
+000146                                      (1/21)79          SUBEXIT 
+000158                                      (1/22)86          END 
+
+Symbol Table Listing
+
+ SYM=TESTCPY2 LOC=00000000 LEN=00000158 ESD=0001 TYPE=CST  XREF=17 27 
+ SYM=WTO#0002_EOT LOC=0000009B LEN=00000001 ESD=0001 TYPE=REL  XREF=34 31 32 
+ SYM=WTO#0003_EOT LOC=000000B7 LEN=00000001 ESD=0001 TYPE=REL  XREF=41 39 40 
+ SYM=WTO#0004_EOT LOC=000000D3 LEN=00000001 ESD=0001 TYPE=REL  XREF=48 46 47 
+ SYM=WTO#0005_EOT LOC=000000EF LEN=00000001 ESD=0001 TYPE=REL  XREF=55 53 54 
+ SYM=WTO#0006_EOT LOC=0000010B LEN=00000001 ESD=0001 TYPE=REL  XREF=62 60 61 
+ SYM=WTO#0007_EOT LOC=00000127 LEN=00000001 ESD=0001 TYPE=REL  XREF=69 67 68 
+ SYM=WTO#0008_EOT LOC=00000143 LEN=00000001 ESD=0001 TYPE=REL  XREF=76 74 75 
+
+Literal Table Listing
+
+ 
+AZ390I total mnote warnings = 0
+AZ390I total mnote errors   = 0
+AZ390I max   mnote level    = 0
+AZ390I total mz390 errors   = 0
+AZ390I total az390 errors   = 0
+TESTCPY2  MZ390 ENDED RC= 0 IO=568
