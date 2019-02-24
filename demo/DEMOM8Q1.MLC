@@ -9,16 +9,21 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* DEMOM8Q1.MLC                                                      *
+* Calculate and display 8 queens chess problem using recursive      *
+* macro code                                                        *
+*********************************************************************
 * Notes:                                                            *
 * * Compiling this module will generate code only.                  *
 *   See resulting ERR and PRN files after assembling.               *
 * * The generated OBJ file will have no CSECT and so no 390         *
 *   executable file can be built.                                   *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
+* 2005-09-30 DSH Initial version                                    *
 *********************************************************************
-*
+
          TITLE 'DEMOM8Q1.MLC - 8 QUEEENS CHESS PROBLEM SOLUTION'
+
          MACRO
          M8Q
          GBLA  &N,&X(8)

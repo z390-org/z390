@@ -9,10 +9,14 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
-* 2011-02-05  DSH Correct register pair to avoid 0C6 + remove junk  *
+* DEMOBMK1.MLC                                                      *
+* Benchmark which executes AXR, BCT 100,000 times for timing        *
+* purposes                                                          *
 *********************************************************************
-*
+* 2005-09-30 DSH Initial version                                    *
+* 2011-02-05 DSH Correct register pair to avoid 0C6 + remove junk   *
+*********************************************************************
+
 TESTBMK2 SUBENTRY
          WTO   'TESTBMK2 BENCHMARK HFP AXR'
          LX    R0,=LH'0'

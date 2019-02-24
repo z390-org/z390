@@ -9,9 +9,13 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
+* DEMOBMK1.MLC                                                      *
+* Benchmark which executes BCT instruction 2 million times for      *
+* timing purposes                                                   *
 *********************************************************************
-*
+* 2005-09-30 DSH Initial version                                    *
+*********************************************************************
+
 DEMOBMK1 SUBENTRY
          WTO  'DEMO2 Z390 FIRST EMULATION BENCHMARK FOR 2,000,000 INS'
          L    1,=A(2000000)

@@ -9,9 +9,12 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
+* DEMOWTO1.MLC                                                      *
+* WTO 'HELLO WORLD' 4 line macro program                            *
 *********************************************************************
-*
+* 2005-09-30 DSH Initial version                                    *
+*********************************************************************
+
 DEMOWTO1 SUBENTRY
          WTO   'HELLO WORLD'
          SUBEXIT

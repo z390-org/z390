@@ -9,29 +9,30 @@
 * The z390 package is distributed under GNU general public license  *
 *                                                                   *
 * Author - Don Higgins                                              *
-* DATE.    12/19/86.
-* REMARKS. LIST PRIMES ENDING IN 999 UP TO 1,000,000 (MAXPRIME VALUE)
-*          USING 1,000,000 BYTE TABLE AND SIEVE ROUTINE
 *********************************************************************
-* 1986-12-19  Initial version                                       *
-* 1987-01-16  Modify to use BXLE and CLCL scan for next prime       *
-* 1987-03-01  Modify to use GMAIN indtead of direct FQE access      *
-* 1987-05-20  Update timings for PC/370 R2.0                        *
-* 2008-03-21  DSH1 Upgrade from PC/370 to Z390 after 20 years       *
-*       1. Replace STD LINKAGE SETUP and EXIT with SUBENTRY/SUBEXIT *
-*          macro                                                    *
-*       2. Replace SVC WTO with WTO MACRO                           *
-*       3. Replace L, BALR to PET with CALL PET macro               *
-*       4. Replace MVCP with Z390 MVCOS Z10 instruction             *
-*       5. Replace GMAIN SVC with GETMAIN macro                     *
-*       6. Replace calls to PET.ALC with calls to updated           *
-*          LINKLIB\DAT.MLC which displays JDBC time stamp,          *
-*          total number of instructions, and MIPS                   *
-* 2008-06-09  DSH RPI-549 Change MVCOS to eliminate overlapped      *
-*                 storage exect.                                    *
-* 2019-01-04  JBA Increased MAXPRIME from 100K to 1M                *
+* SIEVE.MLC                                                         *
+* List primes ending in 999 up to 1,000,000 (MAXPRIME value) using  *
+* a 1,000,000 byte table and SIEVE routine                          *
 *********************************************************************
-*
+* 1986-12-19     Initial version                                    *
+* 1987-01-16     Modify to use BXLE and CLCL scan for next prime    *
+* 1987-03-01     Modify to use GMAIN instead of direct FQE access   *
+* 1987-05-20     Update timings for PC/370 R2.0                     *
+* 2008-03-21 DSH Upgrade from PC/370 to Z390 after 20 years         *
+*                1. Replace STD LINKAGE SETUP and EXIT with         *
+*                   SUBENTRY/SUBEXIT macro                          *
+*                2. Replace SVC WTO with WTO MACRO                  *
+*                3. Replace L, BALR to PET with CALL PET macro      *
+*                4. Replace MVCP with Z390 MVCOS Z10 instruction    *
+*                5. Replace GMAIN SVC with GETMAIN macro            *
+*                6. Replace calls to PET.ALC with calls to updated  *
+*                   LINKLIB\DAT.MLC which displays JDBC time stamp, *
+*                   total number of instructions, and MIPS          *
+* 2008-06-09 DSH Change MVCOS to eliminate overlapped storage       *
+*                exect. RPI-549                                     *
+* 2019-01-04 JBA Increased MAXPRIME from 100K to 1M                 *
+*********************************************************************
+
 SIEVE    SUBENTRY
          WTO   ' '
          WTO   'SIEVE.MLC PROGRAM TO PRINT PRIMES ENDING'

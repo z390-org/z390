@@ -9,9 +9,12 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
+* DEMONUM2.MLC                                                      *
+* Generate prime numbers from 1 to 4,000 using assembler code       *
 *********************************************************************
-*
+* 2005-09-30 DSH Initial version                                    *
+*********************************************************************
+
 DEMONUM2 SUBENTRY
          WTO   'DEMONUM2 PRIMES FROM 1 TO 4000 USING 390 CODE'
          LHI   N,-1

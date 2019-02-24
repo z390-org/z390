@@ -9,11 +9,17 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2006-05-14  DSH Initial version                                   *
-* 2006-05-15  DSH Demonstrate use of structured programming macros  *
-*                 RPI-316                                           *
+* DEMOSTR1.MLC                                                      *
+* Demo use of structured programming macros  - IF, ELSEIF, ELSE,    *
+* ENDIF, DO, and ENDDO.                                             *
+* See z390 Structured Programming Guide.                            *
+* See SHARE presentation by Ed Jaffee.                              *
 *********************************************************************
-*
+* 2006-05-14 DSH Initial version                                    *
+* 2006-05-15 DSH Demonstrate use of structured programming macros   *
+*                RPI-316                                            *
+*********************************************************************
+
          PRINT NOGEN
          COPY  ASMMSP      COPY STRUCTURED MACROS FROM STRMAC\*.*
 DEMOSTR1 SUBENTRY

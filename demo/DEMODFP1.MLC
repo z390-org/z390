@@ -9,9 +9,13 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2006-12-13  DSH Initial version                                   *
+* DEMODFP1.MLC                                                      *
+* Show differences in binary floating point and decimal floating    *
+* point calculation                                                 *
 *********************************************************************
-*
+* 2006-12-13 DSH Initial version                                    *
+*********************************************************************
+
 DEMONUM2 SUBENTRY
          WTO   'DEMODFP1 DEMO DIFFERENCE BETWEEN FP DH AND DD CALC'
          LD    F1,=DH'1.1'
@@ -38,4 +42,4 @@ D45      DC    CL45' '
 WTOEND   EQU   *
 F1       EQU   1
 F2       EQU   2
-         END 
+         END

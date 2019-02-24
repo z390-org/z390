@@ -9,21 +9,24 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
+* DEMO.MLC                                                          *
+* WTO 'HELLO WORLD' 4 line macro program                            *
+*                                                                   *
+* You can assemble, link, and execute this demo using the Z390 GUI  *
+* interface by entering DEMO in the command box or by executing     *
+* DEMO from Windows command line with current directory set to      *
+* Z390 install directory which is e.g.                              *
+* "C:\PROGRAM FILES\AUTOMATED SOFTWARE TOOLS\Z390"                  *
+*                                                                   *
+* The Z390 toolkit is distributed in source and executable format   *
+* under Open Source GPL License (see above).                        *
+* Visit  http://www.z390.org/  for more information.                *
 *********************************************************************
-*
+* 2005-09-30 DSH Initial version                                    *
+*********************************************************************
+
          TITLE 'Z390 HELLO WORLD DEMO'
-*
-* YOU CAN ASSEMBLE, LINK, AND EXECUTE THIS DEMO USING Z390 GUI
-* INTERFACE BY ENTERING DEMO IN COMMAND BOX OR BY EXECUTING DEMO
-* FROM WINDOWS COMMAND LINE WITH CURRENT DIRECTORY SET TO Z390
-* INSTALL DIRECTORY WHICH IS
-* "C:\PROGRAM FILES\AUTOMATED SOFTWARE TOOLS\Z390"
-*
-* THE Z390 TOOLKIT IS DISTRIBUTED IN SOURCE AND EXECUTABLE
-* FORMAT UNDER OPEN SOURCE GPL LICENSE.
-* VISIT  WWW.Z390.ORG  FOR MORE INFORMATION.
-*
+
 DEMO     SUBENTRY
          WTO   'HELLO WORLD'
          SUBEXIT

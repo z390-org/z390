@@ -9,9 +9,12 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
+* DEMOWTO2.MLC                                                      *
+* Repeat WTO 'HELLO WORLD' 5 times using macro code loop            *
 *********************************************************************
-*
+* 2005-09-30 DSH Initial version                                    *
+*********************************************************************
+
 DEMOWTO2 SUBENTRY
 .LOOP    ANOP
 &N       SETA  &N+1
