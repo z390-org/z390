@@ -10,7 +10,7 @@ SET sysTerm=systerm^(%dirRtWork%\RTTEST^)
 REM SET trace=TRON
 REM SET trace=
 
-SET numTestSteps=170
+SET numTestSteps=171
 
 ECHO.
 ECHO RT Test - Run %dirWork% programs in %dirRtWork% and generate diffs in %dirRtDiffs%
@@ -18,8 +18,6 @@ ECHO RT Test - Run %dirWork% programs in %dirRtWork% and generate diffs in %dirR
 ECHO.
 ECHO RT Test - Go one level up to our z390 main program directory (step 0 of %numTestSteps%)
 PUSHD ..
-
-goto testStep170
 
 :testStep01
 ECHO.
@@ -391,7 +389,8 @@ ECHO RT Test - Test the az390 assembler
 
 :testStep49
 ECHO.
-ECHO RT Test - TESTINS1.MLC - Verify assembly of all instruction formats (1085) including z9, z10, and ASSIST (step 49 of %numTestSteps%)
+ECHO RT Test - TESTINS1.MLC - Verify assembly of all instruction formats (1085)
+ECHO RT Test - TESTINS1.MLC - including z9, z10, and ASSIST (step 49 of %numTestSteps%)
 CALL ASMLG %dirRtWork%\TESTINS1 @rt\Options.opt assist %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 :testStep50
@@ -490,7 +489,7 @@ CALL ASMLG %dirRtWork%\TESTASM1 @rt\Options.opt mcall sysmac(%dirRtWork%+.\mac) 
 :testStep64
 ECHO.
 ECHO RT Test - TESTASM2.MLC - az390 test tab delimiter versus space before
-ECHO RT Test - TESTASM2.MLC -  comments using notepad editor (step 64 of %numTestSteps%)
+ECHO RT Test - TESTASM2.MLC - comments using notepad editor (step 64 of %numTestSteps%)
 CALL ASMLG %dirRtWork%\TESTASM2 @rt\Options.opt                                 %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 :testStep65
@@ -570,7 +569,8 @@ CALL ASMLG %dirRtWork%\TESTWXT1 @rt\Options.opt %%sysTerm%% %1 %2 %3 %4 %5 %6 %7
 
 :testStep75
 ECHO.
-ECHO RT Test - TESTOBJ1.MLC - All OBJ record types ESD (SD, ER, WX, LD), TXT, RLD, and END (step 75 of %numTestSteps%)
+ECHO RT Test - TESTOBJ1.MLC - All OBJ record types ESD (SD, ER, WX, LD), TXT,
+ECHO RT Test - TESTOBJ1.MLC - RLD, and END (step 75 of %numTestSteps%)
 ECHO RT Test - TESTOBJ1.MLC - Uses TESTSUB1.OBJ from test far above!
 CALL ASMLG %dirRtWork%\TESTOBJ1 @rt\Options.opt objhex %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 
@@ -1243,31 +1243,31 @@ ECHO RT Test - TESTSTA2.MLC - ESTAE restart and percolate higher level (step 150
 CALL ASMLG %dirRtWork%\TESTSTA2 @rt\Options.opt trace %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 
-:testStep150
-ECHO.
-ECHO RT Test - TESTCTD1.MLC - CTD convert to decimal conversion macro (step 150 of %numTestSteps%)
-CALL ASMLG %dirRtWork%\TESTCTD1 @rt\Options.opt %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
-
 :testStep151
 ECHO.
-ECHO RT Test - TESTCFD1.MLC - CTD convert from decimal conversion macro (step 151 of %numTestSteps%)
-CALL ASMLG %dirRtWork%\TESTCFD1 @rt\Options.opt %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
-
+ECHO RT Test - TESTCTD1.MLC - CTD convert to decimal conversion macro (step 151 of %numTestSteps%)
+CALL ASMLG %dirRtWork%\TESTCTD1 @rt\Options.opt %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 :testStep152
 ECHO.
-ECHO RT Test - TESTCVB1.MLC - CVB 32 bit convert to binary (step 152 of %numTestSteps%)
-CALL ASMLG %dirRtWork%\TESTCVB1 @rt\Options.opt trace %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
+ECHO RT Test - TESTCFD1.MLC - CTD convert from decimal conversion macro (step 152 of %numTestSteps%)
+CALL ASMLG %dirRtWork%\TESTCFD1 @rt\Options.opt %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
+
 
 :testStep153
 ECHO.
-ECHO RT Test - TESTCVBG.MLC - CVBG 64 bit convert to binary (step 153 of %numTestSteps%)
-CALL ASMLG %dirRtWork%\TESTCVBG @rt\Options.opt trace %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
-
+ECHO RT Test - TESTCVB1.MLC - CVB 32 bit convert to binary (step 153 of %numTestSteps%)
+CALL ASMLG %dirRtWork%\TESTCVB1 @rt\Options.opt trace %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 :testStep154
 ECHO.
-ECHO RT Test - TESTSPE1.ZSM - Test structured programming extensions (step 154 of %numTestSteps%)
+ECHO RT Test - TESTCVBG.MLC - CVBG 64 bit convert to binary (step 154 of %numTestSteps%)
+CALL ASMLG %dirRtWork%\TESTCVBG @rt\Options.opt trace %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
+
+
+:testStep155
+ECHO.
+ECHO RT Test - TESTSPE1.ZSM - Test structured programming extensions (step 155 of %numTestSteps%)
 SETLOCAL
 ECHO RT Test
 ECHO RT Test - Test zstrmac basic structures using bootstrap version 1
@@ -1287,16 +1287,16 @@ IF NOT EXIST %sysut2% (
 	ECHO RT Test - TESTSPE1.ZSM - Test will fail.
 	PAUSE
 )
-:testStep155
+:testStep156
 ECHO.
-ECHO RT Test - TESTSPE1.MLC - Test structured programming extensions (step 155 of %numTestSteps%)
+ECHO RT Test - TESTSPE1.MLC - Test structured programming extensions (step 156 of %numTestSteps%)
 CALL ASMLG %sysut2% @rt\Options.opt stats %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 ENDLOCAL
 
 
-:testStep156
+:testStep157
 ECHO.
-ECHO RT Test - TESTSPE2.ZSM - Test structured programming extensions (step 156 of %numTestSteps%)
+ECHO RT Test - TESTSPE2.ZSM - Test structured programming extensions (step 157 of %numTestSteps%)
 ECHO RT Test -              - Translate structured version 2 using bootstrap version 1
 ECHO RT Test -              - mz390 zstrmac1.mlc in:testspe2.zsm  out:testspe2.mlc
 SETLOCAL
@@ -1314,18 +1314,18 @@ IF NOT EXIST %sysut2% (
 	ECHO RT Test - TESTSPE2.ZSM - Test will fail.
 	PAUSE
 )
-:testStep157
+:testStep158
 ECHO.
-ECHO RT Test - TESTSPE2.MLC - Test structured programming extensions (step 157 of %numTestSteps%)
+ECHO RT Test - TESTSPE2.MLC - Test structured programming extensions (step 158 of %numTestSteps%)
 CALL ASMLG %sysut2% @rt\Options.opt stats %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 ENDLOCAL
 
 
-:testStep158
+:testStep150
 ECHO.
 ECHO RT Test - ZSTRMAC1.MLC - Translate structured version 2 using bootstrap version 1
 ECHO RT Test - ZSTRMAC1.MLC - mz390 zstrmac1.mlc in:zstrmac2.zsm  out:zstrmac2.mlc
-ECHO RT Test - ZSTRMAC1.MLC - (bootstrap) (step 158 of %numTestSteps%)
+ECHO RT Test - ZSTRMAC1.MLC - (bootstrap) (step 159 of %numTestSteps%)
 SETLOCAL
 SET sysut1=%dirRtWork%\ZSTRMAC2.ZSM
 SET sysut2=%dirRtWork%\ZSTRMAC2.MLC
@@ -1343,10 +1343,11 @@ IF NOT EXIST %sysut2% (
 )
 ENDLOCAL
 
-:testStep159
+:testStep160
 ECHO.
 ECHO RT Test - ZSTRMAC2.MLC - Verify TESTZSM1.ZSM translation using zstrmac2 matches zstrmac1
-ECHO RT Test   ZSTRMAC2.MLC - mz390 zstrmac2.mlc in:testspe1.zsm  out:testspe1.txt (step 159 of %numTestSteps%)
+ECHO RT Test   ZSTRMAC2.MLC - mz390 zstrmac2.mlc in:testspe1.zsm  out:testspe1.txt (step 160 of %numTestSteps%)
+SETLOCAL
 SET sysut1=%dirRtWork%\TESTSPE1.ZSM
 SET sysut2=%dirRtWork%\TESTSPE1.TXT
 IF EXIST %sysut2%  ERASE %sysut2%
@@ -1364,11 +1365,11 @@ IF NOT EXIST %sysut2% (
 ENDLOCAL
 
 
-:testStep160
+:testStep161
 ECHO.
 ECHO RT Test - ZSTRMAC2.ZSM - Re-generate ZSTRMAC2 using mz390 support to ver zstrmac2.txt = mlc
 ECHO RT Test - ZSTRMAC2.ZSM - mz390 zstrmac2.zsm in:zstrmac2.zsm  out:zstrmac2.txt
-ECHO RT Test - ZSTRMAC2.ZSM - (regen) (step 160 of %numTestSteps%)
+ECHO RT Test - ZSTRMAC2.ZSM - (regen) (step 161 of %numTestSteps%)
 SETLOCAL
 SET sysut1=%dirRtWork%\ZSTRMAC2.ZSM
 SET sysut2=%dirRtWork%\ZSTRMAC2.TXT
@@ -1386,11 +1387,10 @@ IF NOT EXIST %sysut2% (
 )
 ENDLOCAL
 
-
-:testStep161
+:testStep162
 ECHO.
 ECHO RT Test - TESTSPE3.ZSM - Test extensions to ACASE added in zstrmac2 C,X,(v1,v2)
-ECHO RT Test - TESTSPE3.ZSM - mz390 zstrmac2.zsm in:testspe3.zsm  out:testspe3.mlc (step 161 of %numTestSteps%)
+ECHO RT Test - TESTSPE3.ZSM - mz390 zstrmac2.zsm in:testspe3.zsm  out:testspe3.mlc (step 162 of %numTestSteps%)
 SETLOCAL
 SET sysut1=%dirRtWork%\TESTSPE3.ZSM
 SET sysut2=%dirRtWork%\TESTSPE3.MLC
@@ -1405,16 +1405,16 @@ IF NOT EXIST %sysut2% (
 	ECHO RT Test - TESTSPE3.ZSM - Test failed!
 	PAUSE
 )
-:testStep162
+:testStep163
 ECHO.
-ECHO RT Test - TESTSPE3.MLC - Test Structured Programming Extensions (step 162 of %numTestSteps%)
+ECHO RT Test - TESTSPE3.MLC - Test Structured Programming Extensions (step 163 of %numTestSteps%)
 CALL ASMLG %dirRtWork%\TESTSPE3 @rt\Options.opt %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 ENDLOCAL
 
 
-:testStep163
+:testStep164
 ECHO.
-ECHO RT Test - TESTSPE4.ZSM - Test zstrmac error messages (step 163 of %numTestSteps%)
+ECHO RT Test - TESTSPE4.ZSM - Test zstrmac error messages (step 164 of %numTestSteps%)
 ECHO RT Test - TESTSPE4.ZSM - mz390 zstrmac2.zsm in:testspe4.zsm  out:testspe4.mlc
 SETLOCAL
 SET sysut1=%dirRtWork%\TESTSPE4.ZSM
@@ -1428,27 +1428,27 @@ IF ErrorLevel 9 (
 ENDLOCAL
 
 
-:testStep164
+:testStep165
 ECHO.
-ECHO RT Test - TESTSPM1.ZSM - Test ZSTRMAC Structured Assembler Macros (step 164 of %numTestSteps%)
+ECHO RT Test - TESTSPM1.ZSM - Test ZSTRMAC Structured Assembler Macros (step 165 of %numTestSteps%)
 CALL ASMLG %dirRtWork%\TESTSPM1 @rt\Options.opt %%sysTerm%% %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 
-:testStep165
+:testStep166
 ECHO.
-ECHO RT Test - Creating directories %dirRtSaved% and %dirRtDiffs% (if necessary) (step 165 of %numTestSteps%).
+ECHO RT Test - Creating directories %dirRtSaved% and %dirRtDiffs% (if necessary) (step 166 of %numTestSteps%).
 IF NOT EXIST %dirRtWork%\nul   @MKDIR %dirRtWork%
 IF NOT EXIST %dirRtDiffs%\nul  @MKDIR %dirRtDiffs%
 IF NOT EXIST %dirRtSaved%\nul  @MKDIR %dirRtSaved%
 
-:testStep166
-ECHO.
-ECHO RT Test - Cleaning rt diff directory %dirRtDiffs% (step 166 of %numTestSteps%)
-ERASE /Q %dirRtDiffs%\*.*
-
 :testStep167
 ECHO.
-ECHO RT Test - Cleaning demo\DEMO.* work files (step 167 of %numTestSteps%)
+ECHO RT Test - Cleaning rt diff directory %dirRtDiffs% (step 167 of %numTestSteps%)
+ERASE /Q %dirRtDiffs%\*.*
+
+:testStep168
+ECHO.
+ECHO RT Test - Cleaning demo\DEMO.* work files (step 168 of %numTestSteps%)
 IF "%cleanDemoWorkFiles%" == "True" (
 	IF EXIST demo\DEMO.BAL  ERASE demo\DEMO.BAL
 	IF EXIST demo\DEMO.ERR  ERASE demo\DEMO.ERR
@@ -1460,26 +1460,26 @@ IF "%cleanDemoWorkFiles%" == "True" (
 )
 SET cleanDemoWorkFiles=
 
-:testStep168
+:testStep169
 ECHO.
-ECHO RT Test - Erasing linklib.src\REPRO.390 (step 168 of %numTestSteps%)
+ECHO RT Test - Erasing linklib.src\REPRO.390 (step 169 of %numTestSteps%)
 IF "%cleanReproWorkFiles%" == "True" (
 	IF EXIST linklib.src\REPRO.390  ERASE linklib.src\REPRO.390
 )
 SET cleanReproWorkFiles=
 
 :doCompare
-:testStep169
+:testStep170
 ECHO.
 ECHO RT Test - Compare %dirRtWork% test files with %dirRtSaved% save files
-ECHO RT Test - and generate %dirRtDiffs% diff files (step 169 of %numTestSteps%)
+ECHO RT Test - and generate %dirRtDiffs% diff files (step 170 of %numTestSteps%)
 ECHO.
 @java -classpath z390.jar -Xrs %J2SEOPTIONS% DiffRegrTests %dirRtWork% %dirRtSaved% %dirRtDiffs%
 
 :doListing
-:testStep170
+:testStep171
 ECHO.
-ECHO RT Test - Display size ordered list of %dirRtDiffs% (step 170 of %numTestSteps%)
+ECHO RT Test - Display size ordered list of %dirRtDiffs% (step 171 of %numTestSteps%)
 @DIR /OS /P %dirRtDiffs%
 
 ECHO.
