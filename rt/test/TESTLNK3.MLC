@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTLNK3.MLC                                                      *
+* CSECT AND ENTRY POINT FOR TESTLNK2.390                            *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2007-11-09 DSH RPI-732 Test TESTLNK2.LNK to include TESTLNK2 and  *
 *                        TESTLNK3 to build TESTLNK2.390 with entry  *

@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTCIC2.MLC                                                      *
+* Test assembly only of EXEC CICS SEND/RECEIVE with quoted literals *
+*********************************************************************
 * 2007-05-31 DSH         Initial version                            *
 * 2007-06-13 DSH RPI-640 Test quoted strings in EXEC CICS           *
 * 2008-02-01 DSH RPI-805 Test EXEC CICS comments with leading       *

@@ -9,9 +9,12 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTOPR1.MLC                                                      *
+* mz390 operators UPPER, LOWER                                      *
+*********************************************************************
 * 2006-08-08  DSH          Initial version                          *
 * 2006-08-09  DSH RPI-404  Test B2A C2A D2A DCLEN SLA SLL SRA SRL   *
-*                          X2A
+*                          X2A                                      *
 * 2006-08-09  DSH RPI-405  Test O'OPCODE                            *
 * 2006-08-27  DSH RPI-415  Correct ATTRA to valid code GR32         *
 * 2006-08-29  DSH RPI-421  Test duplication operator after .        *

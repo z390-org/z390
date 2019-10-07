@@ -8,7 +8,9 @@
 * The z390 package is distributed under GNU general public license  *
 *                                                                   *
 * Author - Don Higgins                                              *
-* Remark - Test DFP (decimal floating point)                        *
+*********************************************************************
+* TESTDFP1.MLC                                                      *
+* Test DFP (decimal floating point) support                         *
 *********************************************************************
 * 2006-12-09 DSH         Initial version                            *
 * 2006-12-09 DSH RPI-407 Add ADTR, SDTR, MDTR, DDTR, CDTR, CSDTR    *

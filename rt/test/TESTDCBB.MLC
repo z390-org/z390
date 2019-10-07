@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTDCBB.MLC                                                      *
+* Copy RECFM=F EBCDIC file to RECFM=F EBCDIC file using DCB RECORD= *
+* and READ, WRITE, CHECK                                            *
+*********************************************************************
 * 2005 09-30 DSH         Initial version                            *
 *********************************************************************
 

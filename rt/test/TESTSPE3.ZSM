@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSPE3.ZSM                                                      *
+* Test Structured Programming Extensions (SPE)                      *
+*********************************************************************
 * 2008-08-13 DSH         Initial version                            *
 * 2008-09-17 DSH RPI-911 Change ASELECT to ACASE and APM to ACALL   *
 * 2008-09-23 DSH RPI-911 New regression test for SPM's              *

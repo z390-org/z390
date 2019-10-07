@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSCBF.MLC                                                      *
+* Copy SYSUT1 FB file to SYSUT2 FB using GL/PL                      *
+*********************************************************************
 * 2008-09-11 DSH          Initial version                           *
 * 2008-09-11 DSH RPI-764  Test GL/PL mode support and OPEN/CLOSE    *
 *                         (reg)                                     *

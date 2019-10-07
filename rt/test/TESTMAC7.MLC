@@ -9,12 +9,13 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH         Initial version                           *
-* 2006-03-17  DSH RPI-239 Test TAB vs SPACE before comments         *
+* TESTMAC7.MLC                                                      *
+* mz370 test tab versus space before comments using Notepad editor  *
+*                                                                   *
+* Note: This source must be edited by Notepad.exe to keep TAB on X  *
 *********************************************************************
-*
-* NOTE: THIS SOURCE MUST BE EDITED BY NOTEPAD TO KEEP TAB ON X      *
-*
+* 2005-09-30 DSH         Initial version                            *
+* 2006-03-17 DSH RPI-239 Test TAB vs SPACE before comments          *
 *********************************************************************
 
 TESTMAC7 SUBENTRY

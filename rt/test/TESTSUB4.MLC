@@ -9,7 +9,11 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
+* TESTSUB4.MLC                                                      *
+* Subroutine with one CSECT WTO for use in dynamic LINK and LOAD    *
+* tests                                                             *
+*********************************************************************
+* 2005-09-30 DSH Initial version                                    *
 *********************************************************************
 
 TESTSUB4 SUBENTRY

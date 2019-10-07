@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTERR3.MLC                                                      *
+* mz390 DCB macro errors                                            *
+*********************************************************************
 * 2005-10-28  DSH Initial version                                   *
 * 2005-11-13  DSH RPI-88  Add validation for register conflicts     *
 * 2005-11-17  DSH RPI-96  Add validation for RX DCB.                *

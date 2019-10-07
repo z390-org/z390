@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTERR2.MLC                                                      *
+* az390 assembly errors                                             *
+*********************************************************************
 * 2005-09-30  DSH         Initial version                           *
 * 2005-11-08 DSH RPI-74  Test relative offset errors                *
 * 2005-11-08 DSH RPI-85  Test MIN/MAX DC F and H limit errors11     *

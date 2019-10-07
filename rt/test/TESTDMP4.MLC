@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTDMP4.MLC                                                      *
+* SNAP dump with open file information, program information, and    *
+* memory area dump                                                  *
+*********************************************************************
 * 2005-11-08 DSH          Initial version                           *
 * 2005-11-15 DSH RPI-92   Test non-zero memory addresses            *
 * 2006-09-11 DSH RPI-363  Change test to rt\test directory          *

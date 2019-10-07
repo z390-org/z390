@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTPRM4.MLC                                                      *
+* mz390 test double quotes around SYSPARM with commas SYSPARM('A,B')*
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-02-08 DSH RPI-198 Test PARM(...) using SYSPARM(...) to       *
 *                        compare                                    *

@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTZCV1.MLC                                                      *
+* Use ZCVT to access and display current PGM and IPL fields         *
+*********************************************************************
 * 2005-04-23 DSH         Initial version                            *
 * 2006-04-23 DSH RPI-286 Dump ZCVT fields starting at X'2000' after *
 *                        PSA                                        *

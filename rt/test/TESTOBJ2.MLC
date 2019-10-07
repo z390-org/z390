@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTOBJ2.MLC                                                      *
+* 32 MB single CSECT using OBJHEX option (OBJ binary limited to     *
+* 24 bit length)                                                    *
+*********************************************************************
 * 2005-09-30  DSH          Initial version                          *
 *********************************************************************
 * Note: This program has 32MB CSECT requiring OBJHEX and MEM(49)    *

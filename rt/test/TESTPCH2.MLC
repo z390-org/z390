@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTPCH2.MLC                                                      *
+* AREAD and PUNCH with explicit input and output file extensions    *
+*********************************************************************
 * 2005-09-30  DSH Initial version                                   *
 * 2008-04-22  DSH RPI-833 Add string quotes for HLASM compatibility *
 *********************************************************************

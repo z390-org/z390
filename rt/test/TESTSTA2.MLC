@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSTA2.MLC                                                      *
+* ESTAE restart and percolate higher level                          *
+*********************************************************************
 * 2007-06-10 DSH         Initial version                            *
 * 2007-06-10 DSH RPI-636 Test R15=0 for percolate and cancel links  *
 * 2007-07-18 DSH RPI-659 Test RESTART EXIT with R15=4 and R0=NEW    *

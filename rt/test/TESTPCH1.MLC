@@ -9,6 +9,11 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTPCH1.MLC                                                      *
+* Inline AREAD and PUNCH using default PCH file                     *
+*                                                                   *
+* Note: Uses TESTPCH1.TF1, TESTPCH1.TF2, TESTPCH1.TF3               *
+*********************************************************************
 * 2005-09-30  DSH Initial version                                   *
 * 2008-04-22  DSH RPI-833 Add string quotes for HLASM compatibility *
 *********************************************************************

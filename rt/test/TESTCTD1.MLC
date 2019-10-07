@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTCTD1.MLC                                                      *
+* CTD convert to decimal conversion macro                           *
+*********************************************************************
 * 2006-07-10 DSH         Initial version                            *
 * 2006-11-10 DSH RPI-477 Add ASCII support to CTD and CFD,          *
 *                        use IN=,OUT=                               *

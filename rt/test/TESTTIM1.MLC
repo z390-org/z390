@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTTIM1.MLC                                                      *
+* TIME macro svc 11 with numerious date and time formats            *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2005-11-02 DSH RPI-68  Add CLOCK=STCK, CLOCK=STCKE, CLOCK=JAVA    *
 *                        extensions                                 *

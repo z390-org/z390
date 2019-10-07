@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTMEM3.MLC                                                      *
+* STORAGE macro OBTAIN and RELEASE test                             *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2007-01-22 DSH RPI-542 Correct STORAGE output R1=ADDR             *
 * 2008-04-22 DSH RPI-833 Add string quotes for HLASM compatibility  *

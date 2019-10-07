@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTENT1.MLC                                                      *
+* Symbol defined as both ENTRY and CSECT                            *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-04-21 DSH RPI-288 Test ENTRY defined as both CSECT and label *
 *********************************************************************

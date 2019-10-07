@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTASM2.MLC                                                      *
+* az390 test tab delimiter versus space before comments using       *
+* Notepad editor                                                    *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-03-17 DSH RPI-239 Test tab vs. spaces before comments        *
 *********************************************************************

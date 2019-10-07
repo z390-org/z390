@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTIPL1.MLC                                                      *
+* ez390 IPL program to initialize CVTDATE for use by TESTIPL2       *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-04-10 DSH RPI-276 Test ez390 option IPL(TESTIPL1) to set     *
 *                        CVTDATE                                    *

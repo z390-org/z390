@@ -2,36 +2,48 @@
 * Copyright 2008 Automated Software Tools Corporation               *
 * This source code is part of z390 assembler/emulator package       *
 * The z390 package is distributed under GNU general public license  *
+*                                                                   *
+* This source code is part of z390 assembler/emulator package.      *
+*                                                                   *
+* The z390 package is distributed under GNU general public license  *
+*                                                                   *
 * Author - Don Higgins                                              *
-* Date   - 08/13/08                                                 *
 *********************************************************************
-* 08/13/08 RPI 896 TRANSLATE Z390 ZSTRMAC EXTENSIONS TO STD HLASM
-*          1.  Z390 BOOTSTRAP VER - RT\TEST\ZSTRMAC1.MLC
-*          1.  STRUCTURED VERSION - LINKLIB\ZSTRMAC.ZSM
-*          2.  GEN HLASM COMP VER - LINKLIB\ZSTRMAC.MLC VIA ZSTRMAC1
-* 09/17/08 RPI 911 CHANGE ASELECT TO ACASE AND APM TO ACALL AND
-*                  SUPPORT LOWER CASE
-* 02/19/12 RPI 1192 USE D2A(...) FOR &DIGIT SETA, REMOVE DUP )), 
-*                   FIX CONTINUE CONCAT
+* ZSTRMAC2.ZSM                                                      *
+* ZSTRMAC reads SYSUT1 source file and outputs SYSUT2 source file   *
 *********************************************************************
-* ZSTRMAC READS SYSUT1 SOURCE FILE AND OUTPUTS SYSUT2 SOURCE FILE
-* WITH TRANSLATION OF FOLLOWING Z390 ZSTRMAC EXTENSIONS TO STD HLASM:
+* 2008-08-13 DSH          Initial version                           *
+* 2008-08-13 DSH RPI-896  Translate Z390 ZSTRMAC extensions to      *
+*                         standard HLASM                            *
+*          1.  z390 bootstrap ver - rt\test\ZSTRMAC1.MLC            *
+*          1.  Structured version - linklib\ZSTRMAC.ZSM             *
+*          2.  Gen HLASM comp ver - linklib\ZSTRMAC.MLC via ZSTRMAC1*
+* 2008-09-17 DSH RPI-911  Change ASELECT to ACASE and APM to ACALL  *
+*                         and support lower case                    *
+* 2012-02-19 DSH RPI-1192 Use D2A(...) for &DIGIT SETA, REMOVE DUP  *
+*                         )), fix continue CONCAT                   *
+*********************************************************************
+*
+* ZSTRMAC reads SYSUT1 source file and outputs SYSUT2 source file
+* with translation of following z390 ZSTRMAC extensions to standard
+* HLASM:
+*
 *  1. AIF (EXP)     >   AIF (NOT(EXP)).AIF_N_B
 *                   >   ......
 *  2. AELSEIF (EXP) >   AGO .AIF_N_E
 *                   > .AIF_B AIF (EXP).AIF_N_B+1
 *                   >   ......
-*  3. AELSE         >   AGO .AIF_N_E                             
-*                   > .AIF_N_B+1 ANOP                              
+*  3. AELSE         >   AGO .AIF_N_E
+*                   > .AIF_N_B+1 ANOP
 *                   >   ......
-*  4. AEND          > .AIF_N_E ANOP 
+*  4. AEND          > .AIF_N_E ANOP
 *  5. ACALL NAME    > &ACALL_N SETA B
 *                   >   AGO .ACL_N
 *                   > .ACL_N_B ANOP
 *                   >   ......
 *  6. AENTRY NAME   > .ACL_N ANOP
 *                   >   ......
-*  7. AEXIT         >   AGO .ACL_N_E    (EXIT NON AIF STRUCURE) 
+*  7. AEXIT         >   AGO .ACL_N_E    (EXIT NON AIF STRUCURE)
 *                   >   ......
 *     AEND          >   .ACL_N_E AGO (&ACALL_N).ACL_N_1,.ACL_N_2,
 *                   >                                   .ACL_N_B
@@ -50,7 +62,7 @@
 * 10. ACASE (EXP)   >   AGO .ACS_N_AGO
 * 11. AWHEN V1,V2   > .ACS_N_B1 ANOP  VN=(N,C'?',X'??', OR (V1,V2)
 *                   >   ......
-*     AWHEN V2      >   AGO .ACS_N_E  
+*     AWHEN V2      >   AGO .ACS_N_E
 *                   > .ACS_N_B2 ANOP
 *                   >   ......
 *     AELSE         >   AGO .ACS_N_E
@@ -62,10 +74,10 @@
 *                   > .ACS_N_E ANOP
 * 12. :label stmt   > place label in label field without the :
 *                     and indent the stmt to start at the original :
-*  
+*
 * NOTES:
-*  1. THE ORIGINAL BOOTSTRAP VERSION IS IN RT\TEST\ZSTRMAC1.MLC       
-*     ALONG WITH THE FIRST TEST PROGRAM TESTZSM1.ZSM WHICH IS      
+*  1. THE ORIGINAL BOOTSTRAP VERSION IS IN RT\TEST\ZSTRMAC1.MLC
+*     ALONG WITH THE FIRST TEST PROGRAM TESTZSM1.ZSM WHICH IS
 *     TRANSLATED TO TESTZSM1.MLC USING ZSTRMAC1.MLC.
 *  2. TO RUN TRANSLATOR USING HLASM:
 *     A.  REMOVE DDNAME= EXTENSIONS FROM AREAD AND PUNCH
@@ -80,20 +92,20 @@
          LCLC  &TEXT          LINE OF TEXT READ BY READ_TEXT
          LCLB  &EOF           END OF FILE
          LCLA  &LINE          TOTAL INPUT LINES
-         LCLB  &GEN_AIF_ERR   SYNTAX ERROR IN GEN_AIF 
-         LCLB  &FIND_NAME_ERR SYNTAX ERROR FINDING ACALL/AENTRY NAME 
+         LCLB  &GEN_AIF_ERR   SYNTAX ERROR IN GEN_AIF
+         LCLB  &FIND_NAME_ERR SYNTAX ERROR FINDING ACALL/AENTRY NAME
          LCLB  &FIND_PARM_ERR SYNTAX ERROR FINDING FIRST PARM
-         LCLB  &FIND_EXP_ERR  SYNTAX ERROR FINDING (..) FOR AIF/ACASE 
+         LCLB  &FIND_EXP_ERR  SYNTAX ERROR FINDING (..) FOR AIF/ACASE
          LCLB  &GET_VALUE_ERR ERROR PARSING DEC, '?', OR X'??'
          LCLA  &LVL           CURRENT LEVEL OF STRUCTURE
          LCLC  &LVL_TYPE(50) TYPE AIF/ACASE/AENTRY
          LCLA  &LVL_TCNT(50) TYPE INSTANCE COUNTER
-         LCLB  &LVL_TEND(50) TYPE END LABEL REQ FOR MULT BLKS   
+         LCLB  &LVL_TEND(50) TYPE END LABEL REQ FOR MULT BLKS
          LCLA  &LVL_BCNT(50) BLOCK COUNTER WITHIN TYPE INSTANCE
-         LCLC  &LVL_ACASE(50) ACASE COMPUTED AGO STATEMENT 
+         LCLC  &LVL_ACASE(50) ACASE COMPUTED AGO STATEMENT
          LCLA  &LVL_ACASE_FIRST(50) ACASE FIRST WHEN VALUE 0-255
-         LCLA  &LVL_ACASE_LAST(50)  ACASE LAST  WHEN VALUE 0-255 
-         LCLB  &LVL_AELSE(50)   AELSE BLOCK DEFINED FOR ACASE    
+         LCLA  &LVL_ACASE_LAST(50)  ACASE LAST  WHEN VALUE 0-255
+         LCLB  &LVL_AELSE(50)   AELSE BLOCK DEFINED FOR ACASE
          LCLA  &IS_OP           START OF OPCODE
          LCLA  &IS_OP_END       ENDOF OF OPCODE+1
          LCLA  &IS_EXP          START OF AIF EXP (...)
@@ -126,7 +138,7 @@
          MNOTE 'ZSTRMAC TOTAL AEXIT     = &AEXIT_TOT'
          MNOTE 'ZSTRMAC TOTAL AIF       = &AIF_TOT'
          MNOTE 'ZSTRMAC TOTAL ACALL     = &ACALL_TOT'
-         MNOTE 'ZSTRMAC TOTAL ACASE   = &ACASE_TOT'
+         MNOTE 'ZSTRMAC TOTAL ACASE     = &ACASE_TOT'
          MNOTE 'ZSTRMAC TOTAL AWHEN     = &AWHEN_TOT'
          MNOTE 'ZSTRMAC TOTAL AWHILE    = &AWHILE_TOT'
          MNOTE 'ZSTRMAC TOTAL AUNTIL    = &AUNTIL_TOT'
@@ -145,12 +157,12 @@
                        AWHILE (NOT &EOF                                X
                                AND K'&TEXT GE 72                       X
                                AND '&TEXT'(1,15) EQ (15)' '            X
-                               AND &CONTINUE)           
+                               AND &CONTINUE)
                             AIF ('&TEXT'(72,1) NE ' ')
                                 :&REC SETC '&REC'.'&TEXT'(16,71-15)
                                 ACALL READ_TEXT
                             AELSE
-                                :&CONTINUE SETB 0    
+                                :&CONTINUE SETB 0
                             AEND
                        AEND
                        AIF  (NOT &EOF)
@@ -166,7 +178,7 @@
                             ACALL ERR_MSG
                        AEND
                    AEND
-               AELSE  
+               AELSE
                    :&REC SETC '&TEXT'(1,*)
                AEND
          AEND
@@ -180,7 +192,7 @@
                 :&EOF  SETB 1
          AELSE
                 :&LINE SETA &LINE+1
-         AEND                
+         AEND
          AEND
 .*
 .* PROCESS REC BY SCANNING FOR A??? OPCODES AND GENERATING
@@ -264,14 +276,14 @@
                          AEND
                          :&REC SETC '&REC'(&IS_OP+1,K'&OPCODE-1).(&SPACX
                ES)' '.'&REC'(&IS_PARM,*)
-                   AEND    
+                   AEND
                AEND
          AEND
          :&PCH_REC SETC '&REC'
          ACALL PUNCH_REC
          AEND
 .*
-.* AELSE - GEN MACRO COMMENT AND GEN AGO TO AEND AND LABEL FOR ALT. BLK 
+.* AELSE - GEN MACRO COMMENT AND GEN AGO TO AEND AND LABEL FOR ALT. BLK
 .*
          AENTRY PROC_AELSE
          :&AELSE_TOT SETA &AELSE_TOT+1
@@ -304,7 +316,7 @@
          AEND
 .*
 .* AELSE_ACASE
-.*        
+.*
          AENTRY PROC_AELSE_ACASE
          AIF   (&LVL_BCNT(&LVL) GT 0)
                :&PCH_REC SETC (&IS_OP+1)' '.'AGO   .ACS_&LVL_TCNT(&LVL)X
@@ -316,7 +328,7 @@
          ACALL PUNCH_LAB
          AEND
 .*
-.* AELSEIF - GEN MACRO COMMENT AND GEN AIF TO END OF BLK,CUR BLK LAB 
+.* AELSEIF - GEN MACRO COMMENT AND GEN AIF TO END OF BLK,CUR BLK LAB
 .*
          AENTRY PROC_AELSEIF
          :&AELSEIF_TOT SETA &AELSEIF_TOT+1
@@ -331,7 +343,7 @@
                    :&PCH_REC SETC '.AIF_&LVL_TCNT(&LVL)_&LVL_BCNT(&LVL)X
                '
                    ACALL PUNCH_LAB
-                   :&LVL_BCNT(&LVL) SETA &LVL_BCNT(&LVL)+1 NEW TARGET 
+                   :&LVL_BCNT(&LVL) SETA &LVL_BCNT(&LVL)+1 NEW TARGET
                    :&GEN_AIF_TRUE SETB 0          GEN BRANCH IF FALSE
                    :&GEN_AIF_TAG  SETC '&LVL_BCNT(&LVL)'
                    ACALL GEN_AIF
@@ -351,7 +363,7 @@
          AEND
          AEND
 .*
-.* AEND - GEN TERMINATION FOR AENTRY,AIF,ACASE,AUNTIL,AWHILE 
+.* AEND - GEN TERMINATION FOR AENTRY,AIF,ACASE,AUNTIL,AWHILE
 .*
          AENTRY PROC_AEND
          :&AEND_TOT SETA &AEND_TOT+1
@@ -401,7 +413,7 @@
          AEND
          :&PCH_REC SETC '.ACL_&ACALL_INDEX._SKIP'
          ACALL PUNCH_LAB
-         :&LVL SETA  &LVL-1     CURRENT LEVEL 
+         :&LVL SETA  &LVL-1     CURRENT LEVEL
          AEND
 .*
 .* AEND_AIF
@@ -415,7 +427,7 @@
                :&PCH_REC SETC '.AIF_&LVL_TCNT(&LVL)_E'
                ACALL PUNCH_LAB
          AEND
-         :&LVL     SETA  &LVL-1     CURRENT LEVEL 
+         :&LVL     SETA  &LVL-1     CURRENT LEVEL
          AEND
 .*
 .* AEND_AUNTIL
@@ -429,13 +441,13 @@
          AEND
 .*
 .* AEND_AWHILE
-.* 
+.*
          AENTRY PROC_AEND_AWHILE
          :&PCH_REC SETC (&IS_OP+1)' '.'AGO   .AWH_&LVL_TCNT(&LVL)_T'
          ACALL PUNCH_REC
          :&PCH_REC SETC '.AWH_&LVL_TCNT(&LVL)_E'
          ACALL PUNCH_LAB
-         :&LVL     SETA  &LVL-1     CURRENT LEVEL 
+         :&LVL     SETA  &LVL-1     CURRENT LEVEL
          AEND
 .*
 .* AEND_ACASE
@@ -480,14 +492,14 @@
                AEND
                :&PCH_REC SETC '.ACS_&LVL_TCNT(&LVL)_E'
                ACALL PUNCH_LAB
-               :&LVL     SETA  &LVL-1     CURRENT LEVEL 
+               :&LVL     SETA  &LVL-1     CURRENT LEVEL
          AELSE
                :&MSG SETC 'NO WHEN FOUND FOR ACASE'
                ACALL ERR_MSG
          AEND
          AEND
 .*
-.* AENTRY - GEN AGO BRANCH AROUND PENTRY/PEND AND LABEL FOR ENTRY         
+.* AENTRY - GEN AGO BRANCH AROUND PENTRY/PEND AND LABEL FOR ENTRY
 .*
          AENTRY PROC_AENTRY
          :&AENTRY_TOT SETA &AENTRY_TOT+1
@@ -516,7 +528,7 @@
          AEND
          AEND
 .*
-.* AEXIT - EXIT TO FIRST MATCHING TYPE FOUND                             
+.* AEXIT - EXIT TO FIRST MATCHING TYPE FOUND
 .*
          AENTRY PROC_AEXIT
          :&AEXIT_TOT SETA &AEXIT_TOT+1
@@ -560,7 +572,7 @@
 .*
          AENTRY PROC_AIF
          :&AIF_TOT SETA  &AIF_TOT+1     AIF COUNTER
-         :&LVL     SETA  &LVL+1     CURRENT LEVEL 
+         :&LVL     SETA  &LVL+1     CURRENT LEVEL
          :&LVL_TYPE(&LVL) SETC 'AIF' CURRENT LEVEL TYPE
          :&LVL_TCNT(&LVL) SETA &AIF_TOT PRIMARY TYPE COUNTER
          :&LVL_TEND(&LVL) SETB 0        RESET REQ FOR AELSEIF END LABEL
@@ -578,7 +590,7 @@
          AEND
          AEND
 .*
-.* ACALL - GEN AGO TO PERFORMED ROUTINE                                 
+.* ACALL - GEN AGO TO PERFORMED ROUTINE
 .*
          AENTRY PROC_ACALL
          :&ACALL_TOT SETA &ACALL_TOT+1
@@ -602,7 +614,7 @@
                ACALL PUNCH_REC
                :&PCH_REC SETC (&IS_OP+1)' '.'AGO   .ACL_&ACALL_INDEX._&X
                ACALL_NAME(&ACALL_INDEX)'
-               ACALL PUNCH_REC 
+               ACALL PUNCH_REC
                :&PCH_REC SETC '.ACL_&ACALL_INDEX._&ACALL_CNT(&ACALL_INDX
                EX)'
                ACALL PUNCH_LAB
@@ -613,7 +625,7 @@
 .*
          AENTRY PROC_ACASE
          :&ACASE_TOT SETA  &ACASE_TOT+1     ACASE COUNTER
-         :&LVL     SETA  &LVL+1     CURRENT LEVEL 
+         :&LVL     SETA  &LVL+1     CURRENT LEVEL
          :&LVL_TYPE(&LVL) SETC 'ACASE' CURRENT LEVEL TYPE
          :&LVL_TCNT(&LVL) SETA &ACASE_TOT ACASE INSTANCE
          :&LVL_BCNT(&LVL)  SETA 0 RESET ACASE AWHEN BLOCKS
@@ -646,7 +658,7 @@
 .*
          AENTRY PROC_AUNTIL
          :&AUNTIL_TOT SETA  &AUNTIL_TOT+1   AUNTIL COUNTER
-         :&LVL     SETA  &LVL+1     CURRENT LEVEL 
+         :&LVL     SETA  &LVL+1     CURRENT LEVEL
          :&LVL_TYPE(&LVL) SETC 'AUNTIL' CURRENT LEVEL TYPE
          :&LVL_TCNT(&LVL) SETA &AUNTIL_TOT PRIMARY TYPE COUNTER
          :&PCH_REC SETC '.*'.'&REC'(3,*)
@@ -668,7 +680,7 @@
          ACALL PUNCH_LAB
          AEND
 .*
-.* AWHEN - GEN .ACS_N_I LABEL FOR INDEX AND UPDATE INDEX VAL_BLK 
+.* AWHEN - GEN .ACS_N_I LABEL FOR INDEX AND UPDATE INDEX VAL_BLK
 .*
          AENTRY PROC_AWHEN
          :&PCH_REC SETC '.*'.'&REC'(3,*)
@@ -696,19 +708,19 @@
                AELSE
                     :&MSG SETC 'AWHEN MISSING ACASE'
                     ACALL ERR_MSG
-               AEND         
+               AEND
          AELSE
                :&MSG SETC 'AWHEN MISSING ACASE'
                ACALL ERR_MSG
          AEND
-         AEND      
+         AEND
 .*
 .* PROC_WHEN_VALUES V1,V2,(V3,V4) WHERE VN = DEC, C'?', OR X'??'
 .*
          AENTRY PROC_AWHEN_VALUES
          :&VALUE_CNT SETA 0
          AWHILE (&IS_PARM LE K'&REC)
-               ACASE (C2A('&REC'(&IS_PARM,1))) 
+               ACASE (C2A('&REC'(&IS_PARM,1)))
                     AWHEN C'('  SET RANGE (V1,V2)
                         :&IS_PARM SETA &IS_PARM+1
                         ACALL GET_VALUE
@@ -754,7 +766,7 @@
                              ACALL ERR_MSG
                              AEXIT AENTRY
                         AEND
-                        ACALL SET_VAL_BLK 
+                        ACALL SET_VAL_BLK
                AEND
          AEND
          AIF   (&VALUE_CNT EQ 0)
@@ -764,7 +776,7 @@
          AEND
 .*
 .* SET_VAL_BLK  AWHEN BLOCK NUMBER FOR VALUE
-.*   
+.*
          AENTRY SET_VAL_BLK
          AIF   (&VALUE LT &LVL_ACASE_FIRST(&LVL))
                :&LVL_ACASE_FIRST(&LVL) SETA &VALUE
@@ -793,10 +805,10 @@
                     AND '&REC'(&IS_PARM,1) LE '9')
                        :&VALUE_SET SETB 1
                        :&DIGIT SETA D2A('&REC'(&IS_PARM,1)) RPI 1192
-                       :&VALUE SETA &VALUE*10+&DIGIT  
+                       :&VALUE SETA &VALUE*10+&DIGIT
                        :&IS_PARM SETA &IS_PARM+1
                    AELSE
-                       AEXIT AWHILE      
+                       AEXIT AWHILE
                    AEND
                AEND
          AELSEIF (UPPER '&REC'(&IS_PARM,1) EQ 'C') RPI 911
@@ -842,7 +854,7 @@
 .*
          AENTRY PROC_AWHILE
          :&AWHILE_TOT SETA  &AWHILE_TOT+1   AWHILE COUNTER
-         :&LVL     SETA  &LVL+1     CURRENT LEVEL 
+         :&LVL     SETA  &LVL+1     CURRENT LEVEL
          :&LVL_TYPE(&LVL) SETC 'AWHILE' CURRENT LEVEL TYPE
          :&LVL_TCNT(&LVL) SETA &AWHILE_TOT PRIMARY TYPE COUNTER
          :&PCH_REC SETC '.*'.'&REC'(3,*)
@@ -868,7 +880,7 @@
          ACALL FIND_PARM
          AIF   (&FIND_PARM_ERR)
                :&FIND_NAME_ERR SETB 1
-         AELSE           
+         AELSE
                :&NAME SETC (UPPER '&PARM')
                :&ACALL_INDEX SETA 1
                AWHILE (&ACALL_INDEX LE &ACALL_NAME_TOT)
@@ -882,9 +894,9 @@
                     :&ACALL_NAME(&ACALL_INDEX) SETC '&NAME'
                AEND
          AEND
-         AEND   
+         AEND
 .*
-.* FIND_PARM OPERAND TERMINATED WITH SPACE 
+.* FIND_PARM OPERAND TERMINATED WITH SPACE
 .* SET FIND_PARM_ERR IF ERROR
 .*
          AENTRY FIND_PARM
@@ -928,7 +940,7 @@
                AWHILE (K'&PCH_REC-&I GT 55)
                     :&TEXT SETC (DOUBLE '&PCH_REC'(&I,56))
                     PUNCH '               &TEXT.X',DDNAME=SYSUT2
-                    :&I SETA  &I+56         
+                    :&I SETA  &I+56
                AEND
                AIF  (&I LE K'&PCH_REC)
                     :&TEXT SETC (DOUBLE '&PCH_REC'(&I,*))
@@ -1002,4 +1014,3 @@
          MEND
          ZSTRMAC
          END
-        

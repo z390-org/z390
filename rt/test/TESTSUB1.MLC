@@ -9,7 +9,11 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
+* TESTSUB1.MLC                                                      *
+* Subroutine with 3 CSECT WTO routes and ENTRY for use in static    *
+* and dynamic tests                                                 *
+*********************************************************************
+* 2005-09-30 DSH Initial version                                    *
 *********************************************************************
 
 TESTSUB1 SUBENTRY

@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTLCT1.MLC                                                      *
+* LOCTR sections                                                    *
+*********************************************************************
 * 2005-09-30  DSH         Initial version                           *
 * 2007-03-09  DSH RPI-564 Add regression test for RLD im LOCTR      *
 *                         section                                   *

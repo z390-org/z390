@@ -9,6 +9,11 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTCPY1.MLC                                                      *
+* Nested copy statement support                                     *
+*                                                                   *
+* Note: Uses TESTCP11.CPY, TESTCP12.CPY, TESTCP21.CPY, TESTCP22.CPY *
+*********************************************************************
 * 2005-09-30  DSH        Initial version                            *
 * 2005-11-07  DSH RPI-84 Ignore comments after COPY file name       *
 *********************************************************************

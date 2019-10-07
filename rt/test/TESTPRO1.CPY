@@ -14,9 +14,9 @@
 .*********************************************************************
 
 .*********************************************************************
-.* USE OPTION PROFILE(TESTPRO1) TO PERFORM THE FOLLOWING FUNCTIONS:  *
-.*   1.  EXECUTE MACRO TESTPROS.MAC AT MZ390 STARTUP                 *
-.*   2.  EXECUTE MACRO TESTPROT.MAC AT MZ390 TERMINATION             *
+.* Use OPTION PROFILE(TESTPRO1) to perform the following functions:  *
+.*   1.  Execute macro TESTPROS.MAC at MZ390 startup                 *
+.*   2.  Execute macro TESTPROT.MAC at MZ390 termination             *
 .*********************************************************************
          TESTPROS
          MACRO

@@ -10,6 +10,10 @@
 * Author - Don Higgins                                              *
 * Remark - Tests for z196 mainframe problem state instructions      *
 *********************************************************************
+* TESTINS4.MLC                                                      *
+* Verify problem stat instruction execution (226) for new z196      *
+* instruction                                                       *
+*********************************************************************
 * 2010-08-06 DSH          Initial version                           *
 * 2010-08-06 DSH RPI-1125 Copy from TESTINS3 and added z196         *
 *                         instruction tests                         *

@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTDCBD.MLC                                                      *
+* Copy RECFM=FT to RECFM=VT                                         *
+* Test for RECFM=FT and VT create and read contributed by MM        *
+*********************************************************************
 * 2005 09-30 DSH         Initial version                            *
 * 2005-11-18 DSH RPI 101 Correct open bug causing EOF error         *
 * 2005-11-19 DSH         See TESTDCBE for same program run in ASCII *
@@ -16,8 +20,6 @@
 * 2006-01-07 DSH         Change PDATE=TIOT to PDATA=DCB             *
 * 2006-09-11 DSH RPI-363 Change test to rt\test directory           *
 * 2007-02-07 DSH RPI-532 Correct path case for Linux                *
-*********************************************************************
-* Test for RECFM=FT and VT create and read contributed by MM        *
 *********************************************************************
 
 TESTDCBD SUBENTRY

@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTCAL2.MLC                                                      *
+* Test static linked CALL with EXTRN and ENTRY                      *
+*********************************************************************
 * 2005-09-30 DSH          Initial version                           *
 * 2006-06-16 DSH RPI-322  Add test for call MF=L                    *
 * 2009-06-30 DSH RPI-1044 Make MYENT an entry replacing V(MYENT)    *

@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTINS3.MLC                                                      *
+* Verify problem stat instruction execution (226) for new z10       *
+* opcodes                                                           *
+*********************************************************************
 * 2008-03-03 DSH         Initial version                            *
 * 2008-03-03 DSH RPI-817 Copy from TESTINS2 and add z10 instruction *
 *                        tests                                      *

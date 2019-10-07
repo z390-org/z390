@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTMAC1.MLC                                                      *
+* mz390 substring operations and DOUBLE                             *
+*********************************************************************
 * 2005-09-30  DSH          Initial version                          *
 * 2006-03-21  DSH RPI-253  Add test for macro labels starting       *
 *                          with ._                                  *

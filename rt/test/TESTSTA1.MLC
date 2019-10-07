@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSTA1.MLC                                                      *
+* ESTAE restart                                                     *
+*********************************************************************
 * 2006-05-01 DSH         Initial version                            *
 * 2006-05-01 DSH RPI-305 Test ESTAE EXIT with parameter and RESTART *
 * 2006-09-18 DSH RPI-305 Test REPEAT usage                          *

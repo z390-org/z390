@@ -9,6 +9,11 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTOPT1.MLC                                                      *
+* Test nested @FILE options                                         *
+* Note: Uses TESTOPT1.OPT, TESTOPTA.OPT, TESTOPTB.OPT, TESTOPTC.OPT,*
+*       TESTOPTX.OPT, TESTOPTY.OPT                                  *
+*********************************************************************
 * 2007-11-30  DSH         Initial version                           *
 * 2007-11-30  DSH RPI-742 Test nested @FILE options using command   *
 *                         RT1 RT\TEST\TESTOPT1 @TESTOPT1            *

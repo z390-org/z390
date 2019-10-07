@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTMAC2.MLC                                                      *
+* mz390 conditional compares                                        *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2005-11-02 DSH RPI-60  Add multiple logical operator tests for    *
 *                        AND OR NOT                                 *

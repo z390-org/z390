@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTXCL1.MLC                                                      *
+* XCTL main program links to TESTXCL2 then XCTL to TEXTXCL3         *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2005-11-16 DSH RPI-95  Test XCTL                                  *
 * 2007-04-26 DSH RPI-598 Add additional CDE SNAPs to verify OK and  *

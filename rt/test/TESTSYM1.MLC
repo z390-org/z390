@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSYM1.MLC                                                      *
+* mz390 symbol T' and L' operator tests                             *
+*********************************************************************
 * 2005-09-30  DSH         Initial version                           *
 * 2006-01-29  DSH RPI-193 Test mz390 symbol length for implicit CPZ *
 * 2006-08-29  DSH RPI-415 Test AIF reference to ordinary symbol     *

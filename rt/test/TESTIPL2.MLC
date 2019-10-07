@@ -9,6 +9,11 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTIPL2.MLC                                                      *
+* ez390 test option IPL(TESTIPL1) which executes TESTIPL1 before    *
+* TESTIPL2 which then fetches CVTDATE and displays its current      *
+* value which is 0 if TESTIPL1 is not run first to initialize it.   *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-04-10 DSH RPI-276 Test display of IPL date set by            *
 *                        IPL(TESTIPL1)                              *

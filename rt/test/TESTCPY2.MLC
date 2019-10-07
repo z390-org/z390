@@ -9,6 +9,11 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTCPY2.MLC                                                      *
+* Comments after name on COPY statement                             *
+*                                                                   *
+* Note: Uses TESTCP11.CPY, TESTCP12.CPY, TESTCP21.CPY, TESTCP22.CPY *
+*********************************************************************
 * 2005-09-30  DSH         Initial version                           *
 * 2007-02-19  DSH RPI-549 Ignore comments after COPY file name      *
 *********************************************************************

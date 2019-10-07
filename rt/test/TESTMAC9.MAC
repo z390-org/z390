@@ -9,6 +9,11 @@
 .*                                                                   *
 .* Author - Don Higgins                                              *
 .*********************************************************************
+.* TESTMAC9.MAC                                                      *
+.* mz390 COPY support for macro files                                *
+.*                                                                   *
+.* Note: Uses TESTMAC9.CPY, is used by TESTMAC9.MLC                  *
+.*********************************************************************
 .* 2008-04-22  DSH         Initial version                           *
 .* 2008-04-22  DSH RPI-833 Add string quotes for HLASM compatibility *
 .*********************************************************************

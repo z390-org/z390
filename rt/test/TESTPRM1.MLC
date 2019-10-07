@@ -5,11 +5,14 @@
 *                                                                   *
 * This source code is part of z390 assembler/emulator package.      *
 *                                                                   *
-* Note: Needs extra macro file rt\test\TESTPRM1.MAC                 *
-*                                                                   *
 * The z390 package is distributed under GNU general public license  *
 *                                                                   *
 * Author - Don Higgins                                              *
+*********************************************************************
+* TESTPRM1.MLC                                                      *
+* Positional and keyword parameters                                 *
+*                                                                   *
+* Note: Needs extra macro file rt\test\TESTPRM1.MAC                 *
 *********************************************************************
 * 2005-09-30  DSH Initial version                                   *
 *********************************************************************

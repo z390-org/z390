@@ -9,6 +9,11 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTMAC9.MLC                                                      *
+* mz390 COPY support for macro files                                *
+*                                                                   *
+* Note: See TESTMAC9.MAC and TESTMAC9.CPY                           *
+*********************************************************************
 * 2006-04-28  DSH         Initial version                           *
 * 2006-04-28  DSH RPI-300 Test COPY expansion in macro files        *
 *********************************************************************

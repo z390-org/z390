@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTINS2.MLC                                                      *
+* Verify problem state instruction execution (400+) including z9    *
+* opcodes                                                           *
+*********************************************************************
 * 2005-09-30 DSH          Initial version                           *
 * 2005-10-05 DSH RPI-5    Make ASCII mode aware using X'A0' high    *
 *                         bit ASCII space                           *

@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTERRA.MLC                                                      *
+* Test non-ASCII character string error                             *
+*********************************************************************
 * 2009-06-15 DSH          Initial version                           *
 * 2009-06-15 DSH RPI-1053 Move invalid ASCII test and missing macro *
 *                         warn from TESTERR1 and specify ASM and    *
@@ -19,13 +22,11 @@
 
 TESTERR1 CSECT
          USING *,15
-* RPI-744 Test non-ascii character string error
+* RPI-744 Test non-ASCII character string error
          DC   C'e…'  MULTI-KEY VALUES 101 AND 201
 **********************************************************
 * ADD DUPLICATE AND MISSING MACRO ERRORS IN OPEN CODE
-*
 * THIS MUST BE LAST TEST WITH FAILING AGO IN OPEN CODE
-*
 **********************************************************
          MACRO
          TESTLAB

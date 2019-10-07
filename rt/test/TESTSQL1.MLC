@@ -9,15 +9,18 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSQL1.MLC                                                      *
+* mz390 EXEC SQL INCLUDE test to copy specified file                *
+*                                                                   *
+* mz390 parses space delimited EXEC SQL/CICS/DLI statements into    *
+* exec macro call statements with comma delimited parameters        *
+*                                                                   *
+* EXEC SQL INCLUDE member - invokes call to macro named member      *
+*                                                                   *
+* Note: Uses TESTSQL1.MAC                                           *
+*********************************************************************
 * 2006-04-26  DSH Initial version                                   *
 * 2006-04-26  DSH RPI-293 Test EXEC SQL INCLUDE SUPPORT             *
-*********************************************************************
-*
-* mz390 parses space delimited EXEC SQL/CICS/DLI statements into
-* exec macro call statements with comma delimited parameters
-*
-* 1. EXEC SQL INCLUDE member - invokes call to macro named member
-*
 *********************************************************************
 
          TITLE 'TESTSQL1 - TEST EXEC SQL INCLUDE SUPPORT'

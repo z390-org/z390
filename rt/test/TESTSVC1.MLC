@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSVC1.MLC                                                      *
+* Test user defined SVC handler facilty to redefine svc 201 as      *
+* WTO svc 35                                                        *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-01-12 DSH RPI-151 Test new user option for first level SVC   *
 *                        handler                                    *

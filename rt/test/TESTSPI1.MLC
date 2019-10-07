@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSPI1.MLC                                                      *
+* Test ESPIE                                                        *
+*********************************************************************
 * 2006-05-01 DSH         Initial version                            *
 * 2006-05-01 DSH RPI-305 Test ESPIE exit with parameter and RESTART *
 * 2008-06-20 DSH RPI-845 Change EPIED to IHAEPIE                    *

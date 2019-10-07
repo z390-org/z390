@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTINS1.MLC                                                      *
+* Verify assembly of all instruction formats (1085) including z9,   *
+* z10, and ASSIST                                                   *
+*********************************************************************
 * 2005-09-30  DSH          Initial version                          *
 * 2005-10-03  DSH RPI-3    Test RS/RX with comma for omitted index  *
 *                          registers                                *

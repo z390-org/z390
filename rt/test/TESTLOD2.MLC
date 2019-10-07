@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTLOD2.MLC                                                      *
+* Test LOAD and DELETE user data files with DSNAME options          *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2005-11-19 DSH RPI-102 Test new non-390 file loading              *
 *                        DDNAME/DSNAME option                       *

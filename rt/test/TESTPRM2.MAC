@@ -9,7 +9,12 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH Initial version                                   *
+* TESTPRM2.MAC                                                      *
+* Positional and keyword parameters                                 *
+*                                                                   *
+* Note: This macro file is needed by MLC file rt\test\TESTPRM2.MLC  *
+*********************************************************************
+* 2005-09-30 DSH Initial version                                    *
 *********************************************************************
 
          MACRO

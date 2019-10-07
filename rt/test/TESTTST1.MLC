@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTTST1.MLC                                                      *
+* Batch execution test of the interactive test sub-commands         *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-03-22 DSH RPI-251 Add test break on CGXR and verify trace    *
 *********************************************************************

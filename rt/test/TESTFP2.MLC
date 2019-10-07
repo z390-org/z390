@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTFP2.MLC                                                       *
+* Test PFPO conversion between any two FP types                     *
+*********************************************************************
 * 2009-03-09 DSH          Initial version                           *
 * 2009-03-09 DSH RPI-1013 Test PFPO conversion between any two FP   *
 *                         types                                     *

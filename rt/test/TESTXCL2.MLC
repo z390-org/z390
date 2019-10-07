@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTXCL2.MLC                                                      *
+* XCTL subroutine which snaps CDE entries and issues XCTL to        *
+* TESTXCL3                                                          *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2005-11-16 DSH RPI-95  Test XCTL                                  *
 * 2007-04-26 DSH RPI-598 Add additional CDE SNAPs to verify OK      *

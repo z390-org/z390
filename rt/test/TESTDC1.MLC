@@ -9,8 +9,11 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTDC1.MLC                                                       *
+* DC constants                                                      *
+*********************************************************************
 * NOTE: This program is bi-modal supporting EBCDIC and ASCII mode   *
-*       This program is copied to testasc1 to test using ascii      *
+*       This program is copied to TESTASC1 to test using ASCII mode *
 *********************************************************************
 * 2005-09-30 DSH          Initial version                           *
 * 2005-10-02 DSH RPI-2    Add tests for multilpe dupicate DC's      *

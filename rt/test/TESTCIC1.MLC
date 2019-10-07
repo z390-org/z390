@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTCIC1.MLC                                                      *
+* Test of DFTRESP CICS error code literal substitution              *
+*********************************************************************
 * 2007-05-31 DSH          Initial version                           *
 * 2007-05-31 DSH RPI-501  Test LITERAL-ABS expression               *
 * 2007-07-20 DSH RPI-662  Test additional ITEMERR and QIDERR for    *

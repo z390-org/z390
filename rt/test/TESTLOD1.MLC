@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTLOD1.MLC                                                      *
+* Test LOAD 390 load modules with DDNAME and DSNAME options         *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2005-11-16 DSH RPI-I89 Add test of link and load DSNAME and       *
 *                        DDNAME options                             *

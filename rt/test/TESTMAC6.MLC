@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTMAC6.MLC                                                      *
+* mz390 test complex keyword parameter parsing such as              *
+* &OPTION=(A,B,C)                                                   *
+*********************************************************************
 * 2005-09-30  DSH         Initial version                           *
 * 2006-03-13  DSH RPI-223 Support keyword parameter values of the   *
 *                         form (A,B) etc.                           *

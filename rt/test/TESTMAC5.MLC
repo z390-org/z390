@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTMAC5.MLC                                                      *
+* mz390 test multiply in sub-string expression subscript and no     *
+* concatenation . after substring                                   *
+*********************************************************************
 * 2005-09-30  DSH         Initial version                           *
 * 2006-02-24  DSH RPI-214 * OP IN SUBSTRING EXP, NO CONCAT AFTER    *
 *                         SUBSTRING                                 *

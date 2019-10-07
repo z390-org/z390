@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTTIM2.MLC                                                      *
+* STIMER WAIT test to verify approximately 3 seconds elapsed wait   *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-03-03 DSH RPI-209 Test STIMER WAIT                           *
 * 2006-04-22 DSH RPI-279 Add STIMER REAL,EXIT and TTIMER tests      *
@@ -16,11 +19,11 @@
 *                        2 seconds CPU time                         *
 * 2006-09-19 DSH RPI-452 TTIMER cancel requires TU or MIC,ADDR      *
 * 2006-09-22 DSH RPI-461 Use CCGE/CCLE for interval tests to        *
-*                        prevent intermittent failures dependung on *
+*                        prevent intermittent failures depending on *
 *                        system load                                *
 *********************************************************************
 
-         TITLE 'TESTTIM1 REGRSSION TEST STIMER, TIMIER FUNCTIONS'
+         TITLE 'TESTTIM1 REGRSSION TEST STIMER, TIMER FUNCTIONS'
 
 TESTIM2  RT1   MAIN
 BINTVL   DC    F'200'           200 * 0.01

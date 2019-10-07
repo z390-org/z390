@@ -8,7 +8,9 @@
 * The z390 package is distributed under GNU general public license  *
 *                                                                   *
 * Author - Don Higgins                                              *
-* Remark - Test DFP (decimal floating point) constants              *
+*********************************************************************
+* TESTDFP2.MLC                                                      *
+* Test DFP (Decimal Floating Point) constants                       *
 *********************************************************************
 * 2008-01-18 DSH         Initial version                            *
 * 2008-01-18 DSH RPI-790 Correct explicit decimal point setting     *

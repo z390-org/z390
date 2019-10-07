@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTERR7.MLC                                                      *
+* ez390 missing DDNAME and no SYNAD                                 *
+*********************************************************************
 * 2006-07-20 DSH         Initial version                            *
 * 2006-07-20 DSH RPI-377 Test missing DDNAME and no SYNAD causing   *
 *                        recursion                                  *

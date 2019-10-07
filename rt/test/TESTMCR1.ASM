@@ -11,6 +11,10 @@
 *********************************************************************
 * 2005-09-30  DSH Initial version                                   *
 *********************************************************************
+* TESTMCR1.ASM                                                      *
+* mz390 test user specified file type for main program (ASM) and    *
+* macros (MCR)                                                      *
+*                                                                   *
 * This test is run using TESTMCR1.ASM main pgm type and MCR macros  *
 *********************************************************************
 

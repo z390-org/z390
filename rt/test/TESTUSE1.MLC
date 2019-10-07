@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTUSE1.MLC                                                      *
+* USING and labeled USING                                           *
+*********************************************************************
 * 2005-09-30  DSH          Initial version                          *
 * 2006-03-22  DSH RPI-237  Test drop using with comments, multiple  *
 *                          labels                                   *

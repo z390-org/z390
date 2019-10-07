@@ -9,8 +9,12 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH         Initial version                           *
-* 2006-02-24  DSH RPI-213 Test macro labels on MEND and END         *
+* TESTMAC4.MLC                                                      *
+* mz390 test macro labels on MEND statements both upper and lower   *
+* case                                                              *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2006-02-24 DSH RPI-213 Test macro labels on MEND and END          *
 *********************************************************************
 
 TESTMAC4 SUBENTRY

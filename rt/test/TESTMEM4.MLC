@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTMEM4.MLC                                                      *
+* GETMAIN and FREEMAIN test previously cauing corruption on merge   *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-11-12 DSH RPI-491 Test by Melvyn Maltz for corruption on FQE *
 *                        merge                                      *

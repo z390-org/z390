@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTDCB9.MLC                                                      *
+* Copy RECFM=F file in reverse order using random READ and WRITE    *
+*********************************************************************
 * 2005 09-30 DSH         Initial version                            *
 * 2006-01-11 DSH RPI-170 Test length parameter 'S' on READ/WRITE    *
 *********************************************************************

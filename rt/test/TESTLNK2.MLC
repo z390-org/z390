@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTLNK2-MLC                                                      *
+* TESTLNK2 TEST USE OF TESTLNK2.LNK TO BUILD TESTLNK2               *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2007-11-09 DSH RPI-732 Test using TESTLNK2.LNK to build           *
 *                        TESTLNK2.390 including TESTLNK3, entry     *

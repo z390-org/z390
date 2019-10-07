@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* ZSTRMAC1.MLC                                                      *
+* ZSTRMAC reads SYSUT1 source file and outputs SYSUT2 source file   *
+*********************************************************************
 * 2008-08-13 DSH          Initial version                           *
 * 2008-08-22 DSH RPI-896  rt\test\ZSTRMAC1.MLC is the last non-     *
 *                         structured macro version of ZSTRMAC I ever*

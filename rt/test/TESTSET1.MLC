@@ -9,11 +9,14 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSET1.MLC                                                      *
+* mz390 subscripted local and global set variables                  *
+*********************************************************************
 * 2005-09-30  DSH          Initial version                          *
 * 2005-12-08  DSH RPI-119  Add tests for multiple value sets        *
 * 2006-03-20  DSH RPI-242  Add test for LCLC and GBLC init error    *
 * 2006-08-07  DSH RPI-401  Test expansion via multiple store values *
-* 2006-09-08  DSH RPI-435  Test dynamic alloc of local arrays       *
+* 2006-09-08  DSH RPI-435  Test dynamic allocation of local arrays  *
 * 2006-09-21  DSH RPI-445  Test dynamic array expansion copy and    *
 *                          extend                                   *
 * 2006-09-21  DSH RPI-446  Test NOT D'SYMBOL                        *

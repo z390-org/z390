@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTCVBG.MLC                                                      *
+* CVBG 64 bit convert to binary                                     *
+*********************************************************************
 * 2006-08-03 DSH         Initial version                            *
 * 2006-08-04 DSH RPI-389 Expand tests of CVBG and CVDG              *
 * 2008-06-20 DSH RPI-845 Change EPIED to IHAEPIE                    *

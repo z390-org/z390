@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTASM1.MLC                                                      *
+* az390 tests - CNOP, L' operator,  symbol tests, START, COM, and   *
+* RSECT test, CVTDCB flags test.                                    *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2005-10-03 DSH RPI-9   Test length operator in INS and DC         *
 * 2005-11-13 DSH RPI-87  Test ORG preceded by ABS value CALC        *

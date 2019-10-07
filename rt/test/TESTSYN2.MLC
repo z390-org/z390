@@ -11,6 +11,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTSYN2.MLC                                                      *
+* mz390 OPSYN used before and after last restore                    *
+*********************************************************************
 * 2006-04-30  DSH         Initial version                           *
 * 2006-04-30  DSH RPI-306 Test OPSYN for MACRO VS OPCODE            *
 * 2007-03-06  DSH RPI-352 Test OPSYN redefine of MAC OP             *

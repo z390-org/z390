@@ -9,12 +9,13 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTERR8.MLC                                                      *
+* Add compound AIF and computed AGO missing labels                  *
+*********************************************************************
 * 2005-09-30  DSH         Initial version                           *
 * 2008-08-18  DSH RPI-901 Move test of OPEN code UNDEF AGO tests to *
 *                         TESTERR8.MLC/TESTERR9.MLC                 *
 *********************************************************************
-
-* Add compound AIF and computed AGO missing labels
 
          AIF   (1 EQ 2).T11,(2 EQ 2).X11 ABORT ON X117
 .T11     MNOTE '.T11'

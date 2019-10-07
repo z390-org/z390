@@ -9,15 +9,19 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTTXT1.MLC                                                      *
+* Macro processor multiple text file processing option to generate  *
+* HTML text files                                                   *
+*                                                                   *
+* This is a demo of macro code used with option text to generate    *
+* two HTML files as follows:                                        *
+*   rt\test\TESTTXT1A.HTML HELLO WORLD 1                            *
+*   rt\test\TESTTXT1B.HTML HELLO WORLD 2                            *
+*********************************************************************
 * 2005-09-30  DSH Initial version                                   *
 * 2006-05-03  DSH RPI-268 Add option text and DSNAME= extensions    *
 *                 for AREAD and PUNCH to support free form text I/O *
 * 2006-09-11  DSH RPI-363 Changed TEST to RT\TEST directory         *
-*********************************************************************
-* TESTTXT1 is a demo of macro code used with option text to         *
-* generate two HTML files as follows:                               *
-*   rt\test\TESTTXT1A.HTML HELLO WORLD 1                            *
-*   rt\test\TESTTXT1B.HTML HELLO WORLD 2                            *
 *********************************************************************
 
 &TITLE   SETC 'TEST MZ390 OPTION TEXT AND MULTIPLE FILE OUTPUT'

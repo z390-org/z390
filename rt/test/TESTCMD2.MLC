@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTCMD2.MLC                                                      *
+* Two Windows command processes reading separate linked list output *
+* queues in sequence                                                *
+*********************************************************************
 * 2006-09-11 DSH         Initial version                            *
 * 2006-09-11 DSH RPI-363 Change from test to rt\test directory      *
 * 2007-02-02 DSH RPI-532 Remove Windows prompt and fix path case    *

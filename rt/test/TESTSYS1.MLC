@@ -9,10 +9,14 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
-* 2005-09-30  DSH         Initial version                           *
-* 2006-01-27  DSH RPI-192 Test correctly handling of && in strings  *
-* 2006-04-06  DSH RPI-259 Add remaining HLASM system variables for  *
-*                         compatibility                             *
+* TESTSYS1.MLC                                                      *
+* mz390 test of global and local system variables such as &SYSDATE, *
+* &SYSCLOCK                                                         *
+*********************************************************************
+* 2005-09-30 DSH         Initial version                            *
+* 2006-01-27 DSH RPI-192 Test correctly handling of && in strings   *
+* 2006-04-06 DSH RPI-259 Add remaining HLASM system variables for   *
+*                        compatibility                              *
 *********************************************************************
 
 TESTSYS1 SUBENTRY

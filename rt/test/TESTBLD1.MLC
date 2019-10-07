@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTBLD1.MLC                                                      *
+* Test BLDL search for 390 load modules in CDE memory and SYS390    *
+* dirs                                                              *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-04-12 DSH RPI-244 Test BLDL support                          *
 * 2006-05-07 DSH RPI-311 Correct BLDL entry len to exclude len      *

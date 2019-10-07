@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTDCBE.MLC                                                      *
+* Test for RECFM=FT and VT create and read contributed by MM        *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2005-11-18 DSH RPI-101 Correct open bug causing EOF error on GET  *
 * 2005-11-19 DSH         Copy of TESTDCBD run in ASCII mode to      *
@@ -16,8 +19,6 @@
 *                        EBCDIC characters in SNAP dump             *
 * 2006-09-11 DSH RPI-363 Change test to rt\test directory           *
 * 2007-02-07 DSH RPI-532 Correct path case for Linux                *
-*********************************************************************
-* Test for RECFM=FT and VT create and read contributed by MM        *
 *********************************************************************
 
 TESTDCBE SUBENTRY

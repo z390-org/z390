@@ -9,6 +9,10 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTDCBC.MLC                                                      *
+* Copy RECFM=FT ASCII file to RECFM=FT ASCII file in ASCII mode     *
+* with DCB RECORD= and DSNAME= and new file                         *
+*********************************************************************
 * 2005 09-30 DSH         Initial version                            *
 * 2005-10-18 DSH         Change DSN to EBCDIC unless ASCII mode     *
 * 2006-09-11 DSH RPI-363 Change test to rt\test directory           *

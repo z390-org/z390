@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTDST1.MLC                                                      *
+* CSECT and DSECT support                                           *
+*********************************************************************
 * 2005-09-30  DSH         Initial version                           *
 * 2007-02-21  DSH RPI-553 Correct source error for DS1 duplicate    *
 *                         CSECT/DSECT                               *

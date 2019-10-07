@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTERR4.MLC                                                      *
+* ez390 invalid DCB DSNAME causing S013 abend                       *
+*********************************************************************
 * 2005-09-30 DSH Initial version                                    *
 * 2005-11-03 DSH Test invalid DCBDSNAM causing error and S013 abend *
 *********************************************************************

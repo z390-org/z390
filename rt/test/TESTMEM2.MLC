@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTMEM2.MLC                                                      *
+* GETMAIN extensions for LV=nnnK and LV=nnnM                        *
+*********************************************************************
 * 2005-09-30 DSH         Initial version                            *
 * 2006-01-09 DSH RPI-162 Test extensions LV=NNNK and LV=NNNM        *
 * 2007-01-22 DSH RPI-542 Correct GETMAIN output R1=ADDR             *

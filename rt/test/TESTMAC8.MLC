@@ -9,6 +9,12 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTMAC8.MLC                                                      *
+* Test inline macros in open code and macro files with nested       *
+* duplicate labels and labels on MEND                               *
+*                                                                   *
+* Note: Uses extra macro file rt\test\TESTMAC8.MAC                  *
+*********************************************************************
 * 2005-09-30  DSH         Initial version                           *
 * 2006-03-28  DSH RPI-266 Create TESTMAC8.MLC and TESTMAC8.MAC test *
 *                         inlines                                   *

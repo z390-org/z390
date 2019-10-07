@@ -9,6 +9,13 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTPRO1.MLC                                                      *
+* mz390 test PROFILE(TESTPRO1) copy file included preceding MLC     *
+* source which executes macro TESTPROS.MAC and redefines END opcode *
+* to execute TESTPROT.MAC at termination.                           *
+*                                                                   *
+* Note: Uses TESTPRO1.OPT, TESTPROS.MAC, TESTPROT.MAC, TESTPRO1.CPY *
+*********************************************************************
 * 2006-04-10  DSH         Initial version                           *
 * 2006-04-10  DSH RPI-276 Test option profile to insert COPY        *
 *                         statement                                 *

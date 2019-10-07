@@ -9,6 +9,9 @@
 *                                                                   *
 * Author - Don Higgins                                              *
 *********************************************************************
+* TESTDC2.MLC                                                       *
+* DC bit length constants                                           *
+*********************************************************************
 * 2008 11-18 DSH         Initial version                            *
 * 2006-11-18 DSH RPI-417 Test bit length fields                     *
 * 2008-11-10 DSH RPI-946 Test for initialization value X'F6' in DS  *
